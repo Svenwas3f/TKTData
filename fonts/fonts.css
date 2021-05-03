@@ -1,0 +1,45 @@
+/*Ethnocentric*/
+
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url("ethnocentric/ethnocentric_rg.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Ethnocentric Itallic';
+  src: url("ethnocentric/ethnocentric_rg_it.ttf") format("truetype");
+}
+
+/*Open Sans*/
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url("Open_Sans/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Open Sans Bold';
+  src: url("Open_Sans/OpenSans-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Open Sans Semi Bold';
+  src: url("Open_Sans/OpenSans-SemiBold.ttf") format("truetype");
+}
+
+/*Montserrat*/
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('Montserrat/Montserrat-Regular.ttf') format("truetype");
+}
+
+@font-face {
+  font-family: 'Montserrat Bold';
+  src: url('Montserrat/Montserrat-Bold.ttf') format("truetype");
+}
+
+@font-face {
+  font-family: 'Montserrat Semi Bold';
+  src: url('Montserrat/Montserrat-SemiBold.ttf') format("truetype");
+}

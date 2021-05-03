@@ -1,0 +1,1968 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright (c) 1999-2015 Typodermic Fonts Inc.
+FontName Ethnocentric Rg
+FontSubfamily Regular
+UniqueID 4.003;TYPO;EthnocentricRg-Regular
+FullName EthnocentricRg-Regular
+Version Version 4.003
+PostScriptName EthnocentricRg-Regular
+Trademark Ethnocentric is a trademark of Typodermic Fonts Inc.
+Manufacturer Ray Larabie
+Designer Ray Larabie
+Description http://typodermicfonts.com/pages/license
+FontDesignerURL http://typodermicfonts.com
+LicenseDescription http://typodermicfonts.com/pages/license
+LicenseURL http://typodermicfonts.com/pages/license
+PreferredFamily Ethnocentric
+PreferredSubfamily Regular
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 20
+UnderlinePosition -133
+FontHeightOffset 0
+Ascender 945
+Descender -255
+FontBBox -165 -255 1897 945
+StartCharMetrics 371
+U 23 ; WX 383 ; N uni0017 ; G 1
+U 32 ; WX 383 ; N space ; G 2
+U 33 ; WX 325 ; N exclam ; G 3
+U 34 ; WX 446 ; N quotedbl ; G 4
+U 35 ; WX 669 ; N numbersign ; G 5
+U 36 ; WX 677 ; N dollar ; G 6
+U 37 ; WX 1007 ; N percent ; G 7
+U 38 ; WX 873 ; N ampersand ; G 8
+U 39 ; WX 219 ; N quotesingle ; G 9
+U 40 ; WX 351 ; N parenleft ; G 10
+U 41 ; WX 351 ; N parenright ; G 11
+U 42 ; WX 464 ; N asterisk ; G 12
+U 43 ; WX 629 ; N plus ; G 13
+U 44 ; WX 291 ; N comma ; G 14
+U 45 ; WX 464 ; N hyphen ; G 15
+U 46 ; WX 309 ; N period ; G 16
+U 47 ; WX 472 ; N slash ; G 17
+U 48 ; WX 938 ; N zero ; G 18
+U 49 ; WX 446 ; N one ; G 19
+U 50 ; WX 935 ; N two ; G 20
+U 51 ; WX 911 ; N three ; G 21
+U 52 ; WX 960 ; N four ; G 22
+U 53 ; WX 899 ; N five ; G 23
+U 54 ; WX 971 ; N six ; G 24
+U 55 ; WX 845 ; N seven ; G 25
+U 56 ; WX 953 ; N eight ; G 26
+U 57 ; WX 971 ; N nine ; G 27
+U 58 ; WX 368 ; N colon ; G 28
+U 59 ; WX 309 ; N semicolon ; G 29
+U 60 ; WX 611 ; N less ; G 30
+U 61 ; WX 629 ; N equal ; G 31
+U 62 ; WX 611 ; N greater ; G 32
+U 63 ; WX 743 ; N question ; G 33
+U 64 ; WX 912 ; N at ; G 34
+U 65 ; WX 1135 ; N A ; G 35
+U 66 ; WX 964 ; N B ; G 36
+U 67 ; WX 923 ; N C ; G 37
+U 68 ; WX 956 ; N D ; G 38
+U 69 ; WX 848 ; N E ; G 39
+U 70 ; WX 820 ; N F ; G 40
+U 71 ; WX 960 ; N G ; G 41
+U 72 ; WX 939 ; N H ; G 42
+U 73 ; WX 339 ; N I ; G 43
+U 74 ; WX 732 ; N J ; G 44
+U 75 ; WX 912 ; N K ; G 45
+U 76 ; WX 794 ; N L ; G 46
+U 77 ; WX 1259 ; N M ; G 47
+U 78 ; WX 914 ; N N ; G 48
+U 79 ; WX 1062 ; N O ; G 49
+U 80 ; WX 988 ; N P ; G 50
+U 81 ; WX 1062 ; N Q ; G 51
+U 82 ; WX 1023 ; N R ; G 52
+U 83 ; WX 963 ; N S ; G 53
+U 84 ; WX 894 ; N T ; G 54
+U 85 ; WX 986 ; N U ; G 55
+U 86 ; WX 1135 ; N V ; G 56
+U 87 ; WX 1260 ; N W ; G 57
+U 88 ; WX 1040 ; N X ; G 58
+U 89 ; WX 1028 ; N Y ; G 59
+U 90 ; WX 899 ; N Z ; G 60
+U 91 ; WX 318 ; N bracketleft ; G 61
+U 92 ; WX 472 ; N backslash ; G 62
+U 93 ; WX 319 ; N bracketright ; G 63
+U 94 ; WX 573 ; N asciicircum ; G 64
+U 95 ; WX 674 ; N underscore ; G 65
+U 96 ; WX 393 ; N grave ; G 66
+U 97 ; WX 1135 ; N a ; G 67
+U 98 ; WX 964 ; N b ; G 68
+U 99 ; WX 923 ; N c ; G 69
+U 100 ; WX 956 ; N d ; G 70
+U 101 ; WX 848 ; N e ; G 71
+U 102 ; WX 820 ; N f ; G 72
+U 103 ; WX 960 ; N g ; G 73
+U 104 ; WX 939 ; N h ; G 74
+U 105 ; WX 339 ; N i ; G 75
+U 106 ; WX 732 ; N j ; G 76
+U 107 ; WX 912 ; N k ; G 77
+U 108 ; WX 794 ; N l ; G 78
+U 109 ; WX 1259 ; N m ; G 79
+U 110 ; WX 914 ; N n ; G 80
+U 111 ; WX 1062 ; N o ; G 81
+U 112 ; WX 988 ; N p ; G 82
+U 113 ; WX 1062 ; N q ; G 83
+U 114 ; WX 1023 ; N r ; G 84
+U 115 ; WX 963 ; N s ; G 85
+U 116 ; WX 894 ; N t ; G 86
+U 117 ; WX 986 ; N u ; G 87
+U 118 ; WX 1135 ; N v ; G 88
+U 119 ; WX 1260 ; N w ; G 89
+U 120 ; WX 1040 ; N x ; G 90
+U 121 ; WX 1028 ; N y ; G 91
+U 122 ; WX 899 ; N z ; G 92
+U 123 ; WX 361 ; N braceleft ; G 93
+U 124 ; WX 299 ; N bar ; G 94
+U 125 ; WX 361 ; N braceright ; G 95
+U 126 ; WX 567 ; N asciitilde ; G 96
+U 160 ; WX 383 ; N nbspace ; G 97
+U 161 ; WX 325 ; N exclamdown ; G 98
+U 162 ; WX 659 ; N cent ; G 99
+U 163 ; WX 813 ; N sterling ; G 100
+U 165 ; WX 1028 ; N yen ; G 101
+U 166 ; WX 299 ; N brokenbar ; G 102
+U 168 ; WX 430 ; N dieresis ; G 103
+U 169 ; WX 778 ; N copyright ; G 104
+U 170 ; WX 680 ; N ordfeminine ; G 105
+U 171 ; WX 456 ; N guillemotleft ; G 106
+U 174 ; WX 503 ; N registered ; G 107
+U 175 ; WX 393 ; N macron ; G 108
+U 176 ; WX 395 ; N degree ; G 109
+U 177 ; WX 629 ; N plusminus ; G 110
+U 178 ; WX 496 ; N twosuperior ; G 111
+U 179 ; WX 484 ; N threesuperior ; G 112
+U 180 ; WX 393 ; N acute ; G 113
+U 183 ; WX 309 ; N periodcentered ; G 114
+U 184 ; WX 298 ; N cedilla ; G 115
+U 185 ; WX 251 ; N onesuperior ; G 116
+U 186 ; WX 641 ; N ordmasculine ; G 117
+U 187 ; WX 456 ; N guillemotright ; G 118
+U 188 ; WX 926 ; N onequarter ; G 119
+U 189 ; WX 950 ; N onehalf ; G 120
+U 190 ; WX 1057 ; N threequarters ; G 121
+U 191 ; WX 743 ; N questiondown ; G 122
+U 192 ; WX 1135 ; N Agrave ; G 123
+U 193 ; WX 1135 ; N Aacute ; G 124
+U 194 ; WX 1135 ; N Acircumflex ; G 125
+U 195 ; WX 1135 ; N Atilde ; G 126
+U 196 ; WX 1135 ; N Adieresis ; G 127
+U 197 ; WX 1135 ; N Aring ; G 128
+U 198 ; WX 1442 ; N AE ; G 129
+U 199 ; WX 923 ; N Ccedilla ; G 130
+U 200 ; WX 848 ; N Egrave ; G 131
+U 201 ; WX 848 ; N Eacute ; G 132
+U 202 ; WX 848 ; N Ecircumflex ; G 133
+U 203 ; WX 848 ; N Edieresis ; G 134
+U 204 ; WX 339 ; N Igrave ; G 135
+U 205 ; WX 339 ; N Iacute ; G 136
+U 206 ; WX 339 ; N Icircumflex ; G 137
+U 207 ; WX 339 ; N Idieresis ; G 138
+U 208 ; WX 1041 ; N Eth ; G 139
+U 209 ; WX 914 ; N Ntilde ; G 140
+U 210 ; WX 1062 ; N Ograve ; G 141
+U 211 ; WX 1062 ; N Oacute ; G 142
+U 212 ; WX 1062 ; N Ocircumflex ; G 143
+U 213 ; WX 1062 ; N Otilde ; G 144
+U 214 ; WX 1062 ; N Odieresis ; G 145
+U 215 ; WX 629 ; N multiply ; G 146
+U 216 ; WX 1062 ; N Oslash ; G 147
+U 217 ; WX 986 ; N Ugrave ; G 148
+U 218 ; WX 986 ; N Uacute ; G 149
+U 219 ; WX 986 ; N Ucircumflex ; G 150
+U 220 ; WX 986 ; N Udieresis ; G 151
+U 221 ; WX 1028 ; N Yacute ; G 152
+U 222 ; WX 958 ; N Thorn ; G 153
+U 223 ; WX 1927 ; N germandbls ; G 154
+U 224 ; WX 1135 ; N agrave ; G 155
+U 225 ; WX 1135 ; N aacute ; G 156
+U 226 ; WX 1135 ; N acircumflex ; G 157
+U 227 ; WX 1135 ; N atilde ; G 158
+U 228 ; WX 1135 ; N adieresis ; G 159
+U 229 ; WX 1135 ; N aring ; G 160
+U 230 ; WX 1442 ; N ae ; G 161
+U 231 ; WX 923 ; N ccedilla ; G 162
+U 232 ; WX 848 ; N egrave ; G 163
+U 233 ; WX 848 ; N eacute ; G 164
+U 234 ; WX 848 ; N ecircumflex ; G 165
+U 235 ; WX 848 ; N edieresis ; G 166
+U 236 ; WX 339 ; N igrave ; G 167
+U 237 ; WX 339 ; N iacute ; G 168
+U 238 ; WX 339 ; N icircumflex ; G 169
+U 239 ; WX 339 ; N idieresis ; G 170
+U 240 ; WX 1041 ; N eth ; G 171
+U 241 ; WX 914 ; N ntilde ; G 172
+U 242 ; WX 1062 ; N ograve ; G 173
+U 243 ; WX 1062 ; N oacute ; G 174
+U 244 ; WX 1062 ; N ocircumflex ; G 175
+U 245 ; WX 1062 ; N otilde ; G 176
+U 246 ; WX 1062 ; N odieresis ; G 177
+U 247 ; WX 629 ; N divide ; G 178
+U 248 ; WX 1062 ; N oslash ; G 179
+U 249 ; WX 986 ; N ugrave ; G 180
+U 250 ; WX 986 ; N uacute ; G 181
+U 251 ; WX 986 ; N ucircumflex ; G 182
+U 252 ; WX 986 ; N udieresis ; G 183
+U 253 ; WX 1028 ; N yacute ; G 184
+U 254 ; WX 958 ; N thorn ; G 185
+U 255 ; WX 1028 ; N ydieresis ; G 186
+U 256 ; WX 1135 ; N Amacron ; G 187
+U 257 ; WX 1135 ; N amacron ; G 188
+U 258 ; WX 1135 ; N Abreve ; G 189
+U 259 ; WX 1135 ; N abreve ; G 190
+U 260 ; WX 1135 ; N Aogonek ; G 191
+U 261 ; WX 1135 ; N aogonek ; G 192
+U 262 ; WX 923 ; N Cacute ; G 193
+U 263 ; WX 923 ; N cacute ; G 194
+U 266 ; WX 923 ; N Cdotaccent ; G 195
+U 267 ; WX 923 ; N cdotaccent ; G 196
+U 268 ; WX 923 ; N Ccaron ; G 197
+U 269 ; WX 923 ; N ccaron ; G 198
+U 270 ; WX 956 ; N Dcaron ; G 199
+U 271 ; WX 956 ; N dcaron ; G 200
+U 272 ; WX 1041 ; N Dcroat ; G 201
+U 273 ; WX 1041 ; N dcroat ; G 202
+U 274 ; WX 848 ; N Emacron ; G 203
+U 275 ; WX 848 ; N emacron ; G 204
+U 276 ; WX 848 ; N Ebreve ; G 205
+U 277 ; WX 848 ; N ebreve ; G 206
+U 278 ; WX 848 ; N Edotaccent ; G 207
+U 279 ; WX 848 ; N edotaccent ; G 208
+U 280 ; WX 848 ; N Eogonek ; G 209
+U 281 ; WX 848 ; N eogonek ; G 210
+U 282 ; WX 848 ; N Ecaron ; G 211
+U 283 ; WX 848 ; N ecaron ; G 212
+U 286 ; WX 960 ; N Gbreve ; G 213
+U 287 ; WX 960 ; N gbreve ; G 214
+U 288 ; WX 960 ; N Gdotaccent ; G 215
+U 289 ; WX 960 ; N gdotaccent ; G 216
+U 290 ; WX 960 ; N Gcommaaccent ; G 217
+U 291 ; WX 960 ; N gcommaaccent ; G 218
+U 294 ; WX 939 ; N Hbar ; G 219
+U 295 ; WX 939 ; N hbar ; G 220
+U 298 ; WX 339 ; N uni012A ; G 221
+U 299 ; WX 339 ; N imacron ; G 222
+U 300 ; WX 339 ; N Ibreve ; G 223
+U 301 ; WX 339 ; N ibreve ; G 224
+U 302 ; WX 339 ; N Iogonek ; G 225
+U 303 ; WX 339 ; N iogonek ; G 226
+U 304 ; WX 339 ; N Idotaccent ; G 227
+U 305 ; WX 339 ; N dotlessi ; G 228
+U 306 ; WX 1071 ; N IJ ; G 229
+U 307 ; WX 1071 ; N ij ; G 230
+U 310 ; WX 912 ; N Kcommaaccent ; G 231
+U 311 ; WX 912 ; N kcommaaccent ; G 232
+U 313 ; WX 794 ; N Lacute ; G 233
+U 314 ; WX 794 ; N lacute ; G 234
+U 315 ; WX 794 ; N Lcommaaccent ; G 235
+U 316 ; WX 794 ; N lcommaaccent ; G 236
+U 317 ; WX 794 ; N Lcaron ; G 237
+U 318 ; WX 794 ; N lcaron ; G 238
+U 319 ; WX 794 ; N Ldot ; G 239
+U 320 ; WX 794 ; N ldot ; G 240
+U 321 ; WX 794 ; N Lslash ; G 241
+U 322 ; WX 794 ; N lslash ; G 242
+U 323 ; WX 914 ; N Nacute ; G 243
+U 324 ; WX 914 ; N nacute ; G 244
+U 325 ; WX 914 ; N Ncommaaccent ; G 245
+U 326 ; WX 914 ; N ncommaaccent ; G 246
+U 327 ; WX 914 ; N Ncaron ; G 247
+U 328 ; WX 914 ; N ncaron ; G 248
+U 330 ; WX 914 ; N Eng ; G 249
+U 331 ; WX 914 ; N eng ; G 250
+U 332 ; WX 1062 ; N Omacron ; G 251
+U 333 ; WX 1062 ; N omacron ; G 252
+U 334 ; WX 1062 ; N Obreve ; G 253
+U 335 ; WX 1062 ; N obreve ; G 254
+U 336 ; WX 1062 ; N Ohungarumlaut ; G 255
+U 337 ; WX 1062 ; N ohungarumlaut ; G 256
+U 338 ; WX 1506 ; N OE ; G 257
+U 339 ; WX 1506 ; N oe ; G 258
+U 340 ; WX 1023 ; N Racute ; G 259
+U 341 ; WX 1023 ; N racute ; G 260
+U 342 ; WX 1023 ; N Rcommaaccent ; G 261
+U 343 ; WX 1023 ; N rcommaaccent ; G 262
+U 344 ; WX 1023 ; N Rcaron ; G 263
+U 345 ; WX 1023 ; N rcaron ; G 264
+U 346 ; WX 963 ; N Sacute ; G 265
+U 347 ; WX 963 ; N sacute ; G 266
+U 350 ; WX 963 ; N Scedilla ; G 267
+U 351 ; WX 963 ; N scedilla ; G 268
+U 352 ; WX 963 ; N Scaron ; G 269
+U 353 ; WX 963 ; N scaron ; G 270
+U 354 ; WX 894 ; N Tcommaaccent ; G 271
+U 355 ; WX 894 ; N tcommaaccent ; G 272
+U 356 ; WX 894 ; N Tcaron ; G 273
+U 357 ; WX 894 ; N tcaron ; G 274
+U 358 ; WX 894 ; N Tbar ; G 275
+U 359 ; WX 894 ; N tbar ; G 276
+U 360 ; WX 986 ; N Utilde ; G 277
+U 361 ; WX 986 ; N utilde ; G 278
+U 362 ; WX 986 ; N Umacron ; G 279
+U 363 ; WX 986 ; N umacron ; G 280
+U 364 ; WX 986 ; N Ubreve ; G 281
+U 365 ; WX 986 ; N ubreve ; G 282
+U 366 ; WX 986 ; N Uring ; G 283
+U 367 ; WX 986 ; N uring ; G 284
+U 368 ; WX 986 ; N Uhungarumlaut ; G 285
+U 369 ; WX 986 ; N uhungarumlaut ; G 286
+U 370 ; WX 986 ; N Uogonek ; G 287
+U 371 ; WX 986 ; N uogonek ; G 288
+U 372 ; WX 1260 ; N Wcircumflex ; G 289
+U 373 ; WX 1260 ; N wcircumflex ; G 290
+U 374 ; WX 1028 ; N Ycircumflex ; G 291
+U 375 ; WX 1028 ; N ycircumflex ; G 292
+U 376 ; WX 1028 ; N Ydieresis ; G 293
+U 377 ; WX 899 ; N Zacute ; G 294
+U 378 ; WX 899 ; N zacute ; G 295
+U 379 ; WX 899 ; N Zdotaccent ; G 296
+U 380 ; WX 899 ; N zdotaccent ; G 297
+U 381 ; WX 899 ; N Zcaron ; G 298
+U 382 ; WX 899 ; N zcaron ; G 299
+U 536 ; WX 963 ; N Scommaaccent ; G 300
+U 537 ; WX 963 ; N scommaaccent ; G 301
+U 538 ; WX 894 ; N uni021A ; G 302
+U 539 ; WX 894 ; N uni021B ; G 303
+U 710 ; WX 414 ; N circumflex ; G 304
+U 711 ; WX 414 ; N caron ; G 305
+U 728 ; WX 414 ; N breve ; G 306
+U 729 ; WX 221 ; N dotaccent ; G 307
+U 730 ; WX 383 ; N ring ; G 308
+U 731 ; WX 309 ; N ogonek ; G 309
+U 732 ; WX 393 ; N tilde ; G 310
+U 733 ; WX 452 ; N hungarumlaut ; G 311
+U 806 ; WX 259 ; N commaaccent ; G 312
+U 7808 ; WX 1260 ; N Wgrave ; G 313
+U 7809 ; WX 1260 ; N wgrave ; G 314
+U 7810 ; WX 1260 ; N Wacute ; G 315
+U 7811 ; WX 1260 ; N wacute ; G 316
+U 7812 ; WX 1260 ; N Wdieresis ; G 317
+U 7813 ; WX 1260 ; N wdieresis ; G 318
+U 7922 ; WX 1028 ; N Ygrave ; G 319
+U 7923 ; WX 1028 ; N ygrave ; G 320
+U 8211 ; WX 625 ; N endash ; G 321
+U 8212 ; WX 1003 ; N emdash ; G 322
+U 8216 ; WX 219 ; N quoteleft ; G 323
+U 8217 ; WX 219 ; N quoteright ; G 324
+U 8218 ; WX 219 ; N quotesinglbase ; G 325
+U 8220 ; WX 446 ; N quotedblleft ; G 326
+U 8221 ; WX 446 ; N quotedblright ; G 327
+U 8222 ; WX 446 ; N quotedblbase ; G 328
+U 8224 ; WX 429 ; N dagger ; G 329
+U 8225 ; WX 436 ; N daggerdbl ; G 330
+U 8226 ; WX 458 ; N bullet ; G 331
+U 8230 ; WX 1543 ; N ellipsis ; G 332
+U 8240 ; WX 1359 ; N perthousand ; G 333
+U 8249 ; WX 245 ; N guilsinglleft ; G 334
+U 8250 ; WX 245 ; N guilsinglright ; G 335
+U 8260 ; WX 283 ; N fraction ; G 336
+U 8304 ; WX 497 ; N zerosuperior ; G 337
+U 8308 ; WX 508 ; N foursuperior ; G 338
+U 8309 ; WX 478 ; N fivesuperior ; G 339
+U 8310 ; WX 514 ; N sixsuperior ; G 340
+U 8311 ; WX 450 ; N sevensuperior ; G 341
+U 8312 ; WX 504 ; N eightsuperior ; G 342
+U 8313 ; WX 514 ; N ninesuperior ; G 343
+U 8320 ; WX 497 ; N zeroinferior ; G 344
+U 8321 ; WX 251 ; N oneinferior ; G 345
+U 8322 ; WX 496 ; N twoinferior ; G 346
+U 8323 ; WX 484 ; N threeinferior ; G 347
+U 8324 ; WX 508 ; N fourinferior ; G 348
+U 8325 ; WX 478 ; N fiveinferior ; G 349
+U 8326 ; WX 514 ; N sixinferior ; G 350
+U 8327 ; WX 450 ; N seveninferior ; G 351
+U 8328 ; WX 504 ; N eightinferior ; G 352
+U 8329 ; WX 514 ; N nineinferior ; G 353
+U 8364 ; WX 889 ; N Euro ; G 354
+U 8471 ; WX 785 ; N uni2117 ; G 355
+U 8482 ; WX 578 ; N trademark ; G 356
+U 8531 ; WX 923 ; N onethird ; G 357
+U 8532 ; WX 1036 ; N twothirds ; G 358
+U 8539 ; WX 962 ; N oneeighth ; G 359
+U 8540 ; WX 1092 ; N threeeighths ; G 360
+U 8541 ; WX 1061 ; N fiveeighths ; G 361
+U 8542 ; WX 982 ; N seveneighths ; G 362
+U 8722 ; WX 629 ; N minus ; G 363
+U 8776 ; WX 567 ; N approxequal ; G 364
+U 8800 ; WX 629 ; N notequal ; G 365
+U 8804 ; WX 611 ; N lessequal ; G 366
+U 8805 ; WX 611 ; N greaterequal ; G 367
+EndCharMetrics
+StartKernData 
+StartKernPairs 2500
+
+KPX numbersign six -214
+KPX numbersign eight -222
+KPX numbersign semicolon -237
+KPX numbersign V -214
+KPX numbersign X -222
+KPX numbersign bracketleft -237
+KPX numbersign cedilla -237
+KPX numbersign ordmasculine -237
+KPX numbersign dcaron -214
+KPX numbersign Dcroat -214
+KPX numbersign dcroat -214
+KPX numbersign Emacron -214
+KPX numbersign Iogonek -214
+KPX numbersign iogonek -214
+KPX numbersign Ldot -237
+KPX numbersign ldot -237
+KPX numbersign Nacute -109
+KPX numbersign nacute -109
+KPX numbersign ncommaaccent -109
+KPX numbersign Ncaron -109
+
+KPX parenleft numbersign -169
+KPX parenleft comma -237
+KPX parenleft C -169
+KPX parenleft L -237
+KPX parenleft braceleft -169
+KPX parenleft bar -169
+KPX parenleft braceright -169
+KPX parenleft asciitilde -169
+KPX parenleft nbspace -169
+KPX parenleft exclamdown -197
+KPX parenleft guillemotright -169
+KPX parenleft onequarter -169
+KPX parenleft onehalf -169
+KPX parenleft threequarters -169
+KPX parenleft questiondown -169
+KPX parenleft Agrave -169
+KPX parenleft Ncommaaccent -124
+KPX parenleft ncaron -124
+KPX parenleft Omacron -124
+
+KPX hyphen j -184
+KPX hyphen v -184
+KPX hyphen Lslash -184
+KPX hyphen lslash -184
+KPX hyphen Obreve -184
+KPX hyphen obreve -184
+
+KPX period six -126
+KPX period eight -168
+KPX period semicolon -245
+KPX period V -126
+KPX period X -168
+KPX period bracketleft -245
+KPX period j -135
+KPX period v -135
+KPX period cedilla -245
+KPX period ordmasculine -245
+KPX period dcaron -126
+KPX period Dcroat -126
+KPX period dcroat -126
+KPX period Emacron -126
+KPX period Iogonek -126
+KPX period iogonek -126
+KPX period Ldot -245
+KPX period ldot -245
+KPX period Lslash -135
+KPX period lslash -135
+KPX period Nacute -124
+KPX period nacute -124
+KPX period ncommaaccent -124
+KPX period Ncaron -124
+KPX period Obreve -135
+KPX period obreve -135
+
+KPX slash eight -128
+KPX slash X -128
+
+KPX one numbersign -104
+KPX one C -104
+KPX one braceleft -104
+KPX one bar -104
+KPX one braceright -104
+KPX one asciitilde -104
+KPX one nbspace -104
+KPX one exclamdown -104
+KPX one guillemotright -104
+KPX one onequarter -104
+KPX one onehalf -104
+KPX one threequarters -104
+KPX one questiondown -104
+KPX one Agrave -104
+
+KPX two numbersign -158
+KPX two C -158
+KPX two braceleft -158
+KPX two bar -158
+KPX two braceright -158
+KPX two asciitilde -158
+KPX two nbspace -158
+KPX two guillemotright -158
+KPX two onequarter -158
+KPX two onehalf -158
+KPX two threequarters -158
+KPX two questiondown -158
+KPX two Agrave -158
+
+KPX six numbersign -211
+KPX six comma -226
+KPX six slash -136
+KPX six C -211
+KPX six L -226
+KPX six O -136
+KPX six j -122
+KPX six v -122
+KPX six braceleft -211
+KPX six bar -211
+KPX six braceright -211
+KPX six asciitilde -211
+KPX six nbspace -211
+KPX six exclamdown -247
+KPX six guillemotright -211
+KPX six onequarter -211
+KPX six onehalf -211
+KPX six threequarters -211
+KPX six questiondown -211
+KPX six Agrave -211
+KPX six Lslash -122
+KPX six lslash -122
+KPX six Ncommaaccent -110
+KPX six ncaron -110
+KPX six Omacron -110
+KPX six Obreve -122
+KPX six obreve -122
+
+KPX eight numbersign -258
+KPX eight comma -196
+KPX eight slash -127
+KPX eight C -258
+KPX eight L -196
+KPX eight O -127
+KPX eight j -152
+KPX eight v -152
+KPX eight braceleft -258
+KPX eight bar -258
+KPX eight braceright -258
+KPX eight asciitilde -258
+KPX eight nbspace -258
+KPX eight exclamdown -258
+KPX eight guillemotright -258
+KPX eight onequarter -258
+KPX eight onehalf -258
+KPX eight threequarters -258
+KPX eight questiondown -258
+KPX eight Agrave -258
+KPX eight Lslash -152
+KPX eight lslash -152
+KPX eight Ncommaaccent -127
+KPX eight ncaron -127
+KPX eight Omacron -127
+KPX eight Obreve -152
+KPX eight obreve -152
+
+KPX nine numbersign -113
+KPX nine C -113
+KPX nine braceleft -113
+KPX nine bar -113
+KPX nine braceright -113
+KPX nine asciitilde -113
+KPX nine nbspace -113
+KPX nine exclamdown -149
+KPX nine guillemotright -113
+KPX nine onequarter -113
+KPX nine onehalf -113
+KPX nine threequarters -113
+KPX nine questiondown -113
+KPX nine Agrave -113
+
+KPX colon j -122
+KPX colon v -122
+KPX colon Lslash -122
+KPX colon lslash -122
+KPX colon Obreve -122
+KPX colon obreve -122
+
+KPX semicolon numbersign -237
+KPX semicolon comma -220
+KPX semicolon slash -146
+KPX semicolon C -237
+KPX semicolon L -220
+KPX semicolon O -146
+KPX semicolon j -159
+KPX semicolon v -159
+KPX semicolon braceleft -237
+KPX semicolon bar -237
+KPX semicolon braceright -237
+KPX semicolon asciitilde -237
+KPX semicolon nbspace -237
+KPX semicolon exclamdown -217
+KPX semicolon guillemotright -237
+KPX semicolon onequarter -237
+KPX semicolon onehalf -237
+KPX semicolon threequarters -237
+KPX semicolon questiondown -237
+KPX semicolon Agrave -237
+KPX semicolon Lslash -159
+KPX semicolon lslash -159
+KPX semicolon Ncommaaccent -152
+KPX semicolon ncaron -152
+KPX semicolon Omacron -152
+KPX semicolon Obreve -159
+KPX semicolon obreve -159
+
+KPX C six -214
+KPX C eight -222
+KPX C semicolon -237
+KPX C V -214
+KPX C X -222
+KPX C bracketleft -237
+KPX C cedilla -237
+KPX C ordmasculine -237
+KPX C dcaron -214
+KPX C Dcroat -214
+KPX C dcroat -214
+KPX C Emacron -214
+KPX C Iogonek -214
+KPX C iogonek -214
+KPX C Ldot -237
+KPX C ldot -237
+KPX C Nacute -109
+KPX C nacute -109
+KPX C ncommaaccent -109
+KPX C Ncaron -109
+
+KPX H numbersign -169
+KPX H comma -237
+KPX H C -169
+KPX H L -237
+KPX H braceleft -169
+KPX H bar -169
+KPX H braceright -169
+KPX H asciitilde -169
+KPX H nbspace -169
+KPX H exclamdown -197
+KPX H guillemotright -169
+KPX H onequarter -169
+KPX H onehalf -169
+KPX H threequarters -169
+KPX H questiondown -169
+KPX H Agrave -169
+KPX H Ncommaaccent -124
+KPX H ncaron -124
+KPX H Omacron -124
+
+KPX M j -184
+KPX M v -184
+KPX M Lslash -184
+KPX M lslash -184
+KPX M Obreve -184
+KPX M obreve -184
+
+KPX N six -126
+KPX N eight -168
+KPX N semicolon -245
+KPX N V -126
+KPX N X -168
+KPX N bracketleft -245
+KPX N j -135
+KPX N v -135
+KPX N cedilla -245
+KPX N ordmasculine -245
+KPX N dcaron -126
+KPX N Dcroat -126
+KPX N dcroat -126
+KPX N Emacron -126
+KPX N Iogonek -126
+KPX N iogonek -126
+KPX N Ldot -245
+KPX N ldot -245
+KPX N Lslash -135
+KPX N lslash -135
+KPX N Nacute -124
+KPX N nacute -124
+KPX N ncommaaccent -124
+KPX N Ncaron -124
+KPX N Obreve -135
+KPX N obreve -135
+
+KPX O eight -128
+KPX O X -128
+
+KPX R numbersign -158
+KPX R C -158
+KPX R braceleft -158
+KPX R bar -158
+KPX R braceright -158
+KPX R asciitilde -158
+KPX R nbspace -158
+KPX R guillemotright -158
+KPX R onequarter -158
+KPX R onehalf -158
+KPX R threequarters -158
+KPX R questiondown -158
+KPX R Agrave -158
+
+KPX V numbersign -211
+KPX V comma -226
+KPX V slash -136
+KPX V C -211
+KPX V L -226
+KPX V O -136
+KPX V j -122
+KPX V v -122
+KPX V braceleft -211
+KPX V bar -211
+KPX V braceright -211
+KPX V asciitilde -211
+KPX V nbspace -211
+KPX V exclamdown -247
+KPX V guillemotright -211
+KPX V onequarter -211
+KPX V onehalf -211
+KPX V threequarters -211
+KPX V questiondown -211
+KPX V Agrave -211
+KPX V Lslash -122
+KPX V lslash -122
+KPX V Ncommaaccent -110
+KPX V ncaron -110
+KPX V Omacron -110
+KPX V Obreve -122
+KPX V obreve -122
+
+KPX X numbersign -258
+KPX X comma -196
+KPX X slash -127
+KPX X C -258
+KPX X L -196
+KPX X O -127
+KPX X j -152
+KPX X v -152
+KPX X braceleft -258
+KPX X bar -258
+KPX X braceright -258
+KPX X asciitilde -258
+KPX X nbspace -258
+KPX X exclamdown -258
+KPX X guillemotright -258
+KPX X onequarter -258
+KPX X onehalf -258
+KPX X threequarters -258
+KPX X questiondown -258
+KPX X Agrave -258
+KPX X Lslash -152
+KPX X lslash -152
+KPX X Ncommaaccent -127
+KPX X ncaron -127
+KPX X Omacron -127
+KPX X Obreve -152
+KPX X obreve -152
+
+KPX Y numbersign -113
+KPX Y C -113
+KPX Y braceleft -113
+KPX Y bar -113
+KPX Y braceright -113
+KPX Y asciitilde -113
+KPX Y nbspace -113
+KPX Y exclamdown -149
+KPX Y guillemotright -113
+KPX Y onequarter -113
+KPX Y onehalf -113
+KPX Y threequarters -113
+KPX Y questiondown -113
+KPX Y Agrave -113
+
+KPX Z j -122
+KPX Z v -122
+KPX Z Lslash -122
+KPX Z lslash -122
+KPX Z Obreve -122
+KPX Z obreve -122
+
+KPX bracketleft numbersign -237
+KPX bracketleft comma -220
+KPX bracketleft slash -146
+KPX bracketleft C -237
+KPX bracketleft L -220
+KPX bracketleft O -146
+KPX bracketleft j -159
+KPX bracketleft v -159
+KPX bracketleft braceleft -237
+KPX bracketleft bar -237
+KPX bracketleft braceright -237
+KPX bracketleft asciitilde -237
+KPX bracketleft nbspace -237
+KPX bracketleft exclamdown -217
+KPX bracketleft guillemotright -237
+KPX bracketleft onequarter -237
+KPX bracketleft onehalf -237
+KPX bracketleft threequarters -237
+KPX bracketleft questiondown -237
+KPX bracketleft Agrave -237
+KPX bracketleft Lslash -159
+KPX bracketleft lslash -159
+KPX bracketleft Ncommaaccent -152
+KPX bracketleft ncaron -152
+KPX bracketleft Omacron -152
+KPX bracketleft Obreve -159
+KPX bracketleft obreve -159
+
+KPX j numbersign -147
+KPX j comma -159
+KPX j colon -134
+KPX j semicolon -122
+KPX j C -147
+KPX j L -159
+KPX j Z -134
+KPX j bracketleft -122
+KPX j braceleft -147
+KPX j bar -147
+KPX j braceright -147
+KPX j asciitilde -147
+KPX j nbspace -147
+KPX j cedilla -122
+KPX j ordmasculine -122
+KPX j guillemotright -147
+KPX j onequarter -147
+KPX j onehalf -147
+KPX j threequarters -147
+KPX j questiondown -147
+KPX j Agrave -147
+KPX j Ldot -122
+KPX j ldot -122
+
+KPX v numbersign -147
+KPX v comma -159
+KPX v colon -134
+KPX v semicolon -122
+KPX v C -147
+KPX v L -159
+KPX v Z -134
+KPX v bracketleft -122
+KPX v braceleft -147
+KPX v bar -147
+KPX v braceright -147
+KPX v asciitilde -147
+KPX v nbspace -147
+KPX v cedilla -122
+KPX v ordmasculine -122
+KPX v guillemotright -147
+KPX v onequarter -147
+KPX v onehalf -147
+KPX v threequarters -147
+KPX v questiondown -147
+KPX v Agrave -147
+KPX v Ldot -122
+KPX v ldot -122
+
+KPX braceleft six -214
+KPX braceleft eight -222
+KPX braceleft semicolon -237
+KPX braceleft V -214
+KPX braceleft X -222
+KPX braceleft bracketleft -237
+KPX braceleft cedilla -237
+KPX braceleft ordmasculine -237
+KPX braceleft dcaron -214
+KPX braceleft Dcroat -214
+KPX braceleft dcroat -214
+KPX braceleft Emacron -214
+KPX braceleft Iogonek -214
+KPX braceleft iogonek -214
+KPX braceleft Ldot -237
+KPX braceleft ldot -237
+KPX braceleft Nacute -109
+KPX braceleft nacute -109
+KPX braceleft ncommaaccent -109
+KPX braceleft Ncaron -109
+
+KPX bar six -214
+KPX bar eight -222
+KPX bar semicolon -237
+KPX bar V -214
+KPX bar X -222
+KPX bar bracketleft -237
+KPX bar cedilla -237
+KPX bar ordmasculine -237
+KPX bar dcaron -214
+KPX bar Dcroat -214
+KPX bar dcroat -214
+KPX bar Emacron -214
+KPX bar Iogonek -214
+KPX bar iogonek -214
+KPX bar Ldot -237
+KPX bar ldot -237
+KPX bar Nacute -109
+KPX bar nacute -109
+KPX bar ncommaaccent -109
+KPX bar Ncaron -109
+
+KPX braceright six -214
+KPX braceright eight -222
+KPX braceright semicolon -237
+KPX braceright V -214
+KPX braceright X -222
+KPX braceright bracketleft -237
+KPX braceright cedilla -237
+KPX braceright ordmasculine -237
+KPX braceright dcaron -214
+KPX braceright Dcroat -214
+KPX braceright dcroat -214
+KPX braceright Emacron -214
+KPX braceright Iogonek -214
+KPX braceright iogonek -214
+KPX braceright Ldot -237
+KPX braceright ldot -237
+KPX braceright Nacute -109
+KPX braceright nacute -109
+KPX braceright ncommaaccent -109
+KPX braceright Ncaron -109
+
+KPX asciitilde six -214
+KPX asciitilde eight -222
+KPX asciitilde semicolon -237
+KPX asciitilde V -214
+KPX asciitilde X -222
+KPX asciitilde bracketleft -237
+KPX asciitilde cedilla -237
+KPX asciitilde ordmasculine -237
+KPX asciitilde dcaron -214
+KPX asciitilde Dcroat -214
+KPX asciitilde dcroat -214
+KPX asciitilde Emacron -214
+KPX asciitilde Iogonek -214
+KPX asciitilde iogonek -214
+KPX asciitilde Ldot -237
+KPX asciitilde ldot -237
+KPX asciitilde Nacute -109
+KPX asciitilde nacute -109
+KPX asciitilde ncommaaccent -109
+KPX asciitilde Ncaron -109
+
+KPX nbspace six -214
+KPX nbspace eight -222
+KPX nbspace semicolon -237
+KPX nbspace V -214
+KPX nbspace X -222
+KPX nbspace bracketleft -237
+KPX nbspace cedilla -237
+KPX nbspace ordmasculine -237
+KPX nbspace dcaron -214
+KPX nbspace Dcroat -214
+KPX nbspace dcroat -214
+KPX nbspace Emacron -214
+KPX nbspace Iogonek -214
+KPX nbspace iogonek -214
+KPX nbspace Ldot -237
+KPX nbspace ldot -237
+KPX nbspace Nacute -109
+KPX nbspace nacute -109
+KPX nbspace ncommaaccent -109
+KPX nbspace Ncaron -109
+
+
+KPX plusminus braceleft -104
+KPX plusminus bar -104
+KPX plusminus braceright -104
+KPX plusminus asciitilde -104
+KPX plusminus nbspace -104
+KPX plusminus exclamdown -104
+KPX plusminus guillemotright -104
+KPX plusminus onequarter -104
+KPX plusminus onehalf -104
+KPX plusminus threequarters -104
+KPX plusminus questiondown -104
+KPX plusminus Agrave -104
+
+KPX threesuperior numbersign -104
+KPX threesuperior C -104
+KPX threesuperior braceleft -104
+KPX threesuperior bar -104
+KPX threesuperior braceright -104
+KPX threesuperior asciitilde -104
+KPX threesuperior nbspace -104
+KPX threesuperior exclamdown -104
+KPX threesuperior guillemotright -104
+KPX threesuperior onequarter -104
+KPX threesuperior onehalf -104
+KPX threesuperior threequarters -104
+KPX threesuperior questiondown -104
+KPX threesuperior Agrave -104
+
+KPX cedilla numbersign -237
+KPX cedilla comma -220
+KPX cedilla slash -146
+KPX cedilla C -237
+KPX cedilla L -220
+KPX cedilla O -146
+KPX cedilla j -159
+KPX cedilla v -159
+KPX cedilla braceleft -237
+KPX cedilla bar -237
+KPX cedilla braceright -237
+KPX cedilla asciitilde -237
+KPX cedilla nbspace -237
+KPX cedilla exclamdown -217
+KPX cedilla guillemotright -237
+KPX cedilla onequarter -237
+KPX cedilla onehalf -237
+KPX cedilla threequarters -237
+KPX cedilla questiondown -237
+KPX cedilla Agrave -237
+KPX cedilla Lslash -159
+KPX cedilla lslash -159
+KPX cedilla Ncommaaccent -152
+KPX cedilla ncaron -152
+KPX cedilla Omacron -152
+KPX cedilla Obreve -159
+KPX cedilla obreve -159
+
+KPX ordmasculine numbersign -237
+KPX ordmasculine comma -220
+KPX ordmasculine slash -146
+KPX ordmasculine C -237
+KPX ordmasculine L -220
+KPX ordmasculine O -146
+KPX ordmasculine j -159
+KPX ordmasculine v -159
+KPX ordmasculine braceleft -237
+KPX ordmasculine bar -237
+KPX ordmasculine braceright -237
+KPX ordmasculine asciitilde -237
+KPX ordmasculine nbspace -237
+KPX ordmasculine exclamdown -217
+KPX ordmasculine guillemotright -237
+KPX ordmasculine onequarter -237
+KPX ordmasculine onehalf -237
+KPX ordmasculine threequarters -237
+KPX ordmasculine questiondown -237
+KPX ordmasculine Agrave -237
+KPX ordmasculine Lslash -159
+KPX ordmasculine lslash -159
+KPX ordmasculine Ncommaaccent -152
+KPX ordmasculine ncaron -152
+KPX ordmasculine Omacron -152
+KPX ordmasculine Obreve -159
+KPX ordmasculine obreve -159
+
+KPX guillemotright six -214
+KPX guillemotright eight -222
+KPX guillemotright semicolon -237
+KPX guillemotright V -214
+KPX guillemotright X -222
+KPX guillemotright bracketleft -237
+KPX guillemotright cedilla -237
+KPX guillemotright ordmasculine -237
+KPX guillemotright dcaron -214
+KPX guillemotright Dcroat -214
+KPX guillemotright dcroat -214
+KPX guillemotright Emacron -214
+KPX guillemotright Iogonek -214
+KPX guillemotright iogonek -214
+KPX guillemotright Ldot -237
+KPX guillemotright ldot -237
+KPX guillemotright Nacute -109
+KPX guillemotright nacute -109
+KPX guillemotright ncommaaccent -109
+KPX guillemotright Ncaron -109
+
+KPX onequarter six -214
+KPX onequarter eight -222
+KPX onequarter semicolon -237
+KPX onequarter V -214
+KPX onequarter X -222
+KPX onequarter bracketleft -237
+KPX onequarter cedilla -237
+KPX onequarter ordmasculine -237
+KPX onequarter dcaron -214
+KPX onequarter Dcroat -214
+KPX onequarter dcroat -214
+KPX onequarter Emacron -214
+KPX onequarter Iogonek -214
+KPX onequarter iogonek -214
+KPX onequarter Ldot -237
+KPX onequarter ldot -237
+KPX onequarter Nacute -109
+KPX onequarter nacute -109
+KPX onequarter ncommaaccent -109
+KPX onequarter Ncaron -109
+
+KPX onehalf six -214
+KPX onehalf eight -222
+KPX onehalf semicolon -237
+KPX onehalf V -214
+KPX onehalf X -222
+KPX onehalf bracketleft -237
+KPX onehalf cedilla -237
+KPX onehalf ordmasculine -237
+KPX onehalf dcaron -214
+KPX onehalf Dcroat -214
+KPX onehalf dcroat -214
+KPX onehalf Emacron -214
+KPX onehalf Iogonek -214
+KPX onehalf iogonek -214
+KPX onehalf Ldot -237
+KPX onehalf ldot -237
+KPX onehalf Nacute -109
+KPX onehalf nacute -109
+KPX onehalf ncommaaccent -109
+KPX onehalf Ncaron -109
+
+KPX threequarters six -214
+KPX threequarters eight -222
+KPX threequarters semicolon -237
+KPX threequarters V -214
+KPX threequarters X -222
+KPX threequarters bracketleft -237
+KPX threequarters cedilla -237
+KPX threequarters ordmasculine -237
+KPX threequarters dcaron -214
+KPX threequarters Dcroat -214
+KPX threequarters dcroat -214
+KPX threequarters Emacron -214
+KPX threequarters Iogonek -214
+KPX threequarters iogonek -214
+KPX threequarters Ldot -237
+KPX threequarters ldot -237
+KPX threequarters Nacute -109
+KPX threequarters nacute -109
+KPX threequarters ncommaaccent -109
+KPX threequarters Ncaron -109
+
+KPX questiondown six -214
+KPX questiondown eight -222
+KPX questiondown semicolon -237
+KPX questiondown V -214
+KPX questiondown X -222
+KPX questiondown bracketleft -237
+KPX questiondown cedilla -237
+KPX questiondown ordmasculine -237
+KPX questiondown dcaron -214
+KPX questiondown Dcroat -214
+KPX questiondown dcroat -214
+KPX questiondown Emacron -214
+KPX questiondown Iogonek -214
+KPX questiondown iogonek -214
+KPX questiondown Ldot -237
+KPX questiondown ldot -237
+KPX questiondown Nacute -109
+KPX questiondown nacute -109
+KPX questiondown ncommaaccent -109
+KPX questiondown Ncaron -109
+
+KPX Agrave six -214
+KPX Agrave eight -222
+KPX Agrave semicolon -237
+KPX Agrave V -214
+KPX Agrave X -222
+KPX Agrave bracketleft -237
+KPX Agrave cedilla -237
+KPX Agrave ordmasculine -237
+KPX Agrave dcaron -214
+KPX Agrave Dcroat -214
+KPX Agrave dcroat -214
+KPX Agrave Emacron -214
+KPX Agrave Iogonek -214
+KPX Agrave iogonek -214
+KPX Agrave Ldot -237
+KPX Agrave ldot -237
+KPX Agrave Nacute -109
+KPX Agrave nacute -109
+KPX Agrave ncommaaccent -109
+KPX Agrave Ncaron -109
+
+KPX ccedilla j -184
+KPX ccedilla v -184
+KPX ccedilla Lslash -184
+KPX ccedilla lslash -184
+KPX ccedilla Obreve -184
+KPX ccedilla obreve -184
+
+KPX egrave j -184
+KPX egrave v -184
+KPX egrave Lslash -184
+KPX egrave lslash -184
+KPX egrave Obreve -184
+KPX egrave obreve -184
+
+KPX eacute six -126
+KPX eacute eight -168
+KPX eacute semicolon -245
+KPX eacute V -126
+KPX eacute X -168
+KPX eacute bracketleft -245
+KPX eacute j -135
+KPX eacute v -135
+KPX eacute cedilla -245
+KPX eacute ordmasculine -245
+KPX eacute dcaron -126
+KPX eacute Dcroat -126
+KPX eacute dcroat -126
+KPX eacute Emacron -126
+KPX eacute Iogonek -126
+KPX eacute iogonek -126
+KPX eacute Ldot -245
+KPX eacute ldot -245
+KPX eacute Lslash -135
+KPX eacute lslash -135
+KPX eacute Nacute -124
+KPX eacute nacute -124
+KPX eacute ncommaaccent -124
+KPX eacute Ncaron -124
+KPX eacute Obreve -135
+KPX eacute obreve -135
+
+KPX ecircumflex six -126
+KPX ecircumflex eight -168
+KPX ecircumflex semicolon -245
+KPX ecircumflex V -126
+KPX ecircumflex X -168
+KPX ecircumflex bracketleft -245
+KPX ecircumflex j -135
+KPX ecircumflex v -135
+KPX ecircumflex cedilla -245
+KPX ecircumflex ordmasculine -245
+KPX ecircumflex dcaron -126
+KPX ecircumflex Dcroat -126
+KPX ecircumflex dcroat -126
+KPX ecircumflex Emacron -126
+KPX ecircumflex Iogonek -126
+KPX ecircumflex iogonek -126
+KPX ecircumflex Ldot -245
+KPX ecircumflex ldot -245
+KPX ecircumflex Lslash -135
+KPX ecircumflex lslash -135
+KPX ecircumflex Nacute -124
+KPX ecircumflex nacute -124
+KPX ecircumflex ncommaaccent -124
+KPX ecircumflex Ncaron -124
+KPX ecircumflex Obreve -135
+KPX ecircumflex obreve -135
+
+KPX edieresis six -126
+KPX edieresis eight -168
+KPX edieresis semicolon -245
+KPX edieresis V -126
+KPX edieresis X -168
+KPX edieresis bracketleft -245
+KPX edieresis j -135
+KPX edieresis v -135
+KPX edieresis cedilla -245
+KPX edieresis ordmasculine -245
+KPX edieresis dcaron -126
+KPX edieresis Dcroat -126
+KPX edieresis dcroat -126
+KPX edieresis Emacron -126
+KPX edieresis Iogonek -126
+KPX edieresis iogonek -126
+KPX edieresis Ldot -245
+KPX edieresis ldot -245
+KPX edieresis Lslash -135
+KPX edieresis lslash -135
+KPX edieresis Nacute -124
+KPX edieresis nacute -124
+KPX edieresis ncommaaccent -124
+KPX edieresis Ncaron -124
+KPX edieresis Obreve -135
+KPX edieresis obreve -135
+
+KPX igrave six -126
+KPX igrave eight -168
+KPX igrave semicolon -245
+KPX igrave V -126
+KPX igrave X -168
+KPX igrave bracketleft -245
+KPX igrave j -135
+KPX igrave v -135
+KPX igrave cedilla -245
+KPX igrave ordmasculine -245
+KPX igrave dcaron -126
+KPX igrave Dcroat -126
+KPX igrave dcroat -126
+KPX igrave Emacron -126
+KPX igrave Iogonek -126
+KPX igrave iogonek -126
+KPX igrave Ldot -245
+KPX igrave ldot -245
+KPX igrave Lslash -135
+KPX igrave lslash -135
+KPX igrave Nacute -124
+KPX igrave nacute -124
+KPX igrave ncommaaccent -124
+KPX igrave Ncaron -124
+KPX igrave Obreve -135
+KPX igrave obreve -135
+
+KPX idieresis six -126
+KPX idieresis eight -168
+KPX idieresis semicolon -245
+KPX idieresis V -126
+KPX idieresis X -168
+KPX idieresis bracketleft -245
+KPX idieresis j -135
+KPX idieresis v -135
+KPX idieresis cedilla -245
+KPX idieresis ordmasculine -245
+KPX idieresis dcaron -126
+KPX idieresis Dcroat -126
+KPX idieresis dcroat -126
+KPX idieresis Emacron -126
+KPX idieresis Iogonek -126
+KPX idieresis iogonek -126
+KPX idieresis Ldot -245
+KPX idieresis ldot -245
+KPX idieresis Lslash -135
+KPX idieresis lslash -135
+KPX idieresis Nacute -124
+KPX idieresis nacute -124
+KPX idieresis ncommaaccent -124
+KPX idieresis Ncaron -124
+KPX idieresis Obreve -135
+KPX idieresis obreve -135
+
+KPX eth six -126
+KPX eth eight -168
+KPX eth semicolon -245
+KPX eth V -126
+KPX eth X -168
+KPX eth bracketleft -245
+KPX eth j -135
+KPX eth v -135
+KPX eth cedilla -245
+KPX eth ordmasculine -245
+KPX eth dcaron -126
+KPX eth Dcroat -126
+KPX eth dcroat -126
+KPX eth Emacron -126
+KPX eth Iogonek -126
+KPX eth iogonek -126
+KPX eth Ldot -245
+KPX eth ldot -245
+KPX eth Lslash -135
+KPX eth lslash -135
+KPX eth Nacute -124
+KPX eth nacute -124
+KPX eth ncommaaccent -124
+KPX eth Ncaron -124
+KPX eth Obreve -135
+KPX eth obreve -135
+
+KPX ntilde six -126
+KPX ntilde eight -168
+KPX ntilde semicolon -245
+KPX ntilde V -126
+KPX ntilde X -168
+KPX ntilde bracketleft -245
+KPX ntilde j -135
+KPX ntilde v -135
+KPX ntilde cedilla -245
+KPX ntilde ordmasculine -245
+KPX ntilde dcaron -126
+KPX ntilde Dcroat -126
+KPX ntilde dcroat -126
+KPX ntilde Emacron -126
+KPX ntilde Iogonek -126
+KPX ntilde iogonek -126
+KPX ntilde Ldot -245
+KPX ntilde ldot -245
+KPX ntilde Lslash -135
+KPX ntilde lslash -135
+KPX ntilde Nacute -124
+KPX ntilde nacute -124
+KPX ntilde ncommaaccent -124
+KPX ntilde Ncaron -124
+KPX ntilde Obreve -135
+KPX ntilde obreve -135
+
+KPX ograve six -126
+KPX ograve eight -168
+KPX ograve semicolon -245
+KPX ograve V -126
+KPX ograve X -168
+KPX ograve bracketleft -245
+KPX ograve j -135
+KPX ograve v -135
+KPX ograve cedilla -245
+KPX ograve ordmasculine -245
+KPX ograve dcaron -126
+KPX ograve Dcroat -126
+KPX ograve dcroat -126
+KPX ograve Emacron -126
+KPX ograve Iogonek -126
+KPX ograve iogonek -126
+KPX ograve Ldot -245
+KPX ograve ldot -245
+KPX ograve Lslash -135
+KPX ograve lslash -135
+KPX ograve Nacute -124
+KPX ograve nacute -124
+KPX ograve ncommaaccent -124
+KPX ograve Ncaron -124
+KPX ograve Obreve -135
+KPX ograve obreve -135
+
+KPX ucircumflex numbersign -104
+KPX ucircumflex C -104
+KPX ucircumflex braceleft -104
+KPX ucircumflex bar -104
+
+KPX dcaron numbersign -211
+KPX dcaron comma -226
+KPX dcaron slash -136
+KPX dcaron C -211
+KPX dcaron L -226
+KPX dcaron O -136
+KPX dcaron j -122
+KPX dcaron v -122
+KPX dcaron braceleft -211
+KPX dcaron bar -211
+KPX dcaron braceright -211
+KPX dcaron asciitilde -211
+KPX dcaron nbspace -211
+KPX dcaron exclamdown -247
+KPX dcaron guillemotright -211
+KPX dcaron onequarter -211
+KPX dcaron onehalf -211
+KPX dcaron threequarters -211
+KPX dcaron questiondown -211
+KPX dcaron Agrave -211
+KPX dcaron Lslash -122
+KPX dcaron lslash -122
+KPX dcaron Ncommaaccent -110
+KPX dcaron ncaron -110
+KPX dcaron Omacron -110
+KPX dcaron Obreve -122
+KPX dcaron obreve -122
+
+KPX Dcroat numbersign -211
+KPX Dcroat comma -226
+KPX Dcroat slash -136
+KPX Dcroat C -211
+KPX Dcroat L -226
+KPX Dcroat O -136
+KPX Dcroat j -122
+KPX Dcroat v -122
+KPX Dcroat braceleft -211
+KPX Dcroat bar -211
+KPX Dcroat braceright -211
+KPX Dcroat asciitilde -211
+KPX Dcroat nbspace -211
+KPX Dcroat exclamdown -247
+KPX Dcroat guillemotright -211
+KPX Dcroat onequarter -211
+KPX Dcroat onehalf -211
+KPX Dcroat threequarters -211
+KPX Dcroat questiondown -211
+KPX Dcroat Agrave -211
+KPX Dcroat Lslash -122
+KPX Dcroat lslash -122
+KPX Dcroat Ncommaaccent -110
+KPX Dcroat ncaron -110
+KPX Dcroat Omacron -110
+KPX Dcroat Obreve -122
+KPX Dcroat obreve -122
+
+KPX dcroat numbersign -211
+KPX dcroat comma -226
+KPX dcroat slash -136
+KPX dcroat C -211
+KPX dcroat L -226
+KPX dcroat O -136
+KPX dcroat j -122
+KPX dcroat v -122
+KPX dcroat braceleft -211
+KPX dcroat bar -211
+KPX dcroat braceright -211
+KPX dcroat asciitilde -211
+KPX dcroat nbspace -211
+KPX dcroat exclamdown -247
+KPX dcroat guillemotright -211
+KPX dcroat onequarter -211
+KPX dcroat onehalf -211
+KPX dcroat threequarters -211
+KPX dcroat questiondown -211
+KPX dcroat Agrave -211
+KPX dcroat Lslash -122
+KPX dcroat lslash -122
+KPX dcroat Ncommaaccent -110
+KPX dcroat ncaron -110
+KPX dcroat Omacron -110
+KPX dcroat Obreve -122
+KPX dcroat obreve -122
+
+KPX Emacron numbersign -211
+KPX Emacron comma -226
+KPX Emacron slash -136
+KPX Emacron C -211
+KPX Emacron L -226
+KPX Emacron O -136
+KPX Emacron j -122
+KPX Emacron v -122
+KPX Emacron braceleft -211
+KPX Emacron bar -211
+KPX Emacron braceright -211
+KPX Emacron asciitilde -211
+KPX Emacron nbspace -211
+KPX Emacron exclamdown -247
+KPX Emacron guillemotright -211
+KPX Emacron onequarter -211
+KPX Emacron onehalf -211
+KPX Emacron threequarters -211
+KPX Emacron questiondown -211
+KPX Emacron Agrave -211
+KPX Emacron Lslash -122
+KPX Emacron lslash -122
+KPX Emacron Ncommaaccent -110
+KPX Emacron ncaron -110
+KPX Emacron Omacron -110
+KPX Emacron Obreve -122
+KPX Emacron obreve -122
+
+KPX gdotaccent numbersign -113
+KPX gdotaccent C -113
+KPX gdotaccent braceleft -113
+KPX gdotaccent bar -113
+KPX gdotaccent braceright -113
+KPX gdotaccent asciitilde -113
+KPX gdotaccent nbspace -113
+KPX gdotaccent exclamdown -149
+KPX gdotaccent guillemotright -113
+KPX gdotaccent onequarter -113
+KPX gdotaccent onehalf -113
+KPX gdotaccent threequarters -113
+KPX gdotaccent questiondown -113
+KPX gdotaccent Agrave -113
+
+KPX Gcommaaccent numbersign -113
+KPX Gcommaaccent C -113
+KPX Gcommaaccent braceleft -113
+KPX Gcommaaccent bar -113
+KPX Gcommaaccent braceright -113
+KPX Gcommaaccent asciitilde -113
+KPX Gcommaaccent nbspace -113
+KPX Gcommaaccent exclamdown -149
+KPX Gcommaaccent guillemotright -113
+KPX Gcommaaccent onequarter -113
+KPX Gcommaaccent onehalf -113
+KPX Gcommaaccent threequarters -113
+KPX Gcommaaccent questiondown -113
+KPX Gcommaaccent Agrave -113
+
+KPX Iogonek numbersign -211
+KPX Iogonek comma -226
+KPX Iogonek slash -136
+KPX Iogonek C -211
+KPX Iogonek L -226
+KPX Iogonek O -136
+KPX Iogonek j -122
+KPX Iogonek v -122
+KPX Iogonek braceleft -211
+KPX Iogonek bar -211
+KPX Iogonek braceright -211
+KPX Iogonek asciitilde -211
+KPX Iogonek nbspace -211
+KPX Iogonek exclamdown -247
+KPX Iogonek guillemotright -211
+KPX Iogonek onequarter -211
+KPX Iogonek onehalf -211
+KPX Iogonek threequarters -211
+KPX Iogonek questiondown -211
+KPX Iogonek Agrave -211
+KPX Iogonek Lslash -122
+KPX Iogonek lslash -122
+KPX Iogonek Ncommaaccent -110
+KPX Iogonek ncaron -110
+KPX Iogonek Omacron -110
+KPX Iogonek Obreve -122
+KPX Iogonek obreve -122
+
+KPX iogonek numbersign -211
+KPX iogonek comma -226
+KPX iogonek slash -136
+KPX iogonek C -211
+KPX iogonek L -226
+KPX iogonek O -136
+KPX iogonek j -122
+KPX iogonek v -122
+KPX iogonek braceleft -211
+KPX iogonek bar -211
+KPX iogonek braceright -211
+KPX iogonek asciitilde -211
+KPX iogonek nbspace -211
+KPX iogonek exclamdown -247
+KPX iogonek guillemotright -211
+KPX iogonek onequarter -211
+KPX iogonek onehalf -211
+KPX iogonek threequarters -211
+KPX iogonek questiondown -211
+KPX iogonek Agrave -211
+KPX iogonek Lslash -122
+KPX iogonek lslash -122
+KPX iogonek Ncommaaccent -110
+KPX iogonek ncaron -110
+KPX iogonek Omacron -110
+KPX iogonek Obreve -122
+KPX iogonek obreve -122
+
+KPX Lacute numbersign -113
+KPX Lacute C -113
+KPX Lacute braceleft -113
+KPX Lacute bar -113
+KPX Lacute braceright -113
+KPX Lacute asciitilde -113
+KPX Lacute nbspace -113
+KPX Lacute exclamdown -149
+KPX Lacute guillemotright -113
+KPX Lacute onequarter -113
+KPX Lacute onehalf -113
+KPX Lacute threequarters -113
+KPX Lacute questiondown -113
+KPX Lacute Agrave -113
+
+KPX lacute numbersign -113
+KPX lacute C -113
+KPX lacute braceleft -113
+KPX lacute bar -113
+KPX lacute braceright -113
+KPX lacute asciitilde -113
+KPX lacute nbspace -113
+KPX lacute exclamdown -149
+KPX lacute guillemotright -113
+KPX lacute onequarter -113
+KPX lacute onehalf -113
+KPX lacute threequarters -113
+KPX lacute questiondown -113
+KPX lacute Agrave -113
+
+KPX Lcommaaccent numbersign -113
+KPX Lcommaaccent C -113
+KPX Lcommaaccent braceleft -113
+KPX Lcommaaccent bar -113
+KPX Lcommaaccent braceright -113
+KPX Lcommaaccent asciitilde -113
+KPX Lcommaaccent nbspace -113
+KPX Lcommaaccent exclamdown -149
+KPX Lcommaaccent guillemotright -113
+KPX Lcommaaccent onequarter -113
+KPX Lcommaaccent onehalf -113
+KPX Lcommaaccent threequarters -113
+KPX Lcommaaccent questiondown -113
+KPX Lcommaaccent Agrave -113
+
+KPX lcommaaccent numbersign -113
+KPX lcommaaccent C -113
+KPX lcommaaccent braceleft -113
+KPX lcommaaccent bar -113
+KPX lcommaaccent braceright -113
+KPX lcommaaccent asciitilde -113
+KPX lcommaaccent nbspace -113
+KPX lcommaaccent exclamdown -149
+KPX lcommaaccent guillemotright -113
+KPX lcommaaccent onequarter -113
+KPX lcommaaccent onehalf -113
+KPX lcommaaccent threequarters -113
+KPX lcommaaccent questiondown -113
+KPX lcommaaccent Agrave -113
+
+KPX Lcaron numbersign -113
+KPX Lcaron C -113
+KPX Lcaron braceleft -113
+KPX Lcaron bar -113
+KPX Lcaron braceright -113
+KPX Lcaron asciitilde -113
+KPX Lcaron nbspace -113
+KPX Lcaron exclamdown -149
+KPX Lcaron guillemotright -113
+KPX Lcaron onequarter -113
+KPX Lcaron onehalf -113
+KPX Lcaron threequarters -113
+KPX Lcaron questiondown -113
+KPX Lcaron Agrave -113
+
+KPX lcaron numbersign -113
+KPX lcaron C -113
+KPX lcaron braceleft -113
+KPX lcaron bar -113
+KPX lcaron braceright -113
+KPX lcaron asciitilde -113
+KPX lcaron nbspace -113
+KPX lcaron exclamdown -149
+KPX lcaron guillemotright -113
+KPX lcaron onequarter -113
+KPX lcaron onehalf -113
+KPX lcaron threequarters -113
+KPX lcaron questiondown -113
+KPX lcaron Agrave -113
+
+KPX Ldot numbersign -237
+KPX Ldot comma -220
+KPX Ldot slash -146
+KPX Ldot C -237
+KPX Ldot L -220
+KPX Ldot O -146
+KPX Ldot j -159
+KPX Ldot v -159
+KPX Ldot braceleft -237
+KPX Ldot bar -237
+KPX Ldot braceright -237
+KPX Ldot asciitilde -237
+KPX Ldot nbspace -237
+KPX Ldot exclamdown -217
+KPX Ldot guillemotright -237
+KPX Ldot onequarter -237
+KPX Ldot onehalf -237
+KPX Ldot threequarters -237
+KPX Ldot questiondown -237
+KPX Ldot Agrave -237
+KPX Ldot Lslash -159
+KPX Ldot lslash -159
+KPX Ldot Ncommaaccent -152
+KPX Ldot ncaron -152
+KPX Ldot Omacron -152
+KPX Ldot Obreve -159
+KPX Ldot obreve -159
+
+KPX ldot numbersign -237
+KPX ldot comma -220
+KPX ldot slash -146
+KPX ldot C -237
+KPX ldot L -220
+KPX ldot O -146
+KPX ldot j -159
+KPX ldot v -159
+KPX ldot braceleft -237
+KPX ldot bar -237
+KPX ldot braceright -237
+KPX ldot asciitilde -237
+KPX ldot nbspace -237
+KPX ldot exclamdown -217
+KPX ldot guillemotright -237
+KPX ldot onequarter -237
+KPX ldot onehalf -237
+KPX ldot threequarters -237
+KPX ldot questiondown -237
+KPX ldot Agrave -237
+KPX ldot Lslash -159
+KPX ldot lslash -159
+KPX ldot Ncommaaccent -152
+KPX ldot ncaron -152
+KPX ldot Omacron -152
+KPX ldot Obreve -159
+KPX ldot obreve -159
+
+KPX Lslash numbersign -147
+KPX Lslash comma -159
+KPX Lslash colon -134
+KPX Lslash semicolon -122
+KPX Lslash C -147
+KPX Lslash L -159
+KPX Lslash Z -134
+KPX Lslash bracketleft -122
+KPX Lslash braceleft -147
+KPX Lslash bar -147
+KPX Lslash braceright -147
+KPX Lslash asciitilde -147
+KPX Lslash nbspace -147
+KPX Lslash cedilla -122
+KPX Lslash ordmasculine -122
+KPX Lslash guillemotright -147
+KPX Lslash onequarter -147
+KPX Lslash onehalf -147
+KPX Lslash threequarters -147
+KPX Lslash questiondown -147
+KPX Lslash Agrave -147
+KPX Lslash Ldot -122
+KPX Lslash ldot -122
+
+KPX lslash numbersign -147
+KPX lslash comma -159
+KPX lslash colon -134
+KPX lslash semicolon -122
+KPX lslash C -147
+KPX lslash L -159
+KPX lslash Z -134
+KPX lslash bracketleft -122
+KPX lslash braceleft -147
+KPX lslash bar -147
+KPX lslash braceright -147
+KPX lslash asciitilde -147
+KPX lslash nbspace -147
+KPX lslash cedilla -122
+KPX lslash ordmasculine -122
+KPX lslash guillemotright -147
+KPX lslash onequarter -147
+KPX lslash onehalf -147
+KPX lslash threequarters -147
+KPX lslash questiondown -147
+KPX lslash Agrave -147
+KPX lslash Ldot -122
+KPX lslash ldot -122
+
+KPX Nacute numbersign -111
+KPX Nacute comma -129
+KPX Nacute C -111
+KPX Nacute L -129
+KPX Nacute braceleft -111
+KPX Nacute bar -111
+KPX Nacute braceright -111
+KPX Nacute asciitilde -111
+KPX Nacute nbspace -111
+KPX Nacute guillemotright -111
+KPX Nacute onequarter -111
+KPX Nacute onehalf -111
+KPX Nacute threequarters -111
+KPX Nacute questiondown -111
+KPX Nacute Agrave -111
+
+KPX nacute numbersign -111
+KPX nacute comma -129
+KPX nacute C -111
+KPX nacute L -129
+KPX nacute braceleft -111
+KPX nacute bar -111
+KPX nacute braceright -111
+KPX nacute asciitilde -111
+KPX nacute nbspace -111
+KPX nacute guillemotright -111
+KPX nacute onequarter -111
+KPX nacute onehalf -111
+KPX nacute threequarters -111
+KPX nacute questiondown -111
+KPX nacute Agrave -111
+
+KPX Ncommaaccent six -110
+KPX Ncommaaccent eight -126
+KPX Ncommaaccent semicolon -147
+KPX Ncommaaccent V -110
+KPX Ncommaaccent X -126
+KPX Ncommaaccent bracketleft -147
+KPX Ncommaaccent cedilla -147
+KPX Ncommaaccent ordmasculine -147
+KPX Ncommaaccent dcaron -110
+KPX Ncommaaccent Dcroat -110
+KPX Ncommaaccent dcroat -110
+KPX Ncommaaccent Emacron -110
+KPX Ncommaaccent Iogonek -110
+KPX Ncommaaccent iogonek -110
+KPX Ncommaaccent Ldot -147
+KPX Ncommaaccent ldot -147
+
+KPX ncommaaccent numbersign -111
+KPX ncommaaccent comma -129
+KPX ncommaaccent C -111
+KPX ncommaaccent L -129
+KPX ncommaaccent braceleft -111
+KPX ncommaaccent bar -111
+KPX ncommaaccent braceright -111
+KPX ncommaaccent asciitilde -111
+KPX ncommaaccent nbspace -111
+KPX ncommaaccent guillemotright -111
+KPX ncommaaccent onequarter -111
+KPX ncommaaccent onehalf -111
+KPX ncommaaccent threequarters -111
+KPX ncommaaccent questiondown -111
+KPX ncommaaccent Agrave -111
+
+KPX Ncaron numbersign -111
+KPX Ncaron comma -129
+KPX Ncaron C -111
+KPX Ncaron L -129
+KPX Ncaron braceleft -111
+KPX Ncaron bar -111
+KPX Ncaron braceright -111
+KPX Ncaron asciitilde -111
+KPX Ncaron nbspace -111
+KPX Ncaron guillemotright -111
+KPX Ncaron onequarter -111
+KPX Ncaron onehalf -111
+KPX Ncaron threequarters -111
+KPX Ncaron questiondown -111
+KPX Ncaron Agrave -111
+
+KPX ncaron six -110
+KPX ncaron eight -126
+KPX ncaron semicolon -147
+KPX ncaron V -110
+KPX ncaron X -126
+KPX ncaron bracketleft -147
+KPX ncaron cedilla -147
+KPX ncaron ordmasculine -147
+KPX ncaron dcaron -110
+KPX ncaron Dcroat -110
+KPX ncaron dcroat -110
+KPX ncaron Emacron -110
+KPX ncaron Iogonek -110
+KPX ncaron iogonek -110
+KPX ncaron Ldot -147
+KPX ncaron ldot -147
+
+KPX Omacron six -110
+KPX Omacron eight -126
+KPX Omacron semicolon -147
+KPX Omacron V -110
+KPX Omacron X -126
+KPX Omacron bracketleft -147
+KPX Omacron cedilla -147
+KPX Omacron ordmasculine -147
+KPX Omacron dcaron -110
+KPX Omacron Dcroat -110
+KPX Omacron dcroat -110
+KPX Omacron Emacron -110
+KPX Omacron Iogonek -110
+KPX Omacron iogonek -110
+KPX Omacron Ldot -147
+KPX Omacron ldot -147
+
+KPX Obreve numbersign -147
+KPX Obreve comma -159
+KPX Obreve colon -134
+KPX Obreve semicolon -122
+KPX Obreve C -147
+KPX Obreve L -159
+KPX Obreve Z -134
+KPX Obreve bracketleft -122
+KPX Obreve braceleft -147
+KPX Obreve bar -147
+KPX Obreve braceright -147
+KPX Obreve asciitilde -147
+KPX Obreve nbspace -147
+KPX Obreve cedilla -122
+KPX Obreve ordmasculine -122
+KPX Obreve guillemotright -147
+KPX Obreve onequarter -147
+KPX Obreve onehalf -147
+KPX Obreve threequarters -147
+KPX Obreve questiondown -147
+KPX Obreve Agrave -147
+KPX Obreve Ldot -122
+KPX Obreve ldot -122
+
+KPX obreve numbersign -147
+KPX obreve comma -159
+KPX obreve colon -134
+KPX obreve semicolon -122
+KPX obreve C -147
+KPX obreve L -159
+KPX obreve Z -134
+KPX obreve bracketleft -122
+KPX obreve braceleft -147
+KPX obreve bar -147
+KPX obreve braceright -147
+KPX obreve asciitilde -147
+KPX obreve nbspace -147
+KPX obreve cedilla -122
+KPX obreve ordmasculine -122
+KPX obreve guillemotright -147
+KPX obreve onequarter -147
+KPX obreve onehalf -147
+KPX obreve threequarters -147
+KPX obreve questiondown -147
+KPX obreve Agrave -147
+KPX obreve Ldot -122
+KPX obreve ldot -122
+EndKernPairs
+EndKernData
+EndFontMetrics
