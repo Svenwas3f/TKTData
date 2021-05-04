@@ -67,7 +67,7 @@ class User {
     //Hash password
     $salt_parts = str_split(SALT_STRING, round(strlen( SALT_STRING ) / 2)); //Not working with unicode chars such as äöü
     // return hash("sha512", $password);
-    return hash("sha512", $salt_pats[0] . $password . $salt_parts[1]);
+    return hash("sha512", $salt_parts[0] . $password . $salt_parts[1]);
   }
 
   /**
