@@ -1,0 +1,33 @@
+Options All -Indexes
+
+DirectoryIndex index.php
+
+
+#4xx
+ErrorDocument 400 /tktdata/error/index.php
+ErrorDocument 401 /tktdata/error/index.php
+ErrorDocument 402 /tktdata/error/index.php
+ErrorDocument 403 /tktdata/error/index.php
+ErrorDocument 404 /tktdata/error/index.php
+ErrorDocument 405 /tktdata/error/index.php
+ErrorDocument 406 /tktdata/error/index.php
+ErrorDocument 407 /tktdata/error/index.php
+ErrorDocument 408 /tktdata/error/index.php
+ErrorDocument 409 /tktdata/error/index.php
+ErrorDocument 410 /tktdata/error/index.php
+ErrorDocument 411 /tktdata/error/index.php
+ErrorDocument 412 /tktdata/error/index.php
+ErrorDocument 413 /tktdata/error/index.php
+ErrorDocument 414 /tktdata/error/index.php
+ErrorDocument 415 /tktdata/error/index.php
+ErrorDocument 416 /tktdata/error/index.php
+ErrorDocument 417 /tktdata/error/index.php
+
+#5xx
+ErrorDocument 500 /tktdata/error/index.php
+ErrorDocument 501 /tktdata/error/index.php
+ErrorDocument 502 /tktdata/error/index.php
+ErrorDocument 503 /tktdata/error/index.php
+ErrorDocument 504 /tktdata/error/index.php
+ErrorDocument 505 /tktdata/error/index.php
+ErrorDocument 506 /tktdata/error/index.php
