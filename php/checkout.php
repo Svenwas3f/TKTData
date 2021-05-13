@@ -17,6 +17,15 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
+ * Checkout->access ( $user [int or null] ) [$cashier]
+ *
+ * Checkout->products () [$cashier]
+ *
+ * Checkout->global_products ()
+ *
+ * Checkout->values () [$cashier]
+ *
+ *
  */
 class Checkout {
   //Variables
@@ -98,11 +107,14 @@ class Checkout {
   }
 
   /**
+   * Returns true or false or if user is equal to null it returns list of users who have access to the checkout
+   * requires: $cashier
    *
+   * $user = User Id or null (Lists all user with access to this checkout)
    */
   public function access( $user = null ) {
-    // Require global variables
-    global $conn;
+    //Get database connection
+    $conn = Access::connect();
 
     if( is_null($user) ) {
       // Get all users that have access to this checkout
@@ -125,12 +137,16 @@ class Checkout {
     }
   }
 
+  /**
+   * Returns a list of all products for this checkout
+   * requires: $cashier
+   */
   public function products() {
-    // Require global variables
-    global $conn;
+    //Get database connection
+    $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id AND checkout_id=NULL" );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id" );
     $products->execute(array(
       "checkout_id" => $this->cashier,
     ));
@@ -139,11 +155,26 @@ class Checkout {
   }
 
   /**
-   *
+   * Returns list of all global products
+   */
+  public function global_products() {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Get all products
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=NULL" );
+    $products->execute();
+
+    return $products->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+  /**
+   * Returns all values from access, products, global_procutds and all general values of this checkout
+   * requires: $cashier
    */
   public function values() {
-    // Require global variables
-    global $conn;
+    //Get database connection
+    $conn = Access::connect();
 
     // Get all values from checkout
     $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE id=:id");
@@ -153,9 +184,10 @@ class Checkout {
 
     // Combine all values
     return array(
-      "checkout" => $checkout->fetch( PDO::FETCH_ASSOC ),
+      "checkout" => $checkout->fetchAll( PDO::FETCH_ASSOC ),
       "access" => $this->access(),
       "products" => $this->products(),
+      "global_products" => $this->global_products(),
     );
   }
 }
