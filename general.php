@@ -73,7 +73,7 @@ define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
 //Checkout
 define('CHECKOUT', 'tktdata_checkout');
 //Checkout price list
-define('CHECKOUT_PRICE_LIST', 'tktdata_checkout_price_list');
+define('CHECKOUT_PRODUCTS', 'tktdata_checkout_products');
 //Checkout access
 define('CHECKOUT_ACCESS', 'tktdata_checkout_access');
 
@@ -137,6 +137,9 @@ require_once( dirname(__FILE__) . "/php/crypt.php" );
 
 /* Payrexx file */
 require_once( dirname(__FILE__) . "/php/payrexx.php");
+
+/* Checkout file */
+require_once( dirname(__FILE__) . "/php/checkout.php");
 
 /////////////////////////////
 // Require html

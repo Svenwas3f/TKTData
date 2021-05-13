@@ -52,7 +52,7 @@ CREATE TABLE `tktdata_checkout_access` (
 
 CREATE TABLE `tktdata_checkout_price_list` (
   `id` int(11) NOT NULL,
-  `checkou_id` int(11) DEFAULT NULL,
+  `checkout_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
   `currency` varchar(3) DEFAULT NULL
