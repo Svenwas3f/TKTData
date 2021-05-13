@@ -17,6 +17,8 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
+ * Checkout->list ( $offset [int], $steps [int] ) [$cashier]
+ *
  * Checkout->access ( $user [int or null] ) [$cashier]
  *
  * Checkout->products () [$cashier]
@@ -32,11 +34,16 @@ class Checkout {
   public $cashier;
 
   /**
+   * Returns a list of all transactions (in steps) that belong to the checkout
+   * requires: $cashier
    *
+   * $offset: at what row you want to start
+   * $steps: How many rows
+   *
+   * Important notice. This function is recursive so please use the $steps wisely and do not execute this function with a very heigh $steps number
+   * The offset you can set as heigh as you want this does not affect the function in executiont ime
    */
   public function list( $offset = 0, $steps = 20) {
-    // Get payrexx variables
-
     // Define transaction list
     $transaction_list = array();
 
@@ -51,11 +58,11 @@ class Checkout {
 
     // $instanceName is a part of the url where you access your payrexx installation.
     // https://{$instanceName}.payrexx.com
-    $instanceName = 'kantifest-solothurn';
+    $instanceName = $this->values()["checkout"]["payment_payrexx_instance"];
 
     // $secret is the payrexx secret for the communication between the applications
     // if you think someone got your secret, just regenerate it in the payrexx administration
-    $secret = 'bdRhxmdANQySBh9jiW7r0qgUapZ7aq';
+    $secret = $this->values()["checkout"]["payment_payrexx_secret"];
 
     $payrexx = new \Payrexx\Payrexx($instanceName, $secret);
 
@@ -66,7 +73,8 @@ class Checkout {
     try {
         $response = $payrexx->getAll($transaction);
     } catch (\Payrexx\PayrexxException $e) {
-        print $e->getMessage();
+        Action::fail($e->getMessage());
+        return;
     }
 
     foreach( $response as $response ) {
@@ -184,7 +192,7 @@ class Checkout {
 
     // Combine all values
     return array(
-      "checkout" => $checkout->fetchAll( PDO::FETCH_ASSOC ),
+      "checkout" => $checkout->fetch( PDO::FETCH_ASSOC ),
       "access" => $this->access(),
       "products" => $this->products(),
       "global_products" => $this->global_products(),
