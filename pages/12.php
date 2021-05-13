@@ -1,16 +1,13 @@
 <?php
-echo '<div class="livedata-visitor-bar">';
-  echo Livedata::visitors() . " Besucher";
-echo '</div>';
+//Display form
+echo '<form action="' . $url_page . '" method="post" class="search">';
+  echo '<input type="text" name="search_value" value ="' . (isset(  $_POST["search_value"] ) ? $_POST["search_value"] : "") . '" placeholder="Ticketoken">';
+  echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+echo '</form>';
+
+if(! empty($_POST)) {
+  $scanner = new Scanner();
+  $scanner->ticketToken = $_POST["search_value"];
+  echo ($scanner->ticketInfoHTML());
+}
  ?>
-
-
-<div class="livedata-button up" onclick="livedata_up();"><span></span></div>
-<div class="livedata-button down" onclick="livedata_down(); livedata_visitors()"><span></span></div>
-
-<script>
-  setInterval(function() {
-    livedata_visitors(function (resp) {document.getElementsByClassName("livedata-visitor-bar")[0].innerHTML = resp + " Besucher";})
-  }
-  , 100);
-</script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 06. Apr 2021 um 22:48
+-- Erstellungszeit: 13. Mai 2021 um 19:07
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -20,6 +20,43 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `tktdata`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_checkout`
+--
+
+CREATE TABLE `tktdata_checkout` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_checkout_access`
+--
+
+CREATE TABLE `tktdata_checkout_access` (
+  `id` int(11) NOT NULL,
+  `checkout_ID` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_checkout_price_list`
+--
+
+CREATE TABLE `tktdata_checkout_price_list` (
+  `id` int(11) NOT NULL,
+  `checkou_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -70,21 +107,22 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (2, 'Coupons', 0, NULL, 2, NULL),
 (3, 'Scanner', 0, NULL, 3, NULL),
 (4, 'Live', 0, NULL, 4, NULL),
-(5, 'Benutzer', 0, NULL, 5, NULL),
-(6, 'Alle Tickets', 1, 'ticket.svg', 1, NULL),
-(7, 'Gruppen', 1, 'group.svg', 2, NULL),
-(8, 'Alle Coupons', 2, 'coupon.svg', 1, NULL),
-(9, 'Informationen', 3, 'info.svg', 1, NULL),
-(10, 'QR-Scanner', 3, 'qr.svg', 2, NULL),
-(11, 'Code-Scanner', 3, 'code.svg', 3, NULL),
-(12, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
-(13, 'Live', 4, 'livedata_live.svg', 1, NULL),
-(14, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
-(15, 'Alle Benutzer', 5, 'user.svg', 1, NULL),
-(16, 'Aktivitäten', 5, 'activites.svg', 2, NULL),
-(65, 'Testpage', 0, NULL, 6, 'autogenerate-tickets'),
-(66, 'sub', 65, NULL, 6, 'autogenerate-tickets'),
-(67, 'sub 2', 65, NULL, 6, 'autogenerate-tickets');
+(5, 'Kasse', 0, NULL, 5, NULL),
+(6, 'Benutzer', 0, NULL, 6, NULL),
+(7, 'Alle Tickets', 1, 'ticket.svg', 1, NULL),
+(8, 'Gruppen', 1, 'group.svg', 2, NULL),
+(9, 'Alle Coupons', 2, 'coupon.svg', 1, NULL),
+(10, 'Informationen', 3, 'info.svg', 1, NULL),
+(11, 'QR-Scanner', 3, 'qr.svg', 2, NULL),
+(12, 'Code-Scanner', 3, 'code.svg', 3, NULL),
+(13, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
+(14, 'Live', 4, 'livedata_live.svg', 1, NULL),
+(15, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
+(16, 'Übersicht', 5, NULL, 1, NULL),
+(17, 'Administration', 5, NULL, 2, NULL),
+(18, 'Einstellungen', 5, NULL, 3, NULL),
+(19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
+(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -208,21 +246,42 @@ CREATE TABLE `tktdata_user_rights` (
 --
 
 INSERT INTO `tktdata_user_rights` (`id`, `userId`, `page`, `r`, `w`) VALUES
-(1, 'admin', 6, 1, 1),
-(2, 'admin', 7, 1, 1),
-(3, 'admin', 8, 1, 1),
-(4, 'admin', 9, 1, 1),
-(5, 'admin', 10, 1, 1),
-(6, 'admin', 11, 1, 1),
-(7, 'admin', 12, 1, 1),
-(8, 'admin', 13, 1, 1),
-(9, 'admin', 14, 1, 1),
-(10, 'admin', 15, 1, 1),
-(11, 'admin', 16, 1, 1);
+(1, 'Admin', 7, 1, 1),
+(2, 'Admin', 8, 1, 1),
+(3, 'Admin', 9, 1, 1),
+(4, 'Admin', 10, 1, 1),
+(5, 'Admin', 11, 1, 1),
+(6, 'Admin', 12, 1, 1),
+(7, 'Admin', 13, 1, 1),
+(8, 'Admin', 14, 1, 1),
+(9, 'Admin', 15, 1, 1),
+(10, 'Admin', 16, 1, 1),
+(11, 'Admin', 17, 1, 1),
+(12, 'Admin', 18, 1, 1),
+(13, 'Admin', 19, 1, 1),
+(14, 'Admin', 20, 1, 1);
 
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `tktdata_checkout`
+--
+ALTER TABLE `tktdata_checkout`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_checkout_access`
+--
+ALTER TABLE `tktdata_checkout_access`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_checkout_price_list`
+--
+ALTER TABLE `tktdata_checkout_price_list`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `tktdata_livedata_archive`
@@ -286,6 +345,24 @@ ALTER TABLE `tktdata_user_rights`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `tktdata_checkout`
+--
+ALTER TABLE `tktdata_checkout`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
+--
+ALTER TABLE `tktdata_checkout_access`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `tktdata_checkout_price_list`
+--
+ALTER TABLE `tktdata_checkout_price_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_archive`
@@ -301,7 +378,7 @@ ALTER TABLE `tktdata_livedata_live`
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
@@ -313,19 +390,19 @@ ALTER TABLE `tktdata_tickets_coupons`
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_groups`
 --
 ALTER TABLE `tktdata_tickets_groups`
-  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

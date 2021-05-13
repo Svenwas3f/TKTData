@@ -35,7 +35,7 @@
 class Plugin {
   //Variable
   public $plugin_name;
-  private $reserved_mainpages = array(1,2,3,4,5); //By default set. Cannot be removed
+  private $reserved_mainpages = array(1,2,3,4,5,6); //By default set. Cannot be removed
 
   /**
    * Creates the default Plugin name

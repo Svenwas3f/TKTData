@@ -8,10 +8,10 @@
 ///////////////////////////////////////////
 
 //Define system info
-define("SYSTEM_VERSION", "0.9.12");
+define("SYSTEM_VERSION", "1.0.0");
 
 //Define system version name
-define("SYSTEM_NAME", "Allalin");
+define("SYSTEM_NAME", "Gauli");
 
 //Set default time zone
 //https://www.php.net/manual/en/timezones.php (unfinished list)
@@ -70,6 +70,12 @@ define('TICKETS_COUPONS', 'tktdata_tickets_coupons');
 define('LIVEDATA', 'tktdata_livedata_live');
 //Livdata Archiv
 define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
+//Checkout
+define('CHECKOUT', "tktdata_checkout");
+//Checkout price list
+define('CHECKOUT_PRICE_LIST', "tktdata_checkout_price_list");
+//Checkout access
+define('CHECKOUT_ACCESS', "tktdata_checkout_access");
 
 /////////////////////////////
 // Define global vairalbes

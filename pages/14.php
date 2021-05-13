@@ -1,51 +1,59 @@
 <?php
-//Create connection
-$conn = Access::connect();
+/**
+ * Archive
+ */
+if(isset($_GET["archive"])) { //Display confirmation
+  Action::confirm("Möchten Sie den aktuellen Stand tatsächlich archivieren?");
+}
 
-//Get archive infos
-$archive = $conn->prepare("SELECT DISTINCT archive_timestamp FROM " . LIVEDATA_ARCHIVE . " ORDER BY archive_timestamp DESC");
-$archive->execute();
-
-//Display select
-$archive_timestamp = (isset($_GET["archive"]) ? $_GET["archive"] : null);
-echo '<div class="livedata-form">';
-  echo '<div class="select" onclick="toggleOptions(this)">';
-    echo '<input type="text" class="selectValue" name="payment" value="' . $archive_timestamp . '" required>';
-    echo '<span class="headline">' . (is_null($archive_timestamp) ? 'Archiv' : date("d.m.Y H:i", strtotime($archive_timestamp))) . '</span>';
-
-    echo '<div class="options">';
-      foreach($archive->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        echo '<span onclick="location.href = \'' . $url_page . '&archive=' . urlencode($row["archive_timestamp"]) . '\'">' . date("d.m.Y H:i", strtotime($row["archive_timestamp"])) . '</span>';
-      }
-    echo '</div>';
-  echo '</div>';
-echo '</div>';
+if(isset($_POST) && isset($_POST["confirm"])) { //Confirm if required
+  Livedata::archive();
+}
  ?>
+<div class="livedata-live-info">
+  <div class="visitors">
+    <span class="title">Aktuelle Besucher</span>
+    <span class="content"><?php echo Livedata::visitors(); ?></span>
+  </div>
+  <div class="trend">
+    <span class="title">Aktueller Trend</span>
+    <?php
+    switch(Livedata::trend()) {
+      case 0:
+        $arrow_url = $url . "medias/icons/arrow_up.svg";
+      break;
+      case 1:
+        $arrow_url = $url . "medias/icons/arrow_down.svg";
+      break;
+      case 2:
+        $arrow_url = $url . "medias/icons/arrow_equal.svg";
+      break;
+    }
+    ?>
+    <span class="content"><img src="<?php echo $arrow_url; ?>" class="content-trend-img"></span>
+  </div>
+
+  <a class="archive-button" href="<?php echo $url_page; ?>&archive">Archive</a>
+</div>
+
 
 
 <div class="chart-container" style="position: relative; height:50vh; width:calc(50vw - 125px)">
-  <canvas id="history"></canvas>
+    <canvas id="history"></canvas>
 </div>
 
 <div class="chart-container" style="position: relative; height:50vh; width:calc(50vw - 125px)">
-  <canvas id="historyUp"></canvas>
+    <canvas id="historyUp"></canvas>
 </div>
 
 <div class="chart-container" style="position: relative; height:50vh; width:calc(50vw - 125px)">
-  <canvas id="historyDown"></canvas>
+    <canvas id="historyDown"></canvas>
 </div>
 
 <?php
-//Export button
-if(! is_null($archive_timestamp)) {
-  echo '<a href="' . $url . 'medias/files/livedata/export.php?archive_timestamp=' . urlencode($archive_timestamp) . '" class="export-button">';
-    echo 'Export';
-  echo '</a>';
-}
-
 //Set max and min
-$max = Livedata::live_time($archive_timestamp)["max"];
-$min = Livedata::live_time($archive_timestamp)["min"];
+$max = Livedata::live_time()["max"];
+$min = Livedata::live_time()["min"];
 
 //Get data
 $history = Livedata::history($min, $max);
@@ -120,10 +128,22 @@ function live_chart(crt, dataX, dataY, title) {
   });
 }
 
-
 var chartHistory = live_chart(historyData, <?php echo json_encode($history["x"]); ?>, <?php echo json_encode($history["y"]); ?>, "Verlauf");
 var chartHistoryUp = live_chart(historyUp, <?php echo json_encode($historyUp["x"]); ?>, <?php echo json_encode($historyUp["y"]); ?>, "Eintritte");
 var chartHistoryDown = live_chart(historyDownData, <?php echo json_encode($historyDown["x"]); ?>, <?php echo json_encode($historyDown["y"]); ?>, "Austritte");
+
+//Chart interval
+setInterval(function () {
+  livedata_history();
+  livedata_historyUp();
+  livedata_historyDown();
+}, 10000);
+
+//liveinformations interval
+setInterval(function () {
+  livedata_trend();
+  livedata_visitors(function (resp) {document.getElementsByClassName("content")[0].innerHTML = resp;});
+}, 1000)
 
 if(screen.width < 700) {
   chartHistory.canvas.parentNode.style.height = '100%';

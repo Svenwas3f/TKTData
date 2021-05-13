@@ -24,7 +24,7 @@ To create basics you first need to start a class. Do this the following way
 > $plugin = new Plugin();
 
 ###### Add a page
-If you want to add a page to the system, navigate to the `functions.php` file. To create a new page you need to add the following code. The page is a title for subpages and is not a "real page". You can replace all parameters custom. Do not go lower than 6 by the layout because pages 1 to 5 are blocked ones who are pre-installed and cannot be modified.
+If you want to add a page to the system, navigate to the `functions.php` file. To create a new page you need to add the following code. The page is a title for subpages and is not a "real page". You can replace all parameters custom. Do not go lower than 6 by the layout because pages 1 to 6 are blocked ones who are pre-installed and cannot be modified.
 > $mainpage = $plugin->add_page(array(\
 >     "name" => "Testpage",\
 >     "layout" => 6\
