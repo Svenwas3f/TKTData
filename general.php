@@ -71,11 +71,11 @@ define('LIVEDATA', 'tktdata_livedata_live');
 //Livdata Archiv
 define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
 //Checkout
-define('CHECKOUT', "tktdata_checkout");
+define('CHECKOUT', 'tktdata_checkout');
 //Checkout price list
-define('CHECKOUT_PRICE_LIST', "tktdata_checkout_price_list");
+define('CHECKOUT_PRICE_LIST', 'tktdata_checkout_price_list');
 //Checkout access
-define('CHECKOUT_ACCESS', "tktdata_checkout_access");
+define('CHECKOUT_ACCESS', 'tktdata_checkout_access');
 
 /////////////////////////////
 // Define global vairalbes
