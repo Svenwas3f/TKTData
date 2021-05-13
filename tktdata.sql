@@ -118,9 +118,9 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (13, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
 (14, 'Live', 4, 'livedata_live.svg', 1, NULL),
 (15, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
-(16, 'Übersicht', 5, NULL, 1, NULL),
-(17, 'Administration', 5, NULL, 2, NULL),
-(18, 'Einstellungen', 5, NULL, 3, NULL),
+(16, 'Übersicht', 5, 'checkout.svg', 1, NULL),
+(17, 'Administration', 5, 'checkout_administration.svg', 2, NULL),
+(18, 'Einstellungen', 5, 'checkout_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
 (20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
 
