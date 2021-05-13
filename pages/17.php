@@ -1,0 +1,6 @@
+- Liste aller verfügbaren Kassen<br />
+- Produkte hinzufügen<br />
+- Produkte entfernen<br />
+- Produkte überarbeiten<br />
+- Produkte einsehen<br />
+- Preisliste generieren<br />

@@ -1,0 +1,5 @@
+- Neue Kasse hinzufügen<br />
+- Kasse entfernen<br />
+- kasse bearbeiten<br />
+- Payrexx konfiguration für jede Kasse<br />
+- Grundprodukte erstellen, bearbeiten, entfernen<br />

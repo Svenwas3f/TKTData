@@ -1,11 +1,17 @@
+- Alle verfügbaren Kassen anzeigen<br />
+- Auflistung aller Transaktionen der gewählten Kase (Mit weiter und zurück)<br />
+- QR-Download bereitstellen (Link auf ein weiteres Dokument)<br />
+
 <?php
-$checkout = new Checkout();
-$checkout->cashier = 1;
+$html = '<div class="select" onclick="toggleOptions(this)">';
+  $html .= '<input type="text" class="selectValue" name="checkout" value=""  required>';
+  $html .= '<span class="headline">Auswählen</span>';
 
-var_dump($checkout->transactions());
-
-$checkout->add( CHECKOUT::DEFAULT_TABLE , array(
-  "checkout_id" => "TEST",
-  "name" => "hello World",
-));
-?>
+  $html .= '<div class="options">';
+    $html .= '<span data-value="0" onclick="selectElement(this)">Karte</span>';
+    $html .= '<span data-value="1" onclick="selectElement(this)">Rechnung</span>';
+    $html .= '<span data-value="2" onclick="selectElement(this)">Zahlung nicht eingegangen</span>';
+  $html .= '</div>';
+$html .= '</div>';
+echo $html;
+ ?>
