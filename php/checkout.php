@@ -156,10 +156,27 @@ class Checkout {
     //Get database connection
     $conn = Access::connect();
 
+    // Check values
+    $valid_keys = array("checkout_id", "name", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "price", "currency");
+    $checked_values = array_intersect_key($values, array_flip($valid_keys));
+
     //Generate query
     $add_query = "INSERT INTO " . $table . " ";
     $add_query .= "(" . implode(", ", array_flip($values)) . ") ";
     $add_query .= "VALUES ('" . implode("', '", $values) . "')";
+
+    //Create modification
+    $change = array(
+      "user" => $current_user,
+      "message" => "Added " . ($table == SELF::DEFAULT_TABLE ? "checkout" : ($table == SELF::PRODUCTS_TABLE ? "product" : "access")),
+      "table" => ($table == SELF::DEFAULT_TABLE ? "CHECKOUT" : ($table == SELF::PRODUCTS_TABLE ? "CHECKOUT_PRODUCTS" : "CHECKOUT_ACCESS")),
+      "function" => "INSERT INTO",
+      "primary_key" => array("key" => "checkout_id", "value" => ""),
+      "old" => "",
+      "new" => $checked_values
+    );
+
+    User::modifie( $change );
 
     // execute query
     $add = $conn->prepare($add_query);
@@ -182,8 +199,8 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_values = array("name", "payment_payrexx_instance", "payment_payrexx_secret");
-    $checked_values = array_intersect_key($values, array_flip($valid_values));
+    $valid_keys = array("name", "payment_payrexx_instance", "payment_payrexx_secret");
+    $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
     $update_query = "UPDATE " . CHECKOUT . " SET ";
@@ -191,6 +208,19 @@ class Checkout {
       $update_query .= "'" . $key . "' = '" . $value . "', ";
     }
     $update_query = substr( $update_query, 0, -2 ) . " WHERE checkout_id=:checkout_id";
+
+    //Modifie
+    $change = array(
+      "user" => $current_user,
+      "message" => "Updated checkout #" . $this->cashier,
+      "table" => "CHECKOUT",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
+      "old" => array_intersect_key($this->values()["checkout"], array_flip($valid_keys)),
+      "new" => $valid_keys
+    );
+
+    User::modifie($change);
 
     // Update query
     $update = $conn->prepare( $update_query );
@@ -201,7 +231,6 @@ class Checkout {
 
   /**
    * Updates a product
-   * requires: $cashier
    *
    * $product_id: Id of product (stored in database)
    * $values: Array with new values
@@ -217,21 +246,33 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_values = array("name", "price", "currency");
-    $checked_values = array_intersect_key($values, array_flip($valid_values));
+    $valid_keys = array("name", "price", "currency");
+    $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
     $update_query = "UPDATE " . CHECKOUT_PRODUCTS . " SET ";
     foreach( $checked_values as $key => $value ) {
       $update_query .= "'" . $key . "' = '" . $value . "', ";
     }
-    $update_query = substr( $update_query, 0, -2 ) . " WHERE checkout_id=:checkout_id AND id=:id";
+    $update_query = substr( $update_query, 0, -2 ) . " WHERE id=:product_id";
+
+    //Modifie
+    $change = array(
+      "user" => $current_user,
+      "message" => "Updated product #" . $product_id,
+      "table" => "CHECKOUT_PRODUCTS",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "id", "value" => $product_id),
+      "old" => array_intersect_key($this->values()["products"], array_flip($valid_keys)),
+      "new" => $valid_keys
+    );
+
+    User::modifie($change);
 
     // Update query
     $update = $conn->prepare( $update_query );
     return $update->execute(array(
-      ":checkout_id" => $this->cashier,
-      ":id" => $product_id,
+      ":product_id" => $this->cashier,
     ));
   }
 
@@ -242,6 +283,19 @@ class Checkout {
   public function remove_checkout() {
     //Get database connection
     $conn = Access::connect();
+
+    //Modifie
+    $change = array(
+      "user" => $current_user,
+      "message" => "Removed Checkout #" . $this->cashier,
+      "table" => "CHECKOUT",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
+      "old" => $this->values()["checkout"],
+      "new" => array("")
+    );
+
+    User::modifie($change);
 
     // Remove
     $remove = $conn->prepare("DELETE FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id");
@@ -260,6 +314,20 @@ class Checkout {
     //Get database connection
     $conn = Access::connect();
 
+    //Modifie
+    $change = array(
+      "user" => $current_user,
+      "message" => "Removed Checkout #" . $this->cashier,
+      "table" => "CHECKOUT_PRODUCTS",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "id", "value" => $product_id),
+      "old" => $this->values()["products"],
+      "new" => array("")
+    );
+
+    User::modifie($change);
+
+
     // Remove
     $remove = $conn->prepare("DELETE FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id AND id=:id");
     return $remove->execute(array(
@@ -277,6 +345,20 @@ class Checkout {
   public function remove_access( $user ) {
     //Get database connection
     $conn = Access::connect();
+
+    //Modifie
+    $change = array(
+      "user" => $current_user,
+      "message" => "Removed Access for User #" . $user . "(" . User::name( $user ) . ")",
+      "table" => "CHECKOUT_ACCESS",
+      "function" => "UPDATE",
+      "primary_key" => array("key1" => "checkout_id", "value1" => $this->cashier, "key2" => "user_id", "value2" => $user),
+      "old" => $this->values()["access"],
+      "new" => array("")
+    );
+
+    User::modifie($change);
+
 
     // Remove
     $remove = $conn->prepare("DELETE FROM " . CHECKOUT_ACCESS . " WHERE checkout_id=:checkout_id AND user_id=:user_id");
