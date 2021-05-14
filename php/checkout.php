@@ -17,6 +17,8 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
+ * Checkout->all ( $limit [int], $offset [int] )
+ *
  * Checkout->transactions ( $offset [int], $steps [int] ) [$cashier]
  *
  * Checkout->add ( $table [const], $values [array] ) [$cashier]
@@ -49,6 +51,22 @@ class Checkout {
   const DEFAULT_TABLE = CHECKOUT;
   const PRODUCTS_TABLE = CHECKOUT_PRODUCTS;
   const ACCESS_TALBE = CHECKOUT_ACCESS;
+
+  /**
+   * Returns array of all checkouts
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   */
+  public function all( $limit = 20, $offset = 0) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Select all
+    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " LIMIT " . $limit . " OFFSET " . $offset);
+    $checkout->execute();
+    return $checkout->fetchAll( PDO::FETCH_ASSOC );
+  }
 
   /**
    * Returns a list of all transactions (in steps) that belong to the checkout
@@ -432,7 +450,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=NULL" );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL" );
     $products->execute();
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
