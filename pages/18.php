@@ -31,7 +31,7 @@ if( isset($_GET["add"]) ) {
     $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
       // Name
 
-      
+
       // Payrexx
       $html .= '<div class="box">';
         $html .= '<h1>Payrexx</h1>';
@@ -64,16 +64,54 @@ if( isset($_GET["add"]) ) {
 
   }
 
-  // Start HTML
-  $html = '<div class="checkbox">';
-    // $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
-    // Kassen
-    $html .= '<div class="box">';
+  // Display top menu
+  $html = '<div class="checkout">';
+    $html .= '<div class="top-nav">';
+      $html .= '<a href="' . $url_page . '&list=checkout" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "checkout" ? "selected" : "") : "selected" ) . '" title="Kassen auflisten">KASSEN</a>';
+      $html .= '<a href="' . $url_page . '&list=products" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "") . '" title="Produkte auflisten">PRODUKTE</a>';
+    $html .= '</div>';
+  $html .= '</div>';
+
+
+  switch( $_GET["list"] ?? "" ) {
+    case "products":
+      // Search form
+      $html .= '<form action="' . $url_page . '" method="post" class="search">';
+        $html .= '<input type="text" name="s_products" value ="' . (isset(  $_POST["s_products"] ) ? $_POST["s_products"] : "") . '" placeholder="Produktname, Preis">';
+        $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+      $html .= '</form>';
+
+      // Table
+      $html .= '<table class="rows">';
+        //Headline
+        $headline_names = array('Name', 'Preis', 'Aktion');
+
+        //Start headline
+        $html .= '<tr>'; //Start row
+        foreach( $headline_names as $name ){
+          $html .= '<th>'.$name.'</th>';
+        }
+        $html .= '</tr>'; //Close row
+
+        foreach( Checkout::global_products() as $products ) {
+          $html .= '<tr>';
+            $html .= '<td>' . $products["name"] . '</td>';
+            $html .= '<td>' . ($products["price"] / 100) . ' ' . $products["currency"] . '</td>';
+            $html .= '<td><a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
+          $html .= '</tr>';
+        }
+
+      $html .= '</table>';
+    break;
+    case "checkout":
+    default:
+      // Search form
       $html .= '<form action="' . $url_page . '" method="post" class="search">';
         $html .= '<input type="text" name="s_checkout" value ="' . (isset(  $_POST["s_checkout"] ) ? $_POST["s_checkout"] : "") . '" placeholder="Name der Kasse">';
         $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
       $html .= '</form>';
 
+      // Table
       $html .= '<table class="rows">';
         //Headline
         $headline_names = array('Name', 'Aktion');
@@ -89,42 +127,12 @@ if( isset($_GET["add"]) ) {
         foreach( Checkout::all() as $checkout ) {
           $html .= '<tr>';
             $html .= '<td>' . $checkout["name"] . '</td>';
-            $html .= '<td><a href="' . $url_page . '&view_checkout='.urlencode( $checkout["checkout_id"] ).'" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
+            $html .= '<td><a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
           $html .= '</tr>';
         }
       $html .= '</table>';
-    $html .= '</div>';
-
-    // Grundprodukte
-    $html .= '<div class="box" style="margin-top: 60px;">';
-    $html .= '<form action="' . $url_page . '" method="post" class="search">';
-      $html .= '<input type="text" name="s_products" value ="' . (isset(  $_POST["s_products"] ) ? $_POST["s_products"] : "") . '" placeholder="Produktname, Preis">';
-      $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    $html .= '</form>';
-
-    $html .= '<table class="rows">';
-      //Headline
-      $headline_names = array('Name', 'Preis', 'Aktion');
-
-      //Start headline
-      $html .= '<tr>'; //Start row
-      foreach( $headline_names as $name ){
-        $html .= '<th>'.$name.'</th>';
-      }
-      $html .= '</tr>'; //Close row
-
-      foreach( Checkout::global_products() as $products ) {
-        $html .= '<tr>';
-          $html .= '<td>' . $products["name"] . '</td>';
-          $html .= '<td>' . ($products["price"] / 100) . ' ' . $products["currency"] . '</td>';
-          $html .= '<td><a href="' . $url_page . '&view_products='. urlencode( $products["id"] ).'" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
-        $html .= '</tr>';
-      }
-
-    $html .= '</table>';
-
-    $html .= '</div>';
-    // $html .= '</form>';
+    break;
+  }
   $html .= '</div>';
 }
 

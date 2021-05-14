@@ -1781,6 +1781,31 @@ a .vertical {
   background-color: #4f5578;
 }
 
+/* Checkout */
+.checkout .top-nav {
+  background-color: #f2f2f2;
+  border-top: 5px solid #232b43;
+}
+
+.checkout .top-nav a {
+  display: inline-block;
+  padding: 5px 20px;
+  color: #2a2a2a;
+  font-weight: 500;
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+  transition: 0.25s;
+  -webkit-transition: 0.25s;
+}
+
+.checkout a.selected {
+  background-color: white;
+}
+
+.checkout a:hover {
+  background-color: #f9f9f9;
+}
+
 /*footer*/
 footer {
   background-color: #232b43;
