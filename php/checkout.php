@@ -263,7 +263,7 @@ class Checkout {
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $product_id),
-      "old" => array_intersect_key($this->values()["products"], array_flip($valid_keys)),
+      "old" => array_intersect_key($this->products()[array_search( $product_id, array_column($this->products(), "product_id"))], array_flip($valid_keys)),
       "new" => $valid_keys
     );
 
@@ -321,7 +321,7 @@ class Checkout {
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $product_id),
-      "old" => $this->values()["products"],
+      "old" => $this->products()[array_search( $product_id, array_column($this->products(), "product_id"))],
       "new" => array("")
     );
 
@@ -346,6 +346,14 @@ class Checkout {
     //Get database connection
     $conn = Access::connect();
 
+    // Get ID of access
+    $access_id = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE checkout_id=:checkout_id AND user_id=:user_id");
+    $access_id->execute(array(
+      ":checkout_id" => $this->cashier,
+      ":user_id" => $user,
+    ));
+    $id = $access_id->fetch( PDO::FETCH_ASSOC )["id"];
+
     //Modifie
     $change = array(
       "user" => $current_user,
@@ -353,12 +361,11 @@ class Checkout {
       "table" => "CHECKOUT_ACCESS",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "checkout_id", "value1" => $this->cashier, "key2" => "user_id", "value2" => $user),
-      "old" => $this->values()["access"],
+      "old" => $this->access()[array_search( $id, array_column($this->access(), "id"))],
       "new" => array("")
     );
 
     User::modifie($change);
-
 
     // Remove
     $remove = $conn->prepare("DELETE FROM " . CHECKOUT_ACCESS . " WHERE checkout_id=:checkout_id AND user_id=:user_id");
