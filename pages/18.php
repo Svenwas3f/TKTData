@@ -101,7 +101,14 @@ if( isset($_GET["add"]) ) {
           $html .= '<tr>';
             $html .= '<td>' . $products["name"] . '</td>';
             $html .= '<td>' . ($products["price"] / 100) . ' ' . $products["currency"] . '</td>';
-            $html .= '<td><a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
+            $html .= '<td>';
+              if(User::w_access_allowed($page, $current_user)) {
+                  $html .= '<a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                  $html .= '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+              }else {
+                $html .= '<a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+              }
+            $html .= '</td>';
           $html .= '</tr>';
         }
 
@@ -109,23 +116,30 @@ if( isset($_GET["add"]) ) {
         $html .= '<tr class="nav">';
 
           if( (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';
           }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                       </td>';
           }elseif (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';
           }
 
         $html .= '</tr>';
 
       $html .= '</table>';
+
+      if(User::w_access_allowed($page, $current_user)) {
+        $html .= '<a class="add" href="' . $url_page . '&add">
+          <span class="horizontal"></span>
+          <span class="vertical"></span>
+        </a>';
+      }
     break;
     case "checkout":
     default:
@@ -155,7 +169,14 @@ if( isset($_GET["add"]) ) {
         foreach( Checkout::all( $offset, $steps ) as $checkout ) {
           $html .= '<tr>';
             $html .= '<td>' . $checkout["name"] . '</td>';
-            $html .= '<td><a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
+            $html .= '<td>';
+              if(User::w_access_allowed($page, $current_user)) {
+                  $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+                  $html .= '<a href="' . $url_page . '&remove_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kasse entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+              }else {
+                $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+              }
+            $html .= '</td>';
           $html .= '</tr>';
         }
 
@@ -163,23 +184,30 @@ if( isset($_GET["add"]) ) {
         $html .= '<tr class="nav">';
 
           if( (count(Checkout::all( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';
           }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                       </td>';
-          }elseif (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
-            $html .= '<td colspan="3">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+          }elseif (count(Checkout::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
+            $html .= '<td colspan="' . count( $headline_names ) . '">
+                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';
           }
 
         $html .= '</tr>';
 
       $html .= '</table>';
+
+      if(User::w_access_allowed($page, $current_user)) {
+        $html .= '<a class="add" href="' . $url_page . '&add">
+          <span class="horizontal"></span>
+          <span class="vertical"></span>
+        </a>';
+      }
     break;
   }
   $html .= '</div>';

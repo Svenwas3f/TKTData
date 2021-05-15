@@ -488,6 +488,10 @@ table.rows tr td img:hover {
   opacity: 0.5;
 }
 
+table.rows tr td:last-child, table.rows tr th:last-child {
+  text-align: right;
+}
+
 .payment-and-used {
   background-color: #5c6337 !important;
   color: black !important;
@@ -1290,21 +1294,20 @@ h1.info {
 
 /*Add button*/
 .add {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  display: block;
-  height: 60px;
-  width: 60px;
-  background: radial-gradient(#07090d, #232b43);
-  border-radius: 50%;
-  box-shadow: 0px 0px 10px white;
-  transition: 0.5s;
-  -webkit-transition: 0.5s;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	display: block;
+	height: 40px;
+	width: 40px;
+	background: radial-gradient(#07090d, #232b43);
+	box-shadow: 0px 0px 5px #656b7b;
+	transition: 0.5s;
+	-webkit-transition: 0.5s;
 }
 
 .add:hover {
-  transform: scale(1.1);
+  transform: rotateY(180deg);
 }
 
 a .horizontal {
@@ -1314,7 +1317,7 @@ a .horizontal {
   transform: translate(-50%, -50%);
   display: block;
   height: 70%;
-  width: 10px;
+  width: 6px;
   background-color: white;
 }
 
@@ -1324,7 +1327,7 @@ a .vertical {
   top: 50%;
   transform: translate(-50%, -50%);
   display: block;
-  height: 10px;
+  height: 6px;
   width: 70%;
   background-color: white;
 }
