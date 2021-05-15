@@ -14,7 +14,7 @@ if( isset($_GET["add"]) ) {
   }elseif( $_GET["add"] == "product" ) {
 
   }else {
-    Action::fs_info('Die Unterseite existiert nicht.', "Zurück", $url_page );
+    Action::fs_info('Die Unterseite existiert nicht . ', "Zurück", $url_page );
     return;
   }
 }elseif( isset($_GET["view_checkout"]) ) {
@@ -35,7 +35,7 @@ if( isset($_GET["add"]) ) {
       // Payrexx
       $html .= '<div class="box">';
         $html .= '<h1>Payrexx</h1>';
-        $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
+        $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
 
         // Payrexx instance
         $html .= '<label class="txt-input">';
@@ -89,17 +89,41 @@ if( isset($_GET["add"]) ) {
         //Start headline
         $html .= '<tr>'; //Start row
         foreach( $headline_names as $name ){
-          $html .= '<th>'.$name.'</th>';
+          $html .= '<th>' . $name . '</th>';
         }
         $html .= '</tr>'; //Close row
 
-        foreach( Checkout::global_products() as $products ) {
+        // Set offset and steps
+        $steps = 20;
+        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+        foreach( Checkout::global_products( $offset, $steps ) as $products ) {
           $html .= '<tr>';
             $html .= '<td>' . $products["name"] . '</td>';
             $html .= '<td>' . ($products["price"] / 100) . ' ' . $products["currency"] . '</td>';
             $html .= '<td><a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
           $html .= '</tr>';
         }
+
+        // Menu requred
+        $html .= '<tr class="nav">';
+
+          if( (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      </td>';
+          }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                      </td>';
+          }elseif (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      </td>';
+          }
+
+        $html .= '</tr>';
 
       $html .= '</table>';
     break;
@@ -119,17 +143,42 @@ if( isset($_GET["add"]) ) {
         //Start headline
         $html .= '<tr>'; //Start row
         foreach( $headline_names as $name ){
-          $html .= '<th>'.$name.'</th>';
+          $html .= '<th>' . $name . '</th>';
         }
         $html .= '</tr>'; //Close row
 
+        // Set offset and steps
+        $steps = 20;
+        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
         // Get content
-        foreach( Checkout::all() as $checkout ) {
+        foreach( Checkout::all( $offset, $steps ) as $checkout ) {
           $html .= '<tr>';
             $html .= '<td>' . $checkout["name"] . '</td>';
             $html .= '<td><a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a></td>';
           $html .= '</tr>';
         }
+
+        // Menu requred
+        $html .= '<tr class="nav">';
+
+          if( (count(Checkout::all( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      </td>';
+          }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                      </td>';
+          }elseif (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
+            $html .= '<td colspan="3">
+                        <a href="' . $url_page . '&row-start=' . round($offset/$number_rows + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      </td>';
+          }
+
+        $html .= '</tr>';
+
       $html .= '</table>';
     break;
   }

@@ -18,7 +18,7 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
- * Checkout->all ( $limit [int], $offset [int] )
+ * Checkout->all ( $offset [int], $steps [int] )
  *
  * Checkout->transactions ( $offset [int], $steps [int] ) [$cashier]
  *
@@ -26,7 +26,7 @@
  *
  * Checkout->update_checkout ( $values [array] ) [$cashier]
  *
- * Checkout->update_product( $product_id [int], $values [$array] ) [$product_id]
+ * Checkout->update_product( $values [$array] ) [$product_id]
  *
  * Checkout->remove_checkout () [$cashier]
  *
@@ -34,13 +34,13 @@
  *
  * Checkout->remove_access ( $user [int] ) [$cashier]
  *
- * Checkout->access ( $user [int or null] ) [$cashier]
+ * Checkout->access ( $user [int or null], $offset [int], $steps [int] ) [$cashier]
  *
  * Checkout->product () [$product_id]
  *
- * Checkout->products () [$cashier]
+ * Checkout->products ( $offset [int], $steps [int] ) [$cashier]
  *
- * Checkout->global_products ()
+ * Checkout->global_products ( $offset [int], $steps [int] )
  *
  * Checkout->values () [$cashier]
  *
@@ -394,7 +394,6 @@ class Checkout {
       ":user_id" => $user,
     ));
   }
-
 
   /**
    * Returns true or false or if user is equal to null it returns list of users who have access to the checkout
