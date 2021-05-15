@@ -88,7 +88,7 @@ function display_coupons( $search_value = null ){
         //Current user can edit and delete user
         $html .= '<td style="width: auto;">
                     <a href="' . $url_page . '&view=' . $coupon["couponID"] . '" title="Coupondetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-          $html .= '<a href="' . $url_page . '&remove=' . $coupon["couponID"] . '" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&remove=' . $coupon["couponID"] . '" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
         $html .= '</td>';
       }elseif( User::r_access_allowed($page, $current_user) ){
         $html .= '<td style="width: auto;">
@@ -104,16 +104,16 @@ function display_coupons( $search_value = null ){
 
   if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
               </td>';
   }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
               </td>';
    }elseif( $offset > 0){
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
               </td>';
   }
 

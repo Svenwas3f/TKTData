@@ -83,7 +83,7 @@ define('CHECKOUT_ACCESS', 'tktdata_checkout_access');
 $mainPage = isset( $_GET["id"] )?$_GET["id"]:1; //Define min page
 $page = isset( $_GET["sub"] )?$_GET["sub"]:$mainPage; //Define sub page, if no sub page return main page
 $url = $_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"] . "/www.tktdata.ch/"; //Base URL
-$url_page = $url . '?id=' . $mainPage . ((isset( $_GET["sub"] )) ? "&sub=" . $_GET["sub"] : "") . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : ""); //Create url with parameters (first id then if required sub and after that add row-start)
+$url_page = $url . '?id=' . $mainPage . ((isset( $_GET["sub"] )) ? "&sub=" . $_GET["sub"] : ""); //Create url with parameters (first id then if required sub and after that add row-start)
 $current_user = (empty($_SESSION["user"])) ? null : $_SESSION["user"]; //Define current logged in user
 
 //Set default timezone

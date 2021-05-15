@@ -116,11 +116,11 @@ class GroupCustomizer extends Group {
         if( User::w_access_allowed($page, $current_user) ) {
           //Current user can edit and delete user
           $html .= '<td style="width: auto;">
-                      <a href="'.$url_page.'&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a><a href="'.$url_page.'&remove='.$group["groupID"].'" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                      <a href="' . $url_page . '&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a><a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") .'&remove='.$group["groupID"].'" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
           $html .= '</td>';
         } elseif( User::r_access_allowed($page, $current_user) ) {
           $html .= '<td style="width: auto;">
-                      <a href="'.$url_page.'&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
+                      <a href="' . $url_page . '&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
                     </td>';
         }
       $html .= '</tr>'; //End row
@@ -131,16 +131,16 @@ class GroupCustomizer extends Group {
 
     if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
       $html .= '<td colspan="3">
-                  <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
                 </td>';
     }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
       $html .= '<td colspan="3">
-                  <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
                 </td>';
      }elseif( $offset > 0){
       $html .= '<td colspan="3">
-                  <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                  <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
                 </td>';
     }
 

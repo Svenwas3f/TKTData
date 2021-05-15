@@ -7,8 +7,8 @@ function display_tickets( $search_value = null ){
   global $current_user;
   global $conn;
 
-  $number_rows = 20; //Maximal number of rows listed
-  $offset = isset( $_GET["row-start"] )? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
+  $steps = 20; //Maximal number of rows listed
+  $offset = isset( $_GET["row-start"] )? (intval($_GET["row-start"]) * $steps) : 0; //Start position of listet users
 
   if(! empty($search_value)) {
     //Searched after value
@@ -31,7 +31,7 @@ function display_tickets( $search_value = null ){
       ":email" => "%" . $search_value . "%",
       ":custom" => "%" . $search_value . "%",
       ":offset" => $offset,
-      ":max_rows" => $number_rows
+      ":max_rows" => $steps
     ));
 
 
@@ -54,7 +54,7 @@ function display_tickets( $search_value = null ){
     $user_search = $conn->prepare("SELECT * FROM " . TICKETS . " ORDER BY purchase_time DESC LIMIT :offset, :max_rows");//Result of all selected users in range
     $user_search->execute(array(
       ":offset" => $offset,
-      ":max_rows" => $number_rows
+      ":max_rows" => $steps
     ));
 
 
@@ -121,18 +121,18 @@ function display_tickets( $search_value = null ){
       if( User::w_access_allowed($page, $current_user) ){
         //Current user can edit and delete user
         $html .= '<td style="width: auto;">
-                    <a href="'.$url_page.'&view='.urlencode( $ticketToken ).'" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
+                    <a href="' . $url_page . '&view='.urlencode( $ticketToken ).'" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
                     <a href="' . $url . 'pdf/ticket/?ticketToken='.urlencode( $ticketToken ).'" target="_blank" title="PDF öffnen"><img src="' . $url . '/medias/icons/pdf.svg" /></a>';
         //Check if ticket is blocked
         if( $ticket["state"] == 2 ){
-          $html .= '<a href="'.$url_page.'&restore='.urlencode( $ticketToken ).'" title="Restore"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
+          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&restore='.urlencode( $ticketToken ).'" title="Restore"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
         }else{
-          $html .= '<a href="'.$url_page.'&remove='.urlencode( $ticketToken ).'" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&remove='.urlencode( $ticketToken ).'" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
         }
         $html .= '</td>';
       }elseif( User::r_access_allowed($page, $current_user) ){
         $html .= '<td style="width: auto;">
-                    <a href="'.$url_page.'&view='.urlencode( $ticketToken ).'" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
+                    <a href="' . $url_page . '&view='.urlencode( $ticketToken ).'" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
                     <a href="' . $url . 'pdf/ticket/?ticketToken='.urlencode( $ticketToken ).'" target="_blank" title="PDF öffnen"><img src="' . $url . '/medias/icons/pdf.svg" /></a>
                   </td>';
       }
@@ -142,18 +142,18 @@ function display_tickets( $search_value = null ){
   //Range menu
   $html .= '<tr class="nav">';
 
-  if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
+  if( $offset + $steps >= $total_rows && $total_rows > $steps){ //last page
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$steps - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
               </td>';
-  }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
+  }elseif( $offset <= 0 && $total_rows > $steps){ //First page
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$steps + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
               </td>';
    }elseif( $offset > 0){
     $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$steps - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
+                <a href="' . $url_page . '&row-start='.round($offset/$steps + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
               </td>';
   }
 
