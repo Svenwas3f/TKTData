@@ -1307,7 +1307,7 @@ h1.info {
 }
 
 .add:hover {
-  transform: rotateY(180deg);
+  transform: rotate(90deg);
 }
 
 a .horizontal {
@@ -1525,6 +1525,12 @@ a .vertical {
 
 .message-container .message.error {
   background-color: #cf000f;
+  color: white;
+}
+
+.message-container .message a.redirect {
+  display: block;
+  margin: 3px 0px;
   color: white;
 }
 

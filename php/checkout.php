@@ -67,7 +67,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Select all
-    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " LIMIT " . $steps . " OFFSET " . $offset);
+    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
     $checkout->execute();
     return $checkout->fetchAll( PDO::FETCH_ASSOC );
   }
@@ -175,6 +175,9 @@ class Checkout {
    *                          )
    */
   public function add( $table = SELF::DEFAULT_TABLE, $values ) {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -184,8 +187,8 @@ class Checkout {
 
     //Generate query
     $add_query = "INSERT INTO " . $table . " ";
-    $add_query .= "(" . implode(", ", array_flip($values)) . ") ";
-    $add_query .= "VALUES ('" . implode("', '", $values) . "')";
+    $add_query .= "(" . implode(", ", array_keys($checked_values)) . ") ";
+    $add_query .= "VALUES ('" . implode("', '", $checked_values) . "')";
 
     //Create modification
     $change = array(
@@ -202,7 +205,18 @@ class Checkout {
 
     // execute query
     $add = $conn->prepare($add_query);
-    return $add->execute();
+    $result = $add->execute();
+
+    if( $result === true ) {
+      if($table == SELF::DEFAULT_TABLE) {
+        $this->cashier = $conn->lastInsertId();
+      } elseif($table == SELF::PRODUCTS_TABLE) {
+        $this->product_id = $conn->lastInsertId();
+      }
+      return true;
+    }else {
+      return false;
+    }
   }
 
   /**
@@ -217,6 +231,9 @@ class Checkout {
    *         )
    */
   public function update_checkout( $values) {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -265,6 +282,9 @@ class Checkout {
    *         )
    */
   public function update_product( $values ) {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -304,6 +324,9 @@ class Checkout {
    * requires: $cashier
    */
   public function remove_checkout() {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -314,7 +337,7 @@ class Checkout {
       "table" => "CHECKOUT",
       "function" => "UPDATE",
       "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
-      "old" => $this->values(),
+      "old" => array_intersect_key($this->values(), array_flip(array("name", "payment_payrexx_instance", "payment_payrexx_secret"))),
       "new" => array("")
     );
 
@@ -333,17 +356,20 @@ class Checkout {
    *
    */
   public function remove_product() {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed Checkout #" . $this->cashier,
+      "message" => "Removed product #" . $this->product_id,
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
-      "primary_key" => array("key" => "id", "value" => $product_id),
-      "old" => $this->product(),
+      "primary_key" => array("key" => "id", "value" => $this->product_id),
+      "old" => array_intersect_key($this->product(), array_flip(array("checkout_id", "name", "price", "currency"))),
       "new" => array("")
     );
 
@@ -363,6 +389,9 @@ class Checkout {
    * $user: User id (stored in database)
    */
   public function remove_access( $user ) {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -377,7 +406,7 @@ class Checkout {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed Access for User #" . $user . "(" . User::name( $user ) . ")",
+      "message" => "Removed access for User #" . $user . "(" . User::name( $user ) . ")",
       "table" => "CHECKOUT_ACCESS",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "checkout_id", "value1" => $this->cashier, "key2" => "user_id", "value2" => $user),
@@ -452,7 +481,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id LIMIT " . $steps . " OFFSET " . $offset );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
     $products->execute(array(
       "checkout_id" => $this->cashier,
     ));
@@ -468,7 +497,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL LIMIT " . $steps . " OFFSET " . $offset );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
     $products->execute();
 
     return $products->fetchAll( PDO::FETCH_ASSOC );

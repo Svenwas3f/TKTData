@@ -7,12 +7,81 @@ $disabled = ($write === true ? "" : "disabled");
 // Get values
 $checkout = new Checkout();
 
+
+
 // Get page
 if( isset($_GET["add"]) ) {
   if( $_GET["add"] == "checkout" ) {
+    // Check post
+    if(! empty( $_POST )) {
+      if(User::w_access_allowed($page, $current_user)) {
+        if( $checkout->add( CHECKOUT::DEFAULT_TABLE, $_POST ) ) {
+          Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_checkout=" . $checkout->cashier . "' class='redirect'>Kasse verwalten</a></strong>");
+        }else{
+          Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+        }
+      }else {
+        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      }
+    }
 
+    //Start form to edit, show user
+    $html = '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+      $html .= '<h1>Kasse hinzufügen</h1>';
+      //Kassenname
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="name"/>';
+        $html .= '<span class="placeholder">Kassenname</span>';
+      $html .= '</label>';
+
+      //Add submit button
+      $html .= '<input type="submit" name="create" value="Erstellen"/>';
+
+    //Close form
+    $html .= '</form>';
   }elseif( $_GET["add"] == "product" ) {
+    // Check post
+    if(! empty( $_POST )) {
+      if(User::w_access_allowed($page, $current_user)) {
+        // Prepare post value
+        $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
+        if( $checkout->add( CHECKOUT::PRODUCTS_TABLE, $_POST ) ) {
+          Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $checkout->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
+        }else{
+          Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+        }
+      }else {
+        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      }
+    }
+
+    //Start form to edit, show user
+    $html = '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+      $html .= '<h1>Produkt hinzufügen</h1>';
+      //Produktname
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="name"/>';
+        $html .= '<span class="placeholder">Kassenname</span>';
+      $html .= '</label>';
+
+      //Preis
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="price"/>';
+        $html .= '<span class="placeholder">Preis</span>';
+      $html .= '</label>';
+
+      //Währung
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '"/>';
+        $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+      $html .= '</label>';
+
+      //Add submit button
+      $html .= '<input type="submit" name="create" value="Erstellen"/>';
+
+      //Close form
+    $html .= '</form>';
   }else {
     Action::fs_info('Die Unterseite existiert nicht . ', "Zurück", $url_page );
     return;
@@ -39,13 +108,13 @@ if( isset($_GET["add"]) ) {
 
         // Payrexx instance
         $html .= '<label class="txt-input">';
-          $html .= '<input type="text" name="payment_payrexx_instance" value="' . $checkout->values()["checkout"]["payment_payrexx_instance"] . '" ' . $disabled . '/>';
+          $html .= '<input type="text" name="payment_payrexx_instance" value="' . $checkout->values()["payment_payrexx_instance"] . '" ' . $disabled . '/>';
           $html .= '<span class="placeholder">Payrexx Instance</span>';
         $html .= '</label>';
 
         // Payrexx secret
         $html .= '<label class="txt-input">';
-          $html .= '<input type="text" name="payment_payrexx_secret" value="' . $checkout->values()["checkout"]["payment_payrexx_secret"] . '" ' . $disabled . '/>';
+          $html .= '<input type="text" name="payment_payrexx_secret" value="' . $checkout->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
           $html .= '<span class="placeholder">Payrexx Secret</span>';
         $html .= '</label>';
       $html .= '</div>';
@@ -58,12 +127,25 @@ if( isset($_GET["add"]) ) {
   $html .= '</div>';
 } elseif ( isset($_GET["view_product"] )) {
 
+} elseif ( isset($_GET["remove_checkout"]) ) { // Remove checkout
+  // Get name of checkout
+  $checkout->cashier = $_GET["remove_checkout"];
+
+  // Generate message
+  $info = "Möchtest du die Kasse <strong>" . $checkout->values()["name"] . " (#" . $_GET["remove_checkout"] . ")</strong>  wirklich löschen?";
+
+  // Display message
+  Action::confirm($info, $_GET["remove_checkout"], "&list=checkout");
+} elseif ( isset($_GET["remove_product"]) ) { // Remove product
+  // Get name of checkout
+  $checkout->product_id = $_GET["remove_product"];
+
+  // Generate message
+  $info = "Möchtest du das Produkt <strong>" . $checkout->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
+
+  // Display message
+  Action::confirm($info, $_GET["remove_product"], "&list=products");
 } else {
-  // Update/remove/add
-  if(! empty( $_POST )) {
-
-  }
-
   // Display top menu
   $html = '<div class="checkout">';
     $html .= '<div class="top-nav">';
@@ -75,6 +157,20 @@ if( isset($_GET["add"]) ) {
 
   switch( $_GET["list"] ?? "" ) {
     case "products":
+      // remove
+      if(isset($_POST["confirm"])) {
+        // Get values
+        $checkout->product_id = $_POST["confirm"];
+        $product_values = $checkout->product();
+
+        // Remove
+        if( $checkout->remove_product() ) {
+          Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+        }else {
+          Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+        }
+      }
+
       // Search form
       $html .= '<form action="' . $url_page . '" method="post" class="search">';
         $html .= '<input type="text" name="s_products" value ="' . (isset(  $_POST["s_products"] ) ? $_POST["s_products"] : "") . '" placeholder="Produktname, Preis">';
@@ -135,7 +231,7 @@ if( isset($_GET["add"]) ) {
       $html .= '</table>';
 
       if(User::w_access_allowed($page, $current_user)) {
-        $html .= '<a class="add" href="' . $url_page . '&add">
+        $html .= '<a class="add" href="' . $url_page . '&add=product">
           <span class="horizontal"></span>
           <span class="vertical"></span>
         </a>';
@@ -143,6 +239,20 @@ if( isset($_GET["add"]) ) {
     break;
     case "checkout":
     default:
+      // remove
+      if(isset($_POST["confirm"])) {
+        // Get values
+        $checkout->cashier = $_POST["confirm"];
+        $checkout_values = $checkout->values();
+
+        // Remove
+        if( $checkout->remove_checkout() ) {
+          Action::success("Das Produkt <strong>" . $checkout_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+        }else {
+          Action::fail("Das Produkt <strong>" . $checkout_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+        }
+      }
+
       // Search form
       $html .= '<form action="' . $url_page . '" method="post" class="search">';
         $html .= '<input type="text" name="s_checkout" value ="' . (isset(  $_POST["s_checkout"] ) ? $_POST["s_checkout"] : "") . '" placeholder="Name der Kasse">';
@@ -203,7 +313,7 @@ if( isset($_GET["add"]) ) {
       $html .= '</table>';
 
       if(User::w_access_allowed($page, $current_user)) {
-        $html .= '<a class="add" href="' . $url_page . '&add">
+        $html .= '<a class="add" href="' . $url_page . '&add=checkout">
           <span class="horizontal"></span>
           <span class="vertical"></span>
         </a>';

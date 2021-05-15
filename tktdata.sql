@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Mai 2021 um 19:07
+-- Erstellungszeit: 15. Mai 2021 um 21:50
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -28,8 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tktdata_checkout` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
+  `checkout_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `payment_payrexx_instance` varchar(255) NOT NULL,
+  `payment_payrexx_secret` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -40,17 +42,17 @@ CREATE TABLE `tktdata_checkout` (
 
 CREATE TABLE `tktdata_checkout_access` (
   `id` int(11) NOT NULL,
-  `checkout_ID` int(11) DEFAULT NULL,
+  `checkout_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `tktdata_checkout_price_list`
+-- Tabellenstruktur für Tabelle `tktdata_checkout_products`
 --
 
-CREATE TABLE `tktdata_checkout_price_list` (
+CREATE TABLE `tktdata_checkout_products` (
   `id` int(11) NOT NULL,
   `checkout_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -246,20 +248,22 @@ CREATE TABLE `tktdata_user_rights` (
 --
 
 INSERT INTO `tktdata_user_rights` (`id`, `userId`, `page`, `r`, `w`) VALUES
-(1, 'Admin', 7, 1, 1),
-(2, 'Admin', 8, 1, 1),
-(3, 'Admin', 9, 1, 1),
-(4, 'Admin', 10, 1, 1),
-(5, 'Admin', 11, 1, 1),
-(6, 'Admin', 12, 1, 1),
-(7, 'Admin', 13, 1, 1),
-(8, 'Admin', 14, 1, 1),
-(9, 'Admin', 15, 1, 1),
-(10, 'Admin', 16, 1, 1),
-(11, 'Admin', 17, 1, 1),
-(12, 'Admin', 18, 1, 1),
-(13, 'Admin', 19, 1, 1),
-(14, 'Admin', 20, 1, 1);
+(78, 'Kasse', 16, 1, 1),
+(79, 'Kasse', 17, 1, 1),
+(120, 'Admin', 7, 1, 1),
+(121, 'Admin', 8, 1, 1),
+(122, 'Admin', 9, 1, 1),
+(123, 'Admin', 10, 1, 1),
+(124, 'Admin', 11, 1, 1),
+(125, 'Admin', 12, 1, 1),
+(126, 'Admin', 13, 1, 1),
+(127, 'Admin', 14, 1, 1),
+(128, 'Admin', 15, 1, 1),
+(129, 'Admin', 16, 1, 1),
+(130, 'Admin', 17, 1, 1),
+(131, 'Admin', 18, 1, 1),
+(132, 'Admin', 19, 1, 1),
+(133, 'Admin', 20, 1, 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -269,8 +273,7 @@ INSERT INTO `tktdata_user_rights` (`id`, `userId`, `page`, `r`, `w`) VALUES
 -- Indizes für die Tabelle `tktdata_checkout`
 --
 ALTER TABLE `tktdata_checkout`
-  ADD PRIMARY KEY (`id`);
-
+  ADD PRIMARY KEY (`checkout_id`);
 --
 -- Indizes für die Tabelle `tktdata_checkout_access`
 --
@@ -278,9 +281,9 @@ ALTER TABLE `tktdata_checkout_access`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `tktdata_checkout_price_list`
+-- Indizes für die Tabelle `tktdata_checkout_products`
 --
-ALTER TABLE `tktdata_checkout_price_list`
+ALTER TABLE `tktdata_checkout_products`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -348,7 +351,7 @@ ALTER TABLE `tktdata_user_rights`
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout`
 --
 ALTER TABLE `tktdata_checkout`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
@@ -357,10 +360,10 @@ ALTER TABLE `tktdata_checkout_access`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `tktdata_checkout_price_list`
+-- AUTO_INCREMENT für Tabelle `tktdata_checkout_products`
 --
-ALTER TABLE `tktdata_checkout_price_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tktdata_checkout_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
