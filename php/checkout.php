@@ -10,6 +10,7 @@
  ************* Class Variables *************
  * If a function requires such a variable, you will find a hint in the comments of the function
  * $cashier: checkout Id for cashier
+ * $product_id: Id of requested product
  *
  **************** All functions ****************
  * For further description please go to requested function
@@ -25,15 +26,17 @@
  *
  * Checkout->update_checkout ( $values [array] ) [$cashier]
  *
- * Checkout->update_product( $product_id [int], $values [$array] ) [$cashier]
+ * Checkout->update_product( $product_id [int], $values [$array] ) [$product_id]
  *
  * Checkout->remove_checkout () [$cashier]
  *
- * Checkout->remove_product ( $product_id [int] ) [$cashier]
+ * Checkout->remove_product ( $product_id [int] ) [$product_id]
  *
  * Checkout->remove_access ( $user [int] ) [$cashier]
  *
  * Checkout->access ( $user [int or null] ) [$cashier]
+ *
+ * Checkout->product () [$product_id]
  *
  * Checkout->products () [$cashier]
  *
@@ -46,6 +49,7 @@
 class Checkout {
   //Variables
   public $cashier;
+  public $product_id;
 
   //constants
   const DEFAULT_TABLE = CHECKOUT;
@@ -58,12 +62,12 @@ class Checkout {
    * $limit: How many rows
    * $offset: Start row
    */
-  public function all( $limit = 20, $offset = 0) {
+  public function all( $offset = 0, $steps = 20 ) {
     //Get database connection
     $conn = Access::connect();
 
     // Select all
-    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " LIMIT " . $limit . " OFFSET " . $offset);
+    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " LIMIT " . $steps . " OFFSET " . $offset);
     $checkout->execute();
     return $checkout->fetchAll( PDO::FETCH_ASSOC );
   }
@@ -78,7 +82,7 @@ class Checkout {
    * Important notice. This function is recursive so please use the $steps wisely and do not execute this function with a very heigh $steps number
    * The offset you can set as heigh as you want this does not affect the function in executiont ime
    */
-  public function transactions( $offset = 0, $steps = 20) {
+  public function transactions( $offset = 0, $steps = 20 ) {
     // Define transaction list
     $transaction_list = array();
 
@@ -93,11 +97,11 @@ class Checkout {
 
     // $instanceName is a part of the url where you access your payrexx installation.
     // https://{$instanceName}.payrexx.com
-    $instanceName = $this->values()["checkout"]["payment_payrexx_instance"];
+    $instanceName = $this->values()["payment_payrexx_instance"];
 
     // $secret is the payrexx secret for the communication between the applications
     // if you think someone got your secret, just regenerate it in the payrexx administration
-    $secret = $this->values()["checkout"]["payment_payrexx_secret"];
+    $secret = $this->values()["payment_payrexx_secret"];
 
     $payrexx = new \Payrexx\Payrexx($instanceName, $secret);
 
@@ -234,7 +238,7 @@ class Checkout {
       "table" => "CHECKOUT",
       "function" => "UPDATE",
       "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
-      "old" => array_intersect_key($this->values()["checkout"], array_flip($valid_keys)),
+      "old" => array_intersect_key($this->values(), array_flip($valid_keys)),
       "new" => $valid_keys
     );
 
@@ -249,6 +253,7 @@ class Checkout {
 
   /**
    * Updates a product
+   * requires: $product_id
    *
    * $product_id: Id of product (stored in database)
    * $values: Array with new values
@@ -259,7 +264,7 @@ class Checkout {
    *            currency
    *         )
    */
-  public function update_product( $product_id, $values ) {
+  public function update_product( $values ) {
     //Get database connection
     $conn = Access::connect();
 
@@ -281,7 +286,7 @@ class Checkout {
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $product_id),
-      "old" => array_intersect_key($this->products()[array_search( $product_id, array_column($this->products(), "product_id"))], array_flip($valid_keys)),
+      "old" => array_intersect_key($this->product(), array_flip($valid_keys)),
       "new" => $valid_keys
     );
 
@@ -290,7 +295,7 @@ class Checkout {
     // Update query
     $update = $conn->prepare( $update_query );
     return $update->execute(array(
-      ":product_id" => $this->cashier,
+      ":product_id" => $this->product_id,
     ));
   }
 
@@ -309,7 +314,7 @@ class Checkout {
       "table" => "CHECKOUT",
       "function" => "UPDATE",
       "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
-      "old" => $this->values()["checkout"],
+      "old" => $this->values(),
       "new" => array("")
     );
 
@@ -324,11 +329,10 @@ class Checkout {
 
   /**
    * Removes a product
-   * requires: $cashier
+   * requires: $product_id
    *
-   * $product_id: Id of product (stored in database)
    */
-  public function remove_product( $product_id ) {
+  public function remove_product() {
     //Get database connection
     $conn = Access::connect();
 
@@ -339,18 +343,16 @@ class Checkout {
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $product_id),
-      "old" => $this->products()[array_search( $product_id, array_column($this->products(), "product_id"))],
+      "old" => $this->product(),
       "new" => array("")
     );
 
     User::modifie($change);
 
-
     // Remove
-    $remove = $conn->prepare("DELETE FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id AND id=:id");
+    $remove = $conn->prepare("DELETE FROM " . CHECKOUT_PRODUCTS . " WHERE id=:id");
     return $remove->execute(array(
-      ":checkout_id" => $this->cashier,
-      ":id" => $product_id,
+      ":id" => $this->product_id,
     ));
   }
 
@@ -400,13 +402,13 @@ class Checkout {
    *
    * $user = User Id or null (Lists all user with access to this checkout)
    */
-  public function access( $user = null ) {
+  public function access( $user = null, $offset = 0, $steps = 20 ) {
     //Get database connection
     $conn = Access::connect();
 
     if( is_null($user) ) {
       // Get all users that have access to this checkout
-      $users = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id");
+      $users = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id LIMIT " . $steps . " OFFSET " . $offset);
       $users->execute(array(
         ":user_id" => $user,
       ));
@@ -426,15 +428,32 @@ class Checkout {
   }
 
   /**
+   * Lists values of a product
+   * requires: $product_id
+   */
+  public function product() {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Generate sql
+    $product = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE id=:id");
+    $product->execute(array(
+      ":id" => $this->product_id,
+    ));
+
+    return $product->fetch( PDO::FETCH_ASSOC );
+  }
+
+  /**
    * Returns a list of all products for this checkout
    * requires: $cashier
    */
-  public function products() {
+  public function products( $offset = 0, $steps = 20 ) {
     //Get database connection
     $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id" );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id LIMIT " . $steps . " OFFSET " . $offset );
     $products->execute(array(
       "checkout_id" => $this->cashier,
     ));
@@ -445,19 +464,19 @@ class Checkout {
   /**
    * Returns list of all global products
    */
-  public function global_products() {
+  public function global_products( $offset = 0, $steps = 20 ) {
     //Get database connection
     $conn = Access::connect();
 
     // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL" );
+    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL LIMIT " . $steps . " OFFSET " . $offset );
     $products->execute();
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**
-   * Returns all values from access, products, global_procutds and all general values of this checkout
+   * Returns all values from access, products and all general values of this checkout
    * requires: $cashier
    */
   public function values() {
@@ -469,14 +488,7 @@ class Checkout {
     $checkout->execute(array(
       ":checkout_id" => $this->cashier,
     ));
-
-    // Combine all values
-    return array(
-      "checkout" => $checkout->fetch( PDO::FETCH_ASSOC ),
-      "access" => $this->access(),
-      "products" => $this->products(),
-      "global_products" => $this->global_products(),
-    );
+    return $checkout->fetch( PDO::FETCH_ASSOC );
   }
 }
  ?>
