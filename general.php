@@ -47,7 +47,7 @@ define("SIMPLE_SAML_CONFIG", null);
 //define restore availability after deleting a ticketgroup
 //True: Restore images and database, images will not be deleted (Recomended in production)
 //False: Restore only database (Recomended while testing)
-define("FULL_RESTORE", true);
+define("FULL_RESTORE", true); 
 
 /////////////////////////////
 // Define db table names
