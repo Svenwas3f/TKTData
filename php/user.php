@@ -652,7 +652,6 @@ class User {
    *
    * $id = id of restore
    */
-  //TODO: Add custom delete for user rights
   //Add in db a field delete and delete everything before update to ensure that the user has restored rights and not more
   public function restore_action( $id ){
     //Define variables
@@ -743,13 +742,23 @@ class User {
     //Restore data
     if(! contains_array( $new_data )) {
       //Single data
-      $restore_sql = "INSERT INTO " . constant( $data["affected_table"] ) . " (
-          `" . implode("`, `", $primaryKey) . "`,
-          `" . implode("`, `", array_keys( $new_data )) . "`
-        ) VALUES (
-          '" . implode("`, `", $primaryValue) . "',
-          '" . implode("', '", $new_data) . "'
-        ) ON DUPLICATE KEY UPDATE ";
+      $restore_sql = "INSERT INTO " . constant( $data["affected_table"] ) . " (";
+        $restore_sql .= "`" . implode("`, `", $primaryKey) . "`,";
+        $restore_sql .= "`" . implode("`, `", array_keys( $new_data )) . "`";
+      $restore_sql .= ") VALUES (";
+        $restore_sql .= "'" . implode("`, `", $primaryValue) . "', ";
+        foreach( $new_data as $data ) {
+          if( is_null($data) ) {
+            $restore_sql .= "NULL, ";
+          }else {
+            $restore_sql .= "'" . $data . "', ";
+          }
+        }
+      $restore_sql = substr($restore_sql, 0, -2) . ") ON DUPLICATE KEY UPDATE ";
+
+      echo $restore_sql;
+
+
       foreach( $new_data as $key => $value ){
         $comma = (($key == array_key_last($new_data) ? "" : ", "));
         $restore_sql .= $key . "='" . $value . "'" . $comma;
