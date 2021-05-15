@@ -756,9 +756,6 @@ class User {
         }
       $restore_sql = substr($restore_sql, 0, -2) . ") ON DUPLICATE KEY UPDATE ";
 
-      echo $restore_sql;
-
-
       foreach( $new_data as $key => $value ){
         $comma = (($key == array_key_last($new_data) ? "" : ", "));
         $restore_sql .= $key . "='" . $value . "'" . $comma;
