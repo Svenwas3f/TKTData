@@ -231,7 +231,7 @@ class GroupCustomizer extends Group {
 
     //Price
     $html .= '<label class="txt-input">';
-      $html .= '<input type="number" name="price" min="0" step="0.05" value="' . ($groupInfo["price"] / 100) . '" ' . $disabled . '/>';
+      $html .= '<input type="number" name="price" min="0" step="0.05" value="' . number_format(($groupInfo["price"] / 100), 2) . '" ' . $disabled . '/>';
       $html .= '<span class="placeholder">Betrag</span>';
       $html .= '<span class="unit">' . $groupInfo["currency"] . '</span>';
     $html .= '</label>';

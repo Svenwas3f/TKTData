@@ -61,20 +61,21 @@ if( isset($_GET["add"]) ) {
       $html .= '<h1>Produkt hinzufügen</h1>';
       //Produktname
       $html .= '<label class="txt-input">';
-        $html .= '<input type="text" name="name"/>';
+        $html .= '<input type="text" name="name" required/>';
         $html .= '<span class="placeholder">Kassenname</span>';
-      $html .= '</label>';
-
-      //Preis
-      $html .= '<label class="txt-input">';
-        $html .= '<input type="text" name="price"/>';
-        $html .= '<span class="placeholder">Preis</span>';
       $html .= '</label>';
 
       //Währung
       $html .= '<label class="txt-input">';
-        $html .= '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '"/>';
+        $html .= '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
         $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+      $html .= '</label>';
+
+      //Preis
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="number" step="0.05" min="0" name="price" required/>';
+        $html .= '<span class="placeholder">Preis</span>';
+        $html .= '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
       $html .= '</label>';
 
       //Add submit button
@@ -126,6 +127,47 @@ if( isset($_GET["add"]) ) {
     $html .= '</form>';
   $html .= '</div>';
 } elseif ( isset($_GET["view_product"] )) {
+  // set product id
+  $checkout->product_id = $_GET["view_product"];
+
+  if(! empty($_POST)) {
+    // Define values
+    $_POST["price"] = 100*$_POST["price"];
+
+    if( $checkout->update_product(  $_POST ) ) {
+      Action::success("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+    }else {
+      Action::fail("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+    }
+  }
+
+  //Start form to edit, show user
+  $html = '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+    $html .= '<h1>Produkt hinzufügen</h1>';
+    //Produktname
+    $html .= '<label class="txt-input">';
+      $html .= '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" required/>';
+      $html .= '<span class="placeholder">Kassenname</span>';
+    $html .= '</label>';
+
+    //Währung
+    $html .= '<label class="txt-input">';
+      $html .= '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
+      $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+    $html .= '</label>';
+
+    //Preis
+    $html .= '<label class="txt-input">';
+      $html .= '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" required/>';
+      $html .= '<span class="placeholder">Preis</span>';
+      $html .= '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+    $html .= '</label>';
+
+    //Add submit button
+    $html .= '<input type="submit" name="update" value="Update"/>';
+
+    //Close form
+  $html .= '</form>';
 
 } elseif ( isset($_GET["remove_checkout"]) ) { // Remove checkout
   // Get name of checkout
@@ -196,13 +238,13 @@ if( isset($_GET["add"]) ) {
         foreach( Checkout::global_products( $offset, $steps ) as $products ) {
           $html .= '<tr>';
             $html .= '<td>' . $products["name"] . '</td>';
-            $html .= '<td>' . ($products["price"] / 100) . ' ' . $products["currency"] . '</td>';
+            $html .= '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
             $html .= '<td>';
               if(User::w_access_allowed($page, $current_user)) {
-                  $html .= '<a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                  $html .= '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
                   $html .= '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
               }else {
-                $html .= '<a href="' . $url_page . '&view_products=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                $html .= '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
               }
             $html .= '</td>';
           $html .= '</tr>';

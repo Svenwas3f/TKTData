@@ -272,7 +272,7 @@ function single_ticket() {
 
     //Amount
     $html .= '<label class="txt-input">';
-      $html .= '<input type="number" step="0.05" min="0" name="amount" value="' . round(( $values["amount"] / 100 ), 2) . '" ' . $disabled . ' required/>';
+      $html .= '<input type="number" step="0.05" min="0" name="amount" value="' . number_format(( $values["amount"] / 100 ), 2) . '" ' . $disabled . ' required/>';
       $html .= '<span class="placeholder">Betrag</span>';
       $html .= '<span class="unit">' . $group->values()["currency"] . '</span>';
     $html .= '</label>';

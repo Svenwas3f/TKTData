@@ -81,7 +81,7 @@ function display_coupons( $search_value = null ){
     $html .= '<tr class="table-list">'; //Start row
       $html .= '<td><div class="color" style="background-color: ' . $groupInfo["color"] . ';" title="Name: ' . $groupInfo["name"] . '&#013;ID: ' . $groupInfo["groupID"] . '"></div>' . $coupon["name"].'</td>';
       $html .= '<td>' . $coupon["used"].'/' . $coupon["available"] . '</td>';
-      $html .= '<td>-' . (empty($coupon["discount_percent"]) ? ($coupon["discount_absolute"] / 100) . " " . $groupInfo["currency"] : ($coupon["discount_percent"] / 100 . "%")) . '</td>'; //Display discount
+      $html .= '<td>-' . (empty($coupon["discount_percent"]) ? number_format(($coupon["discount_absolute"] / 100), 2) . " " . $groupInfo["currency"] : ($coupon["discount_percent"] / 100 . "%")) . '</td>'; //Display discount
 
       //Check if current user (logged in user) can edit or see the user
       if( User::w_access_allowed($page, $current_user) ){
@@ -171,7 +171,7 @@ function single_coupon() {
 
 
     $html .= '<label class="txt-input">';
-      $html .= '<input type="number" min="0" step="0.05" name="discount" value="' . (empty($coupon->values()["discount_percent"]) ? ($coupon->values()["discount_absolute"] / 100) : ($coupon->values()["discount_percent"] / 100)) . '" ' . $disabled . ' required/>';
+      $html .= '<input type="number" min="0" step="0.05" name="discount" value="' . (empty($coupon->values()["discount_percent"]) ? number_format(($coupon->values()["discount_absolute"] / 100), 2) : ($coupon->values()["discount_percent"] / 100)) . '" ' . $disabled . ' required/>';
       $html .= '<span class="placeholder">Discount</span>';
       $html .= '<span class="unit">' . (empty($coupon->values()["discount_percent"]) ? $group->values()["currency"] : "%") . '</span>';
     $html .= '</label>';

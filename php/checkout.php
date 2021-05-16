@@ -275,7 +275,6 @@ class Checkout {
    * $product_id: Id of product (stored in database)
    * $values: Array with new values
    *          array(
-   *            checkout_id,
    *            name,
    *            price,
    *            currency
@@ -295,17 +294,17 @@ class Checkout {
     // Generate values and keys
     $update_query = "UPDATE " . CHECKOUT_PRODUCTS . " SET ";
     foreach( $checked_values as $key => $value ) {
-      $update_query .= "'" . $key . "' = '" . $value . "', ";
+      $update_query .= $key . " = '" . $value . "', ";
     }
     $update_query = substr( $update_query, 0, -2 ) . " WHERE id=:product_id";
 
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated product #" . $product_id,
+      "message" => "Updated product #" . $this->product_id,
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
-      "primary_key" => array("key" => "id", "value" => $product_id),
+      "primary_key" => array("key" => "id", "value" => $this->product_id),
       "old" => array_intersect_key($this->product(), array_flip($valid_keys)),
       "new" => $valid_keys
     );
