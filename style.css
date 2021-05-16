@@ -1815,6 +1815,20 @@ a .vertical {
   background-color: #f9f9f9;
 }
 
+.checkout .box {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 10pt;
+  padding: 2px 0px;
+}
+
+.checkout .box p {
+  font-size: 13pt;
+  font-weight: 600;
+  color: #232b43;
+  margin: 0px 0px 2px 0px;
+}
+
 /*footer*/
 footer {
   background-color: #232b43;

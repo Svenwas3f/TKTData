@@ -57,32 +57,34 @@ if( isset($_GET["add"]) ) {
     }
 
     //Start form to edit, show user
-    $html = '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-      $html .= '<h1>Produkt hinzufügen</h1>';
-      //Produktname
-      $html .= '<label class="txt-input">';
-        $html .= '<input type="text" name="name" required/>';
-        $html .= '<span class="placeholder">Kassenname</span>';
-      $html .= '</label>';
+    $html = '<div class="checkbox">';
+      $html .= '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+        $html .= '<h1>Produkt hinzufügen</h1>';
+        //Produktname
+        $html .= '<label class="txt-input">';
+          $html .= '<input type="text" name="name" required/>';
+          $html .= '<span class="placeholder">Kassenname</span>';
+        $html .= '</label>';
 
-      //Währung
-      $html .= '<label class="txt-input">';
-        $html .= '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
-        $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-      $html .= '</label>';
+        //Währung
+        $html .= '<label class="txt-input">';
+          $html .= '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
+          $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+        $html .= '</label>';
 
-      //Preis
-      $html .= '<label class="txt-input">';
-        $html .= '<input type="number" step="0.05" min="0" name="price" required/>';
-        $html .= '<span class="placeholder">Preis</span>';
-        $html .= '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
-      $html .= '</label>';
+        //Preis
+        $html .= '<label class="txt-input">';
+          $html .= '<input type="number" step="0.05" min="0" name="price" required/>';
+          $html .= '<span class="placeholder">Preis</span>';
+          $html .= '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
+        $html .= '</label>';
 
-      //Add submit button
-      $html .= '<input type="submit" name="create" value="Erstellen"/>';
+        //Add submit button
+        $html .= '<input type="submit" name="create" value="Erstellen"/>';
 
-      //Close form
-    $html .= '</form>';
+        //Close form
+      $html .= '</form>';
+    $html .= '</div>';
   }else {
     Action::fs_info('Die Unterseite existiert nicht . ', "Zurück", $url_page );
     return;
@@ -93,81 +95,113 @@ if( isset($_GET["add"]) ) {
 
   // Update/remove/add
   if(! empty( $_POST )) {
-
+    if(User::w_access_allowed($page, $current_user)) {
+      // Check what part needs to be updated
+      if( $checkout->update_product(  $_POST ) ) {
+        Action::success("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+      }else {
+        Action::fail("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+      }
+    }else {
+      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+    }
   }
 
   // Start HTML
-  $html = '<div class="checkbox">';
-    $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
-      // Name
+  $html = '<div class="checkout">';
+    $html .= '<div class="top-nav">';
+      $html .= '<a href="' . $url_page . '&view_checkout=' . $checkout->cashier . '&type=general" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" title="Kasse verwalten">Allgemein</a>';
+      $html .= '<a href="' . $url_page . '&view_checkout=' . $checkout->cashier . '&type=access" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "access" ? "selected" : "") : "") . '" title="Rechte verwalten">Rechte</a>';
+    $html .= '</div>';
+
+    switch( $_GET["type"] ?? "") {
+      case "access":
+      break;
+      case "general":
+      default:
+        // Form
+        $html .= '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
+          //Kassenname
+          $html .= '<div class="box">';
+            $html .= '<p>Kassenname</p>';
+            $html .= '<label class="txt-input">';
+              $html .= '<input type="text" name="name" value="' . $checkout->values()["name"] . '"/>';
+              $html .= '<span class="placeholder">Kassenname</span>';
+            $html .= '</label>';
+          $html .= '</div>';
+
+          // Payrexx
+          $html .= '<div class="box">';
+            $html .= '<p>Payrexx</p>';
+            $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+
+            // Payrexx instance
+            $html .= '<label class="txt-input">';
+              $html .= '<input type="text" name="payment_payrexx_instance" value="' . $checkout->values()["payment_payrexx_instance"] . '" ' . $disabled . '/>';
+              $html .= '<span class="placeholder">Payrexx Instance</span>';
+            $html .= '</label>';
+
+            // Payrexx secret
+            $html .= '<label class="txt-input">';
+              $html .= '<input type="text" name="payment_payrexx_secret" value="' . $checkout->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
+              $html .= '<span class="placeholder">Payrexx Secret</span>';
+            $html .= '</label>';
+          $html .= '</div>';
 
 
-      // Payrexx
-      $html .= '<div class="box">';
-        $html .= '<h1>Payrexx</h1>';
-        $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+        $html .= '</form>';
+      break;
+    }
 
-        // Payrexx instance
-        $html .= '<label class="txt-input">';
-          $html .= '<input type="text" name="payment_payrexx_instance" value="' . $checkout->values()["payment_payrexx_instance"] . '" ' . $disabled . '/>';
-          $html .= '<span class="placeholder">Payrexx Instance</span>';
-        $html .= '</label>';
-
-        // Payrexx secret
-        $html .= '<label class="txt-input">';
-          $html .= '<input type="text" name="payment_payrexx_secret" value="' . $checkout->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
-          $html .= '<span class="placeholder">Payrexx Secret</span>';
-        $html .= '</label>';
-      $html .= '</div>';
-
-      // Rechte
-      $html .= '<div class="box">';
-        $html .= '<h1>Rechte</h1>';
-      $html .= '</div>';
-    $html .= '</form>';
   $html .= '</div>';
 } elseif ( isset($_GET["view_product"] )) {
   // set product id
   $checkout->product_id = $_GET["view_product"];
 
   if(! empty($_POST)) {
-    // Define values
-    $_POST["price"] = 100*$_POST["price"];
+    if(User::w_access_allowed($page, $current_user)) {
+      // Define values
+      $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
-    if( $checkout->update_product(  $_POST ) ) {
-      Action::success("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+      if( $checkout->update_product(  $_POST ) ) {
+        Action::success("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+      }else {
+        Action::fail("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+      }
     }else {
-      Action::fail("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
     }
   }
 
   //Start form to edit, show user
-  $html = '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-    $html .= '<h1>Produkt hinzufügen</h1>';
-    //Produktname
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" required/>';
-      $html .= '<span class="placeholder">Kassenname</span>';
-    $html .= '</label>';
+  $html = '<div class="checkout">';
+    $html .= '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+      $html .= '<h1>Produkt hinzufügen</h1>';
+      //Produktname
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" required/>';
+        $html .= '<span class="placeholder">Kassenname</span>';
+      $html .= '</label>';
 
-    //Währung
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
-      $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-    $html .= '</label>';
+      //Währung
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
+        $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+      $html .= '</label>';
 
-    //Preis
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" required/>';
-      $html .= '<span class="placeholder">Preis</span>';
-      $html .= '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
-    $html .= '</label>';
+      //Preis
+      $html .= '<label class="txt-input">';
+        $html .= '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" required/>';
+        $html .= '<span class="placeholder">Preis</span>';
+        $html .= '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+      $html .= '</label>';
 
-    //Add submit button
-    $html .= '<input type="submit" name="update" value="Update"/>';
+      //Add submit button
+      $html .= '<input type="submit" name="update" value="Update"/>';
 
-    //Close form
-  $html .= '</form>';
+      //Close form
+    $html .= '</form>';
+  $html .= '</div>';
 
 } elseif ( isset($_GET["remove_checkout"]) ) { // Remove checkout
   // Get name of checkout
@@ -278,6 +312,8 @@ if( isset($_GET["add"]) ) {
           <span class="vertical"></span>
         </a>';
       }
+
+      $html .= '</div>';
     break;
     case "checkout":
     default:
@@ -296,73 +332,76 @@ if( isset($_GET["add"]) ) {
       }
 
       // Search form
-      $html .= '<form action="' . $url_page . '" method="post" class="search">';
-        $html .= '<input type="text" name="s_checkout" value ="' . (isset(  $_POST["s_checkout"] ) ? $_POST["s_checkout"] : "") . '" placeholder="Name der Kasse">';
-        $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-      $html .= '</form>';
+      $html .= '<div class="checkout">';
+        $html .= '<form action="' . $url_page . '" method="post" class="search">';
+          $html .= '<input type="text" name="s_checkout" value ="' . (isset(  $_POST["s_checkout"] ) ? $_POST["s_checkout"] : "") . '" placeholder="Name der Kasse">';
+          $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+        $html .= '</form>';
 
-      // Table
-      $html .= '<table class="rows">';
-        //Headline
-        $headline_names = array('Name', 'Aktion');
+        // Table
+        $html .= '<table class="rows">';
+          //Headline
+          $headline_names = array('Name', 'Aktion');
 
-        //Start headline
-        $html .= '<tr>'; //Start row
-        foreach( $headline_names as $name ){
-          $html .= '<th>' . $name . '</th>';
-        }
-        $html .= '</tr>'; //Close row
+          //Start headline
+          $html .= '<tr>'; //Start row
+          foreach( $headline_names as $name ){
+            $html .= '<th>' . $name . '</th>';
+          }
+          $html .= '</tr>'; //Close row
 
-        // Set offset and steps
-        $steps = 20;
-        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+          // Set offset and steps
+          $steps = 20;
+          $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-        // Get content
-        foreach( Checkout::all( $offset, $steps ) as $checkout ) {
-          $html .= '<tr>';
-            $html .= '<td>' . $checkout["name"] . '</td>';
-            $html .= '<td>';
-              if(User::w_access_allowed($page, $current_user)) {
+          // Get content
+          foreach( Checkout::all( $offset, $steps ) as $checkout ) {
+            $html .= '<tr>';
+              $html .= '<td>' . $checkout["name"] . '</td>';
+              $html .= '<td>';
+                if(User::w_access_allowed($page, $current_user)) {
+                    $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+                    $html .= '<a href="' . $url_page . '&remove_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kasse entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                }else {
                   $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-                  $html .= '<a href="' . $url_page . '&remove_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kasse entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-              }else {
-                $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-              }
-            $html .= '</td>';
-          $html .= '</tr>';
-        }
-
-        // Menu requred
-        $html .= '<tr class="nav">';
-
-          if( (count(Checkout::all( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-            $html .= '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
-          }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-            $html .= '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                      </td>';
-          }elseif (count(Checkout::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
-            $html .= '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
+                }
+              $html .= '</td>';
+            $html .= '</tr>';
           }
 
-        $html .= '</tr>';
+          // Menu requred
+          $html .= '<tr class="nav">';
 
-      $html .= '</table>';
+            if( (count(Checkout::all( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+              $html .= '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                          <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+              $html .= '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        </td>';
+            }elseif (count(Checkout::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
+              $html .= '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }
 
-      if(User::w_access_allowed($page, $current_user)) {
-        $html .= '<a class="add" href="' . $url_page . '&add=checkout">
-          <span class="horizontal"></span>
-          <span class="vertical"></span>
-        </a>';
-      }
-    break;
-  }
+          $html .= '</tr>';
+
+        $html .= '</table>';
+
+        if(User::w_access_allowed($page, $current_user)) {
+          $html .= '<a class="add" href="' . $url_page . '&add=checkout">
+            <span class="horizontal"></span>
+            <span class="vertical"></span>
+          </a>';
+        }
+      break;
+    }
+    $html .= '</div>';
   $html .= '</div>';
+
 }
 
 

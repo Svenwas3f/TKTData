@@ -306,7 +306,7 @@ class Checkout {
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
       "old" => array_intersect_key($this->product(), array_flip($valid_keys)),
-      "new" => $valid_keys
+      "new" => $checked_values
     );
 
     User::modifie($change);
