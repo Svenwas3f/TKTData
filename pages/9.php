@@ -80,7 +80,7 @@ function display_coupons( $search_value = null ){
 
     $html .= '<tr class="table-list">'; //Start row
       $html .= '<td><div class="color" style="background-color: ' . $groupInfo["color"] . ';" title="Name: ' . $groupInfo["name"] . '&#013;ID: ' . $groupInfo["groupID"] . '"></div>' . $coupon["name"].'</td>';
-      $html .= '<td>' . $coupon["used"].'/' . $coupon["available"] . '</td>';
+      $html .= '<td>' . ($coupon["used"] ?? 0) .'/' . $coupon["available"] . '</td>';
       $html .= '<td>-' . (empty($coupon["discount_percent"]) ? number_format(($coupon["discount_absolute"] / 100), 2) . " " . $groupInfo["currency"] : ($coupon["discount_percent"] / 100 . "%")) . '</td>'; //Display discount
 
       //Check if current user (logged in user) can edit or see the user
