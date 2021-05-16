@@ -18,6 +18,14 @@ if($group->values() === false) {
   header("Location: " . $url . "/store");
 }
 
+if( $group->values() === false ||
+    $group->values()["payment_store"] != 1 ||
+    $group->availableTickets() <= 0 ||
+    $group->timeWindow() === false ) {
+      // Redirect
+      header("Location: " . $url . "/store");
+}
+
 //Check ADFS
 if($group->values()["adfs"] == 1) {
   //Require login
