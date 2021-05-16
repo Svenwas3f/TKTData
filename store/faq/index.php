@@ -69,7 +69,7 @@ require_once(dirname(__FILE__, 3) . "/general.php");
           <div class="content">
             <div class="text">
               Der Ticketkauf ist ganz einfach und kann von dir problemlos durchgeführ werden. Besuche dazu <a href="<?php echo $url; ?>store/" target="_blank"><?php echo $url; ?>store/</a> und wähle Dein Ticket aus. Du wirst auf eine neue Seite weitergeleitet wo du Deine Kontaktangaben machen must. Deine E-Mail wird zwingend benötigt, damit wir Dir dein Ticket zustellen können. Die restlichen Angaben können entweder zwingend oder freiwillig sein, dies kommt auf das Ticket an. Wenn du einen Coupon besitzt kannst du diesen einlösen, indem du auf &quot;Coupon einlösen&quot; klickst. Nach dem ausfüllen des Feldes wird Dir entsprechen der Ticketpreis angepasst. Bitte klicke dich aus dem Eingabefeld um die Änderung zu sehen. Danach kannst du auf &quot;Bezahlen&quot; klicken.<br />
-              Nun die hälfte ist bereits erledigt. Warte einen Augenblick, bis das Zahlfenster geladen hat. Wähle nun Deine bevorzugte Zahlungsmethode aus und folge den Anweisungen des Zahlungsfenster. Nach der erfolgreichen Zahlung, warte kurz bis du auf eine neue Seite weitergeleitet wirs.<br />
+              Nun die hälfte ist bereits erledigt. Warte einen Augenblick, bis das Zahlfenster geladen hat. Wähle nun Deine bevorzugte Zahlungsmethode aus und folge den Anweisungen des Zahlungsfenster. Nach der erfolgreichen Zahlung, warte kurz bis du auf eine neue Seite weitergeleitet wirts.<br />
               Du hast nun erfolgreich dein Ticket bestellt. Du solltest nun eine Zusammenfassung deiner Bestellung sehen. Das Ticket wird Dir unverzüglich per Mail zugestellt. Dies kann jedoch einige Minuten in anspruch nehmen.
             </div>
           </div>
