@@ -71,7 +71,6 @@ class Checkout {
       // Select all
       $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
       $checkout->execute();
-      return $checkout->fetchAll( PDO::FETCH_ASSOC );
     }else {
       // Select all
       $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id OR name=:name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
@@ -79,8 +78,9 @@ class Checkout {
         ":checkout_id" => $search_value,
         ":name" => $search_value
       ));
-      return $checkout->fetchAll( PDO::FETCH_ASSOC );
     }
+
+    return $checkout->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**

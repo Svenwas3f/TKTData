@@ -320,8 +320,9 @@ class User {
       $users = $conn->prepare("SELECT * FROM " . USERS . " ORDER BY name LIMIT " . $steps . " OFFSET " . $offset );
       $users->execute();
     }else {
-      $users = $conn->prepare("SELECT * FROM " . USERS . " WHERE name LIKE '%" . $search_value . "%' OR email=:email OR id=:id ORDER BY name LIMIT " . $steps . " OFFSET " . $offset );
+      $users = $conn->prepare("SELECT * FROM " . USERS . " WHERE name LIKE :name OR email=:email OR id=:id ORDER BY name LIMIT " . $steps . " OFFSET " . $offset );
       $users->execute(array(
+        ":name" => "%" . $search_value . "%",
         ":email" => $search_value,
         ":id" => $search_value,
       ));
@@ -692,8 +693,11 @@ class User {
       $actions = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " ORDER BY modification_time DESC, id DESC LIMIT " . $steps . " OFFSET " . $offset);
       $actions->execute();
     }else {
-      $actions = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " WHERE print_message LIKE '%" . $search_value . "%' OR userID LIKE '%" . $search_value . "%' ORDER BY modification_time DESC, id DESC LIMIT " . $steps . " OFFSET " . $offset);
-      $actions->execute();
+      $actions = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " WHERE print_message LIKE :print_message OR userID LIKE :userID ORDER BY modification_time DESC, id DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $actions->execute(array(
+        ":print_message" => "%" . $search_value . "%",
+        ":userID" => "%" . $search_value . "%",
+      ));
     }
 
     // Return array

@@ -95,6 +95,38 @@ class Ticket {
   }
 
   /**
+   * Returns array of all checkouts
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
+   */
+  public function all( $offset = 0, $steps = 20, $search_value = null ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    if( is_null($search_value) || empty($search_value) ) {
+      //No search
+      $tickets = $conn->prepare("SELECT * FROM " . TICKETS . " ORDER BY purchase_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+      $tickets->execute();
+    }else {
+      // Select all
+      $conn->prepare("SELECT * FROM " . TICKETS . " WHERE ticketKey =:ticketKey1 OR ticketKey =:ticketKey2 AND groupID =:gid OR groupID LIKE :groupID OR coupon LIKE :coupon OR email LIKE :email OR custom LIKE :custom ORDER BY purchase_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+      $tickets->execute(array(
+        ":ticketKey1" => $search_value,
+        ":ticketKey2" => $ticket->cryptToken()["ticketKey"],
+        ":gid" => $ticket->cryptToken()["gid"],
+        ":groupID" => "%" . $search_value . "%",
+        ":coupon" => "%" . $search_value . "%",
+        ":email" => "%" . $search_value . "%",
+        ":custom" => "%" . $search_value . "%",
+      ));
+    }
+
+    return $tickets->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+  /**
    * Sends HTML Ticket mail
    * requires: $ticketToken
    *
@@ -393,7 +425,7 @@ class Ticket {
     $add_ticket = $conn->prepare("INSERT INTO " . TICKETS . "
     (" . implode(",", array_keys($values)) . ") VALUES
     ('" . implode("', '", $values) . "')");
-    
+
     //Check if mail needs to be send
     if($mail == true) {
       $this->sendTicket( $values["email"] );
