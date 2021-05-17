@@ -5,7 +5,7 @@ $conn = Access::connect();
 /**
  * Get infos out of database
  */
-function display_actions(){
+function display_actions( $search_value = null ){
   //Define variables
   global $url;
   global $url_page;
@@ -13,18 +13,14 @@ function display_actions(){
   global $current_user;
   global $conn;
 
-  $number_rows = 50; //Maximal number of rows listed
-  $offset = isset( $_GET["row-start"] )? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet actions
-
-  $action_rows = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " ORDER BY modification_time DESC, id DESC LIMIT :offset, :numRows");
-  $action_rows->execute(array(":offset" => $offset, ":numRows" => $number_rows));
-
-  $action_total_rows = $conn->prepare("SELECT id FROM " . USER_ACTIONS);
-  $action_total_rows->execute();
-  $total_rows = $action_total_rows->rowCount(); //Get number of all registerd action
+  // Search form
+  $html =  '<form action="' . $url_page . '" method="post" class="search">';
+    $html .=  '<input type="text" name="s" value ="' . (isset(  $_POST["s"] ) ? $_POST["s"] : "") . '" placeholder="Produktname, Preis">';
+    $html .=  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+  $html .=  '</form>';
 
   //Start table
-  $html = '<table class="rows">';
+  $html .= '<table class="rows">';
 
   //Headline
   $headline_names = array('User', 'Message', 'Datum', 'Restore details');
@@ -33,24 +29,26 @@ function display_actions(){
   //Headline can be changed over array $headline_names
   $html .= '<tr>'; //Start row
   foreach( $headline_names as $name ){
-    $html .= '<th>'.$name.'</th>';
+    $html .= '<th>' . $name . '</th>';
   }
   $html .= '</tr>'; //Close row
 
-  //row all tickets
-  while( $action = $action_rows->fetch() ){
+  // Set offset and steps
+  $steps = 50;
+  $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
+  foreach( User::actions( $offset, $steps, $search_value) as $action ) {
     $html .= '<tr class="table-list">'; //Start row
       $html .= '<td style="width: 20%;">' . User::name( $action["userID"] ) . ' (' . $action["userID"] . ')</td>'; //Display user id
       $html .= '<td style="width: 50%;">' . $action["print_message"] . '</td>'; //Display Name (pre and lastname)
-      $html .= '<td style="width: 20%;">'.date("d.m.Y H:i:s", strtotime( $action["modification_time"])).'</td>'; //Display purchase date
+      $html .= '<td style="width: 20%;">' . date("d.m.Y H:i:s", strtotime( $action["modification_time"])) . '</td>'; //Display purchase date
 
           //Check if current user (logged in user) can edit or see the user
       if( User::w_access_allowed($page, $current_user) ){
         //Current user can edit and delete user
         $html .= '<td style="width: auto;">';
         if(! empty($action["old_value"]) && ! empty($action["new_value"])){
-          $html .= '<a href="'.$url_page.'&view=' . $action["id"] . '" title="Revisionsdetails #'.$action["id"].'"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
+          $html .= '<a href="' . $url_page . '&view=' . $action["id"] . '" title="Revisionsdetails #' . $action["id"] . '"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
         }
         $html .= '</td>';
       }else{
@@ -59,25 +57,25 @@ function display_actions(){
     $html .= '</tr>'; //End row
   }
 
-  //Range menu
-  $html .= '<tr class="nav">';
+  // Menu requred
+  $html .=  '<tr class="nav">';
 
-  if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
-    $html .= '<td colspan="4">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-              </td>';
-  }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
-    $html .= '<td colspan="4">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-   }elseif( $offset > 0){
-    $html .= '<td colspan="4">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-  }
+    if( (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+      $html .=  '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                </td>';
+    }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+      $html .=  '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                </td>';
+    }elseif (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) { // More pages accessable
+      $html .=  '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                </td>';
+    }
 
-  $html .= '</tr>';
+  $html .=  '</tr>';
 
   //Close table
   $html .= '</table>';
@@ -134,6 +132,6 @@ if( isset($_GET["restore"]) ){
 if( isset($_GET["view"])){
   single_action();
 }else{
-  display_actions();
+  display_actions( ($_POST["s"] ?? null) );
 }
  ?>

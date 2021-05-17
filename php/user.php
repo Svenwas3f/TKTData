@@ -675,6 +675,32 @@ class User {
   /****************************************************
    * backup system
   ***************************************************/
+
+  /**
+   * Returns array of all actions
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
+   */
+  public static function actions( $offset = 0, $steps = 50, $search_value = null ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Select actions
+    if( is_null($search_value) || empty($search_value)) {
+      $actions = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " ORDER BY modification_time DESC, id DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $actions->execute();
+    }else {
+      $actions = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " WHERE print_message LIKE '%" . $search_value . "%' OR userID LIKE '%" . $search_value . "%' ORDER BY modification_time DESC, id DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $actions->execute();
+    }
+
+    // Return array
+    return $actions->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+
   /**
    * Restore action and return true or false
    *
