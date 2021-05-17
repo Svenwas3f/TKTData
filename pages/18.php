@@ -176,7 +176,7 @@ function display_products ( $search_value = null ) {
     $steps = 20;
     $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-    foreach( Checkout::global_products( $offset, $steps ) as $products ) {
+    foreach( Checkout::global_products( $offset, $steps, $search_value ) as $products ) {
       $html .=  '<tr>';
         $html .=  '<td>' . $products["name"] . '</td>';
         $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
@@ -194,7 +194,7 @@ function display_products ( $search_value = null ) {
     // Menu requred
     $html .=  '<tr class="nav">';
 
-      if( (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+      if( (count(Checkout::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $html .=  '<td colspan="' . count( $headline_names ) . '">
                     <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                     <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
