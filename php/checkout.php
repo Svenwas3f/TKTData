@@ -62,14 +62,24 @@ class Checkout {
    * $limit: How many rows
    * $offset: Start row
    */
-  public function all( $offset = 0, $steps = 20 ) {
+  public function all( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
     $conn = Access::connect();
 
-    // Select all
-    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
-    $checkout->execute();
-    return $checkout->fetchAll( PDO::FETCH_ASSOC );
+    if( is_null($search_value) || empty($search_value) ) {
+      // Select all
+      $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
+      $checkout->execute();
+      return $checkout->fetchAll( PDO::FETCH_ASSOC );
+    }else {
+      // Select all
+      $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id OR name=:name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
+      $checkout->execute(array(
+        ":checkout_id" => $search_value,
+        ":name" => $search_value
+      ));
+      return $checkout->fetchAll( PDO::FETCH_ASSOC );
+    }
   }
 
   /**
