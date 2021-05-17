@@ -485,15 +485,25 @@ class Checkout {
    * Returns a list of all products for this checkout
    * requires: $cashier
    */
-  public function products( $offset = 0, $steps = 20 ) {
+  public function products( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
     $conn = Access::connect();
 
-    // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
-    $products->execute(array(
-      "checkout_id" => $this->cashier,
-    ));
+    if( is_null($search_value) || empty($search_value) ) {
+      // Get all products
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products->execute(array(
+        "checkout_id" => $this->cashier,
+      ));
+    }else {
+      // Get all products
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id AND (name=:name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products->execute(array(
+        "checkout_id" => $this->cashier,
+        ":name" => $search_value,
+        ":price" => (intval($search_value) * 100),
+      ));
+    }
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
   }
@@ -501,13 +511,22 @@ class Checkout {
   /**
    * Returns list of all global products
    */
-  public function global_products( $offset = 0, $steps = 20 ) {
+  public function global_products( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
     $conn = Access::connect();
 
-    // Get all products
-    $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
-    $products->execute();
+    if( is_null($search_value) || empty($search_value) ) {
+      // Get all products
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products->execute();
+    }else {
+      // Get all products
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL AND (name=:name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products->execute(array(
+        ":name" => $search_value,
+        ":price" => (intval($search_value) * 100),
+      ));
+    }
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
   }
