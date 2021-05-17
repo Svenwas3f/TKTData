@@ -18,7 +18,7 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
- * Checkout->all ( $offset [int], $steps [int] )
+ * Checkout->all ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * Checkout->transactions ( $offset [int], $steps [int] ) [$cashier]
  *
@@ -38,9 +38,9 @@
  *
  * Checkout->product () [$product_id]
  *
- * Checkout->products ( $offset [int], $steps [int] ) [$cashier]
+ * Checkout->products ( $offset [int], $steps [int], $search_value [info_string] ) [$cashier]
  *
- * Checkout->global_products ( $offset [int], $steps [int] )
+ * Checkout->global_products ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * Checkout->values () [$cashier]
  *
@@ -61,6 +61,7 @@ class Checkout {
    *
    * $limit: How many rows
    * $offset: Start row
+   * $search_value: Search string
    */
   public function all( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
@@ -484,6 +485,10 @@ class Checkout {
   /**
    * Returns a list of all products for this checkout
    * requires: $cashier
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
    */
   public function products( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
@@ -510,6 +515,10 @@ class Checkout {
 
   /**
    * Returns list of all global products
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
    */
   public function global_products( $offset = 0, $steps = 20, $search_value = null ) {
     //Get database connection
