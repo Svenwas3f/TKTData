@@ -30,7 +30,7 @@ function display_checkouts ( $search_value = null ) {
       $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
       // Get content
-      foreach( Checkout::all( $offset, $steps ) as $checkout ) {
+      foreach( Checkout::all( $offset, $steps, $search_value ) as $checkout ) {
         $html .= '<tr>';
           $html .= '<td>' . $checkout["name"] . '</td>';
           $html .= '<td>';
@@ -47,7 +47,7 @@ function display_checkouts ( $search_value = null ) {
       // Menu requred
       $html .= '<tr class="nav">';
 
-        if( (count(Checkout::all( ($offset + $steps), 1 )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+        if( (count(Checkout::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
           $html .= '<td colspan="' . count( $headline_names ) . '">
                       <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                       <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
@@ -461,7 +461,7 @@ switch(key($action)) {
       }
 
       // List products
-      display_products ( ($_POST["s_product"] ?? "") );
+      display_products ( ($_POST["s_product"] ?? null) );
     }else {
       // remove
       if(isset($_POST["confirm"])) {
@@ -479,7 +479,7 @@ switch(key($action)) {
       }
 
       // List checkouts
-      display_checkouts ( ($_POST["s_checkout"] ?? "") );
+      display_checkouts ( ($_POST["s_checkout"] ?? null) );
     }
   break;
 }
