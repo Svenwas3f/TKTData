@@ -14,24 +14,6 @@ function display_users( $search_value = null ) {
   $number_rows = 20; //Maximal number of rows listed
   $offset = isset( $_GET["row-start"] ) ? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
 
-  if(! empty( $search_value )) {
-    //Get infos from db
-    $user_rows = $conn->prepare("SELECT * FROM " . USERS . " WHERE id LIKE :searchValue ORDER BY name, prename LIMIT :offset, :numRows");
-    $user_rows->execute(array(":searchValue" => '%' . $search_value . '%', ":offset" => $offset, ":numRows" => $number_rows));
-
-    $total_rows_req = $conn->prepare("SELECT id FROM " . USERS . " WHERE id LIKE :searchValue");
-    $total_rows_req->execute(array(":searchValue" => '%' . $search_value . '%'));
-    $total_rows = $total_rows_req->rowCount();
-  }else {
-    //Get infos from db
-    $user_rows = $conn->prepare("SELECT * FROM " . USERS . " LIMIT :offset, :numRows");
-    $user_rows->execute(array(":offset" => $offset, ":numRows" => $number_rows));
-
-    $total_rows_req = $conn->prepare("SELECT id FROM " . USERS);
-    $total_rows_req->execute();
-    $total_rows = $total_rows_req->rowCount();
-  }
-
   /**
    * Start html
    */
@@ -46,54 +28,54 @@ function display_users( $search_value = null ) {
   //Headline can be changed over array $headline_names
   $html .= '<tr>'; //Start row
   foreach( $headline_names as $name ){
-    $html .= '<th>'.$name.'</th>';
+    $html .= '<th>' . $name . '</th>';
   }
   $html .= '</tr>'; //Close row
 
-  /**
-   * Display every single user
-   */
-  while( $user = $user_rows->fetch() ){
-    $html .= '<tr class="table-list">'; //Start row
-      $html .= '<td style="width: 10%;">'.$user["id"].'</td>'; //Display user id
-      $html .= '<td style="width: 70%;">'.$user["email"].'</td>'; //Display Name (pre and lastname)
+  // Set offset and steps
+  $steps = 20;
+  $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-      //Check if current user (logged in user) can edit or see the user
-      if( User::w_access_allowed($page, $current_user) ){
-        //Current user can edit and delete user
-        $html .= '<td style="width: auto;">
-                    <a href="'.$url_page.'&view='.$user["id"].'"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
-                    <a href="'.$url_page.'&remove='.$user["id"].'"><img src="' . $url . '/medias/icons/trash.svg" /></a>
+  foreach( User::all( $offset, $steps, $search_value) as $user) {
+      $html .= '<tr class="table-list">'; //Start row
+        $html .= '<td style="width: 10%;">' . $user["id"] . '</td>'; //Display user id
+        $html .= '<td style="width: 70%;">' . $user["email"] . '</td>'; //Display Name (pre and lastname)
+
+        //Check if current user (logged in user) can edit or see the user
+        if( User::w_access_allowed($page, $current_user) ){
+          //Current user can edit and delete user
+          $html .= '<td style="width: auto;">
+                      <a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
+                      <a href="' . $url_page . '&remove=' . $user["id"] . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>
+                    </td>';
+        }elseif( User::r_access_allowed($page, $current_user) ){
+          $html .= '<td style="width: auto;">
+                      <a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
+                    </td>';
+        }
+
+      $html .= '</tr>'; //End row
+    }
+
+    // Menu requred
+    $html .=  '<tr class="nav">';
+
+      if( (count(Checkout::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+        $html .=  '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
-      }elseif( User::r_access_allowed($page, $current_user) ){
-        $html .= '<td style="width: auto;">
-                    <a href="'.$url_page.'&view='.$user["id"].'"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
+      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+        $html .=  '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  </td>';
+      }elseif (count(Checkout::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
+        $html .=  '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
       }
 
-    $html .= '</tr>'; //End row
-  }
-
-  /**
-   * List menu to display other users who are not in range
-   */
-  $html .= '<tr class="nav">';
-
-  if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
-    $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-              </td>';
-  }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
-    $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-  }elseif( $offset > 0){
-    $html .= '<td colspan="3">
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                <a href="'.$url_page.'&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-  }
-  $html .= '</tr>';
+    $html .=  '</tr>';
 
   //Close table
   $html .= '</table>';
@@ -150,7 +132,7 @@ function single_user($user) {
   //Display all menu elements
   while($menu = $menu_elements->fetch() ){
     //Display name
-    $html .= '<div class="right-menu-title"><span>'.$menu["name"].'</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
+    $html .= '<div class="right-menu-title"><span>' . $menu["name"] . '</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
 
     //Get all pages of menu (submenu)
     $submenus = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu=:submenu");
@@ -197,9 +179,9 @@ if( isset($_POST["confirm"])) {
 
   if( User::w_access_allowed($page, $current_user)) {
     if( $user->remove()) {
-      Action::success('Der Benutzer (' . $_POST["confirm"] . ') wurde erfolgreich entfernt.');
+      Action::success('Der Benutzer (' . $_POST["confirm"] . ') wurde erfolgreich entfernt . ');
     }else {
-      Action::fail('Der Benutzer (' . $_POST["confirm"] . ') konnte nicht entfernt werden.');
+      Action::fail('Der Benutzer (' . $_POST["confirm"] . ') konnte nicht entfernt werden . ');
     }
   }else {
     Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -262,7 +244,7 @@ switch(key($action)) {
     //Display all menu elements
     while($menu = $menu_elements->fetch() ){
       //Display name
-      echo '<div class="right-menu-title"><span>'.$menu["name"].'</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
+      echo '<div class="right-menu-title"><span>' . $menu["name"] . '</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
 
       //Get all pages of menu (submenu)
       $submenus = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu=:submenu");
@@ -271,9 +253,9 @@ switch(key($action)) {
       while($submenu = $submenus->fetch()){
         //Display content
         echo '<div class="submenu-rights">';
-        echo '<span title="Submenu #'.$submenu["id"].' ['.$submenu["name"].'] von dem Menu #'.$menu["id"].' ['.$menu["name"].']">'.$submenu["name"].'</span>'; //Menu name
-        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="'.$submenu["id"].'[]" value="w"/><div class="checkbox-btn" title="Schreibberechtigung setzen"></div></label>'; //Write checkbox
-        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="'.$submenu["id"].'[]" value="r"/><div class="checkbox-btn" title="Leseberechtigung setzen"></div></label>'; //Read checkbox
+        echo '<span title="Submenu #' . $submenu["id"] . ' [' . $submenu["name"] . '] von dem Menu #' . $menu["id"] . ' [' . $menu["name"] . ']">' . $submenu["name"] . '</span>'; //Menu name
+        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="w"/><div class="checkbox-btn" title="Schreibberechtigung setzen"></div></label>'; //Write checkbox
+        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="r"/><div class="checkbox-btn" title="Leseberechtigung setzen"></div></label>'; //Read checkbox
         echo '</div>';
       }
     }
@@ -309,7 +291,7 @@ switch(key($action)) {
   break;
   case "remove":
     //display remove form
-    Action::confirm('Möchten Sie den Benutzer '.User::name($_GET["remove"]).' ('.$_GET["remove"].') unwiederruflich entfernen?', $_GET["remove"]);
+    Action::confirm('Möchten Sie den Benutzer ' . User::name($_GET["remove"]) . ' (' . $_GET["remove"] . ') unwiederruflich entfernen?', $_GET["remove"]);
   break;
   default:
     //Display form

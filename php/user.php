@@ -38,6 +38,8 @@
  *
  * User->resetPassword ( $user [identification number] ) {static function}
  *
+ * User->all ( $offset [int], $steps [int], $search_value [info_string] ) {static function}
+ *
  ******** User functions ********
  *
  * User->updateRights ( $newValues [array with new values] ) [$user]
@@ -301,6 +303,32 @@ class User {
 
     //return
     return $newPassword;
+  }
+
+  /**
+   * Returns array of all users
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
+   */
+  public static function all( $offset = 0, $steps = 20, $search_value = null ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    if( is_null($search_value) || empty($search_value)) {
+      $users = $conn->prepare("SELECT * FROM " . USERS . " ORDER BY name LIMIT " . $steps . " OFFSET " . $offset );
+      $users->execute();
+    }else {
+      $users = $conn->prepare("SELECT * FROM " . USERS . " WHERE name LIKE '%" . $search_value . "%' OR email=:email OR id=:id ORDER BY name LIMIT " . $steps . " OFFSET " . $offset );
+      $users->execute(array(
+        ":email" => $search_value,
+        ":id" => $search_value,
+      ));
+    }
+
+    // Return array
+    return $users->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**************************************************** User actions ***************************************************/
