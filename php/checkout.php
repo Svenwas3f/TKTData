@@ -244,7 +244,7 @@ class Checkout {
     // Generate values and keys
     $update_query = "UPDATE " . CHECKOUT . " SET ";
     foreach( $checked_values as $key => $value ) {
-      $update_query .= "'" . $key . "' = '" . $value . "', ";
+      $update_query .= $key . " = '" . $value . "', ";
     }
     $update_query = substr( $update_query, 0, -2 ) . " WHERE checkout_id=:checkout_id";
 
