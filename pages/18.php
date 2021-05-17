@@ -79,7 +79,70 @@ function display_checkouts ( $search_value = null ) {
 }
 
 function single_checkout ( $checkout_id ) {
+  //Require variables
+  global $url;
+  global $url_page;
+  global $page;
+  global $current_user;
 
+  // Set id
+  $checkout = new Checkout();
+  $checkout->cashier = $checkout_id;
+
+  // Get disabled
+  $write = User::w_access_allowed( $page, $current_user );
+  $disabled = ($write === true ? "" : "disabled");
+
+  // Start HTML
+  echo '<div class="checkout">';
+    echo '<div class="top-nav">';
+      echo '<a href="' . $url_page . '&view_checkout=' . $checkout->cashier . '&type=general" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" title="Kasse verwalten">Allgemein</a>';
+      echo '<a href="' . $url_page . '&view_checkout=' . $checkout->cashier . '&type=access" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "access" ? "selected" : "") : "") . '" title="Rechte verwalten">Rechte</a>';
+    echo '</div>';
+
+    switch( $_GET["type"] ?? "") {
+      case "access":
+      break;
+      case "general":
+      default:
+        // Form
+        echo '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
+          //Kassenname
+          echo '<div class="box">';
+            echo '<p>Kassenname</p>';
+            echo '<label class="txt-input">';
+              echo '<input type="text" name="name" value="' . $checkout->values()["name"] . '"/>';
+              echo '<span class="placeholder">Kassenname</span>';
+            echo '</label>';
+          echo '</div>';
+
+          // Payrexx
+          echo '<div class="box">';
+            echo '<p>Payrexx</p>';
+            echo 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+
+            // Payrexx instance
+            echo '<label class="txt-input">';
+              echo '<input type="text" name="payment_payrexx_instance" value="' . $checkout->values()["payment_payrexx_instance"] . '" ' . $disabled . '/>';
+              echo '<span class="placeholder">Payrexx Instance</span>';
+            echo '</label>';
+
+            // Payrexx secret
+            echo '<label class="txt-input">';
+              echo '<input type="text" name="payment_payrexx_secret" value="' . $checkout->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
+              echo '<span class="placeholder">Payrexx Secret</span>';
+            echo '</label>';
+          echo '</div>';
+
+          //Add submit button
+          echo '<input type="submit" name="update" value="Update"/>';
+
+
+        echo '</form>';
+      break;
+    }
+
+  echo '</div>';
 }
 
 //Get current action
@@ -99,6 +162,71 @@ switch(key($action)) {
 
     // Display message
     Action::confirm($info, $_GET["remove_checkout"], "&list=checkout");
+  break;
+  case "view_checkout":
+    // View checkout
+    $checkout = new Checkout();
+    $checkout->cashier = $_GET["view_checkout"];
+
+    // Update if required
+    if(! empty( $_POST )) {
+      if(User::w_access_allowed($page, $current_user)) {
+        switch( $_GET["type"] ?? "" ) {
+          ////////////////////
+          // UPDATE GENERAL //
+          ////////////////////
+          case "general":
+          default:
+            // Check what part needs to be updated
+            if( $checkout->update_checkout(  $_POST ) ) {
+              Action::success("Die Kasse <strong>" . $checkout->values()["name"] . " (#" . $checkout->cashier . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+            }else {
+              Action::fail("Die Kasse <strong>" . $checkout->values()["name"] . " (#" . $checkout->cashier . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+            }
+          break;
+        }
+      }else {
+        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      }
+    }
+
+    // View single
+    single_checkout ( $checkout->cashier );
+  break;
+  case "add":
+    if( ($_GET["add"] ?? "") == "product") {
+      // Add product
+    }else {
+      // Add checkout
+      $checkout = new Checkout();
+
+      if(! empty( $_POST )) {
+        if(User::w_access_allowed($page, $current_user)) {
+          if( $checkout->add( CHECKOUT::DEFAULT_TABLE, $_POST ) ) {
+            Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_checkout=" . $checkout->cashier . "' class='redirect'>Kasse verwalten</a></strong>");
+          }else{
+            Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+          }
+        }else {
+          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        }
+      }
+
+      //Start form to edit, show user
+      echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+        echo '<h1>Kasse hinzufügen</h1>';
+        //Kassenname
+        echo '<label class="txt-input">';
+          echo '<input type="text" name="name"/>';
+          echo '<span class="placeholder">Kassenname</span>';
+        echo '</label>';
+
+        //Add submit button
+        echo '<input type="submit" name="create" value="Erstellen"/>';
+
+      //Close form
+      echo '</form>';
+    }
   break;
   case "list":
   default:
