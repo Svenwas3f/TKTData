@@ -18,6 +18,8 @@
  *
  * Coupon->timeWindow () [couponID] {private function}
  *
+ * Coupon->all ( $offset [int], $steps [int], $search_value [info_string] )
+ *
  * Coupon->get_couponID ( $name [Name of coupon] , $groupID [Id of selected group] )
  *
  * Coupon->add ( $values [Array with new infos] )
@@ -54,6 +56,38 @@ class Coupon {
 
       return $groupWindow->timeWindow(); //Return if timewindow of group is open
     }
+  }
+
+  /**
+   * Returns array of all checkouts
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
+   */
+  public function all( $offset = 0, $steps = 20, $search_value = null ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    if( is_null($search_value) || empty($search_value) ) {
+      // Select all
+      $coupon = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " ORDER BY couponID DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $coupon->execute();
+    }else {
+      // Select all
+      $coupon = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE
+      couponID LIKE :cid OR
+      name LIKE :name OR
+      groupID LIKE :gid
+      ORDER BY couponID DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected coupons in range
+      $coupon->execute(array(
+        ":cid" => "%" . $search_value . "%",
+        ":name" => "%" . $search_value . "%",
+        ":gid" => "%" . $search_value . "%",
+      ));
+    }
+
+    return $coupon->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**

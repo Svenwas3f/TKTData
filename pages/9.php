@@ -10,49 +10,6 @@ function display_coupons( $search_value = null ){
   global $current_user;
   global $conn;
 
-  $number_rows = 20; //Maximal number of rows listed
-  $offset = isset( $_GET["row-start"] )? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
-
-  if(! empty($search_value)) {
-    //Searched after value
-    $coupon_search = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE
-    couponID LIKE :cid OR
-    name LIKE :name OR
-    groupID LIKE :gid
-    ORDER BY couponID DESC LIMIT :offset, :max_rows");//Result of all selected coupons in range
-    $coupon_search->execute(array(
-      ":cid" => "%" . $search_value . "%",
-      ":name" => "%" . $search_value . "%",
-      ":gid" => "%" . $search_value . "%",
-      ":offset" => $offset,
-      ":max_rows" => $number_rows
-    ));
-
-
-    $total_rows_req = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE
-    couponID LIKE :cid OR
-    name LIKE :name OR
-    groupID LIKE :gid");
-    $total_rows_req->execute(array(
-      ":cid" => "%" . $search_value . "%",
-      ":name" => "%" . $search_value . "%",
-      ":gid" => "%" . $search_value . "%",
-    ));
-    $total_rows = $total_rows_req->rowCount();//Get number of all registerd user
-  }else {
-    //No search
-    $coupon_search = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " ORDER BY couponID DESC LIMIT :offset, :max_rows");//Result of all selected users in range
-    $coupon_search->execute(array(
-      ":offset" => $offset,
-      ":max_rows" => $number_rows
-    ));
-
-
-    $total_rows_req = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS);
-    $total_rows_req->execute();
-    $total_rows = $total_rows_req->rowCount();//Get number of all registerd user
-  }
-
   /**
    * Start html
    */
@@ -70,8 +27,12 @@ function display_coupons( $search_value = null ){
   }
   $html .= '</tr>'; //Close row
 
-  //row all tickets
-  while( $coupon = $coupon_search->fetch() ){
+  // Set offset and steps
+  $steps = 20;
+  $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+  // Get content
+  foreach( Coupon::all( $offset, $steps, $search_value ) as $coupon ) {
     //define color of goup
     $group = new Group();
     $group->groupID = $coupon["groupID"];
@@ -99,23 +60,23 @@ function display_coupons( $search_value = null ){
     $html .= '</tr>'; //End row
   }
 
-  //Range menu
+  // Menu requred
   $html .= '<tr class="nav">';
 
-  if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
-    $html .= '<td colspan="3">
-                <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-              </td>';
-  }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
-    $html .= '<td colspan="3">
-                <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-   }elseif( $offset > 0){
-    $html .= '<td colspan="3">
-                <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-              </td>';
-  }
+    if( (count(Coupon::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+      $html .= '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                </td>';
+    }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+      $html .= '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                </td>';
+    }elseif (count(Coupon::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
+      $html .= '<td colspan="' . count( $headline_names ) . '">
+                  <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                </td>';
+    }
 
   $html .= '</tr>';
 
