@@ -519,6 +519,50 @@ class Group {
   }
 
   /**
+   * Returns array of all groups
+   *
+   * $limit: How many rows
+   * $offset: Start row
+   * $search_value: Search string
+   */
+  public function all( $offset = 0, $steps = 20, $search_value = null ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    if( is_null($search_value) || empty($search_value) ) {
+      // Select all
+      $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS . " ORDER BY name, startTime, endTime, tpu DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+      $groups->execute();
+    }else {
+      //Searched after value
+      $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS . " WHERE
+      groupID LIKE :groupID OR
+      maxTickets LIKE :maxTickets OR
+      price LIKE :price OR
+      startTime LIKE :startTime OR
+      endTime LIKE :endTime OR
+      tpu LIKE :tpu OR
+      description LIKE :description OR
+      name LIKE :name OR
+      custom LIKE :custom
+      ORDER BY name, startTime, endTime, tpu DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+      $groups->execute(array(
+        ":groupID" => "%" .  $search_value . "%",
+        ":maxTickets" => "%" . $search_value . "%",
+        ":price" => "%" . $search_value . "%",
+        ":startTime" => "%" . $search_value . "%",
+        ":endTime" => "%" . $search_value . "%",
+        ":tpu" => "%" . $search_value . "%",
+        ":description" => "%" . $search_value . "%",
+        ":name" => "%" . $search_value . "%",
+        ":custom" => "%" . $search_value . "%",
+      ));
+    }
+
+    return $groups->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+  /**
    * Updates a group and returns true or false
    * Requires: $groupID
    *

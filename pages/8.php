@@ -6,81 +6,13 @@ class GroupCustomizer extends Group {
   /**
    * Function to list all groups
    */
-  public function all( $search_value = null ) {
+  public function list( $search_value = null ) {
     //Define variables
     global $url;
     global $url_page;
     global $page;
     global $current_user;
     global $conn;
-
-    $number_rows = 20; //Maximal number of rows listed
-    $offset = isset( $_GET["row-start"] ) ? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
-
-    if(! empty($search_value)) {
-      //Searched after value
-      $user_search = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS . " WHERE
-      groupID LIKE :groupID OR
-      maxTickets LIKE :maxTickets OR
-      price LIKE :price OR
-      startTime LIKE :startTime OR
-      endTime LIKE :endTime OR
-      tpu LIKE :tpu OR
-      description LIKE :description OR
-      name LIKE :name OR
-      custom LIKE :custom
-      ORDER BY name, startTime, endTime, tpu DESC LIMIT :offset, :max_rows");//Result of all selected users in range
-      $user_search->execute(array(
-        ":groupID" => "%" .  $search_value . "%",
-        ":maxTickets" => "%" . $search_value . "%",
-        ":price" => "%" . $search_value . "%",
-        ":startTime" => "%" . $search_value . "%",
-        ":endTime" => "%" . $search_value . "%",
-        ":tpu" => "%" . $search_value . "%",
-        ":description" => "%" . $search_value . "%",
-        ":name" => "%" . $search_value . "%",
-        ":custom" => "%" . $search_value . "%",
-        ":offset" => $offset,
-        ":max_rows" => $number_rows
-      ));
-
-
-      $total_rows_req = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS . " WHERE
-      groupID LIKE :groupID OR
-      maxTickets LIKE :maxTickets OR
-      price LIKE :price OR
-      startTime LIKE :startTime OR
-      endTime LIKE :endTime OR
-      tpu LIKE :tpu OR
-      description LIKE :description OR
-      name LIKE :name OR
-      custom LIKE :custom");
-      $total_rows_req->execute(array(
-        ":groupID" => "%" .  $search_value . "%",
-        ":maxTickets" => "%" . $search_value . "%",
-        ":price" => "%" . $search_value . "%",
-        ":startTime" => "%" . $search_value . "%",
-        ":endTime" => "%" . $search_value . "%",
-        ":tpu" => "%" . $search_value . "%",
-        ":description" => "%" . $search_value . "%",
-        ":name" => "%" . $search_value . "%",
-        ":custom" => "%" . $search_value . "%"
-      ));
-      $total_rows = $total_rows_req->rowCount();//Get number of all registerd user
-    }else {
-      //No search
-      $user_search = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS . " ORDER BY name, startTime, endTime, tpu DESC LIMIT :offset, :max_rows");//Result of all selected users in range
-      $user_search->execute(array(
-        ":offset" => $offset,
-        ":max_rows" => $number_rows
-      ));
-
-
-      $total_rows_req = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS);
-      $total_rows_req->execute();
-      $total_rows = $total_rows_req->rowCount();//Get number of all registerd user
-    }
-
 
     //Start table
     $html = '<table class="rows">';
@@ -92,57 +24,60 @@ class GroupCustomizer extends Group {
     //Headline can be changed over array $headline_names
     $html .= '<tr>'; //Start row
     foreach( $headline_names as $name ){
-      $html .= '<th>'.$name.'</th>';
+      $html .= '<th>' . $name . '</th>';
     }
     $html .= '</tr>'; //Close row
 
-    //row all APIs
-    while( $group = $user_search->fetch() ){
+    // Set offset and steps
+    $steps = 20;
+    $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-      //Used tickets
-      $currentGroup = new Group();
-      $currentGroup->groupID = $group["groupID"];
+    // Get content
+    foreach( Group::all( $offset, $steps, $search_value ) as $group ) {
+        //Used tickets
+        $currentGroup = new Group();
+        $currentGroup->groupID = $group["groupID"];
 
-      $html .= '<tr class="table-list">'; //Start row
-        $html .= '<td style="width: 20%;"><div class="color" style="background-color: '.$group["color"].';"></div>'.$group["name"].'</td>'; //Display user id
-        $html .= '<td style="width: 40%;">'.$currentGroup->ticketsNum().'/'.$group["maxTickets"].'</td>'; //Display Name (pre and lastname)
-        //Check date
-        $startTime = ($group["startTime"] == $group["endTime"] ) ? "Zeitlich" : date("d.m.Y H:i:s", strtotime( $group["startTime"] ));
-        $endTime = ($group["startTime"] == $group["endTime"] ) ? "unbeschr&auml;nkt" : date("d.m.Y H:i:s", strtotime( $group["endTime"] ));
-        $html .= '<td style="width: 20%;">' . $startTime . '-<br />' . $endTime . '</td>'; //Display purchase date
+        $html .= '<tr class="table-list">'; //Start row
+          $html .= '<td style="width: 20%;"><div class="color" style="background-color: ' . $group["color"] . ';"></div>' . $group["name"] . '</td>'; //Display user id
+          $html .= '<td style="width: 40%;">' . $currentGroup->ticketsNum() . '/' . $group["maxTickets"] . '</td>'; //Display Name (pre and lastname)
+          //Check date
+          $startTime = ($group["startTime"] == $group["endTime"] ) ? "Zeitlich" : date("d.m.Y H:i:s", strtotime( $group["startTime"] ));
+          $endTime = ($group["startTime"] == $group["endTime"] ) ? "unbeschr&auml;nkt" : date("d.m.Y H:i:s", strtotime( $group["endTime"] ));
+          $html .= '<td style="width: 20%;">' . $startTime . '-<br />' . $endTime . '</td>'; //Display purchase date
 
 
-        //Check if current user (logged in user) can edit or see the user
-        if( User::w_access_allowed($page, $current_user) ) {
-          //Current user can edit and delete user
-          $html .= '<td style="width: auto;">
-                      <a href="' . $url_page . '&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a><a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") .'&remove='.$group["groupID"].'" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-          $html .= '</td>';
-        } elseif( User::r_access_allowed($page, $current_user) ) {
-          $html .= '<td style="width: auto;">
-                      <a href="' . $url_page . '&view='.$group["groupID"].'" title="Details anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
-                    </td>';
-        }
-      $html .= '</tr>'; //End row
+          //Check if current user (logged in user) can edit or see the user
+          if( User::w_access_allowed($page, $current_user) ) {
+            //Current user can edit and delete user
+            $html .= '<td style="width: auto;">
+                        <a href="' . $url_page . '&view=' . $group["groupID"] . '" title="Details anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a><a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "")  . '&remove=' . $group["groupID"] . '" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+            $html .= '</td>';
+          } elseif( User::r_access_allowed($page, $current_user) ) {
+            $html .= '<td style="width: auto;">
+                        <a href="' . $url_page . '&view=' . $group["groupID"] . '" title="Details anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
+                      </td>';
+          }
+        $html .= '</tr>'; //End row
     }
 
-    //Range menu
+    // Menu requred
     $html .= '<tr class="nav">';
 
-    if( $offset + $number_rows >= $total_rows && $total_rows > $number_rows){ //last page
-      $html .= '<td colspan="3">
-                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                </td>';
-    }elseif( $offset <= 0 && $total_rows > $number_rows){ //First page
-      $html .= '<td colspan="3">
-                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-                </td>';
-     }elseif( $offset > 0){
-      $html .= '<td colspan="3">
-                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows - 1, PHP_ROUND_HALF_UP).'" style="float: left;">Letze</a>
-                  <a href="' . $url_page . '&row-start='.round($offset/$number_rows + 1, PHP_ROUND_HALF_UP).'" style="float: right;">Weiter</a>
-                </td>';
-    }
+      if( (count(Group::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+        $html .= '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                  </td>';
+      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+        $html .= '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  </td>';
+      }elseif (count(Group::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
+        $html .= '<td colspan="' . count( $headline_names ) . '">
+                    <a href="' . $url_page . '&list=checkout&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                  </td>';
+      }
 
     $html .= '</tr>';
 
@@ -163,7 +98,7 @@ class GroupCustomizer extends Group {
     global $url_page;
 
     //Headline with main color
-    $html = '<div class="headline-maincolor" style="background-color: '.$this->values()["color"].'"></div>';
+    $html = '<div class="headline-maincolor" style="background-color: ' . $this->values()["color"] . '"></div>';
 
     //Set menu_elements_name
     $menu_elements = array(
@@ -179,7 +114,7 @@ class GroupCustomizer extends Group {
     $html .= '<div class="group-nav">';
     foreach($menu_elements as $key => $name) {
       $cssClass = ($key == $this->subpage) ? 'class="selected"' : '';
-      $html .= '<a href="'. $url_page . '&view=' . $this->groupID . "&selection="  . $key . '" ' . $cssClass . '>' . $name . '</a>';
+      $html .= '<a href="' .  $url_page . '&view=' . $this->groupID . "&selection="  . $key . '" ' . $cssClass . '>' . $name . '</a>';
     }
     $html .= '</div>';
 
@@ -325,37 +260,37 @@ class GroupCustomizer extends Group {
         //---------------
         //Start container
         //---------------
-        $container = '<div id="container-'.$custom["id"].'" class="container-custom-form">';
+        $container = '<div id="container-' . $custom["id"] . '" class="container-custom-form">';
         //Hidden input
-        $container .= '<input type="hidden" name="hidden[]" value="'.$custom["type"].'%'.$custom["id"].'%">';
+        $container .= '<input type="hidden" name="hidden[]" value="' . $custom["type"] . '%' . $custom["id"] . '%">';
         //Headline
-        $container .= '<div><h1 style="display: inline-block">'.ucfirst($custom["type"]).'-Element</h1><span onclick="removeField('.$custom["id"].')" style="margin: 0px 5px;">Delete</span></div>';
+        $container .= '<div><h1 style="display: inline-block">' . ucfirst($custom["type"]) . '-Element</h1><span onclick="removeField(' . $custom["id"] . ')" style="margin: 0px 5px;">Delete</span></div>';
         if($custom["type"] == 'select' || $custom["type"] == 'radio'){
           //Selection or Radioform
-          $container .= '<input type="text" name="customField'.$custom["id"].'[]" placeholder="Name" value="'.$custom["name"].'" required="true" ' . $disabled . '/>';
-          $container .= '<input type="number" name="customField'.$custom["id"].'[]" placeholder="Reihenfolge" value="'.$custom["order"].'" ' . $disabled . '/>';
-          $container .= '<input type="checkbox" name="customField'.$custom["id"].'[]" placeholder="Name" value="1" '.($custom["required"]==1?"checked":"").' ' . $disabled . '/>(Pflichtfeld)';
-          $container .= '<span class="button" onclick="addMultiple('.$custom["id"].')" style="margin-bottom: 5px;">Auswahl hinzufügen</span>';
+          $container .= '<input type="text" name="customField' . $custom["id"] . '[]" placeholder="Name" value="' . $custom["name"] . '" required="true" ' . $disabled . '/>';
+          $container .= '<input type="number" name="customField' . $custom["id"] . '[]" placeholder="Reihenfolge" value="' . $custom["order"] . '" ' . $disabled . '/>';
+          $container .= '<input type="checkbox" name="customField' . $custom["id"] . '[]" placeholder="Name" value="1" ' . ($custom["required"]==1?"checked":"") . ' ' . $disabled . '/>(Pflichtfeld)';
+          $container .= '<span class="button" onclick="addMultiple(' . $custom["id"] . ')" style="margin-bottom: 5px;">Auswahl hinzufügen</span>';
           //Get all options
           $options = explode(',', $custom["value"]);
 
           for($optionI = 0; $optionI < COUNT($options) - 1; $optionI++){
-            $container .= '<div id="multipleContainer-'.$custom["id"].$optionI.'" class="multipleContainer">';
-              $container .= '<input type="text" name="multiple'.$custom["id"].'[]" placeholder="Name" value="'.$options[$optionI].'" ' . $disabled . '>';
-              $container .= '<span onclick="removeMultiple('.$custom["id"].', '.$optionI.')" style="margin: 0px 5px;">Delete</span>';
+            $container .= '<div id="multipleContainer-' . $custom["id"].$optionI . '" class="multipleContainer">';
+              $container .= '<input type="text" name="multiple' . $custom["id"] . '[]" placeholder="Name" value="' . $options[$optionI] . '" ' . $disabled . '>';
+              $container .= '<span onclick="removeMultiple(' . $custom["id"] . ', ' . $optionI . ')" style="margin: 0px 5px;">Delete</span>';
             $container .= '</div>';
           }
         }elseif($custom["type"] == 'checkbox'){
           //Checkbox form
-          $container .= '<input type="text" name="customField'.$custom["id"].'[]" placeholder="Name" value="'.$custom["name"].'" required="true" ' . $disabled . '/>';
-          $container .= '<input type="number" name="customField'.$custom["id"].'[]" placeholder="Reihenfolge" value="'.$custom["order"].'" ' . $disabled . '/>';
-          $container .= '<input type="checkbox" name="customField'.$custom["id"].'[]" placeholder="Name" value="1" '.($custom["required"]==1?"checked":"").'  ' . $disabled . '/>(Pflichtfeld)';
+          $container .= '<input type="text" name="customField' . $custom["id"] . '[]" placeholder="Name" value="' . $custom["name"] . '" required="true" ' . $disabled . '/>';
+          $container .= '<input type="number" name="customField' . $custom["id"] . '[]" placeholder="Reihenfolge" value="' . $custom["order"] . '" ' . $disabled . '/>';
+          $container .= '<input type="checkbox" name="customField' . $custom["id"] . '[]" placeholder="Name" value="1" ' . ($custom["required"]==1?"checked":"") . '  ' . $disabled . '/>(Pflichtfeld)';
         }else{
           //Text form
-          $container .= '<input type="text" name="customField'.$custom["id"].'[]" placeholder="Name" value="'.$custom["name"].'" required="true" ' . $disabled . '/>';
-          $container .= '<input type="text" name="customField'.$custom["id"].'[]" placeholder="Platzhalter" value="'.$custom["placeholder"].'" required="true" ' . $disabled . '/>';
-          $container .= '<input type="number" name="customField'.$custom["id"].'[]" placeholder="Reihenfolge" value="'.$custom["order"].'" ' . $disabled . '/>';
-          $container .= '<input type="checkbox" name="customField'.$custom["id"].'[]" placeholder="Name" value="1" '.($custom["required"]==1?"checked":"").'  ' . $disabled . '/>(Pflichtfeld)';
+          $container .= '<input type="text" name="customField' . $custom["id"] . '[]" placeholder="Name" value="' . $custom["name"] . '" required="true" ' . $disabled . '/>';
+          $container .= '<input type="text" name="customField' . $custom["id"] . '[]" placeholder="Platzhalter" value="' . $custom["placeholder"] . '" required="true" ' . $disabled . '/>';
+          $container .= '<input type="number" name="customField' . $custom["id"] . '[]" placeholder="Reihenfolge" value="' . $custom["order"] . '" ' . $disabled . '/>';
+          $container .= '<input type="checkbox" name="customField' . $custom["id"] . '[]" placeholder="Name" value="1" ' . ($custom["required"]==1?"checked":"") . '  ' . $disabled . '/>(Pflichtfeld)';
         }
         $container .= '</div>';
 
@@ -458,7 +393,7 @@ class GroupCustomizer extends Group {
 
       $html .= '<div class="ticket-preview">';
         $html .= '<div class="ticket-preview-info-box">&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.</div>';
-        $html .= '<iframe src="' . $url . 'pdf/ticket/?ticketToken='.urlencode( $ticketToken ).'">Loading preview</iframe>';
+        $html .= '<iframe src="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '">Loading preview</iframe>';
       $html .= '</div>';
     $html .= '</div>';
 
@@ -636,7 +571,7 @@ class GroupCustomizer extends Group {
     $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="sdk-code">';
       //Payment request mail message
       $html .= '<p>Zahlungsanforderungs-Mail</p>';
-      $html .= 'Diese Nachricht wird im Mail bei einer Zahlungsanforderung erscheinen. Beachte, dass bei Vorkasse oder Rechnung der Zahlungslink nicht erscheinen wird.';
+      $html .= 'Diese Nachricht wird im Mail bei einer Zahlungsanforderung erscheinen. Beachte, dass bei Vorkasse oder Rechnung der Zahlungslink nicht erscheinen wird . ';
       $html .= '<div class="btn-msg-container">';
         $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%E-Mail%\';">E-Mail</span>';
         $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%Pay-Link%\';">Zahlungslink</span>';
@@ -648,7 +583,7 @@ class GroupCustomizer extends Group {
 
       //Payrexx
       $html .= '<p>Payrexx</p>';
-      $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
+      $html .= 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
 
       //Payrexx instance
       $html .= '<label class="txt-input">';
@@ -714,7 +649,7 @@ class GroupCustomizer extends Group {
       }else {
         $html .= '<div>';
           $html .= '<p>ADFS</p>';
-          $html .= 'Durch aktivieren dieser Funktion, muss der Kunde sich über Ihr ADFS authentifizieren um ein Ticket zu erwerben. Beachten Sie, dass die simpleSAML-Konfiguration manuell vorgenommen werden muss. Ist die Konfiguration fehlerhaft, funktioniert der ganze Bestellungsprozess über den Store für diese Ticketgruppe nicht mehr. Die Authentifizierung kann nicht über ein Drittanbieter via SDK erfolgen.';
+          $html .= 'Durch aktivieren dieser Funktion, muss der Kunde sich über Ihr ADFS authentifizieren um ein Ticket zu erwerben. Beachten Sie, dass die simpleSAML-Konfiguration manuell vorgenommen werden muss. Ist die Konfiguration fehlerhaft, funktioniert der ganze Bestellungsprozess über den Store für diese Ticketgruppe nicht mehr. Die Authentifizierung kann nicht über ein Drittanbieter via SDK erfolgen . ';
           $html .= '<label class="checkbox">';
             $html .= '<input type="checkbox" name="adfs" value="true" ' . (($groupValues["adfs"] === 1) ? "checked" : '')  . ' ' . $disabled . '>';
             $html .= '<div class="checkbox-btn" title="Anmeldung fordern um Ticket zu kaufen"></div>Authentifizierung verlangen';
@@ -795,7 +730,7 @@ class GroupCustomizer extends Group {
       $html .= '</label>';
 
       //Notice
-      $html .= 'WICHTIG: Wer in Besitz dieses Schlüssels ist, kann Tickets hinzufügen, löschen, überarbeiten und auslesen. Veröffentlichen Sie diesen Schlüssel <b>nie</b> und geben Sie den Schlüssel nur an vertraute Personen weiter. Vermuten Sie einen Missbrauch dieses Schlüssels, erneuern Sie ihn unverzüglich.';
+      $html .= 'WICHTIG: Wer in Besitz dieses Schlüssels ist, kann Tickets hinzufügen, löschen, überarbeiten und auslesen. Veröffentlichen Sie diesen Schlüssel <b>nie</b> und geben Sie den Schlüssel nur an vertraute Personen weiter. Vermuten Sie einen Missbrauch dieses Schlüssels, erneuern Sie ihn unverzüglich . ';
 
     $html .= '</div>';
 
@@ -1026,9 +961,9 @@ if(isset($_POST["confirm"])) {
     if(! isset($_GET["selection"]) || $_GET["selection"] != 6) { //On page 6 (SDK), secret key will be refreshed
       //Remove group
       if( $groupCustomizerDelete->remove()) {
-        Action::success('Die Gruppe #' . $_POST["confirm"] . ' wurde erfolgreich entfernt.');
+        Action::success('Die Gruppe #' . $_POST["confirm"] . ' wurde erfolgreich entfernt . ');
       }else {
-        Action::fail('Der Gruppe #' . $_POST["confirm"] . ' konnte nicht entfernt werden.');
+        Action::fail('Der Gruppe #' . $_POST["confirm"] . ' konnte nicht entfernt werden . ');
       }
     }
   }else {
@@ -1046,7 +981,7 @@ if(! isset($_GET["view"]) && ! isset($_GET["add"])) {
   //Display tickets
   $search_value = (!empty($_POST["search_value"])) ? $_POST["search_value"] : '';
 
-  $groupCustomizer->all( $search_value );
+  $groupCustomizer->list( $search_value );
 
   //Add button
   echo '<a class="add" href="' . $url_page . '&add">
