@@ -15,7 +15,7 @@ switch($_POST["p"]) {
   /**
    * Ticket page
    */
-  case 6:
+  case 7:
     switch($_POST["action"]) {
       case "get_custom":
         if(User::r_access_allowed(10, $current_user)) {
@@ -141,7 +141,7 @@ switch($_POST["p"]) {
   /**
    * Information page
    */
-  case 9:
+  case 10:
     switch ($_POST["action"]) {
       case "get_info":
         if(User::r_access_allowed(10, $current_user)) {
@@ -161,7 +161,7 @@ switch($_POST["p"]) {
   /**
    * Scann with camera
    */
-  case 10:
+  case 11:
     switch($_POST["action"]) {
       case "get_ticket":
         if(User::r_access_allowed(10, $current_user)) {
@@ -288,7 +288,7 @@ switch($_POST["p"]) {
   /**
    * Livedata live informations
    */
-  case 13:
+  case 15:
     switch($_POST["action"]) {
       case "up":
         if(User::w_access_allowed($page, $current_user)) {
@@ -357,6 +357,22 @@ switch($_POST["p"]) {
           //Get data
           echo json_encode(Livedata::historyDown($min, $max));
         }
+      break;
+    }
+  break;
+
+  /**
+   * Checkout
+   */
+  case 19:
+    switch($_POST["action"]) {
+      case "add_w":
+      break;;
+      case "add_r":
+      break;
+      case "remove_w":
+      break;
+      case "remove_r":
       break;
     }
   break;

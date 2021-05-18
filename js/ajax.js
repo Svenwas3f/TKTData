@@ -83,7 +83,7 @@ function scanner_request_ticket(ticketToken, qr = false) {
   values["ticketToken"] = ticketToken;
   values["qr"] = qr;
 
-  ajax(10, function(c) {
+  ajax(11, function(c) {
     document.getElementsByClassName("result-ticket")[0].innerHTML = c.responseText;
   }, "get_ticket", values);
 }
@@ -97,7 +97,7 @@ function scanner_request_fullscreen_message(ticketToken) {
   var values = new Object();
   values["ticketToken"] = ticketToken;
 
-  ajax(10, function(c) {
+  ajax(11, function(c) {
     //Get response text
     ajax_response = JSON.parse(c.responseText);
 
@@ -145,7 +145,7 @@ function scanner_cancel_fullscreen_message() {
 function scanner_request_infoTxt( req_type = false ) {
   var values = new Object();
   values["reqType"] = req_type;
-  ajax( 9, function(c) {
+  ajax( 10, function(c) {
     document.getElementsByClassName("scanner-info-txt")[0].innerHTML = "<textarea onkeyup='scanner_request_update_infoTxt(this)'>" + c.responseText + "</textarea>";
   }, "get_info", values);
 }
@@ -159,7 +159,7 @@ function scanner_request_update_infoTxt(ele) {
   var values = new Object();
   values["content"] = ele.value;
 
-  ajax(9, function(c) {}, "update_info", values)
+  ajax(10, function(c) {}, "update_info", values)
 }
 
 /**
@@ -185,7 +185,7 @@ function scanner_employ_ticket(ticketToken) {
   var values = new Object();
   values["ticketToken"] = ticketToken;
 
-  ajax(10, function(c) {
+  ajax(11, function(c) {
     //Display info message
     document.body.innerHTML += c.responseText;
 
@@ -198,7 +198,7 @@ function scanner_employ_ticket(ticketToken) {
  * Set livedata up
  */
 function livedata_up() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display error message
     document.body.innerHTML += c.responseText;
   }, "up");
@@ -208,7 +208,7 @@ function livedata_up() {
  * Set livedaa down
  */
 function livedata_down() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display error message
     document.body.innerHTML += c.responseText;
   }, "down");
@@ -220,7 +220,7 @@ function livedata_down() {
  * callback: Callback function. this.responseText passed as first parameter
  */
 function livedata_visitors(callback) {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display error message
     var reqAnswer = c.responseText;
     callback( c.responseText );
@@ -231,7 +231,7 @@ function livedata_visitors(callback) {
  * Changes trend in content-trend-img
  */
 function livedata_trend() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display error message
     document.getElementsByClassName("content-trend-img")[0].src = c.responseText;
   }, "trend");
@@ -241,7 +241,7 @@ function livedata_trend() {
  * Updates history chart
  */
 function livedata_history() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display message
     var data = c.responseText;
     var historyData = document.getElementById('history');
@@ -253,7 +253,7 @@ function livedata_history() {
  * Updates historyUp chart
  */
 function livedata_historyUp() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display message
     var data = c.responseText;
     var historyData = document.getElementById('historyUp');
@@ -265,7 +265,7 @@ function livedata_historyUp() {
  * Updates historyDown chart
  */
 function livedata_historyDown() {
-  ajax(13, function(c) {
+  ajax(15, function(c) {
     //Display message
     var data = c.responseText;
     var historyData = document.getElementById('historyDown');
@@ -280,7 +280,7 @@ function group_custom(group) {
   var values = new Object();
   values["groupID"] = group;
 
-  ajax(6, function(c) {
+  ajax(7, function(c) {
     //Display message
     document.getElementsByClassName("custom-add-container")[0].innerHTML = c.responseText;
   }, "get_custom", values);
@@ -293,8 +293,12 @@ function group_coupons(group) {
   var values = new Object();
   values["groupID"] = group;
 
-  ajax(6, function(c) {
+  ajax(7, function(c) {
     //Display message
     document.getElementsByClassName("custom-add-container")[0].innerHTML = c.responseText;
   }, "get_coupons", values);
 }
+
+/**
+ *
+ */
