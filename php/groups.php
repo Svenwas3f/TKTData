@@ -26,9 +26,11 @@
  *
  * Group->updateMail ( $values [new values as array] ) [$groupID] {private function}
  *
- * Group->updatePayment ()
+ * Group->updatePayment ( $values [new values as array] ) [$groupID] {private function}
  *
  * Group->refreshSecretKey ( $values array with confirmation) [$groupID] {private function}
+ *
+ * Group->all ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * Group->update ( $selection [page where update will be made], $values [new values as array] ) Summary of all privare update* functions [$groupID indirect]
  *
