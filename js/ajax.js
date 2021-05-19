@@ -321,11 +321,11 @@ function checkout_add_right( link, user, checkout, type = "r" ) {
       // Add values
       var td = link.parentNode;
 
-      td.children[0].firstChild.src = ajax_response.img_w;
+      td.children[0].children[0].src = ajax_response.img_r;
       td.children[0].title = ajax_response.title_w;
       td.children[0].setAttribute("onclick", ajax_response.onclick_name_w);
 
-      td.children[1].firstChild.src = ajax_response.img_r;
+      td.children[1].children[0].src = ajax_response.img_r;
       td.children[1].title = ajax_response.title_r;
       td.children[1].setAttribute("onclick", ajax_response.onclick_name_r);
 
@@ -353,12 +353,12 @@ function checkout_remove_right( link, user, checkout, type = "r" ) {
       // Add values
       var td = link.parentNode;
 
-      td.children[0].firstChild.src = ajax_response.img_w;
+      td.children[0].children[0].src = ajax_response.img_w;
       td.children[0].title = ajax_response.title_w;
       td.children[0].setAttribute("onclick", ajax_response.onclick_name_w);
 
 
-      td.children[1].firstChild.src = ajax_response.img_r;
+      td.children[1].children[0].src = ajax_response.img_r;
       td.children[1].title = ajax_response.title_r;
       td.children[1].setAttribute("onclick", ajax_response.onclick_name_r);
 
