@@ -193,7 +193,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("checkout_id", "name", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "price", "currency");
+    $valid_keys = array("checkout_id", "name", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "price", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -411,7 +411,7 @@ class Checkout {
       ":checkout_id" => $this->cashier,
       ":user_id" => $user,
     ));
-    $id = $access_id->fetch( PDO::FETCH_ASSOC )["id"];
+    $id = $access_id->fetch( PDO::FETCH_ASSOC )["id"] ?? false;
 
     //Modifie
     $change = array(
@@ -420,7 +420,7 @@ class Checkout {
       "table" => "CHECKOUT_ACCESS",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "checkout_id", "value1" => $this->cashier, "key2" => "user_id", "value2" => $user),
-      "old" => $this->access()[array_search( $id, array_column($this->access(), "id"))],
+      "old" => ((empty(array_column($this->access(), "id")) ? "" : $this->access()[array_search( $id, array_column($this->access(), "id"))])),
       "new" => array("")
     );
 
@@ -459,9 +459,10 @@ class Checkout {
         ":user_id" => $user,
         ":checkout_id" => $this->cashier,
       ));
+      $rights = $check->fetch( PDO::FETCH_ASSOC );
 
       // Check if user exists
-      return ($check->rowCount() > 0 ? true :  false);
+      return array_intersect_key(($rights === false ? array() : $rights), array_flip(array("w", "r")));
     }
   }
 

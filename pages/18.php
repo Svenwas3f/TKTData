@@ -38,7 +38,7 @@ function display_checkouts ( $search_value = null ) {
                 $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
                 $html .= '<a href="' . $url_page . '&remove_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kasse entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
             }else {
-              $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+              $html .= '<a href="' . $url_page . '&view_checkout=' . urlencode( $checkout["checkout_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
             }
           $html .= '</td>';
         $html .= '</tr>';
@@ -101,6 +101,85 @@ function single_checkout ( $checkout_id ) {
 
     switch( $_GET["type"] ?? "") {
       case "access":
+        //Define variables
+        $number_rows = 20; //Maximal number of rows listed
+        $offset = isset( $_GET["row-start"] ) ? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
+
+        /**
+         * Start html
+         */
+        $html .= '<table class="rows">';
+
+        /**
+         * Create headline
+         */
+        $headline_names = array('Benutzername', 'Email', 'Schreiben | Lesen');
+
+        //Start headline
+        //Headline can be changed over array $headline_names
+        $html .= '<tr>'; //Start row
+        foreach( $headline_names as $name ){
+          $html .= '<th>' . $name . '</th>';
+        }
+        $html .= '</tr>'; //Close row
+
+        // Set offset and steps
+        $steps = 20;
+        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+        foreach( User::all( $offset, $steps, null) as $user) {
+            $html .= '<tr class="table-list">'; //Start row
+              $html .= '<td style="width: 10%;">' . $user["id"] . '</td>'; //Display user id
+              $html .= '<td style="width: 70%;">' . $user["email"] . '</td>'; //Display Name (pre and lastname)
+
+              //Check if current user (logged in user) can edit or see the user
+              if( User::w_access_allowed($page, $current_user) ){
+                //Current user can edit and delete user
+                $write_access = $checkout->access( $user["id"] )["w"] ?? false;
+                $checkout_access = $checkout->access( $user["id"] )["r"] ?? false;
+
+                $html .= '<td style="width: auto;">';
+                  $html .= '<a onclick="' . ($write_access ? "checkout_remove_right" : "checkout_add_right") . '(this, \'' . $user["id"] . '\', ' . $checkout_id . ', \'w\')"
+                  title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Kasse">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
+                  $html .= '<a onclick="' . ($checkout_access ? "checkout_remove_right" : "checkout_add_right") . '(this, \'' . $user["id"] . '\', ' . $checkout_id . ', \'r\')"
+                  title="' . $user["id"] . ' hat' . ($checkout_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($checkout_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
+                $html .= '</td>';
+              }elseif( User::r_access_allowed($page, $current_user) ){
+                //Current user can edit and delete user
+                $write_access = $checkout->access( $user["id"] )["w"] ?? false;
+                $checkout_access = $checkout->access( $user["id"] )["r"] ?? false;
+
+                $html .= '<td style="width: auto;">';
+                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Kasse">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
+                  $html .= '<a title="' . $user["id"] . ' hat' . ($checkout_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($checkout_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
+                $html .= '</td>';
+              }
+
+            $html .= '</tr>'; //End row
+          }
+
+          // Menu requred
+          $html .=  '<tr class="nav">';
+
+            if( (count(User::all( ($offset + $steps), 1, null )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+              $html .=  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+              $html .=  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        </td>';
+            }elseif (count(User::all( ($offset + $steps), 1, null )) > 0) { // More pages accessable
+              $html .=  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }
+
+          $html .=  '</tr>';
+
+        //Close table
+        $html .= '</table>';
       break;
       case "general":
       default:
@@ -185,7 +264,7 @@ function display_products ( $search_value = null ) {
               $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
               $html .=  '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
           }else {
-            $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+            $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
           }
         $html .=  '</td>';
       $html .=  '</tr>';

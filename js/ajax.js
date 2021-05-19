@@ -43,6 +43,10 @@
  *
  * group_coupons ( group [groupID] )
  *
+ * checkout_add_right ( link [link element], user [UserID], checkout [checkoutID], type [access type] )
+ *
+ * checkout_remove_right ( link [link element], user [UserID], checkout [checkoutID], type [access type] )
+ *
  */
 
 
@@ -300,5 +304,66 @@ function group_coupons(group) {
 }
 
 /**
- *
+ * Set new checkout rights
  */
+function checkout_add_right( link, user, checkout, type = "r" ) {
+  var values = new Object();
+  values["user"] = user;
+  values["checkout"] = checkout,
+  values["type"] = type;
+
+  ajax(19, function(c) {
+    try {
+      // Get json
+      var ajax_response = JSON.parse(c.responseText);
+      console.log(ajax_response);
+
+      // Add values
+      var td = link.parentNode;
+
+      td.children[0].firstChild.src = ajax_response.img_w;
+      td.children[0].title = ajax_response.title_w;
+      td.children[0].setAttribute("onclick", ajax_response.onclick_name_w);
+
+      td.children[1].firstChild.src = ajax_response.img_r;
+      td.children[1].title = ajax_response.title_r;
+      td.children[1].setAttribute("onclick", ajax_response.onclick_name_r);
+
+    } catch (e) {
+      document.getElementsByTagName("body")[0].innerHTML += c.responseText;
+    }
+  }, "add_right", values);
+}
+
+/**
+ * remove checkout rights
+ */
+function checkout_remove_right( link, user, checkout, type = "r" ) {
+  var values = new Object();
+  values["user"] = user;
+  values["checkout"] = checkout,
+  values["type"] = type;
+
+  ajax(19, function(c) {
+    try {
+      // Get json
+      var ajax_response = JSON.parse(c.responseText);
+      console.log(ajax_response);
+
+      // Add values
+      var td = link.parentNode;
+
+      td.children[0].firstChild.src = ajax_response.img_w;
+      td.children[0].title = ajax_response.title_w;
+      td.children[0].setAttribute("onclick", ajax_response.onclick_name_w);
+
+
+      td.children[1].firstChild.src = ajax_response.img_r;
+      td.children[1].title = ajax_response.title_r;
+      td.children[1].setAttribute("onclick", ajax_response.onclick_name_r);
+
+    } catch (e) {
+      document.getElementsByTagName("body")[0].innerHTML += c.responseText;
+    }
+  }, "remove_right", values);
+}

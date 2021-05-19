@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 15. Mai 2021 um 21:50
+-- Erstellungszeit: 19. Mai 2021
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `tktdata_checkout` (
   `checkout_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `payment_payrexx_instance` varchar(255) NOT NULL,
-  `payment_payrexx_secret` varchar(255) NOT NULL
+  `payment_payrexx_instance` varchar(255) DEFAULT NULL,
+  `payment_payrexx_secret` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -43,7 +43,9 @@ CREATE TABLE `tktdata_checkout` (
 CREATE TABLE `tktdata_checkout_access` (
   `id` int(11) NOT NULL,
   `checkout_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL
+  `user_id` varchar(255) DEFAULT NULL,
+  `w` int(11) NOT NULL DEFAULT 0,
+  `r` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -243,27 +245,6 @@ CREATE TABLE `tktdata_user_rights` (
   `w` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Daten für Tabelle `tktdata_user_rights`
---
-
-INSERT INTO `tktdata_user_rights` (`id`, `userId`, `page`, `r`, `w`) VALUES
-(78, 'Kasse', 16, 1, 1),
-(79, 'Kasse', 17, 1, 1),
-(120, 'Admin', 7, 1, 1),
-(121, 'Admin', 8, 1, 1),
-(122, 'Admin', 9, 1, 1),
-(123, 'Admin', 10, 1, 1),
-(124, 'Admin', 11, 1, 1),
-(125, 'Admin', 12, 1, 1),
-(126, 'Admin', 13, 1, 1),
-(127, 'Admin', 14, 1, 1),
-(128, 'Admin', 15, 1, 1),
-(129, 'Admin', 16, 1, 1),
-(130, 'Admin', 17, 1, 1),
-(131, 'Admin', 18, 1, 1),
-(132, 'Admin', 19, 1, 1),
-(133, 'Admin', 20, 1, 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -274,6 +255,7 @@ INSERT INTO `tktdata_user_rights` (`id`, `userId`, `page`, `r`, `w`) VALUES
 --
 ALTER TABLE `tktdata_checkout`
   ADD PRIMARY KEY (`checkout_id`);
+
 --
 -- Indizes für die Tabelle `tktdata_checkout_access`
 --
@@ -351,19 +333,19 @@ ALTER TABLE `tktdata_user_rights`
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout`
 --
 ALTER TABLE `tktdata_checkout`
-  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
 --
 ALTER TABLE `tktdata_checkout_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_products`
 --
 ALTER TABLE `tktdata_checkout_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
@@ -375,37 +357,37 @@ ALTER TABLE `tktdata_livedata_archive`
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_live`
 --
 ALTER TABLE `tktdata_livedata_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1302;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
 --
 ALTER TABLE `tktdata_tickets_coupons`
-  MODIFY `couponID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `couponID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_groups`
 --
 ALTER TABLE `tktdata_tickets_groups`
-  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1557;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2391;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

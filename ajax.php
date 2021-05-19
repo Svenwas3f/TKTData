@@ -366,13 +366,146 @@ switch($_POST["p"]) {
    */
   case 19:
     switch($_POST["action"]) {
-      case "add_w":
-      break;;
-      case "add_r":
+      case "add_right":
+        if(User::w_access_allowed($page, $current_user)) {
+          // Set values
+          $values = json_decode( $_POST["values"], true );
+
+          // Add write rights
+          $checkout = new Checkout();
+          $checkout->cashier = $values["checkout"];
+
+          // Remove access if exitst
+          if(! $checkout->remove_access( $values["user"] ) ) {
+            Action::fail("Die Rechte konnten nicht hinzugefügt werden");
+          }
+
+          if( ($values["type"] ?? "r") == "w") {
+            $access_values = array(
+              "checkout_id" => $values["checkout"],
+              "user_id" => $values["user"],
+              "w" => 1,
+              "r" => 1,
+            );
+          }else {
+            $access_values = array(
+              "checkout_id" => $values["checkout"],
+              "user_id" => $values["user"],
+              "w" => 0,
+              "r" => 1,
+            );
+          }
+
+          if(! $checkout->add( Checkout::ACCESS_TALBE, $access_values ) ) {
+            Action::fail("Die Rechte konnten nicht hinzugefügt werden");
+            return false;
+          }
+
+          // Access to page if not exitst
+          $user = new User();
+          $user->user = $values["user"];
+
+          if( ($values["type"] ?? "r") == "w") {
+            $new_rights = $user->rights();
+            $new_rights[16] = array_unique( array_merge($new_rights[16], array("w", "r")));
+            $new_rights[17] = array_unique( array_merge($new_rights[17], array("w", "r")));
+          }else {
+            $new_rights = $user->rights();
+            $new_rights[16] = array_unique( array_merge($new_rights[16], array("r")));
+            $new_rights[17] = array_unique( array_merge($new_rights[17], array("r")));
+          }
+
+          if(! $user->updateRights( $new_rights ) ) {
+            Action::fail("Die Rechte konnten nicht hinzugefügt werden");
+            return false;
+          }
+
+          // All good
+          if( ($values["type"] ?? "r") == "w") {
+            echo json_encode(array(
+              "img_w" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "title_w" => $values["user"] . " hat Schreibrechte auf diese Kasse",
+              "onclick_name_w" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
+              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+            ));
+          }else {
+            echo json_encode(array(
+              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
+              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
+              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+            ));
+          }
+        }else {
+          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        }
       break;
-      case "remove_w":
-      break;
-      case "remove_r":
+      case "remove_right":
+        if(User::w_access_allowed($page, $current_user)) {
+          // Set values
+          $values = json_decode( $_POST["values"], true );
+
+          // Add write rights
+          $checkout = new Checkout();
+          $checkout->cashier = $values["checkout"];
+
+          // Remove access if exitst
+          if(! $checkout->remove_access( $values["user"] ) ) {
+            Action::fail("Die Rechte konnten nicht hinzugefügt werden");
+          }
+
+          if( ($values["type"] ?? "r") == "w") {
+            $access_values = array(
+              "checkout_id" => $values["checkout"],
+              "user_id" => $values["user"],
+              "w" => 0,
+              "r" => 1,
+            );
+          }else {
+            $access_values = array(
+              "checkout_id" => $values["checkout"],
+              "user_id" => $values["user"],
+              "w" => 0,
+              "r" => 0,
+            );
+          }
+
+          if(! $checkout->add( Checkout::ACCESS_TALBE, $access_values ) ) {
+            Action::fail("Die Rechte konnten nicht hinzugefügt werden");
+            return false;
+          }
+
+          // All good
+          if( ($values["type"] ?? "r") == "w") {
+            echo json_encode(array(
+              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
+              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
+              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+            ));
+          }else {
+            echo json_encode(array(
+              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
+              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_r" => $values["user"] . " hat keine Leserechte auf diese Kasse",
+              "onclick_name_r" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+            ));
+          }
+        }else {
+          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        }
       break;
     }
   break;

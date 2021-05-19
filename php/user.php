@@ -50,6 +50,8 @@
  *
  * User->values( $fetchMode [PDO Fetch mode] ) [$user]
  *
+ * User->rights () [$user]
+ *
  * User->remove () [$user]
  *
  * User->add ($email [email of user], $userID [identification number], $name [display name of user], $rights [array for userrights], $sendMail [boolean, send mail to user or not] ) [$user]
@@ -500,6 +502,30 @@ class User {
 
     //Return content
     return $userInfo->fetch($fetchMode);
+  }
+
+  /**
+   * Returns all rights
+   * requires: $user
+   */
+  public function rights() {
+    //Get database connection
+    $conn = Access::connect();
+
+    $userInfo = $conn->prepare("SELECT * FROM " . USER_RIGHTS . " WHERE userId=:userId");
+    $userInfo->execute(array(":userId" => $this->user));
+
+    // Start rights
+    $rights = array();
+
+    foreach( $userInfo->fetchAll() as $page) {
+      $rights[$page["page"]] = array(
+        (isset($page["w"]) ? "w" : ""),
+        (isset($page["r"]) ? "w" : ""),
+      );
+    }
+
+    return $rights;
   }
 
   /**
