@@ -433,9 +433,9 @@ switch($_POST["p"]) {
             ));
           }else {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
-              "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_r" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
+              "onclick_name_r" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
 
               "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
               "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
@@ -494,9 +494,9 @@ switch($_POST["p"]) {
             ));
           }else {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
-              "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "img_r" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "title_r" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
+              "onclick_name_r" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
 
               "img_r" => $url . "/medias/icons/toggleCheckoutRights1.svg",
               "title_r" => $values["user"] . " hat keine Leserechte auf diese Kasse",
