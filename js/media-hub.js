@@ -1,0 +1,4 @@
+class MediaHub {
+  static window() {
+  }
+}

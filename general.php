@@ -47,7 +47,7 @@ define("SIMPLE_SAML_CONFIG", null);
 //define restore availability after deleting a ticketgroup
 //True: Restore images and database, images will not be deleted (Recomended in production)
 //False: Restore only database (Recomended while testing)
-define("FULL_RESTORE", true); 
+define("FULL_RESTORE", true);
 
 /////////////////////////////
 // Define db table names
@@ -76,6 +76,8 @@ define('CHECKOUT', 'tktdata_checkout');
 define('CHECKOUT_PRODUCTS', 'tktdata_checkout_products');
 //Checkout access
 define('CHECKOUT_ACCESS', 'tktdata_checkout_access');
+//Media hub
+define('MEDIA_HUB', 'tktdata_mediahub');
 
 /////////////////////////////
 // Define global vairalbes
@@ -140,6 +142,9 @@ require_once( dirname(__FILE__) . "/php/payrexx.php");
 
 /* Checkout file */
 require_once( dirname(__FILE__) . "/php/checkout.php");
+
+/* Mediahub file */
+require_once( dirname(__FILE__) . "/php/media-hub.php");
 
 /////////////////////////////
 // Require html
