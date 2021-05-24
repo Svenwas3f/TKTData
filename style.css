@@ -942,11 +942,11 @@ input[type="submit"]:disabled, button:disabled {
   padding-top: 100%;
 }
 
-.media-hub-window .media-article .media-list label input {
+.media-hub-window .media-article .media-list input {
   display: none;
 }
 
-.media-hub-window .media-article .media-list label input:checked ~ .img {
+.media-hub-window .media-article .media-list input:checked ~ label .img {
   outline: 6px solid rgb(35, 43, 67);
   outline-offset: 1px;
 }

@@ -1,4 +1,45 @@
 class MediaHub {
+  // Manage window
+  static window = {
+    "page" : function( page ) {
+      // Get active page
+      var nav = page.closest(".media-nav");
+      var active = nav.getElementsByClassName("active")[0];
+
+      // Remove active
+      active.classList.remove("active");
+
+      // Add to new page
+      page.classList.add("active");
+
+      // Close all pages
+      var pages = nav.closest(".media-hub-window").getElementsByClassName("media-article")[0].children;
+
+      for(var i = 0; i < pages.length; i++) {
+        if( pages[i].getAttribute("class") == page.getAttribute("data-page-class") ) {
+          pages[i].style.display = "";
+        }else {
+          pages[i].style.display = "none";
+        }
+      }
+    },
+    "details" : function( label ) {
+      var details = label.closest(".media-article").getElementsByClassName("media-details")[0];
+      var imageURL = label.getElementsByClassName("img")[0].style.backgroundImage;
+
+      // Set details image
+      details.getElementsByClassName("img")[0].style.backgroundImage = imageURL;
+
+      // Set details values
+
+
+      // Set details actions 
+
+      // Display details
+      details.style.display = "block";
+    }
+  };
+
   // Manage dropzone actions and make ajax request
   static dropzone = {
     "dragover" : function( dropzone, event ) {

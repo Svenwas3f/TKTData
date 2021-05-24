@@ -23,7 +23,7 @@ echo $html;
  <div class="media-hub-window">
    <div class="media-header">
       <div class="media-nav">
-        <a href="" class="left active">Übersicht</a><a href="" class="left">Bild hinzufügen</a><a onclick="this.parentNode.parentNode.parentNode.remove()" class="right">&#10006;</a>
+        <a onclick="MediaHub.window.page( this )" data-page-class="media-list" class="left active">Übersicht</a><a onclick="MediaHub.window.page( this )" data-page-class="media-upload" class="left">Bild hinzufügen</a><a onclick="this.parentNode.parentNode.parentNode.remove()" class="right">&#10006;</a>
       </div>
 
      <!-- <form action="" method="post" class="search">
@@ -31,15 +31,15 @@ echo $html;
      </form> -->
    </div>
    <div class="media-article">
-      <div class="media-list" style="display:none">
-        <label>
-          <input type="radio" name="media">
-          <div class="img" style="background-image: url('https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
+      <div class="media-list">
+        <input type="radio" id="5e6302901dcf886e7c7823eb48039669" name="media">
+        <label onclick="MediaHub.window.details( this )" for="5e6302901dcf886e7c7823eb48039669">
+          <div class="img" style="background-image: url('http://localhost/www.tktdata.ch/medias/hub/5e6302901dcf886e7c7823eb48039669.jpg')"></div>
         </label>
       </div>
       <div class="media-details" style="display:none">
-        <div class="img" style="background-image: url('https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
-          <a onclick="this.parentNode.parentNode.remove()" class="close">&#10006;</a>
+        <div class="img">
+          <a onclick="this.parentNode.parentNode.style.display = 'none'" class="close">&#10006;</a>
         </div>
         <div class="media-detail-values">
           <input type="hidden" name="fileID" value="thisismyfileid" />
@@ -54,7 +54,7 @@ echo $html;
           <button>VERWENDEN</button>
         </div>
       </div>
-      <div class="media-upload">
+      <div class="media-upload" style="display:none">
         <label ondragover="MediaHub.dropzone.dragover( this, event )" ondragleave="MediaHub.dropzone.dragleave( this )" ondragend="MediaHub.dropzone.dragend( this )" ondrop="MediaHub.dropzone.drop( this, event )">
           <span class="upload_prompt">Dokument hineinziehen oder klicken</span>
           <div class="progress_bar">
