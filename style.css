@@ -1076,6 +1076,120 @@ input[type="submit"]:disabled, button:disabled {
   }
 }
 
+.media-hub-window .media-article .media-upload label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 40px;
+  height: calc(100vh - 40px - 80px - 50px - 10px);
+  border: 5px dashed rgb(35, 43, 67);
+  background-color:#a7aab3;
+  cursor: pointer;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+}
+
+.media-hub-window .media-article .media-upload label .upload_prompt {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  font-size: 22pt;
+  color: white;
+}
+
+.media-hub-window .media-article .media-upload label form {
+  display: none;
+}
+
+.media-hub-window .media-article .media-upload .progress_bar {
+  display: none;
+  position: relative;
+  height: 40px;
+  width: 60%;
+  background: rgb(35, 43, 67);
+  border-radius: 10px;
+}
+
+.media-hub-window .media-article .media-upload .progress_bar.animate {
+  background: repeating-linear-gradient(-45deg, rgba(35, 43, 67, 0.7), rgba(35, 43, 67, 0.7) 20px, rgb(35, 43, 67) 20px,  rgb(35, 43, 67) 40px);
+  background-size: 300% 100%;
+  background-position: right;
+  animation: uploadMedia 7s linear infinite;
+}
+
+.media-hub-window .media-article .media-upload .progress_bar .textoverlay {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  line-height: 40px;
+  text-shadow: 2px 2px rgb(35, 43, 67);
+}
+
+@keyframes uploadMedia {
+  0% {
+     background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+}
+
+@-webkit-keyframes uploadMedia {
+  0% {
+     background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+}
+
+.media-hub-window .media-article .media-upload label .uploaded_files {
+  width: 100%;
+  display: none;
+  max-height: 20%;
+  overflow: auto;
+}
+
+.media-hub-window .media-article .media-upload label .uploaded_files span {
+  display: block;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+  color:  rgb(35, 43, 67, 0.55);
+  margin: 3px;
+}
+
+.media-hub-window .media-article .media-upload label .uploaded_files .failed {
+  display: block;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+  color:  rgb(35, 43, 67, 0.55);
+  margin: 3px;
+  color: #f72f2d;
+}
+
+@media screen and (max-width: 700px) {
+  .media-hub-window .media-article .media-upload label {
+    margin: 5px;
+    height: calc(100vh - 70px - 60px - 40px - 45px);
+    border: 5px dashed rgb(35, 43, 67);
+    background-color:#a7aab3;
+    cursor: pointer;
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+  }
+}
+
 /*Ticket*/
 .radio-input-container {
   margin-top: 12.5px;

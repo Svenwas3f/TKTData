@@ -509,5 +509,22 @@ switch($_POST["p"]) {
       break;
     }
   break;
+
+  /**
+   * Mediahub
+   */
+  case "MediaHub":
+    switch($_POST["action"]) {
+      case "add":
+        // Add new image
+        $mediaHub = new MediaHub();
+        if( $mediaHub->addImage( $_FILES["image"], pathinfo($_FILES["image"]["name"], PATHINFO_FILENAME ) ) ) {
+          echo "true";
+        }else {
+          echo "false";
+        }
+      break;
+    }
+  break;
 }
  ?>

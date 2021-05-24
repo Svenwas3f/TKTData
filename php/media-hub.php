@@ -66,25 +66,58 @@ class MediaHub {
   }
 
   /**
+   * Uploades an image to mediahub
    *
+   * $image: $_FILES[""] Array of one image
+   * $alt = Alt text that should be displayed if image not found
    */
   public function addImage( $image, $alt  ) {
+    // Get global values
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
     // Generate new if
     $this->fileID = $this->generateFileID();
 
+    // Upload time
+    $upload_time = date("Y-m-d H:i:s");
+
     // Create db query
     $db_upload = $conn->prepare("INSERT INTO " . MEDIA_HUB . " (fileID, alt, upload_time, upload_user) VALUES (:fileID, :alt, :upload_time, :upload_user)");
     $db_upload->execute(array(
       ":fileID" => $this->fileID,
       ":alt" => $alt,
-      ":upload_time" => date("Y-m-d H:i:s"),
+      ":upload_time" => $upload_time,
       ":upload_user" => $current_user
     ));
 
     // Upload image
+    if( move_uploaded_file( $image["tmp_name"], dirname(__FILE__, 2) . "/medias/hub/" . $this->fileID . "." . pathinfo( $image["name"], PATHINFO_EXTENSION ) )) {
+      //Create modification
+      $change = array(
+        "user" => $current_user,
+        "message" => "Added new Image (MediaHub)",
+        "table" => "MEDIA_HUB",
+        "function" => "INSERT INTO",
+        "primary_key" => array("key" => "fileID", "value" => $this->fileID),
+        "old" => "",
+        "new" => array(
+          "alt" => $alt,
+          "upload_time" => $upload_time,
+          "upload_user" => $current_user,
+        )
+      );
+
+      User::modifie( $change );
+
+      // Return message
+      return true;
+    }else {
+      // Return message
+      return false;
+    }
   }
 
   /**

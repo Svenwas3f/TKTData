@@ -15,61 +15,29 @@ $html = '<div class="select" onclick="toggleOptions(this)">';
 $html .= '</div>';
 echo $html;
  ?> -->
+
+
+
+
+ <script src="<?php echo $url; ?>/js/media-hub.js"></script>
  <div class="media-hub-window">
    <div class="media-header">
       <div class="media-nav">
         <a href="" class="left active">Übersicht</a><a href="" class="left">Bild hinzufügen</a><a onclick="this.parentNode.parentNode.parentNode.remove()" class="right">&#10006;</a>
       </div>
 
-     <form action="" method="post" class="search">
+     <!-- <form action="" method="post" class="search">
        <input type="text" name="s_checkout" value ="" placeholder="Bild suchen"><button><img src="https://localhost/www.tktdata.ch/medias/icons/magnifying-glass.svg" /></button>
-     </form>
+     </form> -->
    </div>
    <div class="media-article">
-      <div class="media-list">
+      <div class="media-list" style="display:none">
         <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1621361160937-d3146b7342df?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1621441320260-66e49b4e95c1?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMXx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1621393665404-dcac9fd3b59c?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMnx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1621441916074-96050a7b1592?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyM3x8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1621442746622-a137ca8ec141?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-
-        <label>
-         <input type="radio" name="media">
-         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1601933973783-43cf8a7d4c5f?ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-
-       </label>
-     </div>
-      <div class="media-details">
+          <input type="radio" name="media">
+          <div class="img" style="background-image: url('https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
+        </label>
+      </div>
+      <div class="media-details" style="display:none">
         <div class="img" style="background-image: url('https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
           <a onclick="this.parentNode.parentNode.remove()" class="close">&#10006;</a>
         </div>
@@ -87,7 +55,17 @@ echo $html;
         </div>
       </div>
       <div class="media-upload">
-
+        <label ondragover="MediaHub.dropzone.dragover( this, event )" ondragleave="MediaHub.dropzone.dragleave( this )" ondragend="MediaHub.dropzone.dragend( this )" ondrop="MediaHub.dropzone.drop( this, event )">
+          <span class="upload_prompt">Dokument hineinziehen oder klicken</span>
+          <div class="progress_bar">
+            <span class="textoverlay">Hochladen ... </span>
+          </div>
+          <div class="uploaded_files">
+          </div>
+          <form action="<?php echo $url; ?>ajax.php" class="media-upload-form">
+            <input type="file" name="image" onchange="MediaHub.dropzone.inputSelection( this.parentNode.parentNode )" multiple/>
+          </form>
+        </label>
       </div>
    </div>
  </div>
