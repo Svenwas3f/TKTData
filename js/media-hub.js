@@ -272,6 +272,16 @@ class MediaHub {
       // Display details
       details.style.display = "block";
     },
+
+    "moreMedias" : function( list, offset ) {
+      // Add new content
+      MediaHub.medias.load(function( html ) {
+        list.innerHTML += html;
+      }, offset);
+
+      // Remove old button
+      list.getElementsByTagName("button")[0].remove();
+    }
   };
 
   // Manage actions
@@ -293,6 +303,11 @@ class MediaHub {
           html += '<label onclick="MediaHub.window.details( this )" for="' + ajax_response[i].fileID + '">';
           html += '<div class="img" style="background-image: url(\'http://localhost/www.tktdata.ch/medias/hub/' + ajax_response[i].fileID + '.jpg\')"></div>';
           html += '</label>';
+        }
+
+        // Check if load more is required
+        if( ajax_response.length >= steps ) {
+          html += "<button onclick='MediaHub.window.moreMedias( this.parentNode, " + (offset + steps) + " )'>Weitere laden</button>";
         }
 
         callback( html );
