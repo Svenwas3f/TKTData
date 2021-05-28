@@ -222,64 +222,6 @@ class MediaHub {
       mediaContainer.appendChild( mediaArticle );
 
      document.getElementsByTagName("article")[0].appendChild(mediaContainer);
-
-
-      // // Start html
-      // var mediaHubWindow = '<div class="media-hub-window">';
-      //   mediaHubWindow += '<div class="media-header">';
-      //     mediaHubWindow += '<div class="media-nav">';
-      //       mediaHubWindow += '<a onclick="MediaHub.window.page( this )" data-page-class="media-list" class="left active">Übersicht</a><a onclick="MediaHub.window.page( this )" data-page-class="media-upload" class="left">Bild hinzufügen</a><a onclick="this.parentNode.parentNode.parentNode.remove()" class="right">&#10006;</a>';
-      //     mediaHubWindow += '</div>';
-      //   mediaHubWindow += '</div>';
-      //   mediaHubWindow += '<div class="media-article">';
-      //     mediaHubWindow += '<div class="media-list">';
-      //
-      //       var test = document.createElement("div");
-      //
-      //       // Load images
-      //       MediaHub.medias.load( function( html ) {
-      //         // mediaHubWindow += html;
-      //         // console.log( mediaHubWindow )
-      //         test.innerHTML = html;
-      //       } );
-      //
-      //       console.log(test);
-      //
-      //     mediaHubWindow += '</div>';
-      //     mediaHubWindow += '<div class="media-details" style="display:none">';
-      //       mediaHubWindow += '<div class="img">';
-      //       mediaHubWindow += '<a onclick="this.parentNode.parentNode.style.display = \'none\'" class="close">&#10006;</a>';
-      //       mediaHubWindow += '</div>';
-      //       mediaHubWindow += '<div class="media-detail-values">';
-      //       mediaHubWindow += '<input type="hidden" name="fileID" value="thisismyfileid" />';
-      //       mediaHubWindow += '<div class="value"><span>Alt:</span><textarea name="alt">Das ist eine Bildbeschreibung</textarea></div>';
-      //       mediaHubWindow += '<div class="value"><span>Benutzer:</span><input type="text" value="Admin" disabled/></div>';
-      //       mediaHubWindow += '<div class="value"><span>Hochgeladen:</span><input type="text" value="20.05.2021 07:19" disabled/></div>';
-      //       mediaHubWindow += '</div>';
-      //       mediaHubWindow += '<div class="actions">';
-      //       mediaHubWindow += '<div>';
-      //       mediaHubWindow += '<a class="remove">Löschen</a> | <a href="">Vollbild</a>';
-      //       mediaHubWindow += '</div>';
-      //       mediaHubWindow += '<button>VERWENDEN</button>';
-      //       mediaHubWindow += '</div>';
-      //     mediaHubWindow += '</div>';
-      //     mediaHubWindow += '<div class="media-upload" style="display:none">';
-      //       mediaHubWindow += '<label ondragover="MediaHub.dropzone.dragover( this, event )" ondragleave="MediaHub.dropzone.dragleave( this )" ondragend="MediaHub.dropzone.dragend( this )" ondrop="MediaHub.dropzone.drop( this, event )">';
-      //         mediaHubWindow += '<span class="upload_prompt">Dokument hineinziehen oder klicken</span>';
-      //         mediaHubWindow += '<div class="progress_bar">';
-      //           mediaHubWindow += '<span class="textoverlay">Hochladen ... </span>';
-      //         mediaHubWindow += '</div>';
-      //         mediaHubWindow += '<div class="uploaded_files"></div>';
-      //         mediaHubWindow += '<form action="' + window.location.href.replace(/\?(.*)/, "") + 'ajax.php" class="media-upload-form">';
-      //           mediaHubWindow += '<input type="file" name="image" onchange="MediaHub.dropzone.inputSelection( this.parentNode.parentNode )" multiple/>';
-      //         mediaHubWindow += '</form>';
-      //       mediaHubWindow += '</label>';
-      //     mediaHubWindow += '</div>';
-      //   mediaHubWindow += '</div>';
-      // mediaHubWindow += '</div>';
-
-      // Show window
-      // document.getElementsByTagName("article")[0].innerHTML = mediaHubWindow;
     },
 
     /**
