@@ -518,11 +518,20 @@ switch($_POST["p"]) {
       case "add":
         // Add new image
         $mediaHub = new MediaHub();
-        if( $mediaHub->addImage( $_FILES["image"], pathinfo($_FILES["image"]["name"], PATHINFO_FILENAME ) ) ) {
+        if( $mediaHub->addImage( $_FILES["file"], pathinfo($_FILES["file"]["name"], PATHINFO_FILENAME ) ) ) {
           echo "true";
         }else {
           echo "false";
         }
+      break;
+      case "loadMedias":
+        $mediaHub = new MediaHub();
+
+        echo json_encode(
+          $mediaHub->all(
+            (json_decode($_POST["values"], true)["offset"] ?? 0),
+            (json_decode($_POST["values"], true)["steps"] ?? 20) )
+        );
       break;
     }
   break;

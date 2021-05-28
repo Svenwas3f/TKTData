@@ -1,6 +1,292 @@
+/**
+ ************* General *************
+ * @Author: Sven Waser
+ * @System: TKTData
+ * @Version: 1.0
+ * @Published: Mai 2021
+ * @Purpose: File to manage media hub actions
+ *
+ *
+ **************** All functions ****************
+ * For further description please go to requested function
+ * Some functions uses class variable. Those are written behind the function name in square brackets [].
+ * Variables witch have to be passd through the function are written after the function name inround brackets ().
+ * All functions can be used as Static
+ *
+ * MediaHub.ajax ( callback [callback function], action [String], values [object] )
+ *
+ * MediaHub.window.open ()
+ *
+ * MediaHub.window.page ( page [Navigation Element] )
+ *
+ * MediaHub.window.details ( label [Label Element] )
+ *
+ * MediaHub.medias.load ( offset [int], steps [int] )
+ *
+ *
+ */
 class MediaHub {
+  /**
+   * Ajax function
+   *
+   * callback: Callback function
+   * action: Name of action for ajax [string]
+   * values: Passed values for ajax [object]
+   */
+  static ajax(callback, action = null, values = null ) {
+    //Important infos
+    var base_url = location.protocol + '//' + location.host + location.pathname;
+    var ajax_file = base_url + "/ajax.php";
+
+    //Connect
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        callback(this);
+      }
+    }
+    req.open("POST", ajax_file, true);
+    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send( "p=" + encodeURIComponent("MediaHub") + (action ? "&action=" + encodeURIComponent(action) : "") + (values ? "&values=" + encodeURIComponent(JSON.stringify(values)) : "") );
+  }
+
   // Manage window
   static window = {
+    /**
+     * Opens a new selection window
+     */
+    "open" : function() {
+      // Start
+      var mediaContainer = document.createElement("div");
+          mediaContainer.setAttribute("class", "media-hub-window");
+      // Generate header
+      var mediaHeader = document.createElement("div");
+          mediaHeader.setAttribute("class", "media-header");
+      var mediaNav = document.createElement("div");
+          mediaNav.setAttribute("class", "media-nav");
+            // Create menu links
+            var mediaNavLink1 = document.createElement("a");
+                mediaNavLink1.setAttribute("onclick", "MediaHub.window.page( this )");
+                mediaNavLink1.setAttribute("class", "left active");
+                mediaNavLink1.setAttribute("data-page-class", "media-list");
+                mediaNavLink1.appendChild( document.createTextNode("Übersicht") );
+            var mediaNavLink2 = document.createElement("a");
+                mediaNavLink2.setAttribute("onclick", "MediaHub.window.page( this )");
+                mediaNavLink2.setAttribute("class", "left");
+                mediaNavLink2.setAttribute("data-page-class", "media-upload");
+                mediaNavLink2.appendChild( document.createTextNode("Bild hinzufügen") );
+            var mediaCloseWindow = document.createElement("a");
+                mediaCloseWindow.setAttribute("onclick", "this.parentNode.parentNode.parentNode.remove()");
+                mediaCloseWindow.setAttribute("class", "right");
+                mediaCloseWindow.appendChild( document.createTextNode("&#10006;") );
+            mediaNav.appendChild( mediaNavLink1 );
+            mediaNav.appendChild( mediaNavLink2 );
+            mediaNav.appendChild( mediaCloseWindow );
+          mediaHeader.appendChild( mediaNav );
+        mediaContainer.appendChild( mediaHeader );
+      // Generate article
+      var mediaArticle = document.createElement("div");
+          mediaArticle.setAttribute("class", "media-article");
+          // Start List
+          var mediaList = document.createElement("div");
+              mediaList.setAttribute("class", "media-list");
+
+              MediaHub.medias.load( function( html ) {
+                mediaList.innerHTML = html;
+              } );
+          // Details
+          var mediaDetails = document.createElement("div");
+              mediaDetails.setAttribute("class", "media-details");
+              mediaDetails.setAttribute("style", "display: none;");
+              var mediaDetailsImg = document.createElement("div");
+                  mediaDetailsImg.setAttribute("class", "img");
+                  var mediaCloseDetails = document.createElement("a");
+                      mediaCloseDetails.setAttribute("onclick", "this.parentNode.parentNode.style.display = \'none\'");
+                      mediaCloseDetails.setAttribute("class", "close");
+                      mediaCloseDetails.appendChild( document.createTextNode("&#10006;") );
+              var mediaDetailsValues = document.createElement("div");
+                  mediaDetailsValues.setAttribute("class", "media-detail-values");
+                  var mediaDetailsValuesInput1 = document.createElement("input");
+                      mediaDetailsValuesInput1.setAttribute("type", "hidden");
+                      mediaDetailsValuesInput1.setAttribute("name", "fileID");
+
+                  var mediaDetailsValuesInput2 = document.createElement("div");
+                      mediaDetailsValuesInput2.setAttribute("class", "value");
+                      mediaDetailsValuesInput2.appendChild(
+                        document.createElement("span").appendChild(
+                          document.createTextNode("Alt:")
+                        )
+                      );
+                      var mediaDetailsValuesInput2Input = document.createElement("textarea");
+                          mediaDetailsValuesInput2Input.setAttribute("name", "alt");
+                      mediaDetailsValuesInput2.appendChild( mediaDetailsValuesInput2Input );
+
+                  var mediaDetailsValuesInput3 = document.createElement("div");
+                      mediaDetailsValuesInput3.setAttribute("class", "value");
+                      mediaDetailsValuesInput3.appendChild(
+                        document.createElement("span").appendChild(
+                          document.createTextNode("Benutzer:")
+                        )
+                      );
+                      var mediaDetailsValuesInput3Input = document.createElement("input");
+                          mediaDetailsValuesInput3Input.setAttribute("type", "text");
+                          mediaDetailsValuesInput3Input.setAttribute("disabled", "");
+                      mediaDetailsValuesInput3.appendChild( mediaDetailsValuesInput3Input );
+
+                  var mediaDetailsValuesInput4 = document.createElement("div");
+                      mediaDetailsValuesInput4.setAttribute("class", "value");
+                      mediaDetailsValuesInput4.appendChild(
+                        document.createElement("span").appendChild(
+                          document.createTextNode("Hochgeladen:")
+                        )
+                      );
+                      var mediaDetailsValuesInput4Input = document.createElement("input");
+                          mediaDetailsValuesInput4Input.setAttribute("type", "text");
+                          mediaDetailsValuesInput4Input.setAttribute("disabled", "");
+                      mediaDetailsValuesInput4.appendChild( mediaDetailsValuesInput4Input );
+
+                  mediaDetailsValues.appendChild( mediaDetailsValuesInput1 );
+                  mediaDetailsValues.appendChild( mediaDetailsValuesInput2 );
+                  mediaDetailsValues.appendChild( mediaDetailsValuesInput3 );
+                  mediaDetailsValues.appendChild( mediaDetailsValuesInput4 );
+
+              var mediaDetailsActions = document.createElement("div");
+                  mediaDetailsActions.setAttribute("class", "actions");
+
+                  var mediaDetailsActionsLinks = document.createElement("div");
+                      var mediaDetailsActionsLinks1 = document.createElement("a");
+                          mediaDetailsActionsLinks1.setAttribute("onclick", "MediaHub.window.page( this )");
+                          mediaDetailsActionsLinks1.setAttribute("class", "remove");
+                          mediaDetailsActionsLinks1.appendChild( document.createTextNode("Löschen") );
+                      var mediaDetailsActionsLinks2 = document.createElement("a");
+                          mediaDetailsActionsLinks2.setAttribute("onclick", "MediaHub.window.page( this )");
+                          mediaDetailsActionsLinks2.setAttribute("href", "");
+                          mediaDetailsActionsLinks2.appendChild( document.createTextNode("Vollbild") );
+                  mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks1 );
+                  mediaDetailsActionsLinks.appendChild( document.createTextNode(" | ") );
+                  mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks2 );
+
+                var mediaDetailsActionsButton = document.createElement("button");
+                    mediaDetailsActionsButton.appendChild( document.createTextNode("VERWENDEN") );
+
+              mediaDetailsActions.appendChild( mediaDetailsActionsLinks );
+              mediaDetailsActions.appendChild( mediaDetailsActionsButton );
+
+
+              mediaDetails.appendChild( mediaDetailsImg );
+              mediaDetails.appendChild( mediaDetailsValues );
+              mediaDetails.appendChild( mediaDetailsActions );
+          // Upload
+          var mediaUpload = document.createElement("div");
+              mediaUpload.setAttribute("class", "media-upload");
+              mediaUpload.setAttribute("style", "display: none;");
+
+              var mediaUploadLabel = document.createElement("label");
+                  mediaUploadLabel.setAttribute("ondragover", "MediaHub.dropzone.dragover( this, event )");
+                  mediaUploadLabel.setAttribute("ondragleave", "MediaHub.dropzone.dragleave( this )");
+                  mediaUploadLabel.setAttribute("ondragend", "MediaHub.dropzone.dragend( this )");
+                  mediaUploadLabel.setAttribute("ondrop", "MediaHub.dropzone.drop( this, event )");
+
+                  var mediaUploadLabelPrompt = document.createElement("span");
+                      mediaUploadLabelPrompt.setAttribute("class", "upload_prompt")
+                      mediaUploadLabelPrompt.appendChild( document.createTextNode("Dokument hineinziehen oder klicken") );
+                  var mediaUploadLabelProgress = document.createElement("div");
+                      mediaUploadLabelProgress.setAttribute("class", "progress_bar");
+                      var mediaUploadLabelProgressSpan = document.createElement("span");
+                          mediaUploadLabelProgressSpan.setAttribute("class", "textoverlay");
+                          mediaUploadLabelProgressSpan.appendChild( document.createTextNode("Hochladen ...") );
+                      mediaUploadLabelProgress.appendChild( mediaUploadLabelProgressSpan );
+                  var mediaUploadLabelUploadedFiles = document.createElement("div");
+                      mediaUploadLabelUploadedFiles.setAttribute("class", "uploaded_files");
+                  var mediaUploadLabelForm = document.createElement("form");
+                      mediaUploadLabelForm.setAttribute("action", window.location.href.replace(/\?(.*)/, "") + "ajax.php");
+                      mediaUploadLabelForm.setAttribute("class", "media-upload-form");
+                      var mediaUploadLabelFormInput = document.createElement("input");
+                          mediaUploadLabelFormInput.setAttribute("type", "file");
+                          mediaUploadLabelFormInput.setAttribute("name", "file");
+                          mediaUploadLabelFormInput.setAttribute("onchange", "MediaHub.dropzone.inputSelection( this.parentNode.parentNode )");
+                          mediaUploadLabelFormInput.setAttribute("multiple", "");
+                      mediaUploadLabelForm.appendChild( mediaUploadLabelFormInput );
+
+                  mediaUploadLabel.appendChild( mediaUploadLabelPrompt );
+                  mediaUploadLabel.appendChild( mediaUploadLabelProgress );
+                  mediaUploadLabel.appendChild( mediaUploadLabelUploadedFiles );
+                  mediaUploadLabel.appendChild( mediaUploadLabelForm );
+              mediaUpload.appendChild( mediaUploadLabel );
+
+
+          mediaArticle.appendChild( mediaList );
+          mediaArticle.appendChild( mediaDetails );
+          mediaArticle.appendChild( mediaUpload );
+      mediaContainer.appendChild( mediaArticle );
+
+     document.getElementsByTagName("article")[0].appendChild(mediaContainer);
+
+
+      // // Start html
+      // var mediaHubWindow = '<div class="media-hub-window">';
+      //   mediaHubWindow += '<div class="media-header">';
+      //     mediaHubWindow += '<div class="media-nav">';
+      //       mediaHubWindow += '<a onclick="MediaHub.window.page( this )" data-page-class="media-list" class="left active">Übersicht</a><a onclick="MediaHub.window.page( this )" data-page-class="media-upload" class="left">Bild hinzufügen</a><a onclick="this.parentNode.parentNode.parentNode.remove()" class="right">&#10006;</a>';
+      //     mediaHubWindow += '</div>';
+      //   mediaHubWindow += '</div>';
+      //   mediaHubWindow += '<div class="media-article">';
+      //     mediaHubWindow += '<div class="media-list">';
+      //
+      //       var test = document.createElement("div");
+      //
+      //       // Load images
+      //       MediaHub.medias.load( function( html ) {
+      //         // mediaHubWindow += html;
+      //         // console.log( mediaHubWindow )
+      //         test.innerHTML = html;
+      //       } );
+      //
+      //       console.log(test);
+      //
+      //     mediaHubWindow += '</div>';
+      //     mediaHubWindow += '<div class="media-details" style="display:none">';
+      //       mediaHubWindow += '<div class="img">';
+      //       mediaHubWindow += '<a onclick="this.parentNode.parentNode.style.display = \'none\'" class="close">&#10006;</a>';
+      //       mediaHubWindow += '</div>';
+      //       mediaHubWindow += '<div class="media-detail-values">';
+      //       mediaHubWindow += '<input type="hidden" name="fileID" value="thisismyfileid" />';
+      //       mediaHubWindow += '<div class="value"><span>Alt:</span><textarea name="alt">Das ist eine Bildbeschreibung</textarea></div>';
+      //       mediaHubWindow += '<div class="value"><span>Benutzer:</span><input type="text" value="Admin" disabled/></div>';
+      //       mediaHubWindow += '<div class="value"><span>Hochgeladen:</span><input type="text" value="20.05.2021 07:19" disabled/></div>';
+      //       mediaHubWindow += '</div>';
+      //       mediaHubWindow += '<div class="actions">';
+      //       mediaHubWindow += '<div>';
+      //       mediaHubWindow += '<a class="remove">Löschen</a> | <a href="">Vollbild</a>';
+      //       mediaHubWindow += '</div>';
+      //       mediaHubWindow += '<button>VERWENDEN</button>';
+      //       mediaHubWindow += '</div>';
+      //     mediaHubWindow += '</div>';
+      //     mediaHubWindow += '<div class="media-upload" style="display:none">';
+      //       mediaHubWindow += '<label ondragover="MediaHub.dropzone.dragover( this, event )" ondragleave="MediaHub.dropzone.dragleave( this )" ondragend="MediaHub.dropzone.dragend( this )" ondrop="MediaHub.dropzone.drop( this, event )">';
+      //         mediaHubWindow += '<span class="upload_prompt">Dokument hineinziehen oder klicken</span>';
+      //         mediaHubWindow += '<div class="progress_bar">';
+      //           mediaHubWindow += '<span class="textoverlay">Hochladen ... </span>';
+      //         mediaHubWindow += '</div>';
+      //         mediaHubWindow += '<div class="uploaded_files"></div>';
+      //         mediaHubWindow += '<form action="' + window.location.href.replace(/\?(.*)/, "") + 'ajax.php" class="media-upload-form">';
+      //           mediaHubWindow += '<input type="file" name="image" onchange="MediaHub.dropzone.inputSelection( this.parentNode.parentNode )" multiple/>';
+      //         mediaHubWindow += '</form>';
+      //       mediaHubWindow += '</label>';
+      //     mediaHubWindow += '</div>';
+      //   mediaHubWindow += '</div>';
+      // mediaHubWindow += '</div>';
+
+      // Show window
+      // document.getElementsByTagName("article")[0].innerHTML = mediaHubWindow;
+    },
+
+    /**
+     * Changes page
+     *
+     * page: HTML Naviagation Element
+     */
     "page" : function( page ) {
       // Get active page
       var nav = page.closest(".media-nav");
@@ -23,6 +309,12 @@ class MediaHub {
         }
       }
     },
+
+    /**
+     * Shows details for usage
+     *
+     * label: HTML Label Element
+     */
     "details" : function( label ) {
       var details = label.closest(".media-article").getElementsByClassName("media-details")[0];
       var imageURL = label.getElementsByClassName("img")[0].style.backgroundImage;
@@ -33,12 +325,39 @@ class MediaHub {
       // Set details values
 
 
-      // Set details actions 
+      // Set details actions
 
       // Display details
       details.style.display = "block";
-    }
+    },
   };
+
+  // Manage actions
+  static medias = {
+    "load" : function( callback, offset = 0, steps = 31) {
+      // Define values
+      var values = new Object();
+      values["offset"] = offset;
+      values["steps"] = steps;
+
+      MediaHub.ajax(function(c) {
+        //Get response text
+        var ajax_response = JSON.parse(c.responseText);
+        var html = "";
+
+        // Load images
+        for( var i = 0; i < Math.min((steps - 1), ajax_response.length) ; i++ ) {
+          html += '<input type="radio" id="' + ajax_response[i].fileID + '" name="media">';
+          html += '<label onclick="MediaHub.window.details( this )" for="' + ajax_response[i].fileID + '">';
+          html += '<div class="img" style="background-image: url(\'http://localhost/www.tktdata.ch/medias/hub/' + ajax_response[i].fileID + '.jpg\')"></div>';
+          html += '</label>';
+        }
+
+        callback( html );
+
+      }, "loadMedias", values);
+    },
+  }
 
   // Manage dropzone actions and make ajax request
   static dropzone = {

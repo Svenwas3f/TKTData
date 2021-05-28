@@ -946,7 +946,7 @@ input[type="submit"]:disabled, button:disabled {
   display: none;
 }
 
-.media-hub-window .media-article .media-list input:checked ~ label .img {
+.media-hub-window .media-article .media-list input:checked + label .img {
   outline: 6px solid rgb(35, 43, 67);
   outline-offset: 1px;
 }
