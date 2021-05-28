@@ -273,6 +273,12 @@ class MediaHub {
       details.style.display = "block";
     },
 
+    /**
+     * Loads new medias into a window
+     *
+     * list: HTML div Element
+     * offset: Number where to start
+     */
     "moreMedias" : function( list, offset ) {
       // Add new content
       MediaHub.medias.load(function( html ) {
