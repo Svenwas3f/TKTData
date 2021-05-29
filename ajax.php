@@ -519,9 +519,15 @@ switch($_POST["p"]) {
         // Add new image
         $mediaHub = new MediaHub();
         if( $mediaHub->addImage( $_FILES["file"], pathinfo($_FILES["file"]["name"], PATHINFO_FILENAME ) ) ) {
-          echo "true";
+          echo json_encode(array(
+            "state" => true,
+            "alt" => pathinfo($_FILES["file"]["name"], PATHINFO_BASENAME ),
+          ));
         }else {
-          echo "false";
+          echo json_encode(array(
+            "state" => false,
+            "alt" => pathinfo($_FILES["file"]["name"], PATHINFO_BASENAME ),
+          ));
         }
       break;
       case "loadMedias":
