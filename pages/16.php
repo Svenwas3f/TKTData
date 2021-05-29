@@ -19,7 +19,9 @@ echo $html;
 
 
 
- <script src="<?php echo $url; ?>/js/media-hub.js"></script>
- <script>
-   MediaHub.window.open();
- </script>
+<script src="<?php echo $url; ?>/js/media-hub.js"></script>
+<form action="" class="form">
+  <script>
+    MediaHub.window.open( document.getElementsByTagName("form")[0], "img_mail" );
+  </script>
+</form>

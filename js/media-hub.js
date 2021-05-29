@@ -62,10 +62,10 @@ class MediaHub {
     /**
      * Opens a new selection window
      */
-    "open" : function() {
+    "open" : function(form, name) {
       // Start
       var mediaContainer = document.createElement("div");
-          mediaContainer.setAttribute("class", "media-hub-window");
+          mediaContainer.setAttribute("class", "media-hub-window window-" + name);
       // Generate header
       var mediaHeader = document.createElement("div");
           mediaHeader.setAttribute("class", "media-header");
@@ -175,7 +175,9 @@ class MediaHub {
                   mediaDetailsActionsLinks.appendChild( document.createTextNode(" | ") );
                   mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks2 );
 
-                var mediaDetailsActionsButton = document.createElement("button");
+                var mediaDetailsActionsButton = document.createElement("a");
+                    mediaDetailsActionsButton.setAttribute("class", "button");
+                    mediaDetailsActionsButton.setAttribute("onclick", "MediaHub.medias.use(this, '" + name + "')");
                     mediaDetailsActionsButton.appendChild( document.createTextNode("VERWENDEN") );
 
               mediaDetailsActions.appendChild( mediaDetailsActionsLinks );
@@ -229,7 +231,7 @@ class MediaHub {
           mediaArticle.appendChild( mediaUpload );
       mediaContainer.appendChild( mediaArticle );
 
-     document.getElementsByTagName("article")[0].appendChild(mediaContainer);
+     form.appendChild(mediaContainer);
     },
 
     /**
@@ -335,7 +337,7 @@ class MediaHub {
       }, offset);
 
       // Remove old button
-      list.getElementsByTagName("button")[0].remove();
+      list.getElementsByClassName("button")[0].remove();
     }
   };
 
@@ -369,7 +371,7 @@ class MediaHub {
 
         // Check if load more is required
         if( ajax_response.length >= steps ) {
-          html += "<button onclick='MediaHub.window.moreMedias( this.parentNode, " + (offset + steps) + " )'>Weitere laden</button>";
+          html += "<a class='button' onclick='MediaHub.window.moreMedias(this.parentNode, " + (offset + steps) + " )'>Weitere laden</a>";
         }
 
         callback( html );
@@ -419,6 +421,36 @@ class MediaHub {
         }
       }, "remove", values );
     },
+
+    /**
+     * Function that creates an Input
+     *
+     * name: name of input
+     * fileID: Id of file
+     */
+    "use" : function( link, name ) {
+      // Get form and window
+      var form = link.closest("form");
+      var mediaHubWindow = link.closest(".window-" + name);
+
+      // Get values and set new input
+      var fileID = mediaHubWindow.getElementsByClassName("media-details")[0].getElementsByTagName("input")[0].value;
+      var input = form.querySelectorAll("[name='" + name + "']");
+
+      if( input.length > 0 ) {
+        input.value = fileID;
+      }else {
+        input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", name);
+        input.setAttribute("value", fileID);
+
+        form.appendChild( input );
+      }
+
+      // remove window
+      mediaHubWindow.remove();
+    }
   }
 
   // Manage dropzone actions and make ajax request
