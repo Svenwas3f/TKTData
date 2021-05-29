@@ -143,6 +143,22 @@ class MediaHub {
       // Remove file
     }
   }
+
+  /**
+   *
+   */
+  public function fileDetails() {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Select values
+    $details = $conn->prepare("SELECT alt, upload_time, upload_user FROM " . MEDIA_HUB . " WHERE fileID=:fileID");
+    $details->execute(array(
+      ":fileID" => $this->fileID,
+    ));
+
+    return $details->fetch( PDO::FETCH_ASSOC );
+  }
 }
 
  ?>

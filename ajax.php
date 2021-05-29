@@ -533,6 +533,14 @@ switch($_POST["p"]) {
             (json_decode($_POST["values"], true)["steps"] ?? 20) )
         );
       break;
+      case "details":
+        $mediaHub = new MediaHub();
+        $mediaHub->fileID = json_decode($_POST["values"], true)["fileID"];
+
+        echo json_encode(
+          $mediaHub->fileDetails()
+        );
+      break;
     }
   break;
 }

@@ -79,7 +79,7 @@ class MediaHub {
             var mediaCloseWindow = document.createElement("a");
                 mediaCloseWindow.setAttribute("onclick", "this.parentNode.parentNode.parentNode.remove()");
                 mediaCloseWindow.setAttribute("class", "right");
-                mediaCloseWindow.appendChild( document.createTextNode("&#10006;") );
+                mediaCloseWindow.appendChild( document.createTextNode("✖") ); //&#10006;
             mediaNav.appendChild( mediaNavLink1 );
             mediaNav.appendChild( mediaNavLink2 );
             mediaNav.appendChild( mediaCloseWindow );
@@ -104,7 +104,8 @@ class MediaHub {
                   var mediaCloseDetails = document.createElement("a");
                       mediaCloseDetails.setAttribute("onclick", "this.parentNode.parentNode.style.display = \'none\'");
                       mediaCloseDetails.setAttribute("class", "close");
-                      mediaCloseDetails.appendChild( document.createTextNode("&#10006;") );
+                      mediaCloseDetails.appendChild( document.createTextNode("✖") ); //&#10006;
+                  mediaDetailsImg.appendChild(mediaCloseDetails);
               var mediaDetailsValues = document.createElement("div");
                   mediaDetailsValues.setAttribute("class", "media-detail-values");
                   var mediaDetailsValuesInput1 = document.createElement("input");
@@ -160,7 +161,8 @@ class MediaHub {
                           mediaDetailsActionsLinks1.setAttribute("class", "remove");
                           mediaDetailsActionsLinks1.appendChild( document.createTextNode("Löschen") );
                       var mediaDetailsActionsLinks2 = document.createElement("a");
-                          mediaDetailsActionsLinks2.setAttribute("onclick", "MediaHub.window.page( this )");
+                          mediaDetailsActionsLinks2.setAttribute("class", "view_fullscreen");
+                          mediaDetailsActionsLinks2.setAttribute("target", "_blank");
                           mediaDetailsActionsLinks2.setAttribute("href", "");
                           mediaDetailsActionsLinks2.appendChild( document.createTextNode("Vollbild") );
                   mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks1 );
@@ -260,14 +262,28 @@ class MediaHub {
     "details" : function( label ) {
       var details = label.closest(".media-article").getElementsByClassName("media-details")[0];
       var imageURL = label.getElementsByClassName("img")[0].style.backgroundImage;
+      var fileID = label.getAttribute("for");
 
       // Set details image
       details.getElementsByClassName("img")[0].style.backgroundImage = imageURL;
 
       // Set details values
+      // Define values
+      var values = new Object();
+      values["fileID"] = fileID;
+      MediaHub.ajax(function(c) {
+        // Get response
+        var ajax_response = JSON.parse(c.responseText);
 
+        // Change values
+        details.getElementsByTagName("textarea")[0].innerHTML = ajax_response["alt"]; // Alt
+        details.getElementsByTagName("input")[1].value = ajax_response["upload_user"]; // User
+        details.getElementsByTagName("input")[2].value = ajax_response["upload_time"]; // Upload time
+
+      }, "details", values);
 
       // Set details actions
+      details.getElementsByClassName("actions")[0].getElementsByClassName("view_fullscreen")[0].href = imageURL.split("\"")[1];
 
       // Display details
       details.style.display = "block";
