@@ -253,10 +253,29 @@ class MediaHub {
 
       for(var i = 0; i < pages.length; i++) {
         if( pages[i].getAttribute("class") == page.getAttribute("data-page-class") ) {
+          MediaHub.window.pageContent( pages[i].getAttribute("class") );
           pages[i].style.display = "";
         }else {
           pages[i].style.display = "none";
         }
+      }
+    },
+
+    /**
+     * Switch page content reload
+     *
+     * page: Class name of page that should be reloaded
+     */
+    "pageContent" : function( page ) {
+      switch( page ) {
+        /**
+         * List all medias
+         */
+        case "media-list":
+          MediaHub.medias.load(function(c) {
+            document.getElementsByClassName("media-list")[0].innerHTML = c;
+          });
+        break;
       }
     },
 
@@ -287,8 +306,9 @@ class MediaHub {
             upload_time.getHours() + ":" + upload_time.getMinutes();
 
         // Change values
-        details.getElementsByTagName("textarea")[0].innerHTML = ajax_response["alt"]; // Alt
+        details.getElementsByTagName("textarea")[0].value = ajax_response["alt"];
         details.getElementsByTagName("textarea")[0].setAttribute("onchange", "MediaHub.medias.update('" + fileID + "', this.value)");
+        details.getElementsByTagName("input")[0].value = fileID; // hidden
         details.getElementsByTagName("input")[1].value = ajax_response["upload_user"]; // User
         details.getElementsByTagName("input")[2].value = readable_upload_time; // Upload time
 
@@ -332,7 +352,7 @@ class MediaHub {
       // Define values
       var values = new Object();
       values["offset"] = offset;
-      values["steps"] = steps++;
+      values["steps"] = (steps + 1);
 
       MediaHub.ajax(function(c) {
         //Get response text
