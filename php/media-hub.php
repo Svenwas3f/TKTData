@@ -82,7 +82,7 @@ class MediaHub {
 
       // Add to array
       $db_list[$key]["extension"] = pathinfo( $search, PATHINFO_EXTENSION  );
-      $db_list[$key]["url"] = $url . "/medias/hub/" . pathinfo( $search, PATHINFO_BASENAME  );
+      $db_list[$key]["url"] = $url . "medias/hub/" . pathinfo( $search, PATHINFO_BASENAME  );
     }
 
     return $db_list;

@@ -406,20 +406,24 @@ class MediaHub {
      * fileID: ID of file that will be deleted
      */
     "remove" : function ( link, fileID ) {
-      // Generate values
-      var values = new Object();
-      values["fileID"] = fileID;
+      var checkDelete = window.confirm("Sicher, dass Sie das Dokument löschen wollen?");
 
-      // Request
-      MediaHub.ajax( function(c) {
-        if( c == "false") {
-          window.alert("Das entfernen des Bildes ist fehlgeschlagen")
-        }else {
-          document.getElementById(fileID).remove();
-          document.querySelectorAll('[for="' + fileID + '"]')[0].remove();
-          link.closest(".media-details").style.display = "none";
-        }
-      }, "remove", values );
+      if( checkDelete ) {
+        // Generate values
+        var values = new Object();
+        values["fileID"] = fileID;
+
+        // Request
+        MediaHub.ajax( function(c) {
+          if( c == "false") {
+            window.alert("Das entfernen des Bildes ist fehlgeschlagen")
+          }else {
+            document.getElementById(fileID).remove();
+            document.querySelectorAll('[for="' + fileID + '"]')[0].remove();
+            link.closest(".media-details").style.display = "none";
+          }
+        }, "remove", values );
+      }
     },
 
     /**
