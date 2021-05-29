@@ -16,14 +16,24 @@
  * Some functions uses class variable. Those are written behind the function name in square brackets [].
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  *
+ * MediaHub->generateFileID () {private}
+ *
  * MediaHub->all ( $offset [int], $steps [int], $search_value [info_string] )
+ *
+ * MediaHub->addImage ( $image [file], $alt [string])
+ *
+ * MediaHub->updateImage ( $alt [string] ) [$fileID]
+ *
+ * MediaHub->removeImage () [$fileID]
+ *
+ * MediaHub->fileDetails () [$fileID]
  */
 class MediaHub {
   // Variables
   public $fileID;
 
   /**
-   *
+   * Generates an new fileID
    */
   private function generateFileID() {
     // Scann all files
@@ -46,6 +56,9 @@ class MediaHub {
    * $search_value: Search string
    */
   public function all( $offset = 0, $steps = 20, $search_value = null ) {
+    // Get global variables
+    global $url;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -62,7 +75,19 @@ class MediaHub {
       ));
     }
 
-    return $checkout->fetchAll( PDO::FETCH_ASSOC );
+    // Get url
+    $db_list = $checkout->fetchAll( PDO::FETCH_ASSOC );
+    foreach( $db_list as $key => $item ) {
+      $search = glob( dirname(__FILE__, 2) . "/medias/hub/" . $item["fileID"] . ".*")[0];
+
+      // Add to array
+      $db_list[$key]["extension"] = pathinfo( $search, PATHINFO_EXTENSION  );
+      $db_list[$key]["url"] = $url . "/medias/hub/" . pathinfo( $search, PATHINFO_BASENAME  );
+    }
+
+    return $db_list;
+
+    // return $checkout->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**
@@ -121,31 +146,111 @@ class MediaHub {
   }
 
   /**
+   * Updates alt text of an image
+   * requires: $fileID
    *
+   * $alt: New alt text as string
    */
-  public function updateImage() {
+  public function updateImage( $alt ) {
+    // Get global values
+    global $current_user;
 
+    //Get database connection
+    $conn = Access::connect();
+
+    // Prepare change
+    $change = array(
+      "user" => $current_user,
+      "message" => "Updated image (MediaHub) #" . $this->fileID,
+      "table" => "MEDIA_HUB",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "fileID", "value" => $this->fileID),
+      "old" => array("alt" => $this->fileDetails()["alt"]),
+      "new" => array(
+        "alt" => $alt,
+      )
+    );
+
+    // Update
+    $updateImage = $conn->prepare("UPDATE " . MEDIA_HUB . " SET alt=:alt WHERE fileID=:fileID");
+    if( $updateImage->execute(array(
+      ":alt" => $alt,
+      ":fileID" => $this->fileID,
+    )) ) {
+      // Add modifictaion
+      User::modifie( $change );
+
+      // return success
+      return true;
+    }else {
+      // return fail
+      return false;
+    }
   }
 
   /**
-   *
+   * Removes an image
+   * requires: $fileID
    */
   public function removeImage() {
+    // Get global values
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
     // Check what restore is required
     if( FULL_RESTORE ) {
+      // Remove from database
+      $change = array(
+        "user" => $current_user,
+        "message" => "Removed image (MediaHub) #" . $this->fileID,
+        "table" => "MEDIA_HUB",
+        "function" => "DELETE",
+        "primary_key" => array("key" => "fileID", "value" => $this->fileID),
+        "old" => $this->fileDetails(),
+        "new" => array("")
+      );
+
       // Remove DB
+      $remove = $conn->prepare("DELETE FROM " . MEDIA_HUB . " WHERE fileID=:fileID");
+      if( $remove->execute(array(
+        ":fileID" => $this->fileID,
+      )) ) {
+        // Add modifictaion
+        User::modifie( $change );
+
+        // return success
+        return true;
+      }
     }else {
+      // Remove from database
+      $change = array(
+        "user" => $current_user,
+        "message" => "Removed image (MediaHub) #" . $this->fileID,
+        "table" => "MEDIA_HUB",
+        "function" => "DELETE",
+        "primary_key" => array("key" => "fileID", "value" => $this->fileID),
+        "old" => $this->fileDetails(),
+        "new" => array()
+      );
+
       // Remove DB
+      $remove = $conn->prepare("DELETE FROM " . MEDIA_HUB . " WHERE fileID=:fileID");
+      if( $remove->execute(array(
+        ":fileID" => $this->fileID,
+      )) ) {
+        // Add modifictaion
+        User::modifie( $change );
+      }
 
       // Remove file
+      return unlink( glob(dirname(__FILE__, 2) . "/medias/hub/" . $this->fileID . ".*")[0] );
     }
   }
 
   /**
-   *
+   * Returns array with details of file
    */
   public function fileDetails() {
     //Get database connection

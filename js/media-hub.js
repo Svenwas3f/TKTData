@@ -267,7 +267,6 @@ class MediaHub {
       // Set details image
       details.getElementsByClassName("img")[0].style.backgroundImage = imageURL;
 
-      // Set details values
       // Define values
       var values = new Object();
       values["fileID"] = fileID;
@@ -275,15 +274,23 @@ class MediaHub {
         // Get response
         var ajax_response = JSON.parse(c.responseText);
 
+        // Generate readable date
+        var upload_time = new Date(ajax_response["upload_time"]);
+        var readable_upload_time =
+            upload_time.getDate() + "." + (upload_time.getMonth() + 1) + "." + upload_time.getFullYear() + " " +
+            upload_time.getHours() + ":" + upload_time.getMinutes();
+
         // Change values
         details.getElementsByTagName("textarea")[0].innerHTML = ajax_response["alt"]; // Alt
+        details.getElementsByTagName("textarea")[0].setAttribute("onchange", "MediaHub.medias.update('" + fileID + "', this.value)");
         details.getElementsByTagName("input")[1].value = ajax_response["upload_user"]; // User
-        details.getElementsByTagName("input")[2].value = ajax_response["upload_time"]; // Upload time
+        details.getElementsByTagName("input")[2].value = readable_upload_time; // Upload time
 
       }, "details", values);
 
       // Set details actions
       details.getElementsByClassName("actions")[0].getElementsByClassName("view_fullscreen")[0].href = imageURL.split("\"")[1];
+      details.getElementsByClassName("actions")[0].getElementsByClassName("remove")[0].setAttribute("onclick", "MediaHub.medias.remove(this, '" + fileID + "')");
 
       // Display details
       details.style.display = "block";
@@ -323,7 +330,7 @@ class MediaHub {
         for( var i = 0; i < Math.min((steps - 1), ajax_response.length) ; i++ ) {
           html += '<input type="radio" id="' + ajax_response[i].fileID + '" name="media">';
           html += '<label onclick="MediaHub.window.details( this )" for="' + ajax_response[i].fileID + '">';
-          html += '<div class="img" style="background-image: url(\'http://localhost/www.tktdata.ch/medias/hub/' + ajax_response[i].fileID + '.jpg\')"></div>';
+          html += '<div class="img" style="background-image: url(\'' + ajax_response[i].url + '\')"></div>';
           html += '</label>';
         }
 
@@ -335,6 +342,35 @@ class MediaHub {
         callback( html );
 
       }, "loadMedias", values);
+    },
+    "update" : function ( fileID, alt ) {
+      // Generate values
+      var values = new Object();
+      values["fileID"] = fileID;
+      values["alt"] = alt;
+
+      // Request
+      MediaHub.ajax( function(c) {
+        if( c == "false") {
+          window.alert("Das überarbeiten des Alt-Text ist fehlgeschlagen")
+        }
+      }, "update", values );
+    },
+    "remove" : function ( link, fileID ) {
+      // Generate values
+      var values = new Object();
+      values["fileID"] = fileID;
+
+      // Request
+      MediaHub.ajax( function(c) {
+        if( c == "false") {
+          window.alert("Das entfernen des Bildes ist fehlgeschlagen")
+        }else {
+          document.getElementById(fileID).remove();
+          document.querySelectorAll('[for="' + fileID + '"]')[0].remove();
+          link.closest(".media-details").style.display = "none";
+        }
+      }, "remove", values );
     },
   }
 

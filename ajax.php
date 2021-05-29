@@ -541,6 +541,26 @@ switch($_POST["p"]) {
           $mediaHub->fileDetails()
         );
       break;
+      case "update":
+        $mediaHub = new MediaHub();
+        $mediaHub->fileID = json_decode($_POST["values"], true)["fileID"];
+
+        if( $mediaHub->updateImage( json_decode($_POST["values"], true)["alt"] ) ) {
+          echo "true";
+        }else {
+          echo "false";
+        }
+      break;
+      case "remove":
+        $mediaHub = new MediaHub();
+        $mediaHub->fileID = json_decode($_POST["values"], true)["fileID"];
+
+        if( $mediaHub->removeImage() ) {
+          echo "true";
+        }else {
+          echo "false";
+        }
+      break;
     }
   break;
 }
