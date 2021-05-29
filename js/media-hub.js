@@ -358,7 +358,10 @@ class MediaHub {
     },
 
     /**
+     * Updates alt text of a file
      *
+     * fileID: ID of file that will be updated
+     * alt: new Alt-Text
      */
     "update" : function ( fileID, alt ) {
       // Generate values
@@ -375,7 +378,10 @@ class MediaHub {
     },
 
     /**
+     * Removes an image
      *
+     * link: link where remove is executed
+     * fileID: ID of file that will be deleted
      */
     "remove" : function ( link, fileID ) {
       // Generate values
