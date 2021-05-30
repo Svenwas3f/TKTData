@@ -78,11 +78,13 @@ class MediaHub {
     // Get url
     $db_list = $checkout->fetchAll( PDO::FETCH_ASSOC );
     foreach( $db_list as $key => $item ) {
-      $search = glob( dirname(__FILE__, 2) . "/medias/hub/" . $item["fileID"] . ".*")[0];
+      $search = glob( dirname(__FILE__, 2) . "/medias/hub/" . $item["fileID"] . ".*");
 
       // Add to array
-      $db_list[$key]["extension"] = pathinfo( $search, PATHINFO_EXTENSION  );
-      $db_list[$key]["url"] = $url . "medias/hub/" . pathinfo( $search, PATHINFO_BASENAME  );
+      if( count( $search ) > 0) {
+        $db_list[$key]["extension"] = pathinfo( $search[0], PATHINFO_EXTENSION  );
+        $db_list[$key]["url"] = $url . "medias/hub/" . pathinfo( $search[0], PATHINFO_BASENAME  );
+      }
     }
 
     return $db_list;
