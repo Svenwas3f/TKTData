@@ -448,12 +448,14 @@ class MediaHub {
       if( input.length > 0 ) {
         input[0].value = fileID;
         input[0].setAttribute("data-url", imageURL);
+        input[0].dispatchEvent( new Event('change') ); // force programmatically onchange event
       }else {
         input = document.createElement("input");
         input.setAttribute("type", "hidden");
         input.setAttribute("name", name);
         input.setAttribute("value", fileID);
         input.setAttribute("data-url", imageURL);
+        input.dispatchEvent( new Event('change') ); // force programmatically onchange event
 
         form.appendChild( input );
       }
