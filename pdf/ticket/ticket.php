@@ -12,18 +12,9 @@ $ticketInfo = explode(",", Crypt::decrypt( $ticketToken ));
 //Get group infos
 $group = new Group();
 $group->groupID = $ticketInfo[0];
+$groupValues = $group->values();
 
-//Define path to Ticketgroup folder
-$ticketGroupPath =  dirname(__FILE__, 3) . "/medias/groups/" . $group->groupID . "/ticket/";
-
-//Check if path is valid
-if(is_dir($ticketGroupPath)) {
-  //Get infos for ticket
-  $logo = glob( $ticketGroupPath . "/logo/*");
-  $adverts = glob( $ticketGroupPath . "/adverts/*");
-  $title = file_get_contents( $ticketGroupPath . "/title.txt");
-}
- ?>
+?>
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
   <head>
@@ -40,17 +31,13 @@ if(is_dir($ticketGroupPath)) {
         <div class="ticket-info">
           <div class="headline">
             <?php
-            if( isset($logo) && is_array($logo) ) {
-              if( count($logo) > 0 ) {
-                echo '<img src="' . $logo[0] . '" />';
-              }
+            // Logo
+            if( isset($groupValues["ticket_logo_fileID"]) ) {
+              echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_logo_fileID"] ) . '" />';
             }
 
-            if(! empty($title)) {
-              echo '<span>' . $title . '</span>';
-            }else {
-              echo '<span>Ihr Ticket</span>';
-            }
+            // Title
+            echo '<span>' . $groupValues["ticket_title"] . '</span>'
             ?>
           </div>
           <div class="qr-container">
@@ -61,11 +48,9 @@ if(is_dir($ticketGroupPath)) {
 
         <div class="advert advert1">
           <?php
-          if( isset($adverts)  && is_array($adverts) ) {
-
-            if(array_key_exists(0, $adverts)) {
-              echo '<img src="' . $adverts[0] . '" />';
-            }
+          // Advert 1
+          if( isset($groupValues["ticket_advert1_fileID"]) ) {
+            echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert1_fileID"] ) . '" />';
           }
           ?>
         </div>
@@ -73,20 +58,18 @@ if(is_dir($ticketGroupPath)) {
 
       <div class="row advert advert2">
         <?php
-        if( isset($adverts) && is_array($adverts) ) {
-          if(array_key_exists(1, $adverts)) {
-            echo '<img src="' . $adverts[1] . '" />';
-          }
+        // Advert 2
+        if( isset($groupValues["ticket_advert2_fileID"]) ) {
+          echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert2_fileID"] ) . '" />';
         }
         ?>
       </div>
 
       <div class="row advert advert3">
         <?php
-        if( isset($adverts) && is_array($adverts) ) {
-          if(array_key_exists(2, $adverts)) {
-            echo '<img src="' . $adverts[2] . '" />';
-          }
+        // Advert 3
+        if( isset($groupValues["ticket_advert3_fileID"]) ) {
+          echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert3_fileID"] ) . '" />';
         }
         ?>
       </div>
