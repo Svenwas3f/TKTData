@@ -16,17 +16,7 @@
  * Some functions uses class variable. Those are written behind the function name in square brackets [].
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  *
- * Group->uploadImage ( $img [current img content], $target [target path], $folderRights = 0777 [Rights of folder] ) {private function}
- *
- * Group->updateGeneral ( $values [new values as array] ) [$groupID] {private function}
- *
  * Group->updateUserInputs ( $values [new values as array] ) [$groupID] {private function}
- *
- * Group->updateTicket ( $values [new values as array] ) [$groupID] {private function}
- *
- * Group->updateMail ( $values [new values as array] ) [$groupID] {private function}
- *
- * Group->updatePayment ( $values [new values as array] ) [$groupID] {private function}
  *
  * Group->refreshSecretKey ( $values array with confirmation) [$groupID] {private function}
  *
@@ -52,104 +42,6 @@
 class Group {
   //Define public variables
   public $groupID;
-
-  /**
-   * Uploads an image
-   * Returns true or false
-   */
-  private function uploadImage($img, $target, $folderRights = 0777) {
-    //Check valid base
-    if(! base64_decode($img, true)) {
-      $img = base64_encode($img);
-    }
-
-    //Create folder if not exits
-    $folderPath = pathinfo($target)["dirname"];
-    if(! is_dir( $folderPath )) {
-      mkdir($folderPath, $folderRights, true);
-    }
-
-    //Modifie image
-    $uploadImg = imagecreatefromstring(base64_decode($img));
-    if(imagepng($uploadImg, $target, 1)) {
-      return true;
-    }else {
-      return false;
-    }
-  }
-
-  /**
-   * Private functions to update selections
-   * Combined in function update
-   */
-
-   /**
-   * Returns true or false
-   * Requires: $groupID
-   *
-   * $values = array(
-   *   name
-   *   maxTickets
-   *   tpu
-   *   currency
-   *   price
-   *   starttTime
-   *   endTime
-   *   vat
-   *   description
-   * ); [None of the elements are required]
-   */
-  private function updateGeneral($values) {
-    //Require variables
-    global $current_user;
-
-    //Create connection
-    $conn = Access::connect();
-
-    //Get old data for restore
-    $oldGroupInfo = $conn->prepare("SELECT name, maxTickets, tpu, currency, price, startTime, endTime, vat, description FROM " . TICKETS_GROUPS . " WHERE groupID=:gid");
-    $oldGroupInfo->execute(array(":gid" => $this->groupID));
-    $newGroupInfo = array(
-      "name" => $values["name"] ?? $this->values()["name"],
-      "maxTickets" => $values["maxTickets"] ?? $this->values()["maxTickets"],
-      "tpu" => $values["tpu"] ?? $this->values()["tpu"],
-      "currency" =>  $values["currency"] ?? $this->values()["currency"],
-      "price" => $values["price"] ? ($values["price"] * 100) : $this->values()["price"],
-      "startTime" => (isset($values["startTime"]) ? ($values["startTime"] == ("0000-00-00 00:00:00" || "0000-00-00T00:00:00") ? "0000-00-00 00:00:00" : date("Y-m-d H:i:s", strtotime($values["startTime"]))) : date("Y-m-d H:i:s", strtotime($this->values()["startTime"])) ),
-      "endTime" => (isset($values["endTime"]) ? ($values["startTime"] == ("0000-00-00 00:00:00" || "0000-00-00T00:00:00") ? "0000-00-00 00:00:00" : date("Y-m-d H:i:s", strtotime($values["endTime"]))) :  date("Y-m-d H:i:s", strtotime($this->values()["endTime"])) ),
-      "vat" => $values["vat"] ? ($values["vat"] * 100) : $this->values()["vat"],
-      "description" => $values["description"] ?? $this->values()["description"],
-    );
-
-    //Do action
-    $general = $conn->prepare("UPDATE " . TICKETS_GROUPS . " SET maxTickets=:maxTickets, price=:price, vat=:vat, currency=:currency, startTime=:startTime, endTime=:endTime, tpu=:tpu, description=:description, name=:name WHERE groupID=:gid");
-
-    if(! $general->execute(
-      array_merge(
-        $newGroupInfo,
-        array(
-          ":gid" => $this->groupID,
-        )),
-    )) {
-      return false;
-    }
-
-    //Create modification
-    $change = array(
-      "user" => $current_user,
-      "message" => "Updated Group #" . $this->groupID . " [General]",
-      "table" => "TICKETS_GROUPS",
-      "function" => "UPDATE",
-      "primary_key" => array("key" => "groupID", "value" => $this->groupID),
-      "old" => $oldGroupInfo->fetch(PDO::FETCH_ASSOC),
-      "new" => $newGroupInfo
-    );
-
-    User::modifie( $change );
-
-    //everything done successufully
-    return true;
-  }
 
   /**
    * Returns true or false
@@ -287,198 +179,6 @@ class Group {
    * Requires: $groupID
    *
    * $values = array(
-   *    title
-   *    logo = array(
-   *      size
-   *      tmp_name
-   *    )
-   *    advert1 = array(
-   *      size
-   *      tmp_name
-   *    )
-   *    advert2 = array(
-   *      size
-   *      tmp_name
-   *    )
-   *    advert3 = array(
-   *      size
-   *      tmp_name
-   *    )
-   * );
-   */
-  private function updateTicket($values) {
-    //Define variables
-    $groupPath = dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID . "/ticket";
-    $folderRight = 0777;
-
-    //Create folder if not exists
-    if(! is_dir($groupPath)) {
-      mkdir($groupPath, $folderRight, true);
-    }
-
-    //Update title
-    if(! file_put_contents($groupPath . "/title.txt", $values["title"]) && ! empty($values["title"])) {
-      return false;
-    }
-
-    //Update logo
-    if(! empty($_FILES["logo"]["size"])) {
-      if(! $this->uploadImage( file_get_contents($values["logo"]["tmp_name"]), $groupPath . "/logo/logo.png" )) {
-        return false;
-      }
-    }
-
-    //Update adverts
-    for($i = 0; $i < 3; $i++) {
-      if(! empty($_FILES["advert" . $i]["size"])){
-        if(! $this->uploadImage( file_get_contents($values["advert" . $i]["tmp_name"]), $groupPath . "/adverts/advertImg" . $i . ".png")) {
-          return false;
-        }
-      }
-    }
-
-    //everything done successufully
-    return true;
-  }
-
-  /**
-   * Returns true or false
-   * Requires: $groupID
-   *
-   * $values = array(
-   *   msg
-   *   from
-   *   displayName
-   *   subject
-   *   banner = array(
-   *     size
-   *     tmp_name
-   * )
-   * );
-   */
-  private function updateMail($values) {
-    //Get variables
-    global $current_user;
-
-    //Get database connection
-    $conn = Access::connect();
-
-    //Modifie values
-    $values["mail_msg"] = nl2br(htmlspecialchars($values["mail_msg"]));
-
-    //Define keys
-    $updateKeys = array("mail_from", "mail_displayName", "mail_subject", "mail_msg");
-    $updateKeysDB = array();
-
-    //Modifie
-    $change = array(
-      "user" => $current_user,
-      "message" => "Updated Group #" . $this->groupID . " [Mail]",
-      "table" => "TICKETS_GROUPS",
-      "function" => "UPDATE",
-      "primary_key" => array("key" => "groupID", "value" => $this->groupID),
-      "old" => array_intersect_key($this->values(), array_flip($updateKeys)),
-      "new" => array_intersect_key($values, array_flip($updateKeys))
-    );
-
-    User::modifie($change);
-
-    //Define variables
-    $groupPath = dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID . "/mail";
-
-    //Update banner
-    if(! empty($_FILES["banner"]["size"])) {
-      if(! $this->uploadImage( file_get_contents($values["banner"]["tmp_name"]), $groupPath . "/banner/banner.png" )) {
-        return false;
-      }
-    }
-
-    //Update
-    $updateMail = $conn->prepare("UPDATE " . TICKETS_GROUPS . " SET mail_from=:from, mail_displayName=:displayName, mail_subject=:subject, mail_msg=:msg");
-    return $updateMail->execute(array(":from" => $values["mail_from"], ":displayName" => $values["mail_displayName"], ":subject" => $values["mail_subject"], ":msg" => $values["mail_msg"]));
-  }
-
-  /**
-   * Returns true or false
-   * Requires: $groupID
-   *
-   * $values = array(
-   *   payment_payrexx_instance
-   *   payment_payrexx_secret
-   *   payment_store
-   *   payment_invoice
-   * );
-   */
-  private function updatePayment($values) {
-    //Get variables
-    global $current_user;
-
-    //Get database connection
-    $conn = Access::connect();
-
-    //Define variables
-    $groupPath = dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID . "/store";
-
-    //Update logo
-    if(! empty($_FILES["logo"]["size"])) {
-      if(! $this->uploadImage( file_get_contents($values["logo"]["tmp_name"]), $groupPath . "/logo.png" )) {
-        return false;
-      }
-    }
-
-    //Update background
-    if(! empty($_FILES["background"]["size"])) {
-      if(! $this->uploadImage( file_get_contents($values["background"]["tmp_name"]), $groupPath . "/background.png" )) {
-        return false;
-      }
-    }
-
-    //Modifie values
-    $values["payment_store"] = (isset($values["payment_store"]) ? 1 : 0);
-    $values["payment_mail_msg"] = nl2br(htmlspecialchars($values["payment_mail_msg"]));
-    $values["adfs"] = (isset($values["adfs"]) ? 1 : 0 );
-    $values["adfs_custom"] = isset($values["adfs_custom"]) ? json_encode($values["adfs_custom"]) : '';
-
-    //Modifie
-    $updateKeys = array("payment_payrexx_instance", "payment_payrexx_secret", "payment_store", "payment_mail_msg", "adfs", "adfs_custom");
-    $change = array(
-      "user" => $current_user,
-      "message" => "Updated Group #" . $this->groupID . " [Payment]",
-      "table" => "TICKETS_GROUPS",
-      "function" => "UPDATE",
-      "primary_key" => array("key" => "groupID", "value" => $this->groupID),
-      "old" => array_intersect_key($this->values(), array_flip($updateKeys)),
-      "new" => array_intersect_key($values, array_flip($updateKeys))
-    );
-
-    User::modifie($change);
-
-    //Update sql
-    $update = $conn->prepare("UPDATE " . TICKETS_GROUPS . " SET
-      payment_payrexx_instance=:payment_payrexx_instance,
-      payment_payrexx_secret=:payment_payrexx_secret,
-      payment_store=:payment_store,
-      payment_mail_msg=:payment_mail_msg,
-      adfs=:adfs,
-      adfs_custom=:adfs_custom
-      WHERE groupID=:gid
-    ");
-    return $update->execute(array(
-      ":payment_payrexx_instance" => $values["payment_payrexx_instance"] ?? $this->values()["payment_payrexx_instance"],
-      ":payment_payrexx_secret" => $values["payment_payrexx_secret"] ?? $this->values()["payment_payrexx_secret"],
-      ":payment_store" => $values["payment_store"],
-      ':payment_mail_msg' => $values["payment_mail_msg"] ?? $this->values()["payment_mail_msg"],
-      ":adfs" => $values["adfs"],
-      ":adfs_custom" => $values["adfs_custom"] ?? $this->values["adfs_custom"],
-      ":gid" => $this->groupID
-    ));
-  }
-
-  /**
-   * Returns true or false
-   * Requires: $groupID
-   *
-   * $values = array(
    *   confirm
    * );
    */
@@ -498,7 +198,7 @@ class Group {
     $key = "";
     $str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678901234567890123456789";
     for($i = 0; $i < 36; $i++) {
-      $key .= str_split($str)[random_int(0, strlen($str))];
+      $key .= str_split($str)[random_int(0, (strlen($str) - 1))];
     }
     $secretKey = Crypt::encrypt($key);
 
@@ -569,31 +269,88 @@ class Group {
    * Requires: $groupID
    *
    * $selection = Subsubpage ID (INT)
-   * $values = array() [Used in subfunctions]
+   * $values = array() [Contains key of DB or required values for subfunction]
    */
   public function update($selection, $values) {
-    switch($selection) {
+    //Require variables
+    global $current_user;
+
+    //Create connection
+    $conn = Access::connect();
+
+    // Generate values
+    switch( $selection )  {
       case 1: //General
-        return $this->updateGeneral($values);
+        $group_page = "Allgemein";
       break;
       case 2: //userInputs
+        $group_page = "Formular";
         return $this->updateUserInputs($values);
       break;
       case 3: //ticket
-        return $this->updateTicket($values);
+        $group_page = "Ticket";
       break;
       case 4: //mail
-        return $this->updateMail($values);
+        $group_page = "Mail";
+
+        //Modifie values
+        $values["mail_msg"] = nl2br(htmlspecialchars($values["mail_msg"]));
       break;
       case 5: //payment
-        return $this->updatePayment($values);
+        $group_page = "Payment";
+
+        //Modifie values
+        $values["payment_store"] = (isset($values["payment_store"]) ? 1 : 0);
+        $values["payment_mail_msg"] = nl2br(htmlspecialchars($values["payment_mail_msg"]));
+        $values["adfs"] = (isset($values["adfs"]) ? 1 : 0 );
+        $values["adfs_custom"] = isset($values["adfs_custom"]) ? json_encode($values["adfs_custom"]) : '';
       break;
       case 6: //SDK
+        $group_page = "SDK";
         return $this->refreshSecretKey($values);
       break;
       default: //Default is false
         return false;
     }
+
+    // Valid keys
+    $valid_keys = array( "maxTickets", "price", "vat", "currency", "startTime", "endTime", "tpu", "ticket_title", "ticket_logo_fileID", "ticket_advert1_fileID", "ticket_advert2_fileID", "ticket_advert3_fileID", "mail_banner_fileID", "mail_from", "mail_displayName", "mail_subject", "mail_msg", "payment_mail_msg", "payment_store", "payment_logo_fileID", "payment_background_fileID", "adfs", "adfs_custom", "payment_payress_instance", "payment_payrexx_secret", "description", "name", "custom" );
+
+    // Ccheck values
+    $checked_values = array_intersect_key( $values, array_flip( $valid_keys ) );
+
+    // Create sql
+    $sql = "UPDATE " . TICKETS_GROUPS . " SET ";
+    foreach( $checked_values as $key=>$value ) {
+      $sql .= $key . "='" . $value . "', ";
+    }
+    $sql = substr( $sql, 0, -2 ) . " WHERE groupID=:gid";
+
+    // Get old values
+    $old_values = array_intersect_key( $this->values(), $checked_values );
+
+    // Do request
+    $update = $conn->prepare( $sql );
+    if( $update->execute(array( ":gid" => $this->groupID )) ) {
+      //Create modification
+      $change = array(
+        "user" => $current_user,
+        "message" => "Updated Group #" . $this->groupID ." [" . $group_page . "]",
+        "table" => "TICKET_GROUP",
+        "function" => "UPDATE",
+        "primary_key" => array("key" => "groupID", "value" => $this->groupID),
+        "old" => $old_values,
+        "new" => $checked_values,
+      );
+
+      User::modifie( $change );
+    }else {
+      // Something went wrong
+      return false;
+    }
+
+    // Everything ok
+    return true;
   }
 
   /**
