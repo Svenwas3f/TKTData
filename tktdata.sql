@@ -3,7 +3,6 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 19. Mai 2021
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -85,6 +84,19 @@ CREATE TABLE `tktdata_livedata_live` (
   `id` int(11) NOT NULL,
   `liveAction` tinyint(1) DEFAULT NULL,
   `action_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_mediahub`
+--
+
+CREATE TABLE `tktdata_mediahub` (
+  `fileID` varchar(32) NOT NULL,
+  `alt` varchar(255) DEFAULT NULL,
+  `upload_time` datetime DEFAULT NULL,
+  `upload_user` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -183,12 +195,20 @@ CREATE TABLE `tktdata_tickets_groups` (
   `startTime` datetime DEFAULT NULL,
   `endTime` datetime DEFAULT NULL,
   `tpu` int(11) DEFAULT NULL,
+  `ticket_title` varchar(255) DEFAULT NULL,
+  `ticket_logo_fileID` varchar(32) DEFAULT NULL,
+  `ticket_advert1_fileID` varchar(32) DEFAULT NULL,
+  `ticket_advert2_fileID` varchar(32) DEFAULT NULL,
+  `ticket_advert3_fileID` varchar(32) DEFAULT NULL,
+  `mail_banner_fileID` varchar(32) DEFAULT NULL,
   `mail_from` varchar(255) DEFAULT NULL,
   `mail_displayName` varchar(255) DEFAULT NULL,
   `mail_subject` varchar(255) DEFAULT NULL,
   `mail_msg` text DEFAULT NULL,
   `payment_mail_msg` text DEFAULT NULL,
   `payment_store` int(11) DEFAULT NULL,
+  `payment_logo_fileID` varchar(32) DEFAULT NULL,
+  `payment_background_fileID` varchar(32) DEFAULT NULL,
   `adfs` int(11) DEFAULT NULL,
   `adfs_custom` text DEFAULT NULL,
   `payment_payrexx_instance` varchar(255) DEFAULT NULL,
@@ -245,7 +265,6 @@ CREATE TABLE `tktdata_user_rights` (
   `w` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 --
 -- Indizes der exportierten Tabellen
 --
@@ -279,6 +298,12 @@ ALTER TABLE `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_live`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_mediahub`
+--
+ALTER TABLE `tktdata_mediahub`
+  ADD PRIMARY KEY (`fileID`);
 
 --
 -- Indizes für die Tabelle `tktdata_menu`
@@ -339,7 +364,7 @@ ALTER TABLE `tktdata_checkout`
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
 --
 ALTER TABLE `tktdata_checkout_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=314;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_products`
@@ -363,7 +388,7 @@ ALTER TABLE `tktdata_livedata_live`
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1302;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1303;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
@@ -381,13 +406,13 @@ ALTER TABLE `tktdata_tickets_groups`
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1557;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2015;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2391;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2809;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
