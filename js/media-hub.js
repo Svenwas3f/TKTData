@@ -441,13 +441,19 @@ class MediaHub {
       var fileID = mediaHubWindow.getElementsByClassName("media-details")[0].getElementsByTagName("input")[0].value;
       var input = form.querySelectorAll("[name='" + name + "']");
 
+      // Get url
+      var details = mediaHubWindow.getElementsByClassName("media-details")[0];
+      var imageURL = details.getElementsByClassName("img")[0].style.backgroundImage.split("\"")[1];
+
       if( input.length > 0 ) {
-        input.value = fileID;
+        input[0].value = fileID;
+        input[0].setAttribute("data-url", imageURL);
       }else {
         input = document.createElement("input");
         input.setAttribute("type", "hidden");
         input.setAttribute("name", name);
         input.setAttribute("value", fileID);
+        input.setAttribute("data-url", imageURL);
 
         form.appendChild( input );
       }

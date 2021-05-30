@@ -95,6 +95,7 @@ if(! isset($_GET["id"])){
     <script src="<?php echo $url; ?>js/ajax.js"></script>
     <script src="<?php echo $url; ?>js/imageUpload.js"></script>
     <script src="<?php echo $url; ?>js/Chart.js"></script>
+    <script src="<?php echo $url; ?>js/media-hub.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
   </head>
