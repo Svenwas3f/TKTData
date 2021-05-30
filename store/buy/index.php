@@ -156,15 +156,14 @@ if(!empty($_POST)) {
 
       <?php
       //Get fullscreen image
-      $path = "/medias/groups/" . $_GET["group"] . "/store/background.png";
-
-      if(! file_exists(dirname(__FILE__, 3) . $path)) {
-        $background_images = glob(dirname(__FILE__, 3) . "/medias/store/background/*");
-        $path = "medias/store/background/" . pathinfo(array_rand(array_flip($background_images)), PATHINFO_BASENAME );
+      if( isset( $group->values()["payment_background_fileID"] ) ) {
+        $backgroundImgUrl = MediaHub::getUrl( $group->values()["payment_background_fileID"] );
+      }else {
+        $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
       }
       ?>
       <div class="buy-container">
-        <div class="fullscreen-img" style="background-image: url('<?php echo $url . $path; ?>');">
+        <div class="fullscreen-img" style="background-image: url('<?php echo $backgroundImgUrl; ?>');">
           <img class="logo" src="" />
         </div>
 
@@ -188,7 +187,7 @@ if(!empty($_POST)) {
 
               //First
               echo '<label class="txt-input">';
-                echo '<input type="text" name="email" ' . (isset($user_informations[$customADFS["email"]]) ? ('value="' . $user_informations[$customADFS["email"]] . '" disabled') : ('required')) . '/>';
+                echo '<input type="text" name="email" ' . (isset($user_informations) &&  isset($user_informations[$customADFS["email"]]) ? ('value="' . $user_informations[$customADFS["email"]] . '" disabled') : ('required')) . '/>';
                 echo '<span class="placeholder">E-Mail</span>';
               echo '</label>';
 

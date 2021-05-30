@@ -21,6 +21,7 @@ if( count($ticket->values()) <= 0 ) {
   exit;
 }
 
+// Start group
 $group = new Group();
 $group->groupID = $ticket->values()["groupID"];
 
@@ -102,11 +103,11 @@ $response = getGateway( $_GET["ticketToken"], $url . 'store/ticket/?ticketToken=
     $ticket = new Ticket();
     $ticket->ticketToken = $_GET["ticketToken"];
 
-    $path = "medias/groups/" . $ticket->values()["groupID"] . "/store/background.png";
-
-    if(! file_exists(dirname(__FILE__, 3) . '/' . $path)) {
-      $background_images = glob(dirname(__FILE__, 3) . "/medias/store/background/*");
-      $path = "medias/store/background/" . pathinfo(array_rand(array_flip($background_images)), PATHINFO_BASENAME );
+    //Get fullscreen image
+    if( isset( $group->values()["payment_background_fileID"] ) ) {
+      $backgroundImgUrl = MediaHub::getUrl( $group->values()["payment_background_fileID"] );
+    }else {
+      $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
     }
      ?>
     <article>

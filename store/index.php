@@ -107,9 +107,9 @@ $current_user = "Store";
             }
 
             //Get logo
-            $logo = 'medias/groups/' . $group["groupID"] . "/store/logo.png";
-            if(file_exists(dirname(__FILE__, 2) . '/' . $logo)) {
-              echo '<img  src="' . $url . $logo .'"/>';
+            //Get fullscreen image
+            if( isset( $groupCheck->values()["payment_logo_fileID"] ) ) {
+              echo '<img  src="' . MediaHub::getUrl( $groupCheck->values()["payment_logo_fileID"] ) .'"/>';
             }else {
               echo '<img  src="' . $url . 'medias/store/favicon-color-512.png"/>';
             }
