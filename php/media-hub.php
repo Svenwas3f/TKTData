@@ -18,6 +18,10 @@
  *
  * MediaHub->generateFileID () {private}
  *
+ * MediaHub->getBasename( $fileID [string] ) {static}
+ *
+ * MediaHub->getUrl( $fileID [string] ) {static}
+ *
  * MediaHub->all ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * MediaHub->addImage ( $image [file], $alt [string])
@@ -46,6 +50,28 @@ class MediaHub {
 
     // Return new id
     return $new_fileID;
+  }
+
+  /**
+   * Get basename by fileID
+   *
+   * $fileID: Identification number of file
+   */
+  public static function getBasename( $fileID ) {
+    return pathinfo( glob( dirname(__FILE__, 2) . "/medias/hub/" . $fileID . ".*")[0], PATHINFO_BASENAME );
+  }
+
+  /**
+   * Get url by fileID
+   *
+   * $fileID: Identification number of file
+   */
+  public static function getUrl( $fileID ) {
+    //Require global variable
+    global $url;
+
+    // Return url
+    return $url . "medias/hub/" . MediaHub::getBasename( $fileID );
   }
 
   /**
