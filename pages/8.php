@@ -322,65 +322,74 @@ class GroupCustomizer extends Group {
     global $page;
     global $current_user;
 
+    // Get values
+    $values = $this->values();
+
     //Define disabled
     $disabled = (User::w_access_allowed($page, $current_user)) ? "" : "disabled";
 
-    //Create form
+    // Hover text
     $advertInfo = "Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.";
+
+    //Create form
     $html = '<div class="grid-container">';
       $html .= '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="form-50 box-width">';
         //Title
         $html .= '<label class="txt-input">';
-          //Get Value
-          $filePath = dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID . "/ticket/title.txt";
-          $inputValue = file_exists( $filePath ) ? file_get_contents( $filePath ) : "";
-          $html .= '<input type="text" name="title" value="' . $inputValue . '" ' . $disabled . '/>';
+          $html .= '<input type="text" name="ticket_title" value="' . $values["ticket_title"] . '" ' . $disabled . '/>';
           $html .= '<span class="placeholder">Tickettitel</span>';
           //$html .= '<span class="unit">CHF</span>';
         $html .= '</label>';
         //logo
         $html .= '<span class="file-info">Logo</span>';
-        $html .= '<label class="file-input">';
-          $html .= '<input type="file" name="logo" onchange="previewImage(this)" ' . $disabled . '/>';
-          //Display image if exists
-          $file = glob("medias/groups/" . $this->groupID . "/ticket/logo/*"); //todo
-          if( count($file) > 0) {
-            $html .= '<div class="preview-image" style="background-image: url(\'' . $file[0] . '\')"></div>';
+        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_logo_fileID\' )"' ) . '>';
+          // Display preview image if possible
+          if( isset($values["ticket_logo_fileID"]) ) {
+            $html .= '<input type="hidden" name="ticket_logo_fileID" value="' . $values["ticket_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
+            $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_logo_fileID"] ) . '\')"></div>';
+          }else {
+            $html .= '<input type="hidden" name="ticket_logo_fileID" onchange="MediaHubSelected(this)">';
           }
-          $html .= '<div class="draganddrop">Click to select file</div>';
+          $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
         $html .= '</label>';
+
         //Advert 1
         $html .= '<span class="file-info">Advert 1 <abbr title="' . $advertInfo . '">(453px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input">';
-          //Display image if exists
-          $file = glob("medias/groups/" . $this->groupID . "/ticket/adverts/advertImg0.*");
-          if( count($file) > 0) {
-            $html .= '<div class="preview-image" style="background-image: url(\'' . $file[0] . '\')"></div>';
+        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert1_fileID\' )"' ) . '>';
+          // Display preview image if possible
+          if( isset($values["ticket_advert1_fileID"]) ) {
+            $html .= '<input type="hidden" name="ticket_advert1_fileID" value="' . $values["ticket_advert1_fileID"] . '" onchange="MediaHubSelected(this)">';
+            $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert1_fileID"] ) . '\')"></div>';
+          }else {
+            $html .= '<input type="hidden" name="ticket_advert1_fileID" onchange="MediaHubSelected(this)">';
           }
-          $html .= '<input type="file" name="advert0" onchange="previewImage(this)" ' . $disabled . '/>';
-          $html .= '<div class="draganddrop">Click to select file</div>';
+          $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
         $html .= '</label>';
+
         //Advert 2
         $html .= '<span class="file-info">Advert 2 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input">';
-          $html .= '<input type="file" name="advert1" onchange="previewImage(this)" ' . $disabled . '/>';
-          //Display image if exists
-          $file = glob("medias/groups/" . $this->groupID . "/ticket/adverts/advertImg1.*");
-          if( count($file) > 0) {
-            $html .= '<div class="preview-image" style="background-image: url(\'' . $file[0] . '\')"></div>';
+        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert2_fileID\' )"' ) . '>';
+          // Display preview image if possible
+          if( isset($values["ticket_advert2_fileID"]) ) {
+            $html .= '<input type="hidden" name="ticket_advert2_fileID" value="' . $values["ticket_advert2_fileID"] . '" onchange="MediaHubSelected(this)">';
+            $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert2_fileID"] ) . '\')"></div>';
+          }else {
+            $html .= '<input type="hidden" name="ticket_advert2_fileID" onchange="MediaHubSelected(this)">';
           }
-          $html .= '<div class="draganddrop">Click to select file</div>';
+          $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
         $html .= '</label>';
+
         //Advert 3
         $html .= '<span class="file-info">Advert 3 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input">';
-          $html .= '<input type="file" name="advert2" onchange="previewImage(this)" ' . $disabled . '/>';
-          //Display image if exists
-          $file = glob("medias/groups/" . $this->groupID . "/ticket/adverts/advertImg2.*");
-          if( count($file) > 0) {
-            $html .= '<div class="preview-image" style="background-image: url(\'' . $file[0] . '\')"></div>';
+        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert3_fileID\' )"' ) . '>';
+          // Display preview image if possible
+          if( isset($values["ticket_advert3_fileID"]) ) {
+            $html .= '<input type="hidden" name="ticket_advert3_fileID" value="' . $values["ticket_advert3_fileID"] . '" onchange="MediaHubSelected(this)">';
+            $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert3_fileID"] ) . '\')"></div>';
+          }else {
+            $html .= '<input type="hidden" name="ticket_advert3_fileID" onchange="MediaHubSelected(this)">';
           }
-          $html .= '<div class="draganddrop">Click to select file</div>';
+          $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
         $html .= '</label>';
 
         //Submit
@@ -421,17 +430,18 @@ class GroupCustomizer extends Group {
     $html = '<div class="grid-container">';
       //Start form
       $html .= '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="form-50 box-width">';
-      //logo
-      $html .= '<span class="file-info">Banner</span>';
-      $html .= '<label class="file-input">';
-        $html .= '<input type="file" name="banner" onchange="previewImage(this)" ' . $disabled . '/>';
-        //Display image if exists
-        $file = glob("medias/groups/" . $this->groupID . "/mail/banner/*");
-        if(count($file) > 0) {
-          $html .= '<div class="preview-image" style="background-image: url(\'' . $file[0] . '\')"></div>';
-        }
-        $html .= '<div class="draganddrop">Click to select file</div>';
-      $html .= '</label>';
+        //logo
+        $html .= '<span class="file-info">Banner</span>';
+        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'mail_banner_fileID\' )"' ) . '>';
+          // Display preview image if possible
+          if( isset($groupValues["mail_banner_fileID"]) ) {
+            $html .= '<input type="hidden" name="mail_banner_fileID" value="' . $groupValues["mail_banner_fileID"] . '" onchange="MediaHubSelected(this)">';
+            $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["mail_banner_fileID"] ) . '\')"></div>';
+          }else {
+            $html .= '<input type="hidden" name="mail_banner_fileID" onchange="MediaHubSelected(this)">';
+          }
+          $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
+        $html .= '</label>';
 
         //Absender
         $html .= '<label class="txt-input">';
@@ -481,12 +491,10 @@ class GroupCustomizer extends Group {
             $initials = (count($initialsArray) > 1) ? substr($initialsArray[0], 0, 1) . substr($initialsArray[1], 0, 1) : substr($initialsArray[0], 0, 1); //Check if two or one char
           }
 
-          //Get header image
-          $path = dirname(__FILE__, 2) . '/medias/groups/' . $group->groupID . '/mail/banner/*'; //Path where img is stored
-
-          if(count(glob($path)) > 0) {
-            $imgUrl = $url . 'medias/groups/' . $group->groupID . "/mail/banner/" . pathinfo(glob($path)[0], PATHINFO_BASENAME); //Onw image
-          }else {
+          //Get bannner image
+          if( isset( $groupValues["mail_banner_fileID"] )) {
+            $imgUrl = MediaHub::getUrl( $groupValues["mail_banner_fileID"] ); //No image found\Logo of tktdata
+          } else {
             $imgUrl = $url . 'medias/logo/logo-fitted.png'; //No image found\Logo of tktdata
           }
 
@@ -609,31 +617,32 @@ class GroupCustomizer extends Group {
 
       //Logo
       $html .= '<span class="file-info">Logo</span>';
-      $html .= '<label class="file-input">';
-        $html .= '<input type="file" name="logo" onchange="previewImage(this)" ' . $disabled . '/>';
-        //Display image if exists
-        $file = "medias/groups/" . $this->groupID . "/store/logo.png";
-        if(!file_exists($file)) {
-          $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_logo_fileID\' )"' ) . '>';
+        // Display preview image if possible
+        if( isset($groupValues["payment_logo_fileID"]) ) {
+          $html .= '<input type="hidden" name="payment_logo_fileID" value="' . $groupValues["payment_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["payment_logo_fileID"] ) . '\')"></div>';
         }else {
-          $html .= '<div class="preview-image" style="background-image: url(\'' .$url . $file . '\')"></div>';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+          $html .= '<input type="hidden" name="payment_logo_fileID" onchange="MediaHubSelected(this)">';
         }
-        $html .= '<div class="draganddrop">Click to select file</div>';
+        $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
       $html .= '</label>';
 
       //background
       $html .= '<span class="file-info">Hintergrundbild</span>';
-      $html .= '<label class="file-input">';
-        $html .= '<input type="file" name="background" onchange="previewImage(this)" ' . $disabled . '/>';
-        //Display image if exists
-        $file = "medias/groups/" . $this->groupID . "/store/background.png";
-        if(!file_exists($file)) {
-          $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,2) . "/medias/store/background/*")[0], PATHINFO_BASENAME ) . '\')"></div>';
+      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_background_fileID\' )"' ) . '>';
+        // Display preview image if possible
+        if( isset($groupValues["payment_background_fileID"]) ) {
+          $html .= '<input type="hidden" name="payment_background_fileID" value="' . $groupValues["payment_background_fileID"] . '" onchange="MediaHubSelected(this)">';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["payment_background_fileID"] ) . '\')"></div>';
         }else {
-          $html .= '<div class="preview-image" style="background-image: url(\'' . $url . $file . '\')"></div>';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,2) . "/medias/store/background/*")[0], PATHINFO_BASENAME ) . '\')"></div>';
+          $html .= '<input type="hidden" name="payment_background_fileID" onchange="MediaHubSelected(this)">';
         }
-        $html .= '<div class="draganddrop">Click to select file</div>';
+        $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
       $html .= '</label>';
+
       $html .= '<br /><span style="color: #fa8702;">HINWEIS:</span> Im Store werden nur Ticketgruppen angezeigt welche oben ein Häcken gesetzt haben.<br />';
 
       //ADFS
