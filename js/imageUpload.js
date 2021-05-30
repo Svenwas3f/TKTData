@@ -35,3 +35,19 @@ function previewImage(fileInput) {
     fileInput.parentNode.appendChild(preview);
   }
 }
+
+function MediaHubSelected( input ) {
+  // Get data attribute
+  var url = input.getAttribute("data-url");
+
+  // Check if preview exits
+  if( input.closest("label").getElementsByClassName("preview-image")[0] ) {
+    input.closest("label").getElementsByClassName("preview-image")[0].style.backgroundImage = "url('" + url + "')";
+  }else {
+    var preview = document.createElement("div");
+    preview.setAttribute("class", "preview-image");
+    preview.style.backgroundImage = "url('" + url + "')";
+
+    input.closest("label").appendChild( preview );
+  }
+}
