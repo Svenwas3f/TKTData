@@ -101,7 +101,7 @@ require_once(dirname(__FILE__, 3) . "/general.php");
                 }
 
                 echo '<div class="logo">';
-                  if( isset( $group->values()["payment_logo_fileID"] ) ) {
+                  if( isset( $group->values()["payment_logo_fileID"] ) &&! empty( $group->values()["payment_logo_fileID"] ) ) {
                     echo '<img  src="' . MediaHub::getUrl( $group->values()["payment_logo_fileID"] ) .'"/>';
                   }else {
                     echo '<img  src="' . $url . 'medias/store/favicon-color-512.png"/>';

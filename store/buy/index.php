@@ -156,7 +156,7 @@ if(!empty($_POST)) {
 
       <?php
       //Get fullscreen image
-      if( isset( $group->values()["payment_background_fileID"] ) ) {
+      if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->values()["payment_background_fileID"] ) ) {
         $backgroundImgUrl = MediaHub::getUrl( $group->values()["payment_background_fileID"] );
       }else {
         $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
