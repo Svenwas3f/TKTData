@@ -32,7 +32,7 @@ $groupValues = $group->values();
           <div class="headline">
             <?php
             // Logo
-            if( isset($groupValues["ticket_logo_fileID"]) ) {
+            if( isset($groupValues["ticket_logo_fileID"]) &&! empty($groupValues["ticket_logo_fileID"]) ) {
               echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_logo_fileID"] ) . '" />';
             }
 
@@ -49,7 +49,7 @@ $groupValues = $group->values();
         <div class="advert advert1">
           <?php
           // Advert 1
-          if( isset($groupValues["ticket_advert1_fileID"]) ) {
+          if( isset($groupValues["ticket_advert1_fileID"]) &&! empty($groupValues["ticket_advert1_fileID"]) ) {
             echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert1_fileID"] ) . '" />';
           }
           ?>
@@ -59,7 +59,7 @@ $groupValues = $group->values();
       <div class="row advert advert2">
         <?php
         // Advert 2
-        if( isset($groupValues["ticket_advert2_fileID"]) ) {
+        if( isset($groupValues["ticket_advert2_fileID"]) &&! empty($groupValues["ticket_advert2_fileID"]) ) {
           echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert2_fileID"] ) . '" />';
         }
         ?>
@@ -68,7 +68,7 @@ $groupValues = $group->values();
       <div class="row advert advert3">
         <?php
         // Advert 3
-        if( isset($groupValues["ticket_advert3_fileID"]) ) {
+        if( isset($groupValues["ticket_advert3_fileID"]) &&! empty($groupValues["ticket_advert3_fileID"]) ) {
           echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert3_fileID"] ) . '" />';
         }
         ?>

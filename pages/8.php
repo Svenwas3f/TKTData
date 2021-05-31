@@ -344,7 +344,7 @@ class GroupCustomizer extends Group {
         $html .= '<span class="file-info">Logo</span>';
         $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_logo_fileID\' )"' ) . '>';
           // Display preview image if possible
-          if( isset($values["ticket_logo_fileID"]) ) {
+          if( isset($values["ticket_logo_fileID"]) &&! empty($values["ticket_logo_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_logo_fileID" value="' . $values["ticket_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
             $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_logo_fileID"] ) . '\')"></div>';
           }else {
@@ -357,7 +357,7 @@ class GroupCustomizer extends Group {
         $html .= '<span class="file-info">Advert 1 <abbr title="' . $advertInfo . '">(453px &#x00D7; 343px)</abbr></span>';
         $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert1_fileID\' )"' ) . '>';
           // Display preview image if possible
-          if( isset($values["ticket_advert1_fileID"]) ) {
+          if( isset($values["ticket_advert1_fileID"]) &&! empty($values["ticket_advert1_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert1_fileID" value="' . $values["ticket_advert1_fileID"] . '" onchange="MediaHubSelected(this)">';
             $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert1_fileID"] ) . '\')"></div>';
           }else {
@@ -370,7 +370,7 @@ class GroupCustomizer extends Group {
         $html .= '<span class="file-info">Advert 2 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
         $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert2_fileID\' )"' ) . '>';
           // Display preview image if possible
-          if( isset($values["ticket_advert2_fileID"]) ) {
+          if( isset($values["ticket_advert2_fileID"]) &&! empty($values["ticket_advert2_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert2_fileID" value="' . $values["ticket_advert2_fileID"] . '" onchange="MediaHubSelected(this)">';
             $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert2_fileID"] ) . '\')"></div>';
           }else {
@@ -383,7 +383,7 @@ class GroupCustomizer extends Group {
         $html .= '<span class="file-info">Advert 3 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
         $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert3_fileID\' )"' ) . '>';
           // Display preview image if possible
-          if( isset($values["ticket_advert3_fileID"]) ) {
+          if( isset($values["ticket_advert3_fileID"]) &&! empty($values["ticket_advert3_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert3_fileID" value="' . $values["ticket_advert3_fileID"] . '" onchange="MediaHubSelected(this)">';
             $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $values["ticket_advert3_fileID"] ) . '\')"></div>';
           }else {
@@ -434,7 +434,7 @@ class GroupCustomizer extends Group {
         $html .= '<span class="file-info">Banner</span>';
         $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'mail_banner_fileID\' )"' ) . '>';
           // Display preview image if possible
-          if( isset($groupValues["mail_banner_fileID"]) ) {
+          if( isset($groupValues["mail_banner_fileID"]) &&! empty($groupValues["mail_banner_fileID"]) ) {
             $html .= '<input type="hidden" name="mail_banner_fileID" value="' . $groupValues["mail_banner_fileID"] . '" onchange="MediaHubSelected(this)">';
             $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["mail_banner_fileID"] ) . '\')"></div>';
           }else {
@@ -619,7 +619,7 @@ class GroupCustomizer extends Group {
       $html .= '<span class="file-info">Logo</span>';
       $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_logo_fileID\' )"' ) . '>';
         // Display preview image if possible
-        if( isset($groupValues["payment_logo_fileID"]) ) {
+        if( isset($groupValues["payment_logo_fileID"]) &&! empty($groupValues["payment_logo_fileID"]) ) {
           $html .= '<input type="hidden" name="payment_logo_fileID" value="' . $groupValues["payment_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
           $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["payment_logo_fileID"] ) . '\')"></div>';
         }else {
@@ -633,7 +633,7 @@ class GroupCustomizer extends Group {
       $html .= '<span class="file-info">Hintergrundbild</span>';
       $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_background_fileID\' )"' ) . '>';
         // Display preview image if possible
-        if( isset($groupValues["payment_background_fileID"]) ) {
+        if( isset($groupValues["payment_background_fileID"]) &&! empty($groupValues["payment_background_fileID"]) ) {
           $html .= '<input type="hidden" name="payment_background_fileID" value="' . $groupValues["payment_background_fileID"] . '" onchange="MediaHubSelected(this)">';
           $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $groupValues["payment_background_fileID"] ) . '\')"></div>';
         }else {

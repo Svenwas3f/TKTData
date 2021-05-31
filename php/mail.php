@@ -106,7 +106,7 @@ class TKTDataMailer extends PHPMailer {
     $group->groupID = $ticket->cryptToken()["gid"];
 
     //Get header image
-    if( isset( $group->values()["mail_banner_fileID"] ) ) {
+    if( isset( $group->values()["mail_banner_fileID"] ) &&! empty( $group->values()["mail_banner_fileID"] ) ) {
       $imgUrl = MediaHub::getUrl( $group->values()["mail_banner_fileID"] ); //Onw image
     }else {
       $imgUrl = $url . 'medias/logo/logo-fitted.png'; //No image found\Logo of tktdata
