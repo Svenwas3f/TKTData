@@ -194,6 +194,36 @@ function single_checkout ( $checkout_id ) {
             $html .=  '</label>';
           $html .=  '</div>';
 
+          // Images
+          $html .=  '<div class="box">';
+            $html .=  '<p>Bilder</p>';
+            $html .= '<span class="file-info">Logo</span>';
+            $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
+              // Display preview image if possible
+              if( isset($checkout->values()["logo_fileID"]) &&! empty($checkout->values()["logo_fileID"]) ) {
+                $html .= '<input type="hidden" name="logo_fileID" value="' . $checkout->values()["logo_fileID"] . '" onchange="MediaHubSelected(this)">';
+                $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->values()["logo_fileID"] ) . '\')"></div>';
+              }else {
+                $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+                $html .= '<input type="hidden" name="logo_fileID" onchange="MediaHubSelected(this)">';
+              }
+              $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
+            $html .= '</label>';
+
+            $html .= '<span class="file-info">Hintergrundbild</span>';
+            $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
+              // Display preview image if possible
+              if( isset($checkout->values()["background_fileID"]) &&! empty($checkout->values()["background_fileID"]) ) {
+                $html .= '<input type="hidden" name="background_fileID" value="' . $checkout->values()["background_fileID"] . '" onchange="MediaHubSelected(this)">';
+                $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->values()["background_fileID"] ) . '\')"></div>';
+              }else {
+                $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+                $html .= '<input type="hidden" name="background_fileID" onchange="MediaHubSelected(this)">';
+              }
+              $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
+            $html .= '</label>';
+          $html .= '</div>';
+
           // Payrexx
           $html .=  '<div class="box">';
             $html .=  '<p>Payrexx</p>';
@@ -316,30 +346,85 @@ function single_product ( $product_id ) {
   $checkout = new Checkout();
   $checkout->product_id = $product_id;
 
+  // Get disabled
+  $write = User::w_access_allowed( $page, $current_user );
+  $disabled = ($write === true ? "" : "disabled");
+
+
   $html =  '<div class="checkout">';
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
       $html .=  '<h1>Produkt hinzufügen</h1>';
       //Produktname
       $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" required/>';
+        $html .=  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
         $html .=  '<span class="placeholder">Kassenname</span>';
       $html .=  '</label>';
 
+      // Section
+      $html .= '<div class="select" onclick="toggleOptions(this)">';
+        $html .= '<input type="text" class="selectValue" name="availability" ' . $disabled . '>';
+        $html .= '<span class="headline">Sektion</span>';
+
+        $html .= '<div class="options">';
+          foreach( $checkout->sections() as $section ) {
+            $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
+          }
+          $html .= '<span onclick="event.stopPropagation()" >';
+            $html .= '<input type="text"/>';
+            $html .= '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
+          $html .= '</span>';
+        $html .= '</div>';
+      $html .= '</div>';
+
       //Währung
       $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
+        $html .=  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
         $html .=  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
       $html .=  '</label>';
 
       //Preis
       $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" required/>';
+        $html .=  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
         $html .=  '<span class="placeholder">Preis</span>';
         $html .=  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
       $html .=  '</label>';
 
+      // Status
+      $availability = array(
+        0 => "Verfügbar",
+        1 => "Wenige verfügbar",
+        2 => "Ausverkauft"
+      );
+
+      $html .= '<div class="select" onclick="toggleOptions(this)">';
+        $html .= '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
+        $html .= '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
+
+        $html .= '<div class="options">';
+          $html .= '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
+          $html .= '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
+          $html .= '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
+        $html .= '</div>';
+      $html .= '</div>';
+
+
+      // Produktbild
+      $html .= '<span class="file-info">Produktbild</span>';
+      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
+        // Display preview image if possible
+        if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
+          $html .= '<input type="hidden" name="product_fileID" value="' . $checkout->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
+        }else {
+          $html .= '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
+        }
+        $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
+      $html .= '</label>';
+
       //Add submit button
-      $html .=  '<input type="submit" name="update" value="Update"/>';
+      if( $disabled != "disabled" ) {
+        $html .=  '<input type="submit" name="update" value="Update"/>';
+      }
 
       //Close form
     $html .=  '</form>';
