@@ -15,27 +15,7 @@
 
 /**
  * Appends a peview image localy
- *
- * fileInput: HTML-Input (use this)
  */
-function previewImage(fileInput) {
-  var reader = new FileReader();
-
-  //Check if input contains file
-  if (fileInput.files.length === 0) {
-    target.style.background = "";
-  } else {
-    reader.readAsDataURL(fileInput.files[0]);
-    var preview = document.createElement("DIV");
-    preview.setAttribute("class", "preview-image");
-    reader.onload = function(event) {
-      preview.setAttribute("style", "background-image: url(" + reader.result + ")");
-    }
-
-    fileInput.parentNode.appendChild(preview);
-  }
-}
-
 function MediaHubSelected( input ) {
   // Get data attribute
   var url = input.getAttribute("data-url");
