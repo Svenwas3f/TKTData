@@ -457,3 +457,10 @@ function selectElement(ele) {
   base.getElementsByClassName("headline")[0].innerHTML = ele.textContent;
   base.getElementsByClassName("selectValue")[0].value = ele.getAttribute("data-value");
 }
+
+function useNewOption( value, section ) {
+  section.getElementsByClassName("selectValue")[0].value = value;
+  section.getElementsByClassName("headline")[0].innerHTML = value;
+
+  toggleOptions( section );
+}
