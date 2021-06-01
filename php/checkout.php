@@ -40,10 +40,19 @@
  *
  * Checkout->products ( $offset [int], $steps [int], $search_value [info_string] ) [$cashier]
  *
+ * Checkout->sections () [$cashier]
+ *
  * Checkout->global_products ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * Checkout->values () [$cashier]
  *
+ *
+ **************** availability explanation ****************
+ *
+ * AVAILABILITY
+ * 0: available
+ * 1: little available
+ * 2: sold
  *
  */
 class Checkout {
@@ -237,6 +246,8 @@ class Checkout {
    * $values: Array with new values
    *          array(
    *            name,
+   *            logo_fileID,
+   *            background_fileID,
    *            payment_payrexx_instance,
    *            payment_payrexx_secret
    *         )
@@ -249,7 +260,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "payment_payrexx_instance", "payment_payrexx_secret");
+    $valid_keys = array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -287,8 +298,11 @@ class Checkout {
    * $values: Array with new values
    *          array(
    *            name,
+   *            section,
    *            price,
-   *            currency
+   *            currency,
+   *            product_fileID,
+   *            availability
    *         )
    */
   public function update_product( $values ) {
@@ -299,7 +313,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "price", "currency");
+    $valid_keys = array("name", "section", "price", "currency", "product_fileID", "availability");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -512,6 +526,31 @@ class Checkout {
     }
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+  /**
+   * Returns array with all section-names
+   * requires: $cashier or no cashier for global products
+   */
+  public function sections() {
+    //Get database connection
+    $conn = Access::connect();
+
+    if( isset($this->cashier) ) {
+      // Get all sections by cashier
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . CHECKOUT_PRODUCTS . " WHERE section IS NOT NULL AND checkout_id=:checkout_id");
+      $sections->execute(array(
+        ":checkout_id" => $this->cashier,
+      ));
+
+      return $sections->fetchAll( PDO::FETCH_ASSOC );
+    }else {
+      // Get all global sections
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . CHECKOUT_PRODUCTS . " WHERE section IS NOT NULL AND checkout_id IS NULL");
+      $sections->execute();
+
+      return $sections->fetchAll( PDO::FETCH_ASSOC );
+    }
   }
 
   /**
