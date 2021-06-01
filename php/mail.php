@@ -107,9 +107,14 @@ class TKTDataMailer extends PHPMailer {
 
     //Get header image
     if( isset( $group->values()["mail_banner_fileID"] ) &&! empty( $group->values()["mail_banner_fileID"] ) ) {
-      $imgUrl = MediaHub::getUrl( $group->values()["mail_banner_fileID"] ); //Onw image
+      $mediaHub = new MediaHub();
+      $mediaHub->fileID = $group->values()["mail_banner_fileID"];
+
+      $backgroundImgUrl = $mediaHub->getUrl( $group->values()["mail_banner_fileID"] );
+      $altImage = $mediaHub->fileDetails()["alt"];
     }else {
       $imgUrl = $url . 'medias/logo/logo-fitted.png'; //No image found\Logo of tktdata
+      $altImage = "TKTDATA TICKETSYSTEM";
     }
 
     //Define message
@@ -171,7 +176,7 @@ class TKTDataMailer extends PHPMailer {
                         <table width="100%" cellspacing="0" cellpadding="0" style="text-align: center; color: #232b43; font-size: 15pt;font-weight: bolder; margin: 50px 0px;">
                           <tr>
                             <td>
-                              <img src="' . $imgUrl . '" style="display: block; width: 100%;" class="logo" alt="TKTDATA TICKETSYSTEM">
+                              <img src="' . $imgUrl . '" style="display: block; width: 100%;" class="logo" alt="' . $altImage . '">
                             </td>
                           </tr>
                         </table>

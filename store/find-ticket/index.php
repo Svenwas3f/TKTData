@@ -102,9 +102,12 @@ require_once(dirname(__FILE__, 3) . "/general.php");
 
                 echo '<div class="logo">';
                   if( isset( $group->values()["payment_logo_fileID"] ) &&! empty( $group->values()["payment_logo_fileID"] ) ) {
-                    echo '<img  src="' . MediaHub::getUrl( $group->values()["payment_logo_fileID"] ) .'"/>';
+                    $mediaHub = new MediaHub();
+                    $mediaHub->fileID = $group->values()["payment_logo_fileID"];
+
+                    echo '<img  src="' . $mediaHub->getUrl( $group->values()["payment_logo_fileID"] ) .'" alt="' . $mediaHub->fileDetails()["alt"] . '"/>';
                   }else {
-                    echo '<img  src="' . $url . 'medias/store/favicon-color-512.png"/>';
+                    echo '<img  src="' . $url . 'medias/store/favicon-color-512.png" alt="LOGO"/>';
                   }
                 echo '</div>';
 

@@ -157,9 +157,14 @@ if(!empty($_POST)) {
       <?php
       //Get fullscreen image
       if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->values()["payment_background_fileID"] ) ) {
-        $backgroundImgUrl = MediaHub::getUrl( $group->values()["payment_background_fileID"] );
+        $mediaHub = new MediaHub();
+        $mediaHub->fileID = $group->values()["payment_background_fileID"];
+
+        $backgroundImgUrl = $mediaHub->getUrl( $group->values()["payment_background_fileID"] );
+        $altImage = $mediaHub->fileDetails()["alt"];
       }else {
         $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
+        $altImage = "Background";
       }
       ?>
       <div class="buy-container">

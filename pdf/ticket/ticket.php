@@ -33,7 +33,10 @@ $groupValues = $group->values();
             <?php
             // Logo
             if( isset($groupValues["ticket_logo_fileID"]) &&! empty($groupValues["ticket_logo_fileID"]) ) {
-              echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_logo_fileID"] ) . '" />';
+              $mediaHub = new MediaHub();
+              $mediaHub->fileID = $group->values()["ticket_logo_fileID"];
+
+              echo '<img src="' . $mediaHub->getUrl( $groupValues["ticket_logo_fileID"] ) . '" alt="' . $mediaHub->fileDetails()["alt"] . '" />';
             }
 
             // Title
@@ -50,7 +53,10 @@ $groupValues = $group->values();
           <?php
           // Advert 1
           if( isset($groupValues["ticket_advert1_fileID"]) &&! empty($groupValues["ticket_advert1_fileID"]) ) {
-            echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert1_fileID"] ) . '" />';
+            $mediaHub = new MediaHub();
+            $mediaHub->fileID = $group->values()["ticket_advert1_fileID"];
+
+            echo '<img src="' . $mediaHub->getUrl( $groupValues["ticket_advert1_fileID"] ) . '" alt="' . $mediaHub->fileDetails()["alt"] . '" />';
           }
           ?>
         </div>
@@ -60,7 +66,10 @@ $groupValues = $group->values();
         <?php
         // Advert 2
         if( isset($groupValues["ticket_advert2_fileID"]) &&! empty($groupValues["ticket_advert2_fileID"]) ) {
-          echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert2_fileID"] ) . '" />';
+          $mediaHub = new MediaHub();
+          $mediaHub->fileID = $group->values()["ticket_advert2_fileID"];
+
+          echo '<img src="' . $mediaHub->getUrl( $groupValues["ticket_advert2_fileID"] ) . '" alt="' . $mediaHub->fileDetails()["alt"] . '" />';
         }
         ?>
       </div>
@@ -69,7 +78,10 @@ $groupValues = $group->values();
         <?php
         // Advert 3
         if( isset($groupValues["ticket_advert3_fileID"]) &&! empty($groupValues["ticket_advert3_fileID"]) ) {
-          echo '<img src="' . MediaHub::getUrl( $groupValues["ticket_advert3_fileID"] ) . '" />';
+          $mediaHub = new MediaHub();
+          $mediaHub->fileID = $group->values()["ticket_advert3_fileID"];
+
+          echo '<img src="' . $mediaHub->getUrl( $groupValues["ticket_advert3_fileID"] ) . '" alt="' . $mediaHub->fileDetails()["alt"] . '" />';
         }
         ?>
       </div>
