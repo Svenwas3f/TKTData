@@ -2179,6 +2179,29 @@ a .vertical {
   margin: 0px 0px 2px 0px;
 }
 
+.checkout .option_add {
+  display: grid !important;
+  grid-template-columns: 80% 20%;
+  border-top: 1px solid #d3d5d9;
+}
+
+.checkout .option_add input {
+  margin: 5px 0px 5px 5px;
+  background-color: transparent;
+  border: 1px solid #656b7b;
+  font-family: 'Open Sans', sans-serif;
+  padding: 10px;
+}
+
+.checkout .option_add .button {
+  text-align: center;
+}
+
+.checkout .option_add .button:hover {
+  text-align: center;
+  background-color: #656b7b;
+}
+
 /*footer*/
 footer {
   background-color: #232b43;

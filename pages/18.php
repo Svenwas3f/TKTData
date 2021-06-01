@@ -353,7 +353,7 @@ function single_product ( $product_id ) {
 
   $html =  '<div class="checkout">';
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-      $html .=  '<h1>Produkt hinzufügen</h1>';
+      $html .=  '<h1>Produkt bearbeten</h1>';
       //Produktname
       $html .=  '<label class="txt-input">';
         $html .=  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
@@ -362,14 +362,14 @@ function single_product ( $product_id ) {
 
       // Section
       $html .= '<div class="select" onclick="toggleOptions(this)">';
-        $html .= '<input type="text" class="selectValue" name="availability" ' . $disabled . '>';
-        $html .= '<span class="headline">Sektion</span>';
+        $html .= '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
+        $html .= '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
 
         $html .= '<div class="options">';
           foreach( $checkout->sections() as $section ) {
             $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
           }
-          $html .= '<span onclick="event.stopPropagation()" >';
+          $html .= '<span onclick="event.stopPropagation()" class="option_add" >';
             $html .= '<input type="text"/>';
             $html .= '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
           $html .= '</span>';
@@ -540,7 +540,7 @@ switch(key($action)) {
       }
 
       //Start form to edit, show user
-      echo '<div class="checkbox">';
+      echo '<div class="checkout">';
         echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
           echo '<h1>Produkt hinzufügen</h1>';
           //Produktname
@@ -551,14 +551,14 @@ switch(key($action)) {
 
           // Section
           echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . '>';
+            echo '<input type="text" class="selectValue" name="section" ' . $disabled . '>';
             echo '<span class="headline">Sektion</span>';
 
             echo '<div class="options">';
               foreach( $checkout->sections() as $section ) {
                 echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
               }
-              echo '<span onclick="event.stopPropagation()" >';
+              echo '<span onclick="event.stopPropagation()" class="option_add" >';
                 echo '<input type="text"/>';
                 echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
               echo '</span>';
