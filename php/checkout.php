@@ -36,6 +36,8 @@
  *
  * Checkout->access ( $user [int or null], $offset [int], $steps [int] ) [$cashier]
  *
+ * Checkout->accessable ( $user [string] )
+ *
  * Checkout->product () [$product_id]
  *
  * Checkout->products ( $offset [int], $steps [int], $search_value [info_string] ) [$cashier]
@@ -361,7 +363,7 @@ class Checkout {
       "table" => "CHECKOUT",
       "function" => "UPDATE",
       "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
-      "old" => array_intersect_key($this->values(), array_flip(array("name", "payment_payrexx_instance", "payment_payrexx_secret"))),
+      "old" => array_intersect_key($this->values(), array_flip(array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret"))),
       "new" => array("")
     );
 
@@ -393,7 +395,7 @@ class Checkout {
       "table" => "CHECKOUT_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
-      "old" => array_intersect_key($this->product(), array_flip(array("checkout_id", "name", "price", "currency"))),
+      "old" => array_intersect_key($this->product(), array_flip(array("checkout_id", "name", "section", "price", "currency", "product_fileID", "availability"))),
       "new" => array("")
     );
 
@@ -478,6 +480,27 @@ class Checkout {
       // Check if user exists
       return array_intersect_key(($rights === false ? array() : $rights), array_flip(array("w", "r")));
     }
+  }
+
+  /**
+  * Function to get all accessable checkouts
+  *
+  * $user: User ID for whom you want to know the accessable checkouts
+  */
+  public function accessable( $user ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // SQL Request
+    $accessable = $conn->prepare("SELECT checkout_id FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id AND( w=1 OR r=1)");
+    $accessable->execute(array(
+      ":user_id" => $user,
+    ));
+
+    // Modifie result
+    $result = array_map(function($v) { return $v[0]; }, $accessable->fetchAll( PDO::FETCH_NUM ));
+
+    return $result;
   }
 
   /**
