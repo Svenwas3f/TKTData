@@ -520,6 +520,10 @@ switch(key($action)) {
       // Add product
       $checkout = new Checkout();
 
+      // Get disabled
+      $write = User::w_access_allowed( $page, $current_user );
+      $disabled = ($write === true ? "" : "disabled");
+
       if(! empty( $_POST )) {
         if(User::w_access_allowed($page, $current_user)) {
           // Prepare post value
@@ -541,21 +545,63 @@ switch(key($action)) {
           echo '<h1>Produkt hinzufügen</h1>';
           //Produktname
           echo '<label class="txt-input">';
-            echo '<input type="text" name="name" required/>';
-            echo '<span class="placeholder">Kassenname</span>';
+            echo '<input type="text" name="name" ' . $disabled . ' required/>';
+            echo '<span class="placeholder">Produktname</span>';
           echo '</label>';
+
+          // Section
+          echo '<div class="select" onclick="toggleOptions(this)">';
+            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . '>';
+            echo '<span class="headline">Sektion</span>';
+
+            echo '<div class="options">';
+              foreach( $checkout->sections() as $section ) {
+                echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
+              }
+              echo '<span onclick="event.stopPropagation()" >';
+                echo '<input type="text"/>';
+                echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
+              echo '</span>';
+            echo '</div>';
+          echo '</div>';
 
           //Währung
           echo '<label class="txt-input">';
-            echo '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" required/>';
+            echo '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
             echo '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
           echo '</label>';
 
           //Preis
           echo '<label class="txt-input">';
-            echo '<input type="number" step="0.05" min="0" name="price" required/>';
+            echo '<input type="number" step="0.05" min="0" name="price" ' . $disabled . ' required/>';
             echo '<span class="placeholder">Preis</span>';
             echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
+          echo '</label>';
+
+          // Status
+          $availability = array(
+            0 => "Verfügbar",
+            1 => "Wenige verfügbar",
+            2 => "Ausverkauft"
+          );
+
+          echo '<div class="select" onclick="toggleOptions(this)">';
+            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' required>';
+            echo '<span class="headline">Produktverfügbarkeit</span>';
+
+            echo '<div class="options">';
+              echo '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
+              echo '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
+              echo '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
+            echo '</div>';
+          echo '</div>';
+
+
+          // Produktbild
+          echo '<span class="file-info">Produktbild</span>';
+          echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
+            echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
+            echo '<div class="draganddrop">Klicken um auszuwählen</div>';
           echo '</label>';
 
           //Add submit button
@@ -567,6 +613,10 @@ switch(key($action)) {
     }elseif( ($_GET["add"] ?? "") == "checkout") {
       // Add checkout
       $checkout = new Checkout();
+
+      // Get disabled
+      $write = User::w_access_allowed( $page, $current_user );
+      $disabled = ($write === true ? "" : "disabled");
 
       if(! empty( $_POST )) {
         if(User::w_access_allowed($page, $current_user)) {
@@ -585,8 +635,38 @@ switch(key($action)) {
         echo '<h1>Kasse hinzufügen</h1>';
         //Kassenname
         echo '<label class="txt-input">';
-          echo '<input type="text" name="name"/>';
+          echo '<input type="text" name="name" ' . $disabled . '/>';
           echo '<span class="placeholder">Kassenname</span>';
+        echo '</label>';
+
+        // Images
+        echo '<span class="file-info">Logo</span>';
+        echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
+          echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+          echo '<input type="hidden" name="logo_fileID" onchange="MediaHubSelected(this)">';
+          echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+        echo '</label>';
+
+        echo '<span class="file-info">Hintergrundbild</span>';
+        echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
+            echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+            echo '<input type="hidden" name="background_fileID" onchange="MediaHubSelected(this)">';
+          echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+        echo '</label>';
+
+        // Payrexx
+        echo '<br />Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+
+        // Payrexx instance
+        echo '<label class="txt-input">';
+          echo '<input type="text" name="payment_payrexx_instance" ' . $disabled . '/>';
+          echo '<span class="placeholder">Payrexx Instance</span>';
+        echo '</label>';
+
+        // Payrexx secret
+        echo '<label class="txt-input">';
+          echo '<input type="text" name="payment_payrexx_secret" ' . $disabled . '/>';
+          echo '<span class="placeholder">Payrexx Secret</span>';
         echo '</label>';
 
         //Add submit button

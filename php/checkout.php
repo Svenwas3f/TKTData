@@ -202,7 +202,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("checkout_id", "name", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "price", "currency");
+    $valid_keys = array("checkout_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
