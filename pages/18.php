@@ -270,7 +270,7 @@ function display_products ( $search_value = null ) {
   $html .=  '</form>';
 
   // Define colors
-  $colors = array(
+  $availability = array(
     0 => array(
       "color" => "#2b4476",
       "title" => "Verfügbar",
@@ -287,10 +287,10 @@ function display_products ( $search_value = null ) {
 
   // Legend
   $html .= '<div class="legend">';
-    foreach( $colors as $color ) {
+    foreach( $availability as $element ) {
       $html .= '<div class="legend-element">';
-        $html .= '<div class="legend-button" style="background-color: ' . $color["color"] . '"></div>';
-        $html .= $color["title"];
+        $html .= '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
+        $html .= $element["title"];
       $html .= '</div>';
     }
   $html .= '</div>';
@@ -313,7 +313,7 @@ function display_products ( $search_value = null ) {
 
     foreach( Checkout::global_products( $offset, $steps, $search_value ) as $products ) {
       $html .=  '<tr>';
-        $html .=  '<td><div class="color" style="background-color: ' . $colors[($products["availability"] ?? 0)]["color"] . ';" title="' . $colors[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
+        $html .=  '<td><div class="color" style="background-color: ' . $availability[($products["availability"] ?? 0)]["color"] . ';" title="' . $availability[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
         $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
         $html .=  '<td>';
           if(User::w_access_allowed($page, $current_user)) {

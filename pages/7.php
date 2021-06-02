@@ -6,7 +6,7 @@ function display_tickets( $search_value = null ){
   global $page;
   global $current_user;
   global $conn;
-  
+
   /**
    * Start html
    */

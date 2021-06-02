@@ -576,7 +576,7 @@ class GroupCustomizer extends Group {
     $group->groupID = $_GET["view"];
     $groupValues = $group->values();
 
-    $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="sdk-code">';
+    $html = '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="payment">';
       //Payment request mail message
       $html .= '<p>Zahlungsanforderungs-Mail</p>';
       $html .= 'Diese Nachricht wird im Mail bei einer Zahlungsanforderung erscheinen. Beachte, dass bei Vorkasse oder Rechnung der Zahlungslink nicht erscheinen wird . ';

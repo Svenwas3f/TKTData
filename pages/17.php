@@ -273,7 +273,7 @@ echo '<div class="checkout">';
       echo  '</form>';
 
       // Define colors
-      $colors = array(
+      $availability = array(
         0 => array(
           "color" => "#2b4476",
           "title" => "Verfügbar",
@@ -290,10 +290,10 @@ echo '<div class="checkout">';
 
       // Legend
       echo '<div class="legend">';
-        foreach( $colors as $color ) {
+        foreach( $availability as $element ) {
           echo '<div class="legend-element">';
-            echo '<div class="legend-button" style="background-color: ' . $color["color"] . '"></div>';
-            echo $color["title"];
+            echo '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
+            echo $element["title"];
           echo '</div>';
         }
       echo '</div>';
@@ -316,7 +316,7 @@ echo '<div class="checkout">';
 
         foreach( $checkout->products( $offset, $steps,null ) as $products ) {
           echo  '<tr>';
-            echo  '<td><div class="color" style="background-color: ' . $colors[($products["availability"] ?? 0)]["color"] . ';" title="' . $colors[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
+            echo  '<td><div class="color" style="background-color: ' . $availability[($products["availability"] ?? 0)]["color"] . ';" title="' . $availability[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
             echo  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
             echo  '<td>';
               // color

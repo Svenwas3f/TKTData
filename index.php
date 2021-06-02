@@ -155,12 +155,17 @@ if(! isset($_GET["id"])){
        */
       if( User::w_access_allowed($displayPage, $current_user) || User::r_access_allowed($displayPage, $current_user ) || $displayPage == "profil"){
         //Generate file
-        $page_file = dirname(__FILE__) . "/pages/".$displayPage.".php";
+        $page_file = dirname(__FILE__) . "/pages/" . $displayPage . ".php";
 
         //Check file
         if(file_exists( $page_file )) {
-          //Display page
-          require_once( $page_file );
+          // Generate container
+          echo '<div class="mainpage-' . $mainPage . ' subpage-' . $page . '">';
+
+            //Display page
+            require_once( $page_file );
+
+          echo '</div>';
         }else {
           //Get plugin name
           $name = new Plugin();
