@@ -2280,11 +2280,11 @@ form.search button img {
   -webkit-transition: 0.25s;
 }
 
-.mainpage-5 .checkout a.selected {
+.mainpage-5 .checkout .top-nav a.selected {
   background-color: white;
 }
 
-.mainpage-5 .checkout a:hover {
+.mainpage-5 .checkout .top-nav a:hover {
   background-color: var(--custom-gray1);
 }
 
@@ -2314,6 +2314,8 @@ form.search button img {
   border: 1px solid var(--lighternavy);
   font-family: 'Open Sans', sans-serif;
   padding: 10px;
+  outline: none;
+  box-shadow: none;
 }
 
 .mainpage-5 .checkout .option_add .button {

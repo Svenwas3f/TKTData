@@ -1,11 +1,3 @@
-<!-- - Liste aller verfügbaren Kassen<br />
-- Produkte hinzufügen<br />
-- Produkte entfernen<br />
-- Produkte überarbeiten<br />
-- Produkte einsehen<br />
-- Preisliste generieren<br /> -->
-
-
 <?php
 $action = $_GET;
 unset($action["id"]); //Remove page
@@ -16,17 +8,31 @@ unset($action["checkout"]);
 // Start checkout
 $checkout = new Checkout();
 
+// Get current checkout
+$accessable_checkouts = $checkout->accessable( $current_user );
+$checkout->cashier = $_GET["checkout"] ?? $accessable_checkouts[0];
+
+// Get Access
+$write_page = User::w_access_allowed( $page, $current_user );
+$write_checkout = boolval( $checkout->access( $current_user )["w"] ?? 0 );
+$write_access = ($write_page === true && $write_checkout === true) ?  true : false;
+
+$read_page = User::r_access_allowed( $page, $current_user );
+$read_checkout = boolval( $write_checkout === true ? true : $checkout->access( $current_user )["r"] ?? 0 );
+$read_access = ($read_page === true && $read_checkout === true) ?  true : false;
+
 // Get disabled
-$write = User::w_access_allowed( $page, $current_user );
-$disabled = ($write === true ? "" : "disabled");
+$disabled = ($write_access === true ? "" : "disabled");
+
+// Message if user has no access to this checkout
+if( $write_access === false && $read_access === false ) {
+  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $checkout->cashier . ") <strong>"  . $checkout->values()['name'] ."</strong>");
+  return;
+}
 
 echo '<div class="checkout">';
   // List accessable checkouts
-  $accessable_checkouts = $checkout->accessable( $current_user );
   if( count($accessable_checkouts) > 1 ) {
-    // Current visible
-    $checkout->cashier = ($_GET["checkout"] ?? $accessable_checkouts[0]);
-
     // Multiple access
     echo '<div class="header" onclick="this.children[1].classList.toggle(\'visible\')">';
       echo '<span class="current multiple">' . $checkout->values()["name"] . '</span>';
@@ -44,9 +50,6 @@ echo '<div class="checkout">';
       echo '</div>';
     echo '</div>';
   } else {
-    // Single access
-    $checkout->cashier = $accessable_checkouts[0];
-
     echo '<div class="header">';
       echo '<span class="current">' . $checkout->values()["name"] . '</span>';
     echo '</div>';
@@ -55,15 +58,15 @@ echo '<div class="checkout">';
   switch(key($action)) {
     case "add": //Product
       if(! empty( $_POST )) {
-        if(User::w_access_allowed($page, $current_user)) {
+        if( $write_access ) {
           // Prepare post value
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
           $_POST["checkout_id"] = $checkout->cashier;
 
           if( $checkout->add( CHECKOUT::PRODUCTS_TABLE, $_POST ) ) {
-            Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $checkout->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
+            Action::success("Das Produkt konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&checkout=" . $checkout->cashier . "&view_product=" . $checkout->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
           }else{
-            Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+            Action::fail("Leider konnte das Produkt <strong>nicht</strong></b> erstellt werden.");
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -150,7 +153,7 @@ echo '<div class="checkout">';
       $info = "Möchtest du das Produkt <strong>" . $checkout->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
 
       // Display message
-      Action::confirm($info, $_GET["remove_product"]);
+      Action::confirm($info, $_GET["remove_product"], "&checkout=" . $checkout->cashier);
     break;
     case "view_product":
       // Set product id
@@ -158,7 +161,7 @@ echo '<div class="checkout">';
 
       // Update
       if(! empty($_POST)) {
-        if(User::w_access_allowed($page, $current_user)) {
+        if( $write_access ) {
           // Define values
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
@@ -186,15 +189,18 @@ echo '<div class="checkout">';
           echo '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
           echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
 
-          echo '<div class="options">';
-            foreach( $checkout->sections() as $section ) {
-              echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
-            }
-            echo '<span onclick="event.stopPropagation()" class="option_add" >';
-              echo '<input type="text"/>';
-              echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
-            echo '</span>';
-          echo '</div>';
+          if( $write_access === true ) {
+            echo '<div class="options">';
+              foreach( $checkout->sections() as $section ) {
+                echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
+              }
+              echo '<span onclick="event.stopPropagation()" class="option_add" >';
+                echo '<input type="text"/>';
+                echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
+              echo '</span>';
+            echo '</div>';
+          }
+
         echo '</div>';
 
         //Währung
@@ -221,11 +227,14 @@ echo '<div class="checkout">';
           echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
           echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
 
-          echo '<div class="options">';
-            echo '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
-            echo '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
-            echo '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
-          echo '</div>';
+
+            if( $write_access === true ) {
+              echo '<div class="options">';
+                foreach( $availability as $key=>$name ) {
+                  echo '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
+                }
+              echo '</div>';
+            }
         echo '</div>';
 
 
@@ -253,16 +262,20 @@ echo '<div class="checkout">';
     default:
       // Check if we need to remove product
       if(isset($_POST["confirm"])) {
-        // Get values
-        $product_remove = new Checkout();
-        $product_remove->product_id = $_POST["confirm"];
-        $product_values = $product_remove->product();
+        if( $write_access ) {
+          // Get values
+          $product_remove = new Checkout();
+          $product_remove->product_id = $_POST["confirm"];
+          $product_values = $product_remove->product();
 
-        // Remove
-        if( $product_remove->remove_product() ) {
-          Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+          // Remove
+          if( $product_remove->remove_product() ) {
+            Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+          }else {
+            Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+          }
         }else {
-          Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
         }
       }
 
@@ -320,11 +333,11 @@ echo '<div class="checkout">';
             echo  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
             echo  '<td>';
               // color
-              if(User::w_access_allowed($page, $current_user)) {
-                  echo  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-                  echo  '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+              if( $write_access === true ) {
+                  echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                  echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
               }else {
-                echo  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
               }
             echo  '</td>';
           echo  '</tr>';
@@ -352,8 +365,8 @@ echo '<div class="checkout">';
 
       echo  '</table>';
 
-      if(User::w_access_allowed($page, $current_user)) {
-        echo  '<a class="add" href="' . $url_page . '&add=product">
+      if( $write_access === true ) {
+        echo  '<a class="add" href="' . $url_page . '&checkout=' . $checkout->cashier . '&add=product">
           <span class="horizontal"></span>
           <span class="vertical"></span>
         </a>';

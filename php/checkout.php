@@ -34,7 +34,7 @@
  *
  * Checkout->remove_access ( $user [int] ) [$cashier]
  *
- * Checkout->access ( $user [int or null], $offset [int], $steps [int] ) [$cashier]
+ * Checkout->access ( $user [int or null] ) [$cashier]
  *
  * Checkout->accessable ( $user [string] )
  *
@@ -456,7 +456,7 @@ class Checkout {
    *
    * $user = User Id or null (Lists all user with access to this checkout)
    */
-  public function access( $user = null, $offset = 0, $steps = 20 ) {
+  public function access( $user = null ) {
     //Get database connection
     $conn = Access::connect();
 
