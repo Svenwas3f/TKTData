@@ -113,11 +113,11 @@ class Ticket {
       $tickets->execute();
     }else {
       // Select all
-      $conn->prepare("SELECT * FROM " . TICKETS . " WHERE ticketKey =:ticketKey1 OR ticketKey =:ticketKey2 AND groupID =:gid OR groupID LIKE :groupID OR coupon LIKE :coupon OR email LIKE :email OR custom LIKE :custom ORDER BY purchase_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+      $tickets = $conn->prepare("SELECT * FROM " . TICKETS . " WHERE ticketKey =:ticketKey1 OR (ticketKey =:ticketKey2 AND groupID =:gid) OR groupID LIKE :groupID OR coupon LIKE :coupon OR email LIKE :email OR custom LIKE :custom ORDER BY purchase_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
       $tickets->execute(array(
         ":ticketKey1" => $search_value,
-        ":ticketKey2" => $ticket->cryptToken()["ticketKey"],
-        ":gid" => $ticket->cryptToken()["gid"],
+        ":ticketKey2" => explode(",", Crypt::decrypt( $search_value ))[1] ?? null,
+        ":gid" => explode(",", Crypt::decrypt( $search_value ))[0] ?? null,
         ":groupID" => "%" . $search_value . "%",
         ":coupon" => "%" . $search_value . "%",
         ":email" => "%" . $search_value . "%",
