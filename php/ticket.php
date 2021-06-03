@@ -20,6 +20,8 @@
  *
  * Ticket->encryptTicketToken($group [GroupID], $ticketKey [Key of ticket]) {static function}
  *
+ * Ticket->all ( $offset [int], $steps [int], $search_value [info_string] )
+ *
  * Ticket->sendTicket( $to [recipient mail adress] ) [$ticketToken]
  *
  * Ticket->requestPayment ( $to [recipient mail adress] ) [$ticketToken]
