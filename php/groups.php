@@ -336,7 +336,7 @@ class Group {
       $change = array(
         "user" => $current_user,
         "message" => "Updated Group #" . $this->groupID ." [" . $group_page . "]",
-        "table" => "TICKET_GROUP",
+        "table" => "TICKETS_GROUPS",
         "function" => "UPDATE",
         "primary_key" => array("key" => "groupID", "value" => $this->groupID),
         "old" => $old_values,
