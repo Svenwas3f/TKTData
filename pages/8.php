@@ -342,7 +342,7 @@ class GroupCustomizer extends Group {
         $html .= '</label>';
         //logo
         $html .= '<span class="file-info">Logo</span>';
-        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_logo_fileID\' )"' ) . '>';
+        $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_logo_fileID\' )"' ) . '>';
           // Display preview image if possible
           if( isset($values["ticket_logo_fileID"]) &&! empty($values["ticket_logo_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_logo_fileID" value="' . $values["ticket_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -355,7 +355,7 @@ class GroupCustomizer extends Group {
 
         //Advert 1
         $html .= '<span class="file-info">Advert 1 <abbr title="' . $advertInfo . '">(453px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert1_fileID\' )"' ) . '>';
+        $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert1_fileID\' )"' ) . '>';
           // Display preview image if possible
           if( isset($values["ticket_advert1_fileID"]) &&! empty($values["ticket_advert1_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert1_fileID" value="' . $values["ticket_advert1_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -368,7 +368,7 @@ class GroupCustomizer extends Group {
 
         //Advert 2
         $html .= '<span class="file-info">Advert 2 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert2_fileID\' )"' ) . '>';
+        $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert2_fileID\' )"' ) . '>';
           // Display preview image if possible
           if( isset($values["ticket_advert2_fileID"]) &&! empty($values["ticket_advert2_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert2_fileID" value="' . $values["ticket_advert2_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -381,7 +381,7 @@ class GroupCustomizer extends Group {
 
         //Advert 3
         $html .= '<span class="file-info">Advert 3 <abbr title="' . $advertInfo . '">(754px &#x00D7; 343px)</abbr></span>';
-        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert3_fileID\' )"' ) . '>';
+        $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'ticket_advert3_fileID\' )"' ) . '>';
           // Display preview image if possible
           if( isset($values["ticket_advert3_fileID"]) &&! empty($values["ticket_advert3_fileID"]) ) {
             $html .= '<input type="hidden" name="ticket_advert3_fileID" value="' . $values["ticket_advert3_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -401,7 +401,9 @@ class GroupCustomizer extends Group {
       $ticketToken = Ticket::encryptTicketToken( $this->groupID, "demo");
 
       $html .= '<div class="ticket-preview">';
-        $html .= '<div class="ticket-preview-info-box">&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.</div>';
+        if( $disabled != "disabled") {
+          $html .= '<div class="ticket-preview-info-box">&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.</div>';
+        }
         $html .= '<iframe src="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '">Loading preview</iframe>';
       $html .= '</div>';
     $html .= '</div>';
@@ -432,7 +434,7 @@ class GroupCustomizer extends Group {
       $html .= '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*" class="form-50 box-width">';
         //logo
         $html .= '<span class="file-info">Banner</span>';
-        $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'mail_banner_fileID\' )"' ) . '>';
+        $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'mail_banner_fileID\' )"' ) . '>';
           // Display preview image if possible
           if( isset($groupValues["mail_banner_fileID"]) &&! empty($groupValues["mail_banner_fileID"]) ) {
             $html .= '<input type="hidden" name="mail_banner_fileID" value="' . $groupValues["mail_banner_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -459,7 +461,7 @@ class GroupCustomizer extends Group {
           $html .= '<span class="placeholder">Betref</span>';
         $html .= '</label>';
         //Buttons for message
-        $html .= '<div class="btn-msg-container" onclick="mailAppendVal(event)">';
+        $html .= '<div class="btn-msg-container" ' . ($disabled == "disabled" ? "" : 'onclick="mailAppendVal(event)"') . '>';
           $html .= '<span>E-Mail</span>';
           $html .= '<span>Ticket</span>';
           if(! empty(json_decode($groupValues["custom"], true))) {
@@ -479,7 +481,9 @@ class GroupCustomizer extends Group {
       $html .= '</form>';
 
       $html .= '<div class="ticket-preview">';
-        $html .= '<div class="ticket-preview-info-box">&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.</div>';
+        if( $disabled != "disabled") {
+          $html .= '<div class="ticket-preview-info-box">&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.</div>';
+        }
         $html .= '<div class="email-header">';
           //Get initials
           if(empty($groupValues["mail_displayName"])) {
@@ -581,11 +585,16 @@ class GroupCustomizer extends Group {
       $html .= '<p>Zahlungsanforderungs-Mail</p>';
       $html .= 'Diese Nachricht wird im Mail bei einer Zahlungsanforderung erscheinen. Beachte, dass bei Vorkasse oder Rechnung der Zahlungslink nicht erscheinen wird . ';
       $html .= '<div class="btn-msg-container">';
-        $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%E-Mail%\';">E-Mail</span>';
-        $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%Pay-Link%\';">Zahlungslink</span>';
+        if( $disabled == "disabled") {
+          $html .= '<span>E-Mail</span>';
+          $html .= '<span>Zahlungslink</span>';
+        }else {
+          $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%E-Mail%\';">E-Mail</span>';
+          $html .= '<span onclick="document.getElementsByName(\'payment_mail_msg\')[0].value += \'%Pay-Link%\';">Zahlungslink</span>';
+        }
       $html .= '</div>';
       $html .= '<label class="txt-input">';
-        $html .= '<textarea name="payment_mail_msg" rows="4">' . str_replace("<br />", "", $groupValues["payment_mail_msg"]) . '</textarea>';
+        $html .= '<textarea name="payment_mail_msg" rows="4" ' . $disabled . '>' . str_replace("<br />", "", $groupValues["payment_mail_msg"]) . '</textarea>';
         $html .= '<span class="placeholder">Nachricht</span>';
       $html .= '</label>';
 
@@ -611,13 +620,13 @@ class GroupCustomizer extends Group {
 
       //store available
       $html .= '<label class="checkbox">';
-        $html .= '<input type="checkbox" name="payment_store" value="true" ' . (($groupValues["payment_store"] === 1) ? "checked" : '')  . '>';
+        $html .= '<input type="checkbox" name="payment_store" value="true" ' . $disabled . ' ' . (($groupValues["payment_store"] === 1) ? "checked" : '')  . '>';
         $html .= '<div class="checkbox-btn" title="Dieses Ticket im Store verkaufen"></div>Im Store anzeigen';
       $html .= '</label>';
 
       //Logo
       $html .= '<span class="file-info">Logo</span>';
-      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_logo_fileID\' )"' ) . '>';
+      $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_logo_fileID\' )"' ) . '>';
         // Display preview image if possible
         if( isset($groupValues["payment_logo_fileID"]) &&! empty($groupValues["payment_logo_fileID"]) ) {
           $html .= '<input type="hidden" name="payment_logo_fileID" value="' . $groupValues["payment_logo_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -631,7 +640,7 @@ class GroupCustomizer extends Group {
 
       //background
       $html .= '<span class="file-info">Hintergrundbild</span>';
-      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_background_fileID\' )"' ) . '>';
+      $html .= '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'payment_background_fileID\' )"' ) . '>';
         // Display preview image if possible
         if( isset($groupValues["payment_background_fileID"]) &&! empty($groupValues["payment_background_fileID"]) ) {
           $html .= '<input type="hidden" name="payment_background_fileID" value="' . $groupValues["payment_background_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -719,6 +728,11 @@ class GroupCustomizer extends Group {
     //Require variables
     global $url;
     global $url_page;
+    global $page;
+    global $current_user;
+
+    //Define disabled
+    $disabled = (User::w_access_allowed($page, $current_user)) ? "" : "disabled";
 
     //refresh secret key action
     if(isset($_GET["refresh"])) {
@@ -735,7 +749,11 @@ class GroupCustomizer extends Group {
       //Secret key
       $html .= '<label class="txt-input">';
         $html .= '<input type="text" value="' . Crypt::decrypt($this->values()["sdk_secret_key"]) . '"/>';
-        $html .= '<a class="refresh" href="' . $url_page . '&view=' . $_GET["view"] . '&selection=' . $_GET["selection"] . '&refresh"><img src="' . $url . 'medias/icons/restore.svg"/></a>';
+        if( $disabled == "disabled") {
+          $html .= '<a class="refresh disabled"><img src="' . $url . 'medias/icons/restore.svg"/></a>';
+        }else {
+          $html .= '<a class="refresh" href="' . $url_page . '&view=' . $_GET["view"] . '&selection=' . $_GET["selection"] . '&refresh"><img src="' . $url . 'medias/icons/restore.svg"/></a>';
+        }
       $html .= '</label>';
 
       //Notice

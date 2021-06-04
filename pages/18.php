@@ -145,11 +145,11 @@ function single_checkout ( $checkout_id ) {
                   title="' . $user["id"] . ' hat' . ($checkout_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($checkout_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
                 $html .= '</td>';
               }elseif( User::r_access_allowed($page, $current_user) ){
-                //Current user can edit and delete user
+                //Current user can not edit and delete user
                 $write_access = $checkout->access( $user["id"] )["w"] ?? false;
                 $checkout_access = $checkout->access( $user["id"] )["r"] ?? false;
 
-                $html .= '<td style="width: auto;">';
+                $html .= '<td style="width: auto;" class="disabled">';
                   $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Kasse">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
                   $html .= '<a title="' . $user["id"] . ' hat' . ($checkout_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($checkout_access ? "toggleCheckoutRights2.svg" : "toggleCheckoutRights1.svg") . '" /></a>';
                 $html .= '</td>';
@@ -189,7 +189,7 @@ function single_checkout ( $checkout_id ) {
           $html .=  '<div class="box">';
             $html .=  '<p>Kassenname</p>';
             $html .=  '<label class="txt-input">';
-              $html .=  '<input type="text" name="name" value="' . $checkout->values()["name"] . '"/>';
+              $html .=  '<input type="text" name="name" value="' . $checkout->values()["name"] . '" ' . $disabled .'/>';
               $html .=  '<span class="placeholder">Kassenname</span>';
             $html .=  '</label>';
           $html .=  '</div>';
@@ -198,7 +198,7 @@ function single_checkout ( $checkout_id ) {
           $html .=  '<div class="box">';
             $html .=  '<p>Bilder</p>';
             $html .= '<span class="file-info">Logo</span>';
-            $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
+            $html .= '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
               // Display preview image if possible
               if( isset($checkout->values()["logo_fileID"]) &&! empty($checkout->values()["logo_fileID"]) ) {
                 $html .= '<input type="hidden" name="logo_fileID" value="' . $checkout->values()["logo_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -211,7 +211,7 @@ function single_checkout ( $checkout_id ) {
             $html .= '</label>';
 
             $html .= '<span class="file-info">Hintergrundbild</span>';
-            $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
+            $html .= '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
               // Display preview image if possible
               if( isset($checkout->values()["background_fileID"]) &&! empty($checkout->values()["background_fileID"]) ) {
                 $html .= '<input type="hidden" name="background_fileID" value="' . $checkout->values()["background_fileID"] . '" onchange="MediaHubSelected(this)">';
@@ -243,7 +243,7 @@ function single_checkout ( $checkout_id ) {
           $html .=  '</div>';
 
           //Add submit button
-          $html .=  '<input type="submit" name="update" value="Update"/>';
+          $html .=  '<input type="submit" name="update" value="Update" ' . $disabled .'/>';
 
 
         $html .=  '</form>';
@@ -265,7 +265,7 @@ function display_products ( $search_value = null ) {
 
   // Search form
   $html =  '<form action="' . $url_page . '&list=products" method="post" class="search">';
-    $html .=  '<input type="text" name="s_product" value ="' . (isset(  $_POST["s_products"] ) ? $_POST["s_products"] : "") . '" placeholder="Produktname, Preis">';
+    $html .=  '<input type="text" name="s_product" value ="' . (isset(  $_POST["s_product"] ) ? $_POST["s_product"] : "") . '" placeholder="Produktname, Preis">';
     $html .=  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
   $html .=  '</form>';
 
@@ -318,7 +318,7 @@ function display_products ( $search_value = null ) {
         $html .=  '<td>';
           if(User::w_access_allowed($page, $current_user)) {
               $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-              $html .=  '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+              $html .=  '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
           }else {
             $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
           }
@@ -379,7 +379,11 @@ function single_product ( $product_id ) {
 
   $html =  '<div class="checkout">';
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-      $html .=  '<h1>Produkt bearbeten</h1>';
+      if( User::w_access_allowed( $page, $current_user) ) {
+        $html .=  '<h1>Produkt bearbeiten</h1>';
+      }else {
+        $html .=  '<h1>Produkt ansehen</h1>';
+      }
       //Produktname
       $html .=  '<label class="txt-input">';
         $html .=  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
@@ -391,15 +395,17 @@ function single_product ( $product_id ) {
         $html .= '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
         $html .= '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
 
-        $html .= '<div class="options">';
-          foreach( $checkout->sections() as $section ) {
-            $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
-          }
-          $html .= '<span onclick="event.stopPropagation()" class="option_add" >';
-            $html .= '<input type="text"/>';
-            $html .= '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
-          $html .= '</span>';
-        $html .= '</div>';
+        if( User::w_access_allowed( $page, $current_user) ) {
+          $html .= '<div class="options">';
+            foreach( $checkout->sections() as $section ) {
+              $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
+            }
+            $html .= '<span onclick="event.stopPropagation()" class="option_add" >';
+              $html .= '<input type="text"/>';
+              $html .= '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
+            $html .= '</span>';
+          $html .= '</div>';
+        }
       $html .= '</div>';
 
       //Währung
@@ -426,11 +432,13 @@ function single_product ( $product_id ) {
         $html .= '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
         $html .= '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
 
-        $html .= '<div class="options">';
-          $html .= '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
-          $html .= '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
-          $html .= '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
-        $html .= '</div>';
+        if( User::w_access_allowed( $page, $current_user) ) {
+          $html .= '<div class="options">';
+            foreach( $availability as $key=>$name ) {
+              $html .= '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
+            }
+          $html .= '</div>';
+        }
       $html .= '</div>';
 
 

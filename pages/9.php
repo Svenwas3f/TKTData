@@ -54,7 +54,6 @@ function display_coupons( $search_value = null ){
       }elseif( User::r_access_allowed($page, $current_user) ){
         $html .= '<td style="width: auto;">
                     <a href="' . $url_page . '&view=' . $coupon["couponID"] . '" title="Coupondetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
-                    <a href="' . $url . 'pdf/ticket/?ticketToken=' . $coupon["couponID"] . '" target="_blank" title="PDF öffnen"><img src="' . $url . '/medias/icons/pdf.svg" /></a>
                   </td>';
       }
     $html .= '</tr>'; //End row
@@ -96,7 +95,7 @@ function single_coupon() {
   global $url;
 
   //Get disabled
-  $disabled = (! User::r_access_allowed($page, $current_user)) ? "disabled":"";
+  $disabled = (! User::w_access_allowed($page, $current_user)) ? "disabled":"";
 
   //Get coupon
   $coupon = new Coupon();

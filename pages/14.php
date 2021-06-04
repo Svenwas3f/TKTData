@@ -39,7 +39,7 @@ echo '</div>';
 //Export button
 if(! is_null($archive_timestamp)) {
   echo '<a href="' . $url . 'medias/files/livedata/export.php?archive_timestamp=' . urlencode($archive_timestamp) . '" class="export-button">';
-    echo 'Export';
+    echo '<img src="' . $url . 'medias/icons/export.svg" title="Exportieren">';
   echo '</a>';
 }
 
@@ -143,13 +143,13 @@ if(screen.width < 700) {
   chartHistoryDown.canvas.parentNode.style.width = 'calc(100vw - 250px)';
   chartHistoryDown.canvas.parentNode.style.float = 'left';
 }else {
-  chartHistory.canvas.parentNode.style.height = '50vh';
+  chartHistory.canvas.parentNode.style.height = '40vh';
   chartHistory.canvas.parentNode.style.width = 'calc(50vw - 134px)';
   chartHistory.canvas.parentNode.style.float = 'left';
-  chartHistoryUp.canvas.parentNode.style.height = '50vh';
+  chartHistoryUp.canvas.parentNode.style.height = '40vh';
   chartHistoryUp.canvas.parentNode.style.width = 'calc(50vw - 134px)';
   chartHistoryUp.canvas.parentNode.style.float = 'left';
-  chartHistoryDown.canvas.parentNode.style.height = '50vh';
+  chartHistoryDown.canvas.parentNode.style.height = '40vh';
   chartHistoryDown.canvas.parentNode.style.width = 'calc(50vw - 134px)';
   chartHistoryDown.canvas.parentNode.style.float = 'left';
 }

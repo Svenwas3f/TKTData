@@ -6,8 +6,17 @@ if(isset($_GET["archive"])) { //Display confirmation
   Action::confirm("Möchten Sie den aktuellen Stand tatsächlich archivieren?");
 }
 
-if(isset($_POST) && isset($_POST["confirm"])) { //Confirm if required
-  Livedata::archive();
+// Archive if required
+if(isset($_POST["confirm"])) {
+  if(User::w_access_allowed($page, $current_user)) {
+    if(Livedata::archive()) {
+      Action::success("Ihre Daten wurden erfolgreich archiviert");
+    }else {
+      Action::fail("Es ist ein Fehler beim archivieren Ihrer Daten aufgetreten");
+    }
+  }else {
+    Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+  }
 }
  ?>
 <div class="livedata-live-info">
@@ -33,7 +42,11 @@ if(isset($_POST) && isset($_POST["confirm"])) { //Confirm if required
     <span class="content"><img src="<?php echo $arrow_url; ?>" class="content-trend-img"></span>
   </div>
 
-  <a class="archive-button" href="<?php echo $url_page; ?>&archive">Archive</a>
+  <?php
+  if(User::w_access_allowed($page, $current_user)) {
+    echo '<a class="archive-button" href="' . $url_page . '&archive">Archive</a>';
+  }
+  ?>
 </div>
 
 

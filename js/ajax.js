@@ -316,7 +316,6 @@ function checkout_add_right( link, user, checkout, type = "r" ) {
     try {
       // Get json
       var ajax_response = JSON.parse(c.responseText);
-      console.log(ajax_response);
 
       // Add values
       var td = link.parentNode;
@@ -348,7 +347,6 @@ function checkout_remove_right( link, user, checkout, type = "r" ) {
     try {
       // Get json
       var ajax_response = JSON.parse(c.responseText);
-      console.log(ajax_response);
 
       // Add values
       var td = link.parentNode;

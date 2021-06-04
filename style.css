@@ -608,6 +608,10 @@ label.txt-input span.unit, label.txt-input a.refresh {
   background-color: white;
 }
 
+label.txt-input span.unit, label.txt-input a.refresh.disabled {
+  cursor: not-allowed !important;
+}
+
 label.txt-input a.refresh img {
   height: 12pt;
 }
@@ -657,6 +661,10 @@ label.checkbox input:checked+div::before {
   transform: rotate(45deg);
 }
 
+label.checkbox input:disabled+div {
+  cursor: not-allowed !important;
+}
+
 label.radio {
   display: flex;
   position: relative;
@@ -686,6 +694,10 @@ label.radio input:checked+div:before {
   width: 18px;
   border: 2px solid var(--maincolor);
   border-radius: 50%;
+}
+
+label.radio input:disabled+div {
+  cursor: not-allowed !important;
 }
 
 .select {
@@ -773,6 +785,10 @@ label.file-input {
   cursor: pointer;
   transition: 0.5s;
   -webkit-transition: 0.5s;
+}
+
+label.file-input.disabled {
+  cursor: not-allowed !important;
 }
 
 label.file-input:hover {
@@ -1485,6 +1501,36 @@ form.search button img {
   box-shadow: 0px 0px 10px var(--custom-gray7);
 }
 
+.mainpage-1.subpage-7 .top-bar-ticket.payment-and-used {
+  background-color: var(--ticket-payment-and-used) !important;
+  color: black !important;
+}
+
+.mainpage-1.subpage-7 .top-bar-ticket.blocked-and-payment {
+  background-color: var(--ticket-blocked-and-payment) !important;
+  color: black !important;
+}
+
+.mainpage-1.subpage-7 .top-bar-ticket.payment-expected {
+  background-color: var(--ticket-payment-expected) !important;
+  color: white !important;
+}
+
+.mainpage-1.subpage-7 .top-bar-ticket.payment-expected img {
+  filter: brightness(0) invert(1);
+  /*Move images to white*/
+}
+
+.mainpage-1.subpage-7 .top-bar-ticket.used {
+  background-color: var(--ticket-used) !important;
+  color: black !important;
+}
+
+.mainpage-1.subpage-7 .top-bar-ticket.blocked {
+  background-color: var(--ticket-blocked) !important;
+  color: black !important;
+}
+
 .mainpage-1.subpage-7 .ticket-payment-date {
   display: block;
   padding: 8px 0px 4px 0px;
@@ -2102,18 +2148,30 @@ form.search button img {
   bottom: 10px;
   right: 10px;
   display: block;
-  background-color: var(--maincolor);
-  font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
-  text-decoration: none;
-  color: white;
-  padding: 22.5px 10px;
-  border-radius: 50%;
-  box-shadow: 0px 0px 5px white;
+  height: 40px;
+  width: 40px;
+  background-image: radial-gradient(var(--darkernavy), var(--maincolor));
+  box-shadow: 0px 0px 5px var(--lighternavy);
   cursor: pointer;
   transition: 0.5s;
   -webkit-transition: 0.5s;
 }
+
+.mainpage-4.subpage-14 .export-button:hover {
+  transform: rotate(90deg);
+}
+
+.mainpage-4.subpage-14 .export-button img {
+  height: 50%;
+  margin: 25%;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+}
+
+.mainpage-4.subpage-14 .export-button:hover img {
+  transform: rotate(-90deg);
+}
+
 
 .mainpage-4.subpage-13 .export-button:hover {
   transform: scale(1.1);
@@ -2216,10 +2274,10 @@ form.search button img {
   -webkit-transition: 0.5s;
 }
 
-.mainpage-4.subpage-15 .archive-button:hover {
-  background-color: var(--custom-navy3);
+.mainpage-4.subpage-15 .livedata-button.disabled {
+  cursor: not-allowed !important;
+  background-color: var(--lightgray);
 }
-
 
 @media screen and (max-width: 700px) {
   .mainpage-4.subpage-15 .livedata-button {
@@ -2400,6 +2458,27 @@ form.search button img {
   width: 10pt;
   border-radius: 10px;
   margin: 0px 5px;
+}
+
+.mainpage-5.subpage-17 .checkout tr.global_product {
+  color: var(--lightnavy)
+}
+
+.mainpage-5.subpage-17 .checkout tr.global_product .color {
+  opacity: 0.75;
+}
+
+.mainpage-5.subpage-17 .checkout .banner-global-product {
+  background-color: var(--info-bar-orange);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px 20px;
+  font-size: 10pt;
+}
+
+.mainpage-5.subpage-18 td.disabled a img {
+  opacity: 0.2;
+  cursor: not-allowed !important;
 }
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*

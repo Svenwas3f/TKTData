@@ -26,7 +26,7 @@ $disabled = ($write_access === true ? "" : "disabled");
 
 // Message if user has no access to this checkout
 if( $write_access === false && $read_access === false ) {
-  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $checkout->cashier . ") <strong>"  . $checkout->values()['name'] ."</strong>");
+  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $checkout->cashier . ") <strong>"  . $checkout->values()['name'] ."</strong>", "Zurück", $url_page);
   return;
 }
 
@@ -175,89 +175,157 @@ echo '<div class="checkout">';
         }
       }
 
-      // Generate html
-      echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-        echo  '<h1>Produkt bearbeten</h1>';
-        //Produktname
-        echo  '<label class="txt-input">';
-          echo  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
-          echo  '<span class="placeholder">Kassenname</span>';
-        echo  '</label>';
-
-        // Section
-        echo '<div class="select" onclick="toggleOptions(this)">';
-          echo '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
-          echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
-
+      // Check if product is accessable
+      if( $checkout->product()["checkout_id"] == $checkout->cashier ) {
+        // Generate html
+        echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
           if( $write_access === true ) {
-            echo '<div class="options">';
-              foreach( $checkout->sections() as $section ) {
-                echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
-              }
-              echo '<span onclick="event.stopPropagation()" class="option_add" >';
-                echo '<input type="text"/>';
-                echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
-              echo '</span>';
-            echo '</div>';
+            echo  '<h1>Produkt bearbeten</h1>';
+          }else {
+            echo  '<h1>Produkt ansehen</h1>';
           }
 
-        echo '</div>';
+          //Produktname
+          echo  '<label class="txt-input">';
+            echo  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
+            echo  '<span class="placeholder">Kassenname</span>';
+          echo  '</label>';
 
-        //Währung
-        echo  '<label class="txt-input">';
-          echo  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
-          echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-        echo  '</label>';
-
-        //Preis
-        echo  '<label class="txt-input">';
-          echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
-          echo  '<span class="placeholder">Preis</span>';
-          echo  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
-        echo  '</label>';
-
-        // Status
-        $availability = array(
-          0 => "Verfügbar",
-          1 => "Wenige verfügbar",
-          2 => "Ausverkauft"
-        );
-
-        echo '<div class="select" onclick="toggleOptions(this)">';
-          echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
-          echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
-
+          // Section
+          echo '<div class="select" onclick="toggleOptions(this)">';
+            echo '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
+            echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
 
             if( $write_access === true ) {
               echo '<div class="options">';
-                foreach( $availability as $key=>$name ) {
-                  echo '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
+                foreach( $checkout->sections() as $section ) {
+                  echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
                 }
+                echo '<span onclick="event.stopPropagation()" class="option_add" >';
+                  echo '<input type="text"/>';
+                  echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
+                echo '</span>';
               echo '</div>';
             }
+
+          echo '</div>';
+
+          //Währung
+          echo  '<label class="txt-input">';
+            echo  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
+            echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+          echo  '</label>';
+
+          //Preis
+          echo  '<label class="txt-input">';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
+            echo  '<span class="placeholder">Preis</span>';
+            echo  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+          echo  '</label>';
+
+          // Status
+          $availability = array(
+            0 => "Verfügbar",
+            1 => "Wenige verfügbar",
+            2 => "Ausverkauft"
+          );
+
+          echo '<div class="select" onclick="toggleOptions(this)">';
+            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
+            echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
+
+
+              if( $write_access === true ) {
+                echo '<div class="options">';
+                  foreach( $availability as $key=>$name ) {
+                    echo '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
+                  }
+                echo '</div>';
+              }
+          echo '</div>';
+
+
+          // Produktbild
+          echo '<span class="file-info">Produktbild</span>';
+          echo '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
+            // Display preview image if possible
+            if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
+              echo '<input type="hidden" name="product_fileID" value="' . $checkout->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
+            }else {
+              echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
+            }
+            echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+          echo '</label>';
+
+          //Add submit button
+          if( $disabled != "disabled" ) {
+            echo  '<input type="submit" name="update" value="Update"/>';
+          }
+
+          //Close form
+        echo  '</form>';
+      } elseif ( is_null($checkout->product()["checkout_id"]) ) {
+        // Banner global product
+        echo '<div class="banner-global-product">';
+          echo '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden';
         echo '</div>';
 
+        echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+          echo  '<h1>Produkt ansehen</h1>';
+          //Produktname
+          echo  '<label class="txt-input">';
+            echo  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" disabled required/>';
+            echo  '<span class="placeholder">Kassenname</span>';
+          echo  '</label>';
 
-        // Produktbild
-        echo '<span class="file-info">Produktbild</span>';
-        echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
-          // Display preview image if possible
-          if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
-            echo '<input type="hidden" name="product_fileID" value="' . $checkout->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
-            echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
-          }else {
-            echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
-          }
-          echo '<div class="draganddrop">Klicken um auszuwählen</div>';
-        echo '</label>';
+          // Section
+          echo '<div class="select">';
+            echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
+          echo '</div>';
 
-        //Add submit button
-        if( $disabled != "disabled" ) {
-          echo  '<input type="submit" name="update" value="Update"/>';
-        }
+          //Währung
+          echo  '<label class="txt-input">';
+            echo  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" min="3" max="3" disabled required/>';
+            echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+          echo  '</label>';
 
-        //Close form
-      echo  '</form>';
+          //Preis
+          echo  '<label class="txt-input">';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" disabled required/>';
+            echo  '<span class="placeholder">Preis</span>';
+            echo  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+          echo  '</label>';
+
+          // Status
+          $availability = array(
+            0 => "Verfügbar",
+            1 => "Wenige verfügbar",
+            2 => "Ausverkauft"
+          );
+
+          echo '<div class="select">';
+            echo '<input type="text" class="selectValue" name="availability" disabled required>';
+            echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
+          echo '</div>';
+
+
+          // Produktbild
+          echo '<span class="file-info">Produktbild</span>';
+          echo '<label class="file-input disabled">';
+            // Display preview image if possible
+            if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
+            }
+            echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+          echo '</label>';
+
+
+          //Close form
+        echo  '</form>';
+      } else {
+        Action::fs_info("Du hast keinen Zugriff auf das Produkt (#" . $checkout->product_id . ") " .  $checkout->product()["name"]);
+      }
     break;
     default:
       // Check if we need to remove product
@@ -280,8 +348,8 @@ echo '<div class="checkout">';
       }
 
       // List all products
-      echo '<form action="' . $url_page . '" method="post" class="search">';
-        echo  '<input type="text" name="s_product" value ="' . (isset(  $_POST["s_products"] ) ? $_POST["s_products"] : "") . '" placeholder="Produktname, Preis">';
+      echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="search">';
+        echo  '<input type="text" name="s_product" value ="' . ($_POST["s_product"] ?? "") . '" placeholder="Produktname, Preis">';
         echo  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
       echo  '</form>';
 
@@ -327,26 +395,39 @@ echo '<div class="checkout">';
         $steps = 20;
         $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-        foreach( $checkout->products( $offset, $steps,null ) as $products ) {
-          echo  '<tr>';
-            echo  '<td><div class="color" style="background-color: ' . $availability[($products["availability"] ?? 0)]["color"] . ';" title="' . $availability[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
-            echo  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
-            echo  '<td>';
-              // color
-              if( $write_access === true ) {
-                  echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-                  echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&remove_product=' . urlencode( $products["id"] ) . '" title="Prdukt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-              }else {
-                echo  '<a href="' . $url_page . '&checkout=' . $checkout->cashier . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
-              }
-            echo  '</td>';
-          echo  '</tr>';
+        // List general products
+        foreach( $checkout->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
+          // Check if global product
+          if( is_null($product["checkout_id"]) ) {
+            // Global product
+            echo  '<tr class="global_product" title="Globales Produkt">';
+              echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+              echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+              echo  '<td>';
+                echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+              echo  '</td>';
+            echo  '</tr>';
+          }else {
+            // Product of checkout
+            echo  '<tr>';
+              echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+              echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+              echo  '<td>';
+                if( $write_access === true ) {
+                    echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                    echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                }else {
+                  echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                }
+              echo  '</td>';
+            echo  '</tr>';
+          }
         }
 
         // Menu requred
         echo  '<tr class="nav">';
 
-          if( (count($checkout->products( ($offset + $steps), 1, null )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+          if( (count($checkout->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
@@ -355,7 +436,7 @@ echo '<div class="checkout">';
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                       </td>';
-          }elseif (count($checkout->products( ($offset + $steps), 1 )) > 0) { // More pages accessable
+          }elseif (count($checkout->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';

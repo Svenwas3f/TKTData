@@ -175,7 +175,7 @@ switch($_POST["p"]) {
         }
       break;
       case "get_fullscreen_info":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(11, $current_user)) {
           $ticket = new Ticket();
           $ticket->ticketToken = json_decode($_POST["values"], true)["ticketToken"];
 
@@ -264,7 +264,7 @@ switch($_POST["p"]) {
         }
       break;
       case "employ_ticket":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(11, $current_user)) {
           $scann = new Scanner();
           $scann->ticketToken = json_decode($_POST["values"], true)["ticketToken"];
 
@@ -291,7 +291,7 @@ switch($_POST["p"]) {
   case 15:
     switch($_POST["action"]) {
       case "up":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(15, $current_user)) {
           if(! Livedata::up()) {
             Action::fail("Es konnte nicht hochgezählt werden.");
           }
@@ -300,7 +300,7 @@ switch($_POST["p"]) {
         }
       break;
       case "down":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(15, $current_user)) {
           if(! Livedata::down()) {
             Action::fail("Es konnte nicht heruntergezählt werden.");
           }
@@ -309,7 +309,7 @@ switch($_POST["p"]) {
         }
       break;
       case "trend":
-        if(User::r_access_allowed($page, $current_user)) {
+        if(User::r_access_allowed(15, $current_user)) {
           switch(Livedata::trend()) {
             case 0:
               echo $url . "medias/icons/arrow_up.svg";
@@ -324,12 +324,12 @@ switch($_POST["p"]) {
         }
       break;
       case "visitors":
-        if(User::r_access_allowed($page, $current_user)) {
+        if(User::r_access_allowed(15, $current_user)) {
           echo Livedata::visitors();
         }
       break;
       case "history":
-        if(User::r_access_allowed($page, $current_user)) {
+        if(User::r_access_allowed(15, $current_user)) {
           //Set max and min
           $max = Livedata::live_time()["max"];
           $min = Livedata::live_time()["min"];
@@ -339,7 +339,7 @@ switch($_POST["p"]) {
         }
       break;
       case "historyUp":
-        if(User::r_access_allowed($page, $current_user)) {
+        if(User::r_access_allowed(15, $current_user)) {
           //Set max and min
           $max = Livedata::live_time()["max"];
           $min = Livedata::live_time()["min"];
@@ -349,7 +349,7 @@ switch($_POST["p"]) {
         }
       break;
       case "historyDown":
-        if(User::r_access_allowed($page, $current_user)) {
+        if(User::r_access_allowed(15, $current_user)) {
           //Set max and min
           $max = Livedata::live_time()["max"];
           $min = Livedata::live_time()["min"];
@@ -367,7 +367,7 @@ switch($_POST["p"]) {
   case 19:
     switch($_POST["action"]) {
       case "add_right":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(19, $current_user)) {
           // Set values
           $values = json_decode( $_POST["values"], true );
 
@@ -447,7 +447,7 @@ switch($_POST["p"]) {
         }
       break;
       case "remove_right":
-        if(User::w_access_allowed($page, $current_user)) {
+        if(User::w_access_allowed(19, $current_user)) {
           // Set values
           $values = json_decode( $_POST["values"], true );
 
