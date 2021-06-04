@@ -174,7 +174,7 @@ function scanner_request_update_infoTxt(ele) {
 function scanner_cancel_ticket(video = false) {
   document.getElementsByClassName('scann-result-container')[0].remove();
 
-  if (video === true) {
+  if (video == true) {
     tick(); //Search for new qr-code
     document.getElementsByTagName('canvas')[0].style.display = 'block'; //Display canva video
   }
