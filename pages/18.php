@@ -376,7 +376,7 @@ function single_product ( $product_id ) {
   $write = User::w_access_allowed( $page, $current_user );
   $disabled = ($write === true ? "" : "disabled");
 
-
+  // Start html
   $html =  '<div class="checkout">';
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
       if( User::w_access_allowed( $page, $current_user) ) {
