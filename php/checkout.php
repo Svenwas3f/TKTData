@@ -34,13 +34,13 @@
  *
  * Checkout->remove_access ( $user [int] ) [$cashier]
  *
- * Checkout->access ( $user [int or null] ) [$cashier]
+ * Checkout->access ( $user [int or null], $offset [int], $steps [int] ) [$cashier]
  *
  * Checkout->accessable ( $user [string] )
  *
  * Checkout->product () [$product_id]
  *
- * Checkout->products ( $offset [int], $steps [int], $search_value [info_string] ) [$cashier]
+ * Checkout->products ( $offset [int], $steps [int], $search_value [info_string], $include_globals [boolean] ) [$cashier]
  *
  * Checkout->sections () [$cashier]
  *
@@ -455,8 +455,10 @@ class Checkout {
    * requires: $cashier
    *
    * $user = User Id or null (Lists all user with access to this checkout)
+   * $offset: at what row you want to start
+   * $steps: How many rows
    */
-  public function access( $user = null ) {
+  public function access( $user = null, $offset = 0, $steps = 20 ) {
     //Get database connection
     $conn = Access::connect();
 
@@ -527,29 +529,39 @@ class Checkout {
    * $limit: How many rows
    * $offset: Start row
    * $search_value: Search string
+   * $include_globals: Set to true if you want to display the global products aswell
    */
-  public function products( $offset = 0, $steps = 20, $search_value = null ) {
+  public function products( $offset = 0, $steps = 20, $search_value = null, $include_globals = false ) {
     //Get database connection
     $conn = Access::connect();
 
+    // Prepare global products
+    $global_products = ($include_globals ? " OR checkout_id IS NULL" : "");
+
     if( is_null($search_value) || empty($search_value) ) {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id " . $global_products . " ORDER BY checkout_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
       $products->execute(array(
         "checkout_id" => $this->cashier,
       ));
     }else {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id AND (name=:name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE (checkout_id=:checkout_id " . $global_products . ") AND (name LIKE :name OR price=:price) ORDER BY checkout_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
+
       $products->execute(array(
         "checkout_id" => $this->cashier,
-        ":name" => $search_value,
-        ":price" => (intval($search_value) * 100),
+        ":name" => "%" . $search_value . "%",
+        ":price" => (floatval($search_value) == 0 ? $search_value : (floatval($search_value) * 100) ),
       ));
     }
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
   }
+
+  // public function all_products( $offset = 0, $steps = 20, $search_value = null ) {
+  //
+  //   $sql = "SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL OR checkout_id=:checkout_id ORDER BY name ASC, section ASC, availability ASC, price DESC";
+  // }
 
   /**
    * Returns array with all section-names
@@ -593,10 +605,10 @@ class Checkout {
       $products->execute();
     }else {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL AND (name=:name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL AND (name LIKE :name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
       $products->execute(array(
-        ":name" => $search_value,
-        ":price" => (intval($search_value) * 100),
+        ":name" => "%" . $search_value . "%",
+        ":price" => (floatval($search_value) == 0 ? $search_value : (floatval($search_value) * 100) ),
       ));
     }
 
