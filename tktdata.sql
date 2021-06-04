@@ -3,6 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+-- Erstellungszeit: 04. Jun 2021 um 22:21
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -29,6 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `tktdata_checkout` (
   `checkout_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `logo_fileID` varchar(32) DEFAULT NULL,
+  `background_fileID` varchar(32) DEFAULT NULL,
   `payment_payrexx_instance` varchar(255) DEFAULT NULL,
   `payment_payrexx_secret` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -57,8 +60,11 @@ CREATE TABLE `tktdata_checkout_products` (
   `id` int(11) NOT NULL,
   `checkout_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `section` varchar(255) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
-  `currency` varchar(3) DEFAULT NULL
+  `currency` varchar(3) DEFAULT NULL,
+  `product_fileID` varchar(32) DEFAULT NULL,
+  `availability` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -85,6 +91,15 @@ CREATE TABLE `tktdata_livedata_live` (
   `liveAction` tinyint(1) DEFAULT NULL,
   `action_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `tktdata_livedata_live`
+--
+
+INSERT INTO `tktdata_livedata_live` (`id`, `liveAction`, `action_timestamp`) VALUES
+(1, 0, '2021-06-04 19:29:19'),
+(2, 1, '2021-06-04 19:29:29'),
+(3, 0, '2021-06-04 19:35:43');
 
 -- --------------------------------------------------------
 
@@ -135,7 +150,7 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (14, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
 (15, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
 (16, 'Übersicht', 5, 'checkout.svg', 1, NULL),
-(17, 'Administration', 5, 'checkout_administration.svg', 2, NULL),
+(17, 'Produkte', 5, 'checkout_products.svg', 2, NULL),
 (18, 'Einstellungen', 5, 'checkout_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
 (20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
@@ -358,31 +373,31 @@ ALTER TABLE `tktdata_user_rights`
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout`
 --
 ALTER TABLE `tktdata_checkout`
-  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
 --
 ALTER TABLE `tktdata_checkout_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=314;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_checkout_products`
 --
 ALTER TABLE `tktdata_checkout_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_archive`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_live`
 --
 ALTER TABLE `tktdata_livedata_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
@@ -406,13 +421,13 @@ ALTER TABLE `tktdata_tickets_groups`
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2015;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2809;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3315;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
