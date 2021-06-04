@@ -24,11 +24,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `tktdata_checkout`
+-- Tabellenstruktur für Tabelle `tktdata_pub`
 --
 
-CREATE TABLE `tktdata_checkout` (
-  `checkout_id` int(11) NOT NULL,
+CREATE TABLE `tktdata_pub` (
+  `pub_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `logo_fileID` varchar(32) DEFAULT NULL,
   `background_fileID` varchar(32) DEFAULT NULL,
@@ -39,12 +39,12 @@ CREATE TABLE `tktdata_checkout` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `tktdata_checkout_access`
+-- Tabellenstruktur für Tabelle `tktdata_pub_access`
 --
 
-CREATE TABLE `tktdata_checkout_access` (
+CREATE TABLE `tktdata_pub_access` (
   `id` int(11) NOT NULL,
-  `checkout_id` int(11) DEFAULT NULL,
+  `pub_id` int(11) DEFAULT NULL,
   `user_id` varchar(255) DEFAULT NULL,
   `w` int(11) NOT NULL DEFAULT 0,
   `r` int(11) NOT NULL DEFAULT 0
@@ -53,12 +53,12 @@ CREATE TABLE `tktdata_checkout_access` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `tktdata_checkout_products`
+-- Tabellenstruktur für Tabelle `tktdata_pub_products`
 --
 
-CREATE TABLE `tktdata_checkout_products` (
+CREATE TABLE `tktdata_pub_products` (
   `id` int(11) NOT NULL,
-  `checkout_id` int(11) DEFAULT NULL,
+  `pub_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `section` varchar(255) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
@@ -149,9 +149,9 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (13, 'Live', 4, 'livedata_live.svg', 1, NULL),
 (14, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
 (15, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
-(16, 'Übersicht', 5, 'checkout.svg', 1, NULL),
-(17, 'Produkte', 5, 'checkout_products.svg', 2, NULL),
-(18, 'Einstellungen', 5, 'checkout_settings.svg', 3, NULL),
+(16, 'Übersicht', 5, 'pub.svg', 1, NULL),
+(17, 'Produkte', 5, 'pub_products.svg', 2, NULL),
+(18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
 (20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
 
@@ -285,21 +285,21 @@ CREATE TABLE `tktdata_user_rights` (
 --
 
 --
--- Indizes für die Tabelle `tktdata_checkout`
+-- Indizes für die Tabelle `tktdata_pub`
 --
-ALTER TABLE `tktdata_checkout`
-  ADD PRIMARY KEY (`checkout_id`);
+ALTER TABLE `tktdata_pub`
+  ADD PRIMARY KEY (`pub_id`);
 
 --
--- Indizes für die Tabelle `tktdata_checkout_access`
+-- Indizes für die Tabelle `tktdata_pub_access`
 --
-ALTER TABLE `tktdata_checkout_access`
+ALTER TABLE `tktdata_pub_access`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `tktdata_checkout_products`
+-- Indizes für die Tabelle `tktdata_pub_products`
 --
-ALTER TABLE `tktdata_checkout_products`
+ALTER TABLE `tktdata_pub_products`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -370,21 +370,21 @@ ALTER TABLE `tktdata_user_rights`
 --
 
 --
--- AUTO_INCREMENT für Tabelle `tktdata_checkout`
+-- AUTO_INCREMENT für Tabelle `tktdata_pub`
 --
-ALTER TABLE `tktdata_checkout`
-  MODIFY `checkout_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `tktdata_pub`
+  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT für Tabelle `tktdata_checkout_access`
+-- AUTO_INCREMENT für Tabelle `tktdata_pub_access`
 --
-ALTER TABLE `tktdata_checkout_access`
+ALTER TABLE `tktdata_pub_access`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
--- AUTO_INCREMENT für Tabelle `tktdata_checkout_products`
+-- AUTO_INCREMENT für Tabelle `tktdata_pub_products`
 --
-ALTER TABLE `tktdata_checkout_products`
+ALTER TABLE `tktdata_pub_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --

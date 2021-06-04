@@ -70,12 +70,12 @@ define('TICKETS_COUPONS', 'tktdata_tickets_coupons');
 define('LIVEDATA', 'tktdata_livedata_live');
 //Livdata Archiv
 define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
-//Checkout
-define('CHECKOUT', 'tktdata_checkout');
-//Checkout price list
-define('CHECKOUT_PRODUCTS', 'tktdata_checkout_products');
-//Checkout access
-define('CHECKOUT_ACCESS', 'tktdata_checkout_access');
+//Pub
+define('PUB', 'tktdata_pub');
+//Pub price list
+define('PUB_PRODUCTS', 'tktdata_pub_products');
+//Pub access
+define('PUB_ACCESS', 'tktdata_pub_access');
 //Media hub
 define('MEDIA_HUB', 'tktdata_mediahub');
 
@@ -140,8 +140,8 @@ require_once( dirname(__FILE__) . "/php/crypt.php" );
 /* Payrexx file */
 require_once( dirname(__FILE__) . "/php/payrexx.php");
 
-/* Checkout file */
-require_once( dirname(__FILE__) . "/php/checkout.php");
+/* pub file */
+require_once( dirname(__FILE__) . "/php/pub.php");
 
 /* Mediahub file */
 require_once( dirname(__FILE__) . "/php/media-hub.php");

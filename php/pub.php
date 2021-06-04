@@ -5,11 +5,11 @@
  * @System: TKTData
  * @Version: 1.0
  * @Published: Mai 2021
- * @Purpose: File to manage cashier ations
+ * @Purpose: File to manage pub ations
  *
  ************* Class Variables *************
  * If a function requires such a variable, you will find a hint in the comments of the function
- * $cashier: checkout Id for cashier
+ * $pub: pub Id for pub
  * $product_id: Id of requested product
  *
  **************** All functions ****************
@@ -18,35 +18,35 @@
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  * All functions can be used as Static
  *
- * Checkout->all ( $offset [int], $steps [int], $search_value [info_string] )
+ * pub->all ( $offset [int], $steps [int], $search_value [info_string] )
  *
- * Checkout->transactions ( $offset [int], $steps [int] ) [$cashier]
+ * pub->transactions ( $offset [int], $steps [int] ) [$pub]
  *
- * Checkout->add ( $table [const], $values [array] ) [$cashier]
+ * pub->add ( $table [const], $values [array] ) [$pub]
  *
- * Checkout->update_checkout ( $values [array] ) [$cashier]
+ * pub->update_pub ( $values [array] ) [$pub]
  *
- * Checkout->update_product( $values [$array] ) [$product_id]
+ * pub->update_product( $values [$array] ) [$product_id]
  *
- * Checkout->remove_checkout () [$cashier]
+ * pub->remove_pub () [$pub]
  *
- * Checkout->remove_product ( $product_id [int] ) [$product_id]
+ * pub->remove_product ( $product_id [int] ) [$product_id]
  *
- * Checkout->remove_access ( $user [int] ) [$cashier]
+ * pub->remove_access ( $user [int] ) [$pub]
  *
- * Checkout->access ( $user [int or null], $offset [int], $steps [int] ) [$cashier]
+ * pub->access ( $user [int or null], $offset [int], $steps [int] ) [$pub]
  *
- * Checkout->accessable ( $user [string] )
+ * pub->accessable ( $user [string] )
  *
- * Checkout->product () [$product_id]
+ * pub->product () [$product_id]
  *
- * Checkout->products ( $offset [int], $steps [int], $search_value [info_string], $include_globals [boolean] ) [$cashier]
+ * pub->products ( $offset [int], $steps [int], $search_value [info_string], $include_globals [boolean] ) [$pub]
  *
- * Checkout->sections () [$cashier]
+ * pub->sections () [$pub]
  *
- * Checkout->global_products ( $offset [int], $steps [int], $search_value [info_string] )
+ * pub->global_products ( $offset [int], $steps [int], $search_value [info_string] )
  *
- * Checkout->values () [$cashier]
+ * pub->values () [$pub]
  *
  *
  **************** availability explanation ****************
@@ -57,18 +57,18 @@
  * 2: sold
  *
  */
-class Checkout {
+class Pub {
   //Variables
-  public $cashier;
+  public $pub;
   public $product_id;
 
   //constants
-  const DEFAULT_TABLE = CHECKOUT;
-  const PRODUCTS_TABLE = CHECKOUT_PRODUCTS;
-  const ACCESS_TALBE = CHECKOUT_ACCESS;
+  const DEFAULT_TABLE = PUB;
+  const PRODUCTS_TABLE = PUB_PRODUCTS;
+  const ACCESS_TALBE = PUB_ACCESS;
 
   /**
-   * Returns array of all checkouts
+   * Returns array of all pubs
    *
    * $limit: How many rows
    * $offset: Start row
@@ -80,23 +80,23 @@ class Checkout {
 
     if( is_null($search_value) || empty($search_value) ) {
       // Select all
-      $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
-      $checkout->execute();
+      $pub = $conn->prepare("SELECT * FROM " . PUB . " ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
+      $pub->execute();
     }else {
       // Select all
-      $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id OR name=:name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
-      $checkout->execute(array(
-        ":checkout_id" => $search_value,
+      $pub = $conn->prepare("SELECT * FROM " . PUB . " WHERE pub_id=:pub_id OR name=:name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
+      $pub->execute(array(
+        ":pub_id" => $search_value,
         ":name" => $search_value
       ));
     }
 
-    return $checkout->fetchAll( PDO::FETCH_ASSOC );
+    return $pub->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**
-   * Returns a list of all transactions (in steps) that belong to the checkout
-   * requires: $cashier
+   * Returns a list of all transactions (in steps) that belong to the pub
+   * requires: $pub
    *
    * $offset: at what row you want to start
    * $steps: How many rows
@@ -139,7 +139,7 @@ class Checkout {
     }
 
     foreach( $response as $response ) {
-      if( $response->getPurpose() == "cashier-" . $this->cashier ) {
+      if( $response->getPurpose() == "pub-" . $this->pub ) {
         // Add to array
         array_push( $transaction_list,
           array(
@@ -186,13 +186,13 @@ class Checkout {
    *                            payment_payrexx_secret
    *                          )
    *          PRODUCTS_TABLE: array(
-   *                            checkout_id,
+   *                            pub_id,
    *                            name,
    *                            price,
    *                            currency
    *                          )
    *          ACCESS_TABLE:   array(
-   *                            checkout_id,
+   *                            pub_id,
    *                            user_id
    *                          )
    */
@@ -204,7 +204,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("checkout_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
+    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -212,13 +212,20 @@ class Checkout {
     $add_query .= "(" . implode(", ", array_keys($checked_values)) . ") ";
     $add_query .= "VALUES ('" . implode("', '", $checked_values) . "')";
 
+    // Restore message
+    $restore_message = array(
+      "pub" => "Added new pub",
+      "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
+      "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
+    );
+
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Added " . ($table == SELF::DEFAULT_TABLE ? "checkout" : ($table == SELF::PRODUCTS_TABLE ? "product" : "access")),
-      "table" => ($table == SELF::DEFAULT_TABLE ? "CHECKOUT" : ($table == SELF::PRODUCTS_TABLE ? "CHECKOUT_PRODUCTS" : "CHECKOUT_ACCESS")),
+      "message" => ($table == SELF::DEFAULT_TABLE ? $restore_message["pub"] : ($table == SELF::PRODUCTS_TABLE ? $restore_message["product"] : $restore_message["access"])),
+      "table" => ($table == SELF::DEFAULT_TABLE ? "pub" : ($table == SELF::PRODUCTS_TABLE ? "PUB_PRODUCTS" : "PUB_ACCESS")),
       "function" => "INSERT INTO",
-      "primary_key" => array("key" => "checkout_id", "value" => ""),
+      "primary_key" => array("key" => "pub_id", "value" => ""),
       "old" => "",
       "new" => $checked_values
     );
@@ -231,7 +238,7 @@ class Checkout {
 
     if( $result === true ) {
       if($table == SELF::DEFAULT_TABLE) {
-        $this->cashier = $conn->lastInsertId();
+        $this->pub = $conn->lastInsertId();
       } elseif($table == SELF::PRODUCTS_TABLE) {
         $this->product_id = $conn->lastInsertId();
       }
@@ -242,8 +249,8 @@ class Checkout {
   }
 
   /**
-   * Updates a checkout
-   * requires: $cashier
+   * Updates a pub
+   * requires: $pub
    *
    * $values: Array with new values
    *          array(
@@ -254,7 +261,7 @@ class Checkout {
    *            payment_payrexx_secret
    *         )
    */
-  public function update_checkout( $values) {
+  public function update_pub( $values) {
     // Get global
     global $current_user;
 
@@ -266,19 +273,19 @@ class Checkout {
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
-    $update_query = "UPDATE " . CHECKOUT . " SET ";
+    $update_query = "UPDATE " . PUB . " SET ";
     foreach( $checked_values as $key => $value ) {
       $update_query .= $key . " = '" . $value . "', ";
     }
-    $update_query = substr( $update_query, 0, -2 ) . " WHERE checkout_id=:checkout_id";
+    $update_query = substr( $update_query, 0, -2 ) . " WHERE pub_id=:pub_id";
 
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated checkout #" . $this->cashier,
-      "table" => "CHECKOUT",
+      "message" => "Updated pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "table" => "pub",
       "function" => "UPDATE",
-      "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
+      "primary_key" => array("key" => "pub_id", "value" => $this->pub),
       "old" => array_intersect_key($this->values(), array_flip($valid_keys)),
       "new" => $valid_keys
     );
@@ -288,7 +295,7 @@ class Checkout {
     // Update query
     $update = $conn->prepare( $update_query );
     return $update->execute(array(
-      ":checkout_id" => $this->cashier,
+      ":pub_id" => $this->pub,
     ));
   }
 
@@ -319,7 +326,7 @@ class Checkout {
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
-    $update_query = "UPDATE " . CHECKOUT_PRODUCTS . " SET ";
+    $update_query = "UPDATE " . PUB_PRODUCTS . " SET ";
     foreach( $checked_values as $key => $value ) {
       $update_query .= $key . " = '" . $value . "', ";
     }
@@ -328,8 +335,8 @@ class Checkout {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated product #" . $this->product_id,
-      "table" => "CHECKOUT_PRODUCTS",
+      "message" => "Updated product #" . $this->product_id . " (" . $this->product()["name"] . ")",
+      "table" => "PUB_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
       "old" => array_intersect_key($this->product(), array_flip($valid_keys)),
@@ -346,10 +353,10 @@ class Checkout {
   }
 
   /**
-   * Removes a checkout
-   * requires: $cashier
+   * Removes a pub
+   * requires: $pub
    */
-  public function remove_checkout() {
+  public function remove_pub() {
     // Get global
     global $current_user;
 
@@ -359,10 +366,10 @@ class Checkout {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed Checkout #" . $this->cashier,
-      "table" => "CHECKOUT",
+      "message" => "Removed pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "table" => "pub",
       "function" => "UPDATE",
-      "primary_key" => array("key" => "checkout_id", "value" => $this->cashier),
+      "primary_key" => array("key" => "pub_id", "value" => $this->pub),
       "old" => array_intersect_key($this->values(), array_flip(array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret"))),
       "new" => array("")
     );
@@ -370,9 +377,9 @@ class Checkout {
     User::modifie($change);
 
     // Remove
-    $remove = $conn->prepare("DELETE FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id");
+    $remove = $conn->prepare("DELETE FROM " . PUB . " WHERE pub_id=:pub_id");
     return $remove->execute(array(
-      ":checkout_id" => $this->cashier,
+      ":pub_id" => $this->pub,
     ));
   }
 
@@ -391,18 +398,18 @@ class Checkout {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed product #" . $this->product_id,
-      "table" => "CHECKOUT_PRODUCTS",
+      "message" => "Removed product #" . $this->product_id . " (" . $this->product()["name"] . ")",
+      "table" => "PUB_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
-      "old" => array_intersect_key($this->product(), array_flip(array("checkout_id", "name", "section", "price", "currency", "product_fileID", "availability"))),
+      "old" => array_intersect_key($this->product(), array_flip(array("pub_id", "name", "section", "price", "currency", "product_fileID", "availability"))),
       "new" => array("")
     );
 
     User::modifie($change);
 
     // Remove
-    $remove = $conn->prepare("DELETE FROM " . CHECKOUT_PRODUCTS . " WHERE id=:id");
+    $remove = $conn->prepare("DELETE FROM " . PUB_PRODUCTS . " WHERE id=:id");
     return $remove->execute(array(
       ":id" => $this->product_id,
     ));
@@ -410,7 +417,7 @@ class Checkout {
 
   /**
    * Removes an access
-   * requires: $cashier
+   * requires: $pub
    *
    * $user: User id (stored in database)
    */
@@ -422,9 +429,9 @@ class Checkout {
     $conn = Access::connect();
 
     // Get ID of access
-    $access_id = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE checkout_id=:checkout_id AND user_id=:user_id");
+    $access_id = $conn->prepare("SELECT * FROM " . PUB_ACCESS . " WHERE pub_id=:pub_id AND user_id=:user_id");
     $access_id->execute(array(
-      ":checkout_id" => $this->cashier,
+      ":pub_id" => $this->pub,
       ":user_id" => $user,
     ));
     $id = $access_id->fetch( PDO::FETCH_ASSOC )["id"] ?? false;
@@ -432,10 +439,10 @@ class Checkout {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed access for User #" . $user . "(" . User::name( $user ) . ")",
-      "table" => "CHECKOUT_ACCESS",
+      "message" => "Removed access for User #" . $user . " (" . User::name( $user ) . ") on pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "table" => "PUB_ACCESS",
       "function" => "UPDATE",
-      "primary_key" => array("key1" => "checkout_id", "value1" => $this->cashier, "key2" => "user_id", "value2" => $user),
+      "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "user_id", "value2" => $user),
       "old" => ((empty(array_column($this->access(), "id")) ? "" : $this->access()[array_search( $id, array_column($this->access(), "id"))])),
       "new" => array("")
     );
@@ -443,18 +450,18 @@ class Checkout {
     User::modifie($change);
 
     // Remove
-    $remove = $conn->prepare("DELETE FROM " . CHECKOUT_ACCESS . " WHERE checkout_id=:checkout_id AND user_id=:user_id");
+    $remove = $conn->prepare("DELETE FROM " . PUB_ACCESS . " WHERE pub_id=:pub_id AND user_id=:user_id");
     return $remove->execute(array(
-      ":checkout_id" => $this->cashier,
+      ":pub_id" => $this->pub,
       ":user_id" => $user,
     ));
   }
 
   /**
-   * Returns true or false or if user is equal to null it returns list of users who have access to the checkout
-   * requires: $cashier
+   * Returns true or false or if user is equal to null it returns list of users who have access to the pub
+   * requires: $pub
    *
-   * $user = User Id or null (Lists all user with access to this checkout)
+   * $user = User Id or null (Lists all user with access to this pub)
    * $offset: at what row you want to start
    * $steps: How many rows
    */
@@ -463,19 +470,19 @@ class Checkout {
     $conn = Access::connect();
 
     if( is_null($user) ) {
-      // Get all users that have access to this checkout
-      $users = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id LIMIT " . $steps . " OFFSET " . $offset);
+      // Get all users that have access to this pub
+      $users = $conn->prepare("SELECT * FROM " . PUB_ACCESS . " WHERE user_id=:user_id LIMIT " . $steps . " OFFSET " . $offset);
       $users->execute(array(
         ":user_id" => $user,
       ));
 
       return $users->fetchAll( PDO::FETCH_ASSOC );
     }else {
-      // Check if user has access to this checkout
-      $check = $conn->prepare("SELECT * FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id AND checkout_id=:checkout_id");
+      // Check if user has access to this pub
+      $check = $conn->prepare("SELECT * FROM " . PUB_ACCESS . " WHERE user_id=:user_id AND pub_id=:pub_id");
       $check->execute(array(
         ":user_id" => $user,
-        ":checkout_id" => $this->cashier,
+        ":pub_id" => $this->pub,
       ));
       $rights = $check->fetch( PDO::FETCH_ASSOC );
 
@@ -485,16 +492,16 @@ class Checkout {
   }
 
   /**
-  * Function to get all accessable checkouts
+  * Function to get all accessable pubs
   *
-  * $user: User ID for whom you want to know the accessable checkouts
+  * $user: User ID for whom you want to know the accessable pubs
   */
   public function accessable( $user ) {
     //Get database connection
     $conn = Access::connect();
 
     // SQL Request
-    $accessable = $conn->prepare("SELECT checkout_id FROM " . CHECKOUT_ACCESS . " WHERE user_id=:user_id AND( w=1 OR r=1)");
+    $accessable = $conn->prepare("SELECT pub_id FROM " . PUB_ACCESS . " WHERE user_id=:user_id AND( w=1 OR r=1)");
     $accessable->execute(array(
       ":user_id" => $user,
     ));
@@ -514,7 +521,7 @@ class Checkout {
     $conn = Access::connect();
 
     // Generate sql
-    $product = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE id=:id");
+    $product = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE id=:id");
     $product->execute(array(
       ":id" => $this->product_id,
     ));
@@ -523,8 +530,8 @@ class Checkout {
   }
 
   /**
-   * Returns a list of all products for this checkout
-   * requires: $cashier
+   * Returns a list of all products for this pub
+   * requires: $pub
    *
    * $limit: How many rows
    * $offset: Start row
@@ -536,20 +543,20 @@ class Checkout {
     $conn = Access::connect();
 
     // Prepare global products
-    $global_products = ($include_globals ? " OR checkout_id IS NULL" : "");
+    $global_products = ($include_globals ? " OR pub_id IS NULL" : "");
 
     if( is_null($search_value) || empty($search_value) ) {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id=:checkout_id " . $global_products . " ORDER BY checkout_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE pub_id=:pub_id " . $global_products . " ORDER BY pub_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
       $products->execute(array(
-        "checkout_id" => $this->cashier,
+        "pub_id" => $this->pub,
       ));
     }else {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE (checkout_id=:checkout_id " . $global_products . ") AND (name LIKE :name OR price=:price) ORDER BY checkout_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE (pub_id=:pub_id " . $global_products . ") AND (name LIKE :name OR price=:price) ORDER BY pub_id DESC, name ASC LIMIT " . $steps . " OFFSET " . $offset );
 
       $products->execute(array(
-        "checkout_id" => $this->cashier,
+        "pub_id" => $this->pub,
         ":name" => "%" . $search_value . "%",
         ":price" => (floatval($search_value) == 0 ? $search_value : (floatval($search_value) * 100) ),
       ));
@@ -560,28 +567,28 @@ class Checkout {
 
   // public function all_products( $offset = 0, $steps = 20, $search_value = null ) {
   //
-  //   $sql = "SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL OR checkout_id=:checkout_id ORDER BY name ASC, section ASC, availability ASC, price DESC";
+  //   $sql = "SELECT * FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL OR pub_id=:pub_id ORDER BY name ASC, section ASC, availability ASC, price DESC";
   // }
 
   /**
    * Returns array with all section-names
-   * requires: $cashier or no cashier for global products
+   * requires: $pub or no pub for global products
    */
   public function sections() {
     //Get database connection
     $conn = Access::connect();
 
-    if( isset($this->cashier) ) {
-      // Get all sections by cashier
-      $sections = $conn->prepare("SELECT DISTINCT section FROM " . CHECKOUT_PRODUCTS . " WHERE section IS NOT NULL AND checkout_id=:checkout_id");
+    if( isset($this->pub) ) {
+      // Get all sections by pub
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND pub_id=:pub_id");
       $sections->execute(array(
-        ":checkout_id" => $this->cashier,
+        ":pub_id" => $this->pub,
       ));
 
       return $sections->fetchAll( PDO::FETCH_ASSOC );
     }else {
       // Get all global sections
-      $sections = $conn->prepare("SELECT DISTINCT section FROM " . CHECKOUT_PRODUCTS . " WHERE section IS NOT NULL AND checkout_id IS NULL");
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND pub_id IS NULL");
       $sections->execute();
 
       return $sections->fetchAll( PDO::FETCH_ASSOC );
@@ -601,11 +608,11 @@ class Checkout {
 
     if( is_null($search_value) || empty($search_value) ) {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
       $products->execute();
     }else {
       // Get all products
-      $products = $conn->prepare("SELECT * FROM " . CHECKOUT_PRODUCTS . " WHERE checkout_id IS NULL AND (name LIKE :name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
+      $products = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL AND (name LIKE :name OR price=:price) ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset );
       $products->execute(array(
         ":name" => "%" . $search_value . "%",
         ":price" => (floatval($search_value) == 0 ? $search_value : (floatval($search_value) * 100) ),
@@ -616,19 +623,19 @@ class Checkout {
   }
 
   /**
-   * Returns all values from access, products and all general values of this checkout
-   * requires: $cashier
+   * Returns all values from access, products and all general values of this pub
+   * requires: $pub
    */
   public function values() {
     //Get database connection
     $conn = Access::connect();
 
-    // Get all values from checkout
-    $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE checkout_id=:checkout_id");
-    $checkout->execute(array(
-      ":checkout_id" => $this->cashier,
+    // Get all values from pub
+    $pub = $conn->prepare("SELECT * FROM " . PUB . " WHERE pub_id=:pub_id");
+    $pub->execute(array(
+      ":pub_id" => $this->pub,
     ));
-    return $checkout->fetch( PDO::FETCH_ASSOC );
+    return $pub->fetch( PDO::FETCH_ASSOC );
   }
 }
  ?>

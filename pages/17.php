@@ -3,55 +3,55 @@ $action = $_GET;
 unset($action["id"]); //Remove page
 unset($action["sub"]); //Remove subpage
 unset($action["row-start"]); //Remove tow to get only valid keys
-unset($action["checkout"]);
+unset($action["pub"]);
 
-// Start checkout
-$checkout = new Checkout();
+// Start pub
+$pub = new Pub();
 
-// Get current checkout
-$accessable_checkouts = $checkout->accessable( $current_user );
-$checkout->cashier = $_GET["checkout"] ?? $accessable_checkouts[0];
+// Get current pub
+$accessable_pubs = $pub->accessable( $current_user );
+$pub->pub = $_GET["pub"] ?? $accessable_pubs[0];
 
 // Get Access
 $write_page = User::w_access_allowed( $page, $current_user );
-$write_checkout = boolval( $checkout->access( $current_user )["w"] ?? 0 );
-$write_access = ($write_page === true && $write_checkout === true) ?  true : false;
+$write_pub = boolval( $pub->access( $current_user )["w"] ?? 0 );
+$write_access = ($write_page === true && $write_pub === true) ?  true : false;
 
 $read_page = User::r_access_allowed( $page, $current_user );
-$read_checkout = boolval( $write_checkout === true ? true : $checkout->access( $current_user )["r"] ?? 0 );
-$read_access = ($read_page === true && $read_checkout === true) ?  true : false;
+$read_pub = boolval( $write_pub === true ? true : $pub->access( $current_user )["r"] ?? 0 );
+$read_access = ($read_page === true && $read_pub === true) ?  true : false;
 
 // Get disabled
 $disabled = ($write_access === true ? "" : "disabled");
 
-// Message if user has no access to this checkout
+// Message if user has no access to this pub
 if( $write_access === false && $read_access === false ) {
-  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $checkout->cashier . ") <strong>"  . $checkout->values()['name'] ."</strong>", "Zurück", $url_page);
+  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $pub->pub . ") <strong>"  . $pub->values()['name'] ."</strong>", "Zurück", $url_page);
   return;
 }
 
-echo '<div class="checkout">';
-  // List accessable checkouts
-  if( count($accessable_checkouts) > 1 ) {
+echo '<div class="pub">';
+  // List accessable pubs
+  if( count($accessable_pubs) > 1 ) {
     // Multiple access
     echo '<div class="header" onclick="this.children[1].classList.toggle(\'visible\')">';
-      echo '<span class="current multiple">' . $checkout->values()["name"] . '</span>';
-      echo '<div class="checkouts">';
-        // List all accessable checkouts
-        foreach( $accessable_checkouts as $checkout_id ) {
-          if( $checkout->cashier != $checkout_id) {
-            // Start new checkout for name
-            $name_checkout = new Checkout();
-            $name_checkout->cashier = $checkout_id;
+      echo '<span class="current multiple">' . $pub->values()["name"] . '</span>';
+      echo '<div class="pubs">';
+        // List all accessable pubs
+        foreach( $accessable_pubs as $pub_id ) {
+          if( $pub->pub != $pub_id) {
+            // Start new pub for name
+            $name_pub = new Pub();
+            $name_pub->pub = $pub_id;
 
-            echo '<a href="' . $url_page . '&checkout=' . $checkout_id . '">' . $name_checkout->values()["name"] . '</a>';
+            echo '<a href="' . $url_page . '&pub=' . $pub_id . '">' . $name_pub->values()["name"] . '</a>';
           }
         }
       echo '</div>';
     echo '</div>';
   } else {
     echo '<div class="header">';
-      echo '<span class="current">' . $checkout->values()["name"] . '</span>';
+      echo '<span class="current">' . $pub->values()["name"] . '</span>';
     echo '</div>';
   }
 
@@ -61,10 +61,10 @@ echo '<div class="checkout">';
         if( $write_access ) {
           // Prepare post value
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
-          $_POST["checkout_id"] = $checkout->cashier;
+          $_POST["pub_id"] = $pub->pub;
 
-          if( $checkout->add( CHECKOUT::PRODUCTS_TABLE, $_POST ) ) {
-            Action::success("Das Produkt konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&checkout=" . $checkout->cashier . "&view_product=" . $checkout->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
+          if( $pub->add( pub::PRODUCTS_TABLE, $_POST ) ) {
+            Action::success("Das Produkt konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&pub=" . $pub->pub . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
           }else{
             Action::fail("Leider konnte das Produkt <strong>nicht</strong></b> erstellt werden.");
           }
@@ -74,7 +74,7 @@ echo '<div class="checkout">';
       }
 
       //Start form to edit, show user
-      echo '<div class="checkout">';
+      echo '<div class="pub">';
         echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
           echo '<h1>Produkt hinzufügen</h1>';
           //Produktname
@@ -89,7 +89,7 @@ echo '<div class="checkout">';
             echo '<span class="headline">Sektion</span>';
 
             echo '<div class="options">';
-              foreach( $checkout->sections() as $section ) {
+              foreach( $pub->sections() as $section ) {
                 echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
               }
               echo '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -146,18 +146,18 @@ echo '<div class="checkout">';
       echo '</div>';
     break;
     case "remove_product": // Product
-      // Get name of checkout
-      $checkout->product_id = $_GET["remove_product"] ?? null;
+      // Get name of pub
+      $pub->product_id = $_GET["remove_product"] ?? null;
 
       // Generate message
-      $info = "Möchtest du das Produkt <strong>" . $checkout->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
+      $info = "Möchtest du das Produkt <strong>" . $pub->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
 
       // Display message
-      Action::confirm($info, $_GET["remove_product"], "&checkout=" . $checkout->cashier);
+      Action::confirm($info, $_GET["remove_product"], "&pub=" . $pub->pub);
     break;
     case "view_product":
       // Set product id
-      $checkout->product_id = $_GET["view_product"] ?? null;
+      $pub->product_id = $_GET["view_product"] ?? null;
 
       // Update
       if(! empty($_POST)) {
@@ -165,10 +165,10 @@ echo '<div class="checkout">';
           // Define values
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
-          if( $checkout->update_product(  $_POST ) ) {
-            Action::success("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+          if( $pub->update_product(  $_POST ) ) {
+            Action::success("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
           }else {
-            Action::fail("Das Produkt <strong>" . $checkout->product()["name"] . " (#" . $checkout->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+            Action::fail("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -176,7 +176,7 @@ echo '<div class="checkout">';
       }
 
       // Check if product is accessable
-      if( $checkout->product()["checkout_id"] == $checkout->cashier ) {
+      if( $pub->product()["pub_id"] == $pub->pub ) {
         // Generate html
         echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
           if( $write_access === true ) {
@@ -187,18 +187,18 @@ echo '<div class="checkout">';
 
           //Produktname
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
+            echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
             echo  '<span class="placeholder">Kassenname</span>';
           echo  '</label>';
 
           // Section
           echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="section" ' . (isset($checkout->product()["section"]) ? 'value="' . $checkout->product()["section"] . '"' : "") . ' ' . $disabled . '>';
-            echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
+            echo '<input type="text" class="selectValue" name="section" ' . (isset($pub->product()["section"]) ? 'value="' . $pub->product()["section"] . '"' : "") . ' ' . $disabled . '>';
+            echo '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
 
             if( $write_access === true ) {
               echo '<div class="options">';
-                foreach( $checkout->sections() as $section ) {
+                foreach( $pub->sections() as $section ) {
                   echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
                 }
                 echo '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -212,15 +212,15 @@ echo '<div class="checkout">';
 
           //Währung
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
+            echo  '<input type="text" name="currency" value="' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
             echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
           echo  '</label>';
 
           //Preis
           echo  '<label class="txt-input">';
-            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
             echo  '<span class="placeholder">Preis</span>';
-            echo  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+            echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
 
           // Status
@@ -231,8 +231,8 @@ echo '<div class="checkout">';
           );
 
           echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($checkout->product()["availability"]) ? 'value="' . $checkout->product()["availability"] . '"' : "") . ' required>';
-            echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
+            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($pub->product()["availability"]) ? 'value="' . $pub->product()["availability"] . '"' : "") . ' required>';
+            echo '<span class="headline">' . ($availability[$pub->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
 
 
               if( $write_access === true ) {
@@ -249,9 +249,9 @@ echo '<div class="checkout">';
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
             // Display preview image if possible
-            if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
-              echo '<input type="hidden" name="product_fileID" value="' . $checkout->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
-              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
+            if( isset($pub->product()["product_fileID"]) &&! empty($pub->product()["product_fileID"]) ) {
+              echo '<input type="hidden" name="product_fileID" value="' . $pub->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->product()["product_fileID"] ) . '\')"></div>';
             }else {
               echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
             }
@@ -265,7 +265,7 @@ echo '<div class="checkout">';
 
           //Close form
         echo  '</form>';
-      } elseif ( is_null($checkout->product()["checkout_id"]) ) {
+      } elseif ( is_null($pub->product()["pub_id"]) ) {
         // Banner global product
         echo '<div class="banner-global-product">';
           echo '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden';
@@ -275,26 +275,26 @@ echo '<div class="checkout">';
           echo  '<h1>Produkt ansehen</h1>';
           //Produktname
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="name" value="' . ($checkout->product()["name"] ?? "") . '" disabled required/>';
+            echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" disabled required/>';
             echo  '<span class="placeholder">Kassenname</span>';
           echo  '</label>';
 
           // Section
           echo '<div class="select">';
-            echo '<span class="headline">' . (isset($checkout->product()["section"]) ? $checkout->product()["section"] : "Sektion") . '</span>';
+            echo '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
           echo '</div>';
 
           //Währung
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="currency" value="' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '" min="3" max="3" disabled required/>';
+            echo  '<input type="text" name="currency" value="' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '" min="3" max="3" disabled required/>';
             echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
           echo  '</label>';
 
           //Preis
           echo  '<label class="txt-input">';
-            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($checkout->product()["price"] ? number_format(($checkout->product()["price"]/100), 2) :  "")  . '" disabled required/>';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" disabled required/>';
             echo  '<span class="placeholder">Preis</span>';
-            echo  '<span class="unit">' . ($checkout->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+            echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
 
           // Status
@@ -306,7 +306,7 @@ echo '<div class="checkout">';
 
           echo '<div class="select">';
             echo '<input type="text" class="selectValue" name="availability" disabled required>';
-            echo '<span class="headline">' . ($availability[$checkout->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
+            echo '<span class="headline">' . ($availability[$pub->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
           echo '</div>';
 
 
@@ -314,8 +314,8 @@ echo '<div class="checkout">';
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input disabled">';
             // Display preview image if possible
-            if( isset($checkout->product()["product_fileID"]) &&! empty($checkout->product()["product_fileID"]) ) {
-              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $checkout->product()["product_fileID"] ) . '\')"></div>';
+            if( isset($pub->product()["product_fileID"]) &&! empty($pub->product()["product_fileID"]) ) {
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->product()["product_fileID"] ) . '\')"></div>';
             }
             echo '<div class="draganddrop">Klicken um auszuwählen</div>';
           echo '</label>';
@@ -324,7 +324,7 @@ echo '<div class="checkout">';
           //Close form
         echo  '</form>';
       } else {
-        Action::fs_info("Du hast keinen Zugriff auf das Produkt (#" . $checkout->product_id . ") " .  $checkout->product()["name"]);
+        Action::fs_info("Du hast keinen Zugriff auf das Produkt (#" . $pub->product_id . ") " .  $pub->product()["name"]);
       }
     break;
     default:
@@ -332,7 +332,7 @@ echo '<div class="checkout">';
       if(isset($_POST["confirm"])) {
         if( $write_access ) {
           // Get values
-          $product_remove = new Checkout();
+          $product_remove = new Pub();
           $product_remove->product_id = $_POST["confirm"];
           $product_values = $product_remove->product();
 
@@ -396,28 +396,28 @@ echo '<div class="checkout">';
         $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
         // List general products
-        foreach( $checkout->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
+        foreach( $pub->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
           // Check if global product
-          if( is_null($product["checkout_id"]) ) {
+          if( is_null($product["pub_id"]) ) {
             // Global product
             echo  '<tr class="global_product" title="Globales Produkt">';
               echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
               echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
               echo  '<td>';
-                echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
               echo  '</td>';
             echo  '</tr>';
           }else {
-            // Product of checkout
+            // Product of pub
             echo  '<tr>';
               echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
               echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
               echo  '<td>';
                 if( $write_access === true ) {
-                    echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-                    echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
                 }else {
-                  echo  '<a href="' . $url_page . '&checkout=' . urlencode( $checkout->cashier ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                  echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
                 }
               echo  '</td>';
             echo  '</tr>';
@@ -427,7 +427,7 @@ echo '<div class="checkout">';
         // Menu requred
         echo  '<tr class="nav">';
 
-          if( (count($checkout->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+          if( (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
@@ -436,7 +436,7 @@ echo '<div class="checkout">';
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                       </td>';
-          }elseif (count($checkout->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
+          }elseif (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
             echo  '<td colspan="' . count( $headline_names ) . '">
                         <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                       </td>';
@@ -447,7 +447,7 @@ echo '<div class="checkout">';
       echo  '</table>';
 
       if( $write_access === true ) {
-        echo  '<a class="add" href="' . $url_page . '&checkout=' . $checkout->cashier . '&add=product">
+        echo  '<a class="add" href="' . $url_page . '&pub=' . $pub->pub . '&add=product">
           <span class="horizontal"></span>
           <span class="vertical"></span>
         </a>';
@@ -456,7 +456,7 @@ echo '<div class="checkout">';
       echo  '</div>';
 
 
-      // List default settings for checkout
+      // List default settings for pub
     break;
   }
 echo '</div>';

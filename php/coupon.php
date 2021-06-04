@@ -59,7 +59,7 @@ class Coupon {
   }
 
   /**
-   * Returns array of all checkouts
+   * Returns array of all coupons
    *
    * $limit: How many rows
    * $offset: Start row

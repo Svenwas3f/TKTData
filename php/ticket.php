@@ -97,7 +97,7 @@ class Ticket {
   }
 
   /**
-   * Returns array of all checkouts
+   * Returns array of all tickets
    *
    * $limit: How many rows
    * $offset: Start row

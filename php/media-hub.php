@@ -75,7 +75,7 @@ class MediaHub {
   }
 
   /**
-   * Returns array of all checkouts
+   * Returns array of all files
    *
    * $limit: How many rows
    * $offset: Start row
@@ -90,19 +90,19 @@ class MediaHub {
 
     if( is_null($search_value) || empty($search_value) ) {
       // Select all
-      $checkout = $conn->prepare("SELECT * FROM " . MEDIA_HUB . " ORDER BY upload_time DESC LIMIT " . $steps . " OFFSET " . $offset);
-      $checkout->execute();
+      $files = $conn->prepare("SELECT * FROM " . MEDIA_HUB . " ORDER BY upload_time DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $files->execute();
     }else {
       // Select all
-      $checkout = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE alt=:alt OR upload_user=:upload_user  ORDER BY upload_time DESC LIMIT " . $steps . " OFFSET " . $offset);
-      $checkout->execute(array(
+      $files = $conn->prepare("SELECT * FROM " . CHECKOUT . " WHERE alt=:alt OR upload_user=:upload_user  ORDER BY upload_time DESC LIMIT " . $steps . " OFFSET " . $offset);
+      $files->execute(array(
         ":alt" => $search_value,
         ":upload_user" => $search_value
       ));
     }
 
     // Get url
-    $db_list = $checkout->fetchAll( PDO::FETCH_ASSOC );
+    $db_list = $files->fetchAll( PDO::FETCH_ASSOC );
     foreach( $db_list as $key => $item ) {
       $search = glob( dirname(__FILE__, 2) . "/medias/hub/" . $item["fileID"] . ".*");
 
@@ -114,8 +114,6 @@ class MediaHub {
     }
 
     return $db_list;
-
-    // return $checkout->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**

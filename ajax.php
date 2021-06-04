@@ -362,7 +362,7 @@ switch($_POST["p"]) {
   break;
 
   /**
-   * Checkout
+   * Pub
    */
   case 19:
     switch($_POST["action"]) {
@@ -372,31 +372,31 @@ switch($_POST["p"]) {
           $values = json_decode( $_POST["values"], true );
 
           // Add write rights
-          $checkout = new Checkout();
-          $checkout->cashier = $values["checkout"];
+          $pub = new Pub();
+          $pub->pub = $values["pub"];
 
           // Remove access if exitst
-          if(! $checkout->remove_access( $values["user"] ) ) {
+          if(! $pub->remove_access( $values["user"] ) ) {
             Action::fail("Die Rechte konnten nicht hinzugefügt werden");
           }
 
           if( ($values["type"] ?? "r") == "w") {
             $access_values = array(
-              "checkout_id" => $values["checkout"],
+              "pub_id" => $values["pub"],
               "user_id" => $values["user"],
               "w" => 1,
               "r" => 1,
             );
           }else {
             $access_values = array(
-              "checkout_id" => $values["checkout"],
+              "pub_id" => $values["pub"],
               "user_id" => $values["user"],
               "w" => 0,
               "r" => 1,
             );
           }
 
-          if(! $checkout->add( Checkout::ACCESS_TALBE, $access_values ) ) {
+          if(! $pub->add( Pub::ACCESS_TALBE, $access_values ) ) {
             Action::fail("Die Rechte konnten nicht hinzugefügt werden");
             return false;
           }
@@ -423,23 +423,23 @@ switch($_POST["p"]) {
           // All good
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "img_w" => $url . "/medias/icons/togglePubRights2.svg",
               "title_w" => $values["user"] . " hat Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "onclick_name_w" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
-              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "img_r" => $url . "/medias/icons/togglePubRights2.svg",
               "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
-              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+              "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }else {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "img_w" => $url . "/medias/icons/togglePubRights1.svg",
               "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
-              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "img_r" => $url . "/medias/icons/togglePubRights2.svg",
               "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
-              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+              "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }
         }else {
@@ -452,31 +452,31 @@ switch($_POST["p"]) {
           $values = json_decode( $_POST["values"], true );
 
           // Add write rights
-          $checkout = new Checkout();
-          $checkout->cashier = $values["checkout"];
+          $pub = new Pub();
+          $pub->pub = $values["pub"];
 
           // Remove access if exitst
-          if(! $checkout->remove_access( $values["user"] ) ) {
+          if(! $pub->remove_access( $values["user"] ) ) {
             Action::fail("Die Rechte konnten nicht hinzugefügt werden");
           }
 
           if( ($values["type"] ?? "r") == "w") {
             $access_values = array(
-              "checkout_id" => $values["checkout"],
+              "pub_id" => $values["pub"],
               "user_id" => $values["user"],
               "w" => 0,
               "r" => 1,
             );
           }else {
             $access_values = array(
-              "checkout_id" => $values["checkout"],
+              "pub_id" => $values["pub"],
               "user_id" => $values["user"],
               "w" => 0,
               "r" => 0,
             );
           }
 
-          if(! $checkout->add( Checkout::ACCESS_TALBE, $access_values ) ) {
+          if(! $pub->add( Pub::ACCESS_TALBE, $access_values ) ) {
             Action::fail("Die Rechte konnten nicht hinzugefügt werden");
             return false;
           }
@@ -484,23 +484,23 @@ switch($_POST["p"]) {
           // All good
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "img_w" => $url . "/medias/icons/togglePubRights1.svg",
               "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
-              "img_r" => $url . "/medias/icons/toggleCheckoutRights2.svg",
+              "img_r" => $url . "/medias/icons/togglePubRights2.svg",
               "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
-              "onclick_name_r" => "checkout_remove_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+              "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }else {
             echo json_encode(array(
-              "img_w" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "img_w" => $url . "/medias/icons/togglePubRights1.svg",
               "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
-              "onclick_name_w" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'w')",
+              "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
-              "img_r" => $url . "/medias/icons/toggleCheckoutRights1.svg",
+              "img_r" => $url . "/medias/icons/togglePubRights1.svg",
               "title_r" => $values["user"] . " hat keine Leserechte auf diese Kasse",
-              "onclick_name_r" => "checkout_add_right(this, '" . $values["user"] . "', '" . $checkout->cashier . "', 'r')",
+              "onclick_name_r" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }
         }else {

@@ -43,9 +43,9 @@
  *
  * group_coupons ( group [groupID] )
  *
- * checkout_add_right ( link [link element], user [UserID], checkout [checkoutID], type [access type] )
+ * pub_add_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
- * checkout_remove_right ( link [link element], user [UserID], checkout [checkoutID], type [access type] )
+ * pub_remove_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
  */
 
@@ -304,12 +304,12 @@ function group_coupons(group) {
 }
 
 /**
- * Set new checkout rights
+ * Set new pub rights
  */
-function checkout_add_right( link, user, checkout, type = "r" ) {
+function pub_add_right( link, user, pub, type = "r" ) {
   var values = new Object();
   values["user"] = user;
-  values["checkout"] = checkout,
+  values["pub"] = pub,
   values["type"] = type;
 
   ajax(19, function(c) {
@@ -335,12 +335,12 @@ function checkout_add_right( link, user, checkout, type = "r" ) {
 }
 
 /**
- * remove checkout rights
+ * remove pub rights
  */
-function checkout_remove_right( link, user, checkout, type = "r" ) {
+function pub_remove_right( link, user, pub, type = "r" ) {
   var values = new Object();
   values["user"] = user;
-  values["checkout"] = checkout,
+  values["pub"] = pub,
   values["type"] = type;
 
   ajax(19, function(c) {

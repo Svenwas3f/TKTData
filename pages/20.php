@@ -23,7 +23,7 @@ function display_actions( $search_value = null ){
   $html .= '<table class="rows">';
 
   //Headline
-  $headline_names = array('User', 'Message', 'Datum', 'Restore details');
+  $headline_names = array('Initiator', 'Tätigkeit', 'Datum', 'Wiederherstellungsdetails');
 
   //Start headline
   //Headline can be changed over array $headline_names
