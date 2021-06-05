@@ -26,7 +26,7 @@ $disabled = ($write_access === true ? "" : "disabled");
 
 // Message if user has no access to this pub
 if( $write_access === false && $read_access === false ) {
-  Action::fs_info("Du hast keinen Zugriff auf die Kasse (#" . $pub->pub . ") <strong>"  . $pub->values()['name'] ."</strong>", "Zurück", $url_page);
+  Action::fs_info("Du hast keinen Zugriff auf die Wirtschaft (#" . $pub->pub . ") <strong>"  . $pub->values()['name'] ."</strong>", "Zurück", $url_page);
   return;
 }
 
@@ -188,7 +188,7 @@ echo '<div class="pub">';
           //Produktname
           echo  '<label class="txt-input">';
             echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
-            echo  '<span class="placeholder">Kassenname</span>';
+            echo  '<span class="placeholder">Produktname</span>';
           echo  '</label>';
 
           // Section
@@ -276,7 +276,7 @@ echo '<div class="pub">';
           //Produktname
           echo  '<label class="txt-input">';
             echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" disabled required/>';
-            echo  '<span class="placeholder">Kassenname</span>';
+            echo  '<span class="placeholder">Produktname</span>';
           echo  '</label>';
 
           // Section

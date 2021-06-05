@@ -74,6 +74,8 @@ define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
 define('PUB', 'tktdata_pub');
 //Pub price list
 define('PUB_PRODUCTS', 'tktdata_pub_products');
+//Pub price meta
+define('PUB_PRODUCTS_META', 'tktdata_pub_products_meta');
 //Pub access
 define('PUB_ACCESS', 'tktdata_pub_access');
 //Media hub

@@ -46,6 +46,10 @@
  *
  * pub->global_products ( $offset [int], $steps [int], $search_value [info_string] )
  *
+ * pub->product_visibility () [$pub, $product_id]
+ *
+ * pub->toggleVisibility () [$pub, $product_id]
+ *
  * pub->values () [$pub]
  *
  *
@@ -275,7 +279,9 @@ class Pub {
     // Generate values and keys
     $update_query = "UPDATE " . PUB . " SET ";
     foreach( $checked_values as $key => $value ) {
-      $update_query .= $key . " = '" . $value . "', ";
+      if(! empty($value) ) {
+        $update_query .= $key . " = '" . $value . "', ";
+      }
     }
     $update_query = substr( $update_query, 0, -2 ) . " WHERE pub_id=:pub_id";
 
@@ -328,7 +334,11 @@ class Pub {
     // Generate values and keys
     $update_query = "UPDATE " . PUB_PRODUCTS . " SET ";
     foreach( $checked_values as $key => $value ) {
-      $update_query .= $key . " = '" . $value . "', ";
+      if( empty($value) ) {
+        $update_query .= $key . " = NULL, ";
+      }else {
+        $update_query .= $key . " = '" . $value . "', ";
+      }
     }
     $update_query = substr( $update_query, 0, -2 ) . " WHERE id=:product_id";
 
@@ -620,6 +630,64 @@ class Pub {
     }
 
     return $products->fetchAll( PDO::FETCH_ASSOC );
+  }
+
+  /**
+   * Gets current visibility of product
+   * requires: $pub, $product_id
+   */
+  public function product_visibility() {
+    //Get database connection
+    $conn = Access::connect();
+
+    // get visibility
+    $visibility = $conn->prepare("SELECT visible FROM " . PUB_PRODUCTS_META . " WHERE pub_id=:pub_id AND product_id=:product_id");
+    $visibility->execute(array(
+      ":pub_id" => $this->pub,
+      ":product_id" => $this->product_id
+    ));
+    return boolval( $visibility->fetch( PDO::FETCH_NUM )[0] );
+  }
+
+  /**
+   * Toggles visibility of an product
+   * requires: $pub, $product_id
+   */
+  public function toggleVisibility() {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Check if product is visible or no
+    $check = $conn->prepare("SELECT visible FROM " . PUB_PRODUCTS_META . " WHERE pub_id=:pub_id AND product_id=:product_id");
+    $check->execute(array(
+      ":pub_id" => $this->pub,
+      ":product_id" => $this->product_id
+    ));
+    $check = $check->fetch( PDO::FETCH_NUM );
+
+    // var_dump($check != false);
+    // var_dump((count( $check ) > 0) );
+    // var_dump((($check[0] ?? null) != 1));
+    // echo $check[0];
+
+
+    // Do action
+    // If no value is set the product is visible by default
+    if( $check != false && (count( $check ) > 0) && (($check[0] ?? null) != 1)) {
+      // expose product
+      $expose = $conn->prepare("INSERT INTO " . PUB_PRODUCTS_META . " (pub_id, product_id, visible) VALUES (:pub_id, :product_id, 1) ON DUPLICATE KEY UPDATE visible=1");
+      return $expose->execute(array(
+        ":pub_id" => $this->pub,
+        ":product_id" => $this->product_id,
+      ));
+    }else {
+      // hide product
+      $hide = $conn->prepare("INSERT INTO " . PUB_PRODUCTS_META . " (pub_id, product_id, visible) VALUES (:pub_id, :product_id, 0) ON DUPLICATE KEY UPDATE visible=0");
+      return $hide->execute(array(
+        ":pub_id" => $this->pub,
+        ":product_id" => $this->product_id,
+      ));
+    }
   }
 
   /**

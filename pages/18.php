@@ -9,7 +9,7 @@ function display_pubs ( $search_value = null ) {
   // Search form
   $html = '<div class="pub">';
     $html .= '<form action="' . $url_page . '&list=pub" method="post" class="search">';
-      $html .= '<input type="text" name="s_pub" value ="' . (isset(  $_POST["s_pub"] ) ? $_POST["s_pub"] : "") . '" placeholder="Name der Kasse">';
+      $html .= '<input type="text" name="s_pub" value ="' . (isset(  $_POST["s_pub"] ) ? $_POST["s_pub"] : "") . '" placeholder="Name der Wirtschaft">';
       $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     $html .= '</form>';
 
@@ -35,10 +35,10 @@ function display_pubs ( $search_value = null ) {
           $html .= '<td>' . $pub["name"] . '</td>';
           $html .= '<td>';
             if(User::w_access_allowed($page, $current_user)) {
-                $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-                $html .= '<a href="' . $url_page . '&remove_pub=' . urlencode( $pub["pub_id"] ) . '" title="Kasse entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaftdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+                $html .= '<a href="' . $url_page . '&remove_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaft entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
             }else {
-              $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Kassendetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
+              $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaftdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
             }
           $html .= '</td>';
         $html .= '</tr>';
@@ -95,7 +95,7 @@ function single_pub ( $pub_id ) {
   // Start HTML
   $html =  '<div class="pub">';
     $html .=  '<div class="top-nav">';
-      $html .=  '<a href="' . $url_page . '&view_pub=' . $pub->pub . '&type=general" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" title="Kasse verwalten">Allgemein</a>';
+      $html .=  '<a href="' . $url_page . '&view_pub=' . $pub->pub . '&type=general" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" title="Wirtschaft verwalten">Allgemein</a>';
       $html .=  '<a href="' . $url_page . '&view_pub=' . $pub->pub . '&type=access" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "access" ? "selected" : "") : "") . '" title="Rechte verwalten">Rechte</a>';
     $html .=  '</div>';
 
@@ -140,9 +140,9 @@ function single_pub ( $pub_id ) {
 
                 $html .= '<td style="width: auto;">';
                   $html .= '<a onclick="' . ($write_access ? "pub_remove_right" : "pub_add_right") . '(this, \'' . $user["id"] . '\', ' . $pub_id . ', \'w\')"
-                  title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Kasse">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
+                  title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
                   $html .= '<a onclick="' . ($pub_access ? "pub_remove_right" : "pub_add_right") . '(this, \'' . $user["id"] . '\', ' . $pub_id . ', \'r\')"
-                  title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglePubRights1.svg") . '" /></a>';
+                  title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglePubRights1.svg") . '" /></a>';
                 $html .= '</td>';
               }elseif( User::r_access_allowed($page, $current_user) ){
                 //Current user can not edit and delete user
@@ -150,8 +150,8 @@ function single_pub ( $pub_id ) {
                 $pub_access = $pub->access( $user["id"] )["r"] ?? false;
 
                 $html .= '<td style="width: auto;" class="disabled">';
-                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Kasse">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
-                  $html .= '<a title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Kasse"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
+                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
+                  $html .= '<a title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
                 $html .= '</td>';
               }
 
@@ -185,12 +185,12 @@ function single_pub ( $pub_id ) {
       default:
         // Form
         $html .=  '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
-          //Kassenname
+          //BWirtschaftnname
           $html .=  '<div class="box">';
-            $html .=  '<p>Kassenname</p>';
+            $html .=  '<p>Wirtschaft ' . $pub->values()["name"] . '</p>';
             $html .=  '<label class="txt-input">';
               $html .=  '<input type="text" name="name" value="' . $pub->values()["name"] . '" ' . $disabled .'/>';
-              $html .=  '<span class="placeholder">Kassenname</span>';
+              $html .=  '<span class="placeholder">Wirtschaftname</span>';
             $html .=  '</label>';
           $html .=  '</div>';
 
@@ -387,7 +387,7 @@ function single_product ( $product_id ) {
       //Produktname
       $html .=  '<label class="txt-input">';
         $html .=  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
-        $html .=  '<span class="placeholder">Kassenname</span>';
+        $html .=  '<span class="placeholder">Wirtschaftnname</span>';
       $html .=  '</label>';
 
       // Section
@@ -481,7 +481,7 @@ switch(key($action)) {
     $pub->pub = $_GET["remove_pub"];
 
     // Generate message
-    $info = "Möchtest du die Kasse <strong>" . $pub->values()["name"] . " (#" . $_GET["remove_pub"] . ")</strong>  wirklich löschen?";
+    $info = "Möchtest du die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $_GET["remove_pub"] . ")</strong>  wirklich löschen?";
 
     // Display message
     Action::confirm($info, $_GET["remove_pub"], "&list=pub");
@@ -513,9 +513,9 @@ switch(key($action)) {
           default:
             // Check what part needs to be updated
             if( $pub->update_pub(  $_POST ) ) {
-              Action::success("Die Kasse <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+              Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
             }else {
-              Action::fail("Die Kasse <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+              Action::fail("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
             }
           break;
         }
@@ -564,9 +564,9 @@ switch(key($action)) {
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
           if( $pub->add( Pub::PRODUCTS_TABLE, $_POST ) ) {
-            Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
+            Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
           }else{
-            Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+            Action::fail("Leider konnte die Wirtschaft <strong>nicht</strong></b> erstellt werden.");
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -655,9 +655,9 @@ switch(key($action)) {
       if(! empty( $_POST )) {
         if(User::w_access_allowed($page, $current_user)) {
           if( $pub->add( Pub::DEFAULT_TABLE, $_POST ) ) {
-            Action::success("Die Kasse konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_pub=" . $pub->pub . "' class='redirect'>Kasse verwalten</a></strong>");
+            Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_pub=" . $pub->pub . "' class='redirect'>Wirtschaft verwalten</a></strong>");
           }else{
-            Action::fail("Leider konnte die Kasse <strong>nicht</strong></b> erstellt werden.");
+            Action::fail("Leider konnte die Wirtschaft <strong>nicht</strong></b> erstellt werden.");
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -666,11 +666,11 @@ switch(key($action)) {
 
       //Start form to edit, show user
       echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-        echo '<h1>Kasse hinzufügen</h1>';
-        //Kassenname
+        echo '<h1>Wirtschaft hinzufügen</h1>';
+        //Wirtschaftnname
         echo '<label class="txt-input">';
           echo '<input type="text" name="name" ' . $disabled . '/>';
-          echo '<span class="placeholder">Kassenname</span>';
+          echo '<span class="placeholder">Wirtschaftname</span>';
         echo '</label>';
 
         // Images
@@ -717,8 +717,8 @@ switch(key($action)) {
     // Display top menu
     echo '<div class="pub">';
       echo '<div class="top-nav">';
-        echo '<a href="' . $url_page . '&list=pub" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "pub" ? "selected" : "") : "selected" ) . '" title="Kassen auflisten">KASSEN</a>';
-        echo '<a href="' . $url_page . '&list=products" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "") . '" title="Produkte auflisten">PRODUKTE</a>';
+        echo '<a href="' . $url_page . '&list=pub" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "pub" ? "selected" : "") : "selected" ) . '" title="Wirtschaften auflisten">WIRTSCHAFTEN</a>';
+        echo '<a href="' . $url_page . '&list=products" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "") . '" title="Produkte auflisten">GLOBALE PRODUKTE</a>';
       echo '</div>';
     echo '</div>';
 
@@ -750,9 +750,9 @@ switch(key($action)) {
 
         // Remove
         if( $pub->remove_pub() ) {
-          Action::success("Die Kasse <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+          Action::success("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
         }else {
-          Action::fail("Die Kasse <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+          Action::fail("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
         }
       }
 
