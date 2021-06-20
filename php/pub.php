@@ -187,7 +187,9 @@ class Pub {
    *          DFAULT TABLE:   array(
    *                            name,
    *                            payment_payrexx_instance,
-   *                            payment_payrexx_secret
+   *                            payment_payrexx_secret,
+   *                            payment_fee_absolute, (100 = 1)
+   *                            payment_fee_percent (1000 = 100%)
    *                          )
    *          PRODUCTS_TABLE: array(
    *                            pub_id,
@@ -208,7 +210,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
+    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -218,7 +220,7 @@ class Pub {
 
     // Restore message
     $restore_message = array(
-      "pub" => "Added new pub",
+      "pub" => "Added new pub (" . $checked_values["name"] . ")",
       "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
       "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
     );
@@ -262,7 +264,9 @@ class Pub {
    *            logo_fileID,
    *            background_fileID,
    *            payment_payrexx_instance,
-   *            payment_payrexx_secret
+   *            payment_payrexx_secret,
+   *            payment_fee_absolute, (100 = 1)
+   *            payment_fee_percent (10000 = 100%)
    *         )
    */
   public function update_pub( $values) {
@@ -273,7 +277,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret");
+    $valid_keys = array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -317,7 +321,6 @@ class Pub {
    *            price,
    *            currency,
    *            product_fileID,
-   *            availability
    *         )
    */
   public function update_product( $values ) {
@@ -328,7 +331,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "section", "price", "currency", "product_fileID", "availability");
+    $valid_keys = array("name", "section", "price", "currency", "product_fileID");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -654,6 +657,9 @@ class Pub {
    * requires: $pub, $product_id
    */
   public function toggleVisibility() {
+    // Get global
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
@@ -665,17 +671,25 @@ class Pub {
     ));
     $check = $check->fetch( PDO::FETCH_NUM );
 
-    // var_dump($check != false);
-    // var_dump((count( $check ) > 0) );
-    // var_dump((($check[0] ?? null) != 1));
-    // echo $check[0];
-
-
     // Do action
     // If no value is set the product is visible by default
     if( $check != false && (count( $check ) > 0) && (($check[0] ?? null) != 1)) {
       // expose product
       $expose = $conn->prepare("INSERT INTO " . PUB_PRODUCTS_META . " (pub_id, product_id, visible) VALUES (:pub_id, :product_id, 1) ON DUPLICATE KEY UPDATE visible=1");
+
+      //Create modification
+      $change = array(
+        "user" => $current_user,
+        "message" => "Exposed product #" . $this->product_id . " (" . $this->product()["name"] . ")",
+        "table" => PUB_PRODUCTS_META,
+        "function" => "UPDATE",
+        "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
+        "old" => array("visible" => 0),
+        "new" => array("visible" => 1),
+      );
+
+      User::modifie( $change );
+
       return $expose->execute(array(
         ":pub_id" => $this->pub,
         ":product_id" => $this->product_id,
@@ -683,6 +697,20 @@ class Pub {
     }else {
       // hide product
       $hide = $conn->prepare("INSERT INTO " . PUB_PRODUCTS_META . " (pub_id, product_id, visible) VALUES (:pub_id, :product_id, 0) ON DUPLICATE KEY UPDATE visible=0");
+
+      //Create modification
+      $change = array(
+        "user" => $current_user,
+        "message" => "Hid product #" . $this->product_id . " (" . $this->product()["name"] . ")",
+        "table" => PUB_PRODUCTS_META,
+        "function" => "UPDATE",
+        "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
+        "old" => array("visible" => 1),
+        "new" => array("visible" => 0),
+      );
+
+      User::modifie( $change );
+
       return $hide->execute(array(
         ":pub_id" => $this->pub,
         ":product_id" => $this->product_id,
