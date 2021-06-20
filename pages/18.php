@@ -150,7 +150,7 @@ function single_pub ( $pub_id ) {
                 $pub_access = $pub->access( $user["id"] )["r"] ?? false;
 
                 $html .= '<td style="width: auto;" class="disabled">';
-                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
+                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($write_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
                   $html .= '<a title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
                 $html .= '</td>';
               }
@@ -227,7 +227,7 @@ function single_pub ( $pub_id ) {
           // Payrexx
           $html .=  '<div class="box">';
             $html .=  '<p>Payrexx</p>';
-            $html .=  'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+            $html .=  'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
 
             // Payrexx instance
             $html .=  '<label class="txt-input">';
@@ -239,6 +239,26 @@ function single_pub ( $pub_id ) {
             $html .=  '<label class="txt-input">';
               $html .=  '<input type="text" name="payment_payrexx_secret" value="' . $pub->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
               $html .=  '<span class="placeholder">Payrexx Secret</span>';
+            $html .=  '</label>';
+          $html .=  '</div>';
+
+          // Fees
+          $html .=  '<div class="box">';
+            $html .=  '<p>Gebühren</p>';
+            $html .=  'Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Produktpreisen ändert sich dadurch nichts.';
+
+            // Payrexx instance
+            $html .=  '<label class="txt-input">';
+              $html .=  '<input type="number" name="payment_fee_absolute" value="' . ($pub->values()["payment_fee_absolute"] / 100) . '" ' . $disabled . '/>';
+              $html .=  '<span class="placeholder">Absolute Gebühren</span>';
+              $html .=  '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
+            $html .=  '</label>';
+
+            // Payrexx secret
+            $html .=  '<label class="txt-input">';
+              $html .=  '<input type="number" name="payment_fee_percent" value="' . ($pub->values()["payment_fee_percent"] / 100) . '" ' . $disabled . '/>';
+              $html .=  '<span class="placeholder">Prozentuale Gebühren</span>';
+              $html .=  '<span class="unit">%</span>';
             $html .=  '</label>';
           $html .=  '</div>';
 
@@ -378,6 +398,34 @@ function single_product ( $product_id ) {
 
   // Start html
   $html =  '<div class="pub">';
+
+  //Display right menu
+  $html .= '<div class="right-sub-menu">';
+    $html .= '<div class="right-menu-container">';
+      $html .= '<a class="right-menu-item"><img src="' . $url . 'medias/icons/availability.svg" alt="state" title="Produktstatus bestimmen"/></a>';
+      $html .= '<div class="right-sub-menu-container">';
+        // Define colors
+        $availability = array(
+          0 => array(
+            "color" => "#2b4476",
+            "title" => "Verfügbar",
+          ),
+          1 => array(
+            "color" => "#7c2b51",
+            "title" => "Wenige verfügbar",
+          ),
+          2 => array(
+            "color" => "#e10c23",
+            "title" => "Ausverkauft",
+          ),
+        );
+        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
+        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
+        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
+      $html .= '</div>';
+    $html .= '</div>';
+  $html .= '</div>';
+
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
       if( User::w_access_allowed( $page, $current_user) ) {
         $html .=  '<h1>Produkt bearbeiten</h1>';
@@ -420,27 +468,6 @@ function single_product ( $product_id ) {
         $html .=  '<span class="placeholder">Preis</span>';
         $html .=  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
       $html .=  '</label>';
-
-      // Status
-      $availability = array(
-        0 => "Verfügbar",
-        1 => "Wenige verfügbar",
-        2 => "Ausverkauft"
-      );
-
-      $html .= '<div class="select" onclick="toggleOptions(this)">';
-        $html .= '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($pub->product()["availability"]) ? 'value="' . $pub->product()["availability"] . '"' : "") . ' required>';
-        $html .= '<span class="headline">' . ($availability[$pub->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
-
-        if( User::w_access_allowed( $page, $current_user) ) {
-          $html .= '<div class="options">';
-            foreach( $availability as $key=>$name ) {
-              $html .= '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
-            }
-          $html .= '</div>';
-        }
-      $html .= '</div>';
-
 
       // Produktbild
       $html .= '<span class="file-info">Produktbild</span>';
@@ -512,6 +539,9 @@ switch(key($action)) {
           case "general":
           default:
             // Check what part needs to be updated
+            $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
+            $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
+
             if( $pub->update_pub(  $_POST ) ) {
               Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
             }else {
@@ -562,6 +592,8 @@ switch(key($action)) {
         if(User::w_access_allowed($page, $current_user)) {
           // Prepare post value
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
+          $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
+          $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
 
           if( $pub->add( Pub::PRODUCTS_TABLE, $_POST ) ) {
             Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
@@ -689,7 +721,7 @@ switch(key($action)) {
         echo '</label>';
 
         // Payrexx
-        echo '<br />Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren . ';
+        echo '<br />Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
 
         // Payrexx instance
         echo '<label class="txt-input">';
@@ -701,6 +733,23 @@ switch(key($action)) {
         echo '<label class="txt-input">';
           echo '<input type="text" name="payment_payrexx_secret" ' . $disabled . '/>';
           echo '<span class="placeholder">Payrexx Secret</span>';
+        echo '</label>';
+
+        // Fees
+        echo '<br />Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Proudktpreisen ändert sich dadurch nichts.';
+
+        // Payrexx instance
+        echo '<label class="txt-input">';
+          echo '<input type="number" name="payment_fee_absolute" />';
+          echo '<span class="placeholder">Absolute Gebühren</span>';
+          echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
+        echo '</label>';
+
+        // Payrexx secret
+        echo '<label class="txt-input">';
+          echo '<input type="number" name="payment_payrexx_secret"/>';
+          echo '<span class="placeholder">Prozentuale Gebühren</span>';
+          echo '<span class="unit">%</span>';
         echo '</label>';
 
         //Add submit button

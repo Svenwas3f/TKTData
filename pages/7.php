@@ -319,7 +319,7 @@ function single_ticket() {
           '</span>';
 
         $html .= '<div class="options">';
-          $html .= '<span data-value="" onclick="selectElement(this)">Kein Coupon verwenden</span>';
+          $html .= '<span data-value="" onclick="selectElement(this)">Kein Coupon verwendet</span>';
           foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
             $couponPrice = new Coupon();
             $couponPrice->couponID = $coupon["couponID"];
@@ -356,11 +356,15 @@ unset($action["row-start"]); //Remove tow to get only valid keys
 switch(key($action)) {
   case "view":
     if(! empty($_POST)) {
+
+      var_dump($_POST);
       //Update ticket
       if(User::w_access_allowed($page, $current_user)) {
         //do update
         $ticket = new Ticket();
         $ticket->ticketToken = $_GET["view"];
+
+        var_dump($ticket->values());
 
         if($ticket->update($_POST)) {
           Action::success("Das Ticket konnte <strong>erfolgreich</strong> überarbeitet werden.");

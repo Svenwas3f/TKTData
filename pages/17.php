@@ -75,7 +75,7 @@ echo '<div class="pub">';
 
       //Start form to edit, show user
       echo '<div class="pub">';
-        echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+        echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="box-width">';
           echo '<h1>Produkt hinzufügen</h1>';
           //Produktname
           echo '<label class="txt-input">';
@@ -158,6 +158,7 @@ echo '<div class="pub">';
     case "view_product":
       // Set product id
       $pub->product_id = $_GET["view_product"] ?? null;
+      $pub->toggleVisibility();
 
       // Update
       if(! empty($_POST)) {
@@ -177,8 +178,43 @@ echo '<div class="pub">';
 
       // Check if product is accessable
       if( $pub->product()["pub_id"] == $pub->pub ) {
+        //Display right menu
+        echo '<div class="right-sub-menu">';
+          echo '<div class="right-menu-container">';
+            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          echo '</div>';
+
+          echo '<div class="right-menu-container">';
+            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/availability.svg" alt="state" title="Produktstatus bestimmen"/></a>';
+            echo '<div class="right-sub-menu-container">';
+              // Define colors
+              $availability = array(
+                0 => array(
+                  "color" => "#2b4476",
+                  "title" => "Verfügbar",
+                ),
+                1 => array(
+                  "color" => "#7c2b51",
+                  "title" => "Wenige verfügbar",
+                ),
+                2 => array(
+                  "color" => "#e10c23",
+                  "title" => "Ausverkauft",
+                ),
+              );
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
+            echo '</div>';
+          echo '</div>';
+
+          echo '<div class="right-menu-container">';
+            echo '<a href="' . $url_page . '&remove_product=' . $pub->product_id . '" class="right-menu-item"><img src="' . $url . 'medias/icons/trash.svg" alt="Mail" title="Produkt entfernen"/></a>';
+          echo '</div>';
+        echo '</div>';
+
         // Generate html
-        echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
+        echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="right-menu">';
           if( $write_access === true ) {
             echo  '<h1>Produkt bearbeten</h1>';
           }else {
@@ -223,28 +259,6 @@ echo '<div class="pub">';
             echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
 
-          // Status
-          $availability = array(
-            0 => "Verfügbar",
-            1 => "Wenige verfügbar",
-            2 => "Ausverkauft"
-          );
-
-          echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' ' . (isset($pub->product()["availability"]) ? 'value="' . $pub->product()["availability"] . '"' : "") . ' required>';
-            echo '<span class="headline">' . ($availability[$pub->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
-
-
-              if( $write_access === true ) {
-                echo '<div class="options">';
-                  foreach( $availability as $key=>$name ) {
-                    echo '<span data-value="' . $key . '" onclick="selectElement(this)">' . $name . '</span>';
-                  }
-                echo '</div>';
-              }
-          echo '</div>';
-
-
           // Produktbild
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
@@ -269,6 +283,37 @@ echo '<div class="pub">';
         // Banner global product
         echo '<div class="banner-global-product">';
           echo '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden';
+        echo '</div>';
+
+        // Right menu
+        echo '<div class="right-sub-menu">';
+          echo '<div class="right-menu-container">';
+            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          echo '</div>';
+
+          echo '<div class="right-menu-container">';
+            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/availability.svg" alt="state" title="Produktstatus bestimmen"/></a>';
+            echo '<div class="right-sub-menu-container">';
+              // Define colors
+              $availability = array(
+                0 => array(
+                  "color" => "#2b4476",
+                  "title" => "Verfügbar",
+                ),
+                1 => array(
+                  "color" => "#7c2b51",
+                  "title" => "Wenige verfügbar",
+                ),
+                2 => array(
+                  "color" => "#e10c23",
+                  "title" => "Ausverkauft",
+                ),
+              );
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
+            echo '</div>';
+          echo '</div>';
         echo '</div>';
 
         echo  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
@@ -296,19 +341,6 @@ echo '<div class="pub">';
             echo  '<span class="placeholder">Preis</span>';
             echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
-
-          // Status
-          $availability = array(
-            0 => "Verfügbar",
-            1 => "Wenige verfügbar",
-            2 => "Ausverkauft"
-          );
-
-          echo '<div class="select">';
-            echo '<input type="text" class="selectValue" name="availability" disabled required>';
-            echo '<span class="headline">' . ($availability[$pub->product()["availability"]] ?? 'Produktverfügbarkeit') . '</span>';
-          echo '</div>';
-
 
           // Produktbild
           echo '<span class="file-info">Produktbild</span>';
@@ -345,6 +377,14 @@ echo '<div class="pub">';
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
         }
+      }
+
+      // Fees info
+      if( isset($pub->values()["payment_fee_absolute"]) || isset($pub->values()["payment_fee_percent"]) ) {
+        echo '<div class="fee-info">';
+          // fee info text
+          echo 'Onlinezahlungen sind leider nicht ganz gratis, weshalb vom Verkauspreis jeweils <strong>' . $pub->values()["payment_fee_absolute"] . ' ' . DEFAULT_CURRENCY . '</strong> und <strong>' . $pub->values()["payment_fee_percent"] . '%</strong> abgegeben werden muss.';
+        echo '</div>';
       }
 
       // List all products
