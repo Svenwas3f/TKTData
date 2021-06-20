@@ -158,7 +158,6 @@ echo '<div class="pub">';
     case "view_product":
       // Set product id
       $pub->product_id = $_GET["view_product"] ?? null;
-      $pub->toggleVisibility();
 
       // Update
       if(! empty($_POST)) {
@@ -181,7 +180,11 @@ echo '<div class="pub">';
         //Display right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
-            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+            if($pub->product_visibility()) {
+              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+            }else {
+              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+            }
           echo '</div>';
 
           echo '<div class="right-menu-container">';
@@ -288,7 +291,11 @@ echo '<div class="pub">';
         // Right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
-            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          if($pub->product_visibility()) {
+            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          }else {
+            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          }
           echo '</div>';
 
           echo '<div class="right-menu-container">';

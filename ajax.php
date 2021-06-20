@@ -362,9 +362,39 @@ switch($_POST["p"]) {
   break;
 
   /**
+   * Pub products
+   */
+  case 17:
+    switch($_POST["action"]) {
+      case "toggleVisibility":
+          if(User::w_access_allowed(18, $current_user)) {
+            // Change toggle
+            $pub = new Pub();
+            $pub->pub = json_decode($_POST["values"], true)["pub"];
+            $pub->product_id = json_decode($_POST["values"], true)["product_id"];
+            $pub->toggleVisibility();
+
+            // Return new image
+            if( $pub->product_visibility() ) {
+              echo json_encode(array(
+                "visibility" => "on",
+                "img_src" => $url . '/medias/icons/visibility-on.svg'
+              ));
+            }else {
+              echo json_encode(array(
+                "visibility" => "off",
+                "img_src" => $url . '/medias/icons/visibility-off.svg'
+              ));
+            }
+          }
+      break;
+    }
+  break;
+
+  /**
    * Pub
    */
-  case 19:
+  case 18:
     switch($_POST["action"]) {
       case "add_right":
         if(User::w_access_allowed(19, $current_user)) {

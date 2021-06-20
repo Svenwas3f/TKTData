@@ -649,7 +649,15 @@ class Pub {
       ":pub_id" => $this->pub,
       ":product_id" => $this->product_id
     ));
-    return boolval( $visibility->fetch( PDO::FETCH_NUM )[0] );
+
+    return boolval( ($visibility->fetch( PDO::FETCH_NUM )[0] ?? 1) );
+  }
+
+  /**
+   *
+   */
+  public function product_availability() {
+
   }
 
   /**
@@ -716,6 +724,13 @@ class Pub {
         ":product_id" => $this->product_id,
       ));
     }
+  }
+
+  /**
+   *
+   */
+  public function update_availability() {
+
   }
 
   /**

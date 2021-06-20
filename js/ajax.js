@@ -43,6 +43,8 @@
  *
  * group_coupons ( group [groupID] )
  *
+ * pub_product_visiliity_toggle( item [HTML Element], pub [pubID], product_id [product_id] )
+ *
  * pub_add_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
  * pub_remove_right ( link [link element], user [UserID], pub [pubID], type [access type] )
@@ -304,6 +306,22 @@ function group_coupons(group) {
 }
 
 /**
+ *
+ */
+function pub_product_visiliity_toggle(item, pub, product_id) {
+  var values = new Object();
+  values["pub"] = pub,
+  values["product_id"] = product_id;
+
+  ajax(17, function(c) {
+    // Get response
+    var ajax_response = JSON.parse(c.responseText);
+
+    item.firstChild.src = ajax_response.img_src;
+  }, "toggleVisibility", values);
+}
+
+/**
  * Set new pub rights
  */
 function pub_add_right( link, user, pub, type = "r" ) {
@@ -312,7 +330,7 @@ function pub_add_right( link, user, pub, type = "r" ) {
   values["pub"] = pub,
   values["type"] = type;
 
-  ajax(19, function(c) {
+  ajax(18, function(c) {
     try {
       // Get json
       var ajax_response = JSON.parse(c.responseText);
@@ -343,7 +361,7 @@ function pub_remove_right( link, user, pub, type = "r" ) {
   values["pub"] = pub,
   values["type"] = type;
 
-  ajax(19, function(c) {
+  ajax(18, function(c) {
     try {
       // Get json
       var ajax_response = JSON.parse(c.responseText);
