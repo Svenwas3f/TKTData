@@ -210,7 +210,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "availability", "currency");
+    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -578,11 +578,6 @@ class Pub {
     return $products->fetchAll( PDO::FETCH_ASSOC );
   }
 
-  // public function all_products( $offset = 0, $steps = 20, $search_value = null ) {
-  //
-  //   $sql = "SELECT * FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL OR pub_id=:pub_id ORDER BY name ASC, section ASC, availability ASC, price DESC";
-  // }
-
   /**
    * Returns array with all section-names
    * requires: $pub or no pub for global products
@@ -654,10 +649,21 @@ class Pub {
   }
 
   /**
-   *
+   * Gets current availability of product
+   * requiest: $pub, $product_id
    */
   public function product_availability() {
+    //Get database connection
+    $conn = Access::connect();
 
+    // get visibility
+    $visibility = $conn->prepare("SELECT availability FROM " . PUB_PRODUCTS_META . " WHERE pub_id=:pub_id AND product_id=:product_id");
+    $visibility->execute(array(
+      ":pub_id" => $this->pub,
+      ":product_id" => $this->product_id
+    ));
+
+    return ($visibility->fetch( PDO::FETCH_NUM )[0] ?? 0);
   }
 
   /**
@@ -728,9 +734,38 @@ class Pub {
 
   /**
    *
+   * $availability = 0: available
+    *                1: little available
+    *                2: sold
    */
-  public function update_availability() {
+  public function update_availability( $availability ) {
+    // Get global
+    global $current_user;
 
+    //Get database connection
+    $conn = Access::connect();
+
+    //Create modification
+    $change = array(
+      "user" => $current_user,
+      "message" => "Changed availability of product #" . $this->product_id . " (" . $this->product()["name"] . ")",
+      "table" => PUB_PRODUCTS_META,
+      "function" => "UPDATE",
+      "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
+      "old" => array("availability" => $this->product_availability()),
+      "new" => array("availability" => $availability),
+    );
+
+    User::modifie( $change );
+
+    // Update availability
+    $update = $conn->prepare("INSERT INTO " . PUB_PRODUCTS_META . " (pub_id, product_id, availability) VALUES (:pub_id, :product_id, :availability1) ON DUPLICATE KEY UPDATE availability=:availability2");
+    return $update->execute(array(
+      ":pub_id" => $this->pub,
+      ":product_id" => $this->product_id,
+      ":availability1" => $availability,
+      ":availability2" => $availability,
+    ));
   }
 
   /**

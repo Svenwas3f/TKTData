@@ -205,9 +205,9 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
 
@@ -316,9 +316,9 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
         echo '</div>';
@@ -390,7 +390,7 @@ echo '<div class="pub">';
       if( isset($pub->values()["payment_fee_absolute"]) || isset($pub->values()["payment_fee_percent"]) ) {
         echo '<div class="fee-info">';
           // fee info text
-          echo 'Onlinezahlungen sind leider nicht ganz gratis, weshalb vom Verkauspreis jeweils <strong>' . $pub->values()["payment_fee_absolute"] . ' ' . DEFAULT_CURRENCY . '</strong> und <strong>' . $pub->values()["payment_fee_percent"] . '%</strong> abgegeben werden muss.';
+          echo 'Onlinezahlungen sind leider nicht ganz gratis, weshalb vom Verkauspreis jeweils <strong>' . ($pub->values()["payment_fee_absolute"] / 100) . ' ' . DEFAULT_CURRENCY . '</strong> und <strong>' . ($pub->values()["payment_fee_percent"] / 100) . '%</strong> abgegeben werden muss.';
         echo '</div>';
       }
 

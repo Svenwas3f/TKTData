@@ -388,6 +388,22 @@ switch($_POST["p"]) {
             }
           }
       break;
+      case "update_availability":
+        // Update availability
+        $pub = new Pub();
+        $pub->pub = json_decode($_POST["values"], true)["pub"];
+        $pub->product_id = json_decode($_POST["values"], true)["product_id"];
+
+        if( $pub->update_availability( json_decode($_POST["values"], true)["availability"] ) ) {
+          echo json_encode(array(
+            "status" => true,
+          ));
+        }else {
+          echo json_encode(array(
+            "status" => false,
+          ));
+        }
+      break;
     }
   break;
 

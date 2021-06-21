@@ -321,6 +321,30 @@ function pub_product_visiliity_toggle(item, pub, product_id) {
   }, "toggleVisibility", values);
 }
 
+function pub_prdocut_availability( container, pub, product_id, availability) {
+  var values = new Object();
+  values["pub"] = pub,
+  values["product_id"] = product_id;
+  values["availability"] = availability;
+
+  ajax(17, function(c) {
+    // Get response
+    var ajax_response = JSON.parse(c.responseText);
+
+    if( ajax_response.status == true) {
+      // Remove classes
+      for(var i = 0; i < container.children.length; i++) {
+        container.children[i].classList.remove("current");
+      }
+
+      // Add to new class
+      container.children[availability].classList.add("current");
+
+      console.log(container.children);
+    }
+  }, "update_availability", values);
+}
+
 /**
  * Set new pub rights
  */

@@ -2419,7 +2419,10 @@ form.search button img {
   font-family: 'Open Sans', sans-serif;
   color: var(--maincolor);
   border-bottom: 1px dotted var(--whitegray);
+}
 
+.mainpage-5 .right-sub-menu .right-menu-container:hover .right-sub-menu-container .right-sub-menu-item.current {
+  background-color: var(--custom-gray3);
 }
 
 .mainpage-5 .right-sub-menu .right-menu-container:hover .right-sub-menu-container .right-sub-menu-item:hover {
