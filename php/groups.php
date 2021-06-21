@@ -314,7 +314,7 @@ class Group {
     }
 
     // Valid keys
-    $valid_keys = array( "maxTickets", "price", "vat", "currency", "startTime", "endTime", "tpu", "ticket_title", "ticket_logo_fileID", "ticket_advert1_fileID", "ticket_advert2_fileID", "ticket_advert3_fileID", "mail_banner_fileID", "mail_from", "mail_displayName", "mail_subject", "mail_msg", "payment_mail_msg", "payment_store", "payment_logo_fileID", "payment_background_fileID", "adfs", "adfs_custom", "payment_payress_instance", "payment_payrexx_secret", "description", "name", "custom" );
+    $valid_keys = array( "maxTickets", "price", "vat", "currency", "startTime", "endTime", "tpu", "ticket_title", "ticket_logo_fileID", "ticket_advert1_fileID", "ticket_advert2_fileID", "ticket_advert3_fileID", "mail_banner_fileID", "mail_from", "mail_displayName", "mail_subject", "mail_msg", "payment_mail_msg", "payment_store", "payment_logo_fileID", "payment_background_fileID", "adfs", "adfs_custom", "payment_payrexx_instance", "payment_payrexx_secret", "description", "name", "custom" );
 
     // Ccheck values
     $checked_values = array_intersect_key( $values, array_flip( $valid_keys ) );
