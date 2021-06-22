@@ -289,32 +289,6 @@ function display_products ( $search_value = null ) {
     $html .=  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
   $html .=  '</form>';
 
-  // Define colors
-  $availability = array(
-    0 => array(
-      "color" => "#2b4476",
-      "title" => "Verfügbar",
-    ),
-    1 => array(
-      "color" => "#7c2b51",
-      "title" => "Wenige verfügbar",
-    ),
-    2 => array(
-      "color" => "#e10c23",
-      "title" => "Ausverkauft",
-    ),
-  );
-
-  // Legend
-  $html .= '<div class="legend">';
-    foreach( $availability as $element ) {
-      $html .= '<div class="legend-element">';
-        $html .= '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
-        $html .= $element["title"];
-      $html .= '</div>';
-    }
-  $html .= '</div>';
-
   // Table
   $html .=  '<table class="rows">';
     //Headline
@@ -333,7 +307,7 @@ function display_products ( $search_value = null ) {
 
     foreach( Pub::global_products( $offset, $steps, $search_value ) as $products ) {
       $html .=  '<tr>';
-        $html .=  '<td><div class="color" style="background-color: ' . $availability[($products["availability"] ?? 0)]["color"] . ';" title="' . $availability[($products["availability"] ?? 0)]["title"] . '"></div>' . $products["name"] . '</td>';
+        $html .=  '<td>' . $products["name"] . '</td>';
         $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
         $html .=  '<td>';
           if(User::w_access_allowed($page, $current_user)) {
@@ -398,34 +372,6 @@ function single_product ( $product_id ) {
 
   // Start html
   $html =  '<div class="pub">';
-
-  //Display right menu
-  $html .= '<div class="right-sub-menu">';
-    $html .= '<div class="right-menu-container">';
-      $html .= '<a class="right-menu-item"><img src="' . $url . 'medias/icons/availability.svg" alt="state" title="Produktstatus bestimmen"/></a>';
-      $html .= '<div class="right-sub-menu-container">';
-        // Define colors
-        $availability = array(
-          0 => array(
-            "color" => "#2b4476",
-            "title" => "Verfügbar",
-          ),
-          1 => array(
-            "color" => "#7c2b51",
-            "title" => "Wenige verfügbar",
-          ),
-          2 => array(
-            "color" => "#e10c23",
-            "title" => "Ausverkauft",
-          ),
-        );
-        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[0]["color"] . '">' . $availability[0]["title"] . '</a>';
-        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[1]["color"] . '">' . $availability[1]["title"] . '</a>';
-        $html .= '<a class="right-sub-menu-item" style="border-left: 5px solid ' . $availability[2]["color"] . '">' . $availability[2]["title"] . '</a>';
-      $html .= '</div>';
-    $html .= '</div>';
-  $html .= '</div>';
-
     $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
       if( User::w_access_allowed( $page, $current_user) ) {
         $html .=  '<h1>Produkt bearbeiten</h1>';
@@ -643,24 +589,6 @@ switch(key($action)) {
             echo '<span class="placeholder">Preis</span>';
             echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
           echo '</label>';
-
-          // Status
-          $availability = array(
-            0 => "Verfügbar",
-            1 => "Wenige verfügbar",
-            2 => "Ausverkauft"
-          );
-
-          echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' required>';
-            echo '<span class="headline">Produktverfügbarkeit</span>';
-
-            echo '<div class="options">';
-              echo '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
-              echo '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
-              echo '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
-            echo '</div>';
-          echo '</div>';
 
 
           // Produktbild

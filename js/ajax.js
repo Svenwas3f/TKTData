@@ -43,14 +43,14 @@
  *
  * group_coupons ( group [groupID] )
  *
- * pub_product_visiliity_toggle( item [HTML Element], pub [pubID], product_id [product_id] )
+ * pub_product_visiliity_toggle ( item [HTML Element], pub [pubID], product_id [product_id] )
+ *
+ * pub_product_availability ( container [HTML Element], pub [pubID], product_id [product_id], availability [availability state])
  *
  * pub_add_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
  * pub_remove_right ( link [link element], user [UserID], pub [pubID], type [access type] )
- *
  */
-
 
 /**
  * Ajax function
@@ -230,8 +230,8 @@ function livedata_visitors(callback) {
     //Display error message
     var reqAnswer = c.responseText;
     callback( c.responseText );
-  }, "visitors")
-} //TODO
+  }, "visitors");
+}
 
 /**
  * Changes trend in content-trend-img
@@ -281,8 +281,10 @@ function livedata_historyDown() {
 
 /**
  * Gets custom elements of group
+ *
+ * group: group ID
  */
-function group_custom(group) {
+function group_custom( group ) {
   var values = new Object();
   values["groupID"] = group;
 
@@ -294,6 +296,8 @@ function group_custom(group) {
 
 /**
  * Gets all coupons of group
+ *
+ * group: group ID
  */
 function group_coupons(group) {
   var values = new Object();
@@ -306,7 +310,11 @@ function group_coupons(group) {
 }
 
 /**
+ * Changes visibility of a product and the pub
  *
+ * item: container of image
+ * pub: pub ID
+ * product_id: product ID
  */
 function pub_product_visiliity_toggle(item, pub, product_id) {
   var values = new Object();
@@ -321,7 +329,17 @@ function pub_product_visiliity_toggle(item, pub, product_id) {
   }, "toggleVisibility", values);
 }
 
-function pub_prdocut_availability( container, pub, product_id, availability) {
+/**
+ * Changes availability of a product and the pub
+ *
+ * container: container where availability states are stored
+ * pub: pb ID
+ * product_id: product ID
+ * availability = 0: available
+ *                1: little available
+ *                2: sold
+ */
+function pub_product_availability( container, pub, product_id, availability) {
   var values = new Object();
   values["pub"] = pub,
   values["product_id"] = product_id;
@@ -339,14 +357,17 @@ function pub_prdocut_availability( container, pub, product_id, availability) {
 
       // Add to new class
       container.children[availability].classList.add("current");
-
-      console.log(container.children);
     }
   }, "update_availability", values);
 }
 
 /**
  * Set new pub rights
+ *
+ * link: onclick link for new icons
+ * user: User who should have access to pub
+ * pub: Pub ID
+ * type: r (read) or w (write)
  */
 function pub_add_right( link, user, pub, type = "r" ) {
   var values = new Object();
@@ -378,6 +399,11 @@ function pub_add_right( link, user, pub, type = "r" ) {
 
 /**
  * remove pub rights
+ *
+ * link: onclick link for new icons
+ * user: User who should have access to pub
+ * pub: Pub ID
+ * type: r (read) or w (write)
  */
 function pub_remove_right( link, user, pub, type = "r" ) {
   var values = new Object();

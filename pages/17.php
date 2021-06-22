@@ -205,9 +205,9 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
 
@@ -444,11 +444,14 @@ echo '<div class="pub">';
 
         // List general products
         foreach( $pub->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
+          // set product id
+          $pub->product_id = $product["id"];
+
           // Check if global product
           if( is_null($product["pub_id"]) ) {
             // Global product
-            echo  '<tr class="global_product" title="Globales Produkt">';
-              echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+            echo  '<tr class="global_product ' . (! $pub->product_visibility() ? "hidden_product" : "") . '" title="' . ($pub->product_visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+              echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
               echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
               echo  '<td>';
                 echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
@@ -456,8 +459,8 @@ echo '<div class="pub">';
             echo  '</tr>';
           }else {
             // Product of pub
-            echo  '<tr>';
-              echo  '<td><div class="color" style="background-color: ' . $availability[($product["availability"] ?? 0)]["color"] . ';" title="' . $availability[($product["availability"] ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+            echo  '<tr class="' . ($pub->product_visibility() ? "" : "hidden_product") . '" title="' . ($pub->product_visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+              echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
               echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
               echo  '<td>';
                 if( $write_access === true ) {
@@ -469,6 +472,9 @@ echo '<div class="pub">';
               echo  '</td>';
             echo  '</tr>';
           }
+
+          // reset product id
+          $pub->product_id = null;
         }
 
         // Menu requred

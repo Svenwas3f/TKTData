@@ -48,7 +48,11 @@
  *
  * pub->product_visibility () [$pub, $product_id]
  *
+ * pub->product_availability () [$pub, $product_id]
+ *
  * pub->toggleVisibility () [$pub, $product_id]
+ *
+ * pub->update_availability () [$pub, $product_id]
  *
  * pub->values () [$pub]
  *
@@ -733,10 +737,12 @@ class Pub {
   }
 
   /**
+   * Updates availability
+   * requires: $pub, $product_id (Set $pub to null if you want to use global products)
    *
    * $availability = 0: available
-    *                1: little available
-    *                2: sold
+   *                 1: little available
+   *                 2: sold
    */
   public function update_availability( $availability ) {
     // Get global

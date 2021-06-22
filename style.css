@@ -2553,7 +2553,13 @@ form.search button img {
 }
 
 .mainpage-5.subpage-17 .pub tr.global_product {
-  color: var(--lightnavy)
+  color: var(--lightnavy);
+}
+
+.mainpage-5.subpage-17 .pub tr.hidden_product {
+  background-image: repeating-linear-gradient(45deg, var(--lightwhitegray), var(--lightwhitegray) 2px, white 2px, white 8px);
+  background-size: 100% 100%;
+  background-position: center center;
 }
 
 .mainpage-5.subpage-17 .pub tr.global_product .color {
