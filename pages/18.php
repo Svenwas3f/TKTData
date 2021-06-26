@@ -185,11 +185,19 @@ function single_pub ( $pub_id ) {
       default:
         // Form
         $html .=  '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
-          //BWirtschaftnname
+          //Wirtschaftnname
           $html .=  '<div class="box">';
-            $html .=  '<p>Wirtschaft ' . $pub->values()["name"] . '</p>';
+            $html .= '<p>Generell</p>';
             $html .=  '<label class="txt-input">';
               $html .=  '<input type="text" name="name" value="' . $pub->values()["name"] . '" ' . $disabled .'/>';
+              $html .=  '<span class="placeholder">Wirtschaftname</span>';
+            $html .=  '</label>';
+          $html .=  '</div>';
+
+          //Beschreibung
+          $html .=  '<div class="box">';
+            $html .=  '<label class="txt-input">';
+              $html .=  '<textarea name="description" ' . $disabled .'/>' . $pub->values()["description"] . '</textarea>';
               $html .=  '<span class="placeholder">Wirtschaftname</span>';
             $html .=  '</label>';
           $html .=  '</div>';
@@ -632,6 +640,12 @@ switch(key($action)) {
           echo '<input type="text" name="name" ' . $disabled . '/>';
           echo '<span class="placeholder">Wirtschaftname</span>';
         echo '</label>';
+
+        //Beschreibung
+        echo '<label class="txt-input">';
+            echo '<textarea name="description" ' . $disabled .'/></textarea>';
+            echo '<span class="placeholder">Wirtschaftname</span>';
+          echo '</label>';
 
         // Images
         echo '<span class="file-info">Logo</span>';

@@ -112,25 +112,6 @@ echo '<div class="pub">';
             echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
           echo '</label>';
 
-          // Status
-          $availability = array(
-            0 => "Verfügbar",
-            1 => "Wenige verfügbar",
-            2 => "Ausverkauft"
-          );
-
-          echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="availability" ' . $disabled . ' required>';
-            echo '<span class="headline">Produktverfügbarkeit</span>';
-
-            echo '<div class="options">';
-              echo '<span data-value="0" onclick="selectElement(this)">Verfügbar</span>';
-              echo '<span data-value="1" onclick="selectElement(this)">Wenige verfügbar</span>';
-              echo '<span data-value="2" onclick="selectElement(this)">Ausverkauft</span>';
-            echo '</div>';
-          echo '</div>';
-
-
           // Produktbild
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
