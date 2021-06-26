@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Jun 2021 um 22:21
+-- Erstellungszeit: 25. Jun 2021 um 20:42
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -20,52 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `tktdata`
 --
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `tktdata_pub`
---
-
-CREATE TABLE `tktdata_pub` (
-  `pub_id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `logo_fileID` varchar(32) DEFAULT NULL,
-  `background_fileID` varchar(32) DEFAULT NULL,
-  `payment_payrexx_instance` varchar(255) DEFAULT NULL,
-  `payment_payrexx_secret` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `tktdata_pub_access`
---
-
-CREATE TABLE `tktdata_pub_access` (
-  `id` int(11) NOT NULL,
-  `pub_id` int(11) DEFAULT NULL,
-  `user_id` varchar(255) DEFAULT NULL,
-  `w` int(11) NOT NULL DEFAULT 0,
-  `r` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `tktdata_pub_products`
---
-
-CREATE TABLE `tktdata_pub_products` (
-  `id` int(11) NOT NULL,
-  `pub_id` int(11) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `section` varchar(255) DEFAULT NULL,
-  `price` int(11) DEFAULT NULL,
-  `currency` varchar(3) DEFAULT NULL,
-  `product_fileID` varchar(32) DEFAULT NULL,
-  `availability` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -91,15 +45,6 @@ CREATE TABLE `tktdata_livedata_live` (
   `liveAction` tinyint(1) DEFAULT NULL,
   `action_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `tktdata_livedata_live`
---
-
-INSERT INTO `tktdata_livedata_live` (`id`, `liveAction`, `action_timestamp`) VALUES
-(1, 0, '2021-06-04 19:29:19'),
-(2, 1, '2021-06-04 19:29:29'),
-(3, 0, '2021-06-04 19:35:43');
 
 -- --------------------------------------------------------
 
@@ -138,7 +83,7 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (2, 'Coupons', 0, NULL, 2, NULL),
 (3, 'Scanner', 0, NULL, 3, NULL),
 (4, 'Live', 0, NULL, 4, NULL),
-(5, 'Kasse', 0, NULL, 5, NULL),
+(5, 'Wirtschaften', 0, NULL, 5, NULL),
 (6, 'Benutzer', 0, NULL, 6, NULL),
 (7, 'Alle Tickets', 1, 'ticket.svg', 1, NULL),
 (8, 'Gruppen', 1, 'group.svg', 2, NULL),
@@ -154,6 +99,67 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
 (20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_pub`
+--
+
+CREATE TABLE `tktdata_pub` (
+  `pub_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `logo_fileID` varchar(32) DEFAULT NULL,
+  `background_fileID` varchar(32) DEFAULT NULL,
+  `payment_payrexx_instance` varchar(255) DEFAULT NULL,
+  `payment_payrexx_secret` varchar(255) DEFAULT NULL,
+  `payment_fee_percent` int(11) DEFAULT NULL,
+  `payment_fee_absolute` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_pub_access`
+--
+
+CREATE TABLE `tktdata_pub_access` (
+  `id` int(11) NOT NULL,
+  `pub_id` int(11) DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  `w` int(11) NOT NULL DEFAULT 0,
+  `r` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_pub_products`
+--
+
+CREATE TABLE `tktdata_pub_products` (
+  `id` int(11) NOT NULL,
+  `pub_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `section` varchar(255) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT NULL,
+  `product_fileID` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_pub_products_meta`
+--
+
+CREATE TABLE `tktdata_pub_products_meta` (
+  `pub_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `visible` int(11) DEFAULT NULL,
+  `availability` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -285,24 +291,6 @@ CREATE TABLE `tktdata_user_rights` (
 --
 
 --
--- Indizes für die Tabelle `tktdata_pub`
---
-ALTER TABLE `tktdata_pub`
-  ADD PRIMARY KEY (`pub_id`);
-
---
--- Indizes für die Tabelle `tktdata_pub_access`
---
-ALTER TABLE `tktdata_pub_access`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indizes für die Tabelle `tktdata_pub_products`
---
-ALTER TABLE `tktdata_pub_products`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indizes für die Tabelle `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_archive`
@@ -325,6 +313,30 @@ ALTER TABLE `tktdata_mediahub`
 --
 ALTER TABLE `tktdata_menu`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_pub`
+--
+ALTER TABLE `tktdata_pub`
+  ADD PRIMARY KEY (`pub_id`);
+
+--
+-- Indizes für die Tabelle `tktdata_pub_access`
+--
+ALTER TABLE `tktdata_pub_access`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_pub_products`
+--
+ALTER TABLE `tktdata_pub_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `tktdata_pub_products_meta`
+--
+ALTER TABLE `tktdata_pub_products_meta`
+  ADD UNIQUE KEY `pub_id` (`pub_id`,`product_id`);
 
 --
 -- Indizes für die Tabelle `tktdata_tickets`
@@ -370,40 +382,40 @@ ALTER TABLE `tktdata_user_rights`
 --
 
 --
--- AUTO_INCREMENT für Tabelle `tktdata_pub`
---
-ALTER TABLE `tktdata_pub`
-  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT für Tabelle `tktdata_pub_access`
---
-ALTER TABLE `tktdata_pub_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
-
---
--- AUTO_INCREMENT für Tabelle `tktdata_pub_products`
---
-ALTER TABLE `tktdata_pub_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_archive`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_live`
 --
 ALTER TABLE `tktdata_livedata_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1303;
+
+--
+-- AUTO_INCREMENT für Tabelle `tktdata_pub`
+--
+ALTER TABLE `tktdata_pub`
+  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT für Tabelle `tktdata_pub_access`
+--
+ALTER TABLE `tktdata_pub_access`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=367;
+
+--
+-- AUTO_INCREMENT für Tabelle `tktdata_pub_products`
+--
+ALTER TABLE `tktdata_pub_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
@@ -421,13 +433,13 @@ ALTER TABLE `tktdata_tickets_groups`
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=408;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3315;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3479;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
