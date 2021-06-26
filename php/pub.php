@@ -44,6 +44,8 @@
  *
  * pub->sections () [$pub]
  *
+ * pub->products_by_section () [$pub]
+ *
  * pub->global_products ( $offset [int], $steps [int], $search_value [info_string] )
  *
  * pub->product_visibility () [$pub, $product_id]
@@ -214,7 +216,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
+    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -281,7 +283,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent");
+    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -584,15 +586,15 @@ class Pub {
 
   /**
    * Returns array with all section-names
-   * requires: $pub or no pub for global products
+   * requires: $pub or no pub for global sections
    */
   public function sections() {
     //Get database connection
     $conn = Access::connect();
 
     if( isset($this->pub) ) {
-      // Get all sections by pub
-      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND pub_id=:pub_id");
+      // Get all sections by pub (including globals)
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND (pub_id=:pub_id OR pub_id IS NULL) ORDER BY section ASC");
       $sections->execute(array(
         ":pub_id" => $this->pub,
       ));
@@ -600,11 +602,41 @@ class Pub {
       return $sections->fetchAll( PDO::FETCH_ASSOC );
     }else {
       // Get all global sections
-      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND pub_id IS NULL");
+      $sections = $conn->prepare("SELECT DISTINCT section FROM " . PUB_PRODUCTS . " WHERE section IS NOT NULL AND pub_id IS NULL ORDER BY section ASC");
       $sections->execute();
 
       return $sections->fetchAll( PDO::FETCH_ASSOC );
     }
+  }
+
+  /**
+   * Returns all products by section
+   * If you set $pub the global products are included aswell
+   *
+   * requires: $pub or no pub for global sections
+   */
+  public function products_by_section( $section ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Request section
+    if( isset($this->pub) ) {
+      // Get all products of pub and section (inclubing globals)
+      $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND (pub_id=:pub_id OR pub_id IS NULL) ORDER BY name ASC, price ASC");
+      $sections->execute(array(
+        ":section" => $section,
+        ":pub_id" => $this->pub,
+      ));
+    }else {
+      // Get all global products and section
+      $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND pub_id IS NULL ORDER BY name ASC, price ASC");
+      $sections->execute(array(
+        ":section" => $section,
+      ));
+    }
+
+    // Return array
+    return $sections->fetchAll( PDO::FETCH_ASSOC );
   }
 
   /**
