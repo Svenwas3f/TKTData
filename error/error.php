@@ -45,6 +45,11 @@ class ERR {
           "code" => "DB Connetion failed",
           "message" => "Es konnte keine Verbindung zur Datenbank aufgebaut werden.")[$id];
       break;
+      case "pub":
+        return array(
+          "code" => "Keine Wirtschaft angegeben",
+          "message" => "Für die Getränke und Speisekarte benötigt es eine Wirtschaft.")[$id];
+      break;
       default:
         if(! empty(http_response_code())) {
           switch (http_response_code()) {

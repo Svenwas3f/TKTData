@@ -90,7 +90,7 @@ $groupValues = $group->values();
 
     <footer>
       <div>
-        Provided by <span>TKTDATA</span> & Sven Waser
+        Ticket provided by <span>TKTDATA</span>
       </div>
     </footer>
   </body>

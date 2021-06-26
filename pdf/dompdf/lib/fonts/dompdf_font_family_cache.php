@@ -83,29 +83,29 @@
     '800' => $fontDir . '/baloo-tamma-2-800_3e82da8673856456fd10d58a8c19cfa1',
   ),
   'open sans' => array(
-    'normal' => $fontDir . '/open-sans-normal_2ffbb7fe88d9dc438ac12d7deaf79459',
+    'normal' => $fontDir . '/open-sans-normal_cf03ddd813be5c12330d0320c7a624bd',
     'bold' => $fontDir . '/open-sans-bold_e153176450f92f468fa14d9de918408b',
     '800' => $fontDir . '/open-sans-800_9b31cb72fa555985c61d89917ed8cb08',
   ),
   'ethnocentric' => array(
-    'normal' => $fontDir . '/ethnocentric-normal_2d74097c705b6bcd0854f360cf0d2990',
+    'normal' => $fontDir . '/ethnocentric-normal_52b6e7a354c934150fec7b5ac44aae14',
   ),
   'ethnocentric itallic' => array(
-    'normal' => $fontDir . '/ethnocentric-itallic-normal_cce524dc3f73b36c9422c41af2987751',
+    'normal' => $fontDir . '/ethnocentric-itallic-normal_1cf83cb29631e10bddddd163a18a98a9',
   ),
   'open sans bold' => array(
-    'normal' => $fontDir . '/open-sans-bold-normal_f04be8bb19fde61922c85e47e5dce857',
+    'normal' => $fontDir . '/open-sans-bold-normal_98eade2235b1f337ff711e63edf30eba',
   ),
   'open sans semi bold' => array(
-    'normal' => $fontDir . '/open-sans-semi-bold-normal_3c29d3e3384ffb252141612ecc979b2a',
+    'normal' => $fontDir . '/open-sans-semi-bold-normal_252d96a0a572d062eff8721c651f5406',
   ),
   'montserrat' => array(
-    'normal' => $fontDir . '/montserrat-normal_a6d58f03254d5889a3b629109554c6de',
+    'normal' => $fontDir . '/montserrat-normal_227a4d9a9d026e7a99a726cb4ac53265',
   ),
   'montserrat bold' => array(
-    'normal' => $fontDir . '/montserrat-bold-normal_956eec2bfbad6e06083523d4d03d90ed',
+    'normal' => $fontDir . '/montserrat-bold-normal_63d947f30cf9bd5d373b39b242c7fea7',
   ),
   'montserrat semi bold' => array(
-    'normal' => $fontDir . '/montserrat-semi-bold-normal_5318edf586e8d9070200885ee8988dda',
+    'normal' => $fontDir . '/montserrat-semi-bold-normal_56820d957b4f78bae7f669c2d3244f14',
   ),
 ) ?>
