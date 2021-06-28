@@ -50,6 +50,8 @@
  * pub_add_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
  * pub_remove_right ( link [link element], user [UserID], pub [pubID], type [access type] )
+ *
+ * toggleTipMoney( pub [pubID], img [HTML Element] )
  */
 
 /**
@@ -432,4 +434,23 @@ function pub_remove_right( link, user, pub, type = "r" ) {
       document.getElementsByTagName("body")[0].innerHTML += c.responseText;
     }
   }, "remove_right", values);
+}
+
+/**
+ * toggles tip money availability
+ *
+ * pub: Pub ID
+ * img: HTML Element where new image should be placed
+ */
+function toggleTipMoney( pub, img ) {
+  var values = new Object();
+  values["pub"] = pub,
+
+  ajax(18, function(c) {
+    // Get json
+    var ajax_response = JSON.parse(c.responseText);
+
+    // Set new src
+    img.src = ajax_response.img_src;
+  }, "toggle_tip", values);
 }

@@ -413,7 +413,7 @@ switch($_POST["p"]) {
   case 18:
     switch($_POST["action"]) {
       case "add_right":
-        if(User::w_access_allowed(19, $current_user)) {
+        if(User::w_access_allowed(18, $current_user)) {
           // Set values
           $values = json_decode( $_POST["values"], true );
 
@@ -493,7 +493,7 @@ switch($_POST["p"]) {
         }
       break;
       case "remove_right":
-        if(User::w_access_allowed(19, $current_user)) {
+        if(User::w_access_allowed(18, $current_user)) {
           // Set values
           $values = json_decode( $_POST["values"], true );
 
@@ -551,6 +551,31 @@ switch($_POST["p"]) {
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        }
+      break;
+      case "toggle_tip":
+        // Start new pub
+        $pub = new Pub();
+        $pub->pub = json_decode($_POST["values"], true)["pub"];
+
+        if( $pub->values()["tip"] == 1) {
+          // Change state
+          $pub->update_pub(array("tip" => 0));
+
+          // Return values
+          echo json_encode(array(
+            "visibility" => "off",
+            "img_src" => $url . '/medias/icons/tip-money-off.svg'
+          ));
+        }else {
+          // Change state
+          $pub->update_pub(array("tip" => 1));
+
+          // Return values
+          echo json_encode(array(
+            "visibility" => "on",
+            "img_src" => $url . '/medias/icons/tip-money-on.svg'
+          ));
         }
       break;
     }
