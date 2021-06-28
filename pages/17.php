@@ -393,7 +393,81 @@ echo '<div class="pub">';
 
       // Select page
       if( ($_GET["list"] ?? "") == "settings") {
+        // Update
+        if(isset($_POST["update"])) {
+          if( $write_access ) {
+            // Prepare values
+            $valid_keys = array("logo_fileID", "description", "background_fileID", "tip");
+            $checked_values = array_intersect_key($_POST, array_flip($valid_keys));
+
+            // Remove
+            if( $pub->update_pub( $checked_values ) ) {
+              Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+            }else {
+              Action::fail("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+            }
+          }else {
+            Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          }
+        }
+
+        echo '<div class="right-sub-menu">';
+          echo '<div class="right-menu-container">';
+            echo '<a class="right-menu-item" href="' . $url . 'pdf/menu/?pub=' . $pub->pub . '" target="_blank"><img src="' . $url . 'medias/icons/pdf.svg" alt="PDF" title="Speise und Getränkekarte als PDF ansehen"/></a>';
+            if($pub->values()["tip"] == 1) {
+              echo '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-on.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
+            }else {
+              echo '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-off.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
+            }
+          echo '</div>';
+        echo '</div>';
+
         // List settings
+        echo '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" class="right-menu">';
+          //Beschreibung
+          echo '<div class="box">';
+            echo '<p>Details</p>';
+            echo '<label class="txt-input">';
+              echo '<textarea name="description" ' . $disabled .'/>' . $pub->values()["description"] . '</textarea>';
+              echo '<span class="placeholder">Beschreibung</span>';
+            echo '</label>';
+          echo '</div>';
+
+          // Images
+          echo '<div class="box">';
+            echo '<p>Bilder</p>';
+            echo '<span class="file-info">Logo</span>';
+            echo '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
+              // Display preview image if possible
+              if( isset($pub->values()["logo_fileID"]) &&! empty($pub->values()["logo_fileID"]) ) {
+                echo '<input type="hidden" name="logo_fileID" value="' . $pub->values()["logo_fileID"] . '" onchange="MediaHubSelected(this)">';
+                echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->values()["logo_fileID"] ) . '\')"></div>';
+              }else {
+                echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+                echo '<input type="hidden" name="logo_fileID" onchange="MediaHubSelected(this)">';
+              }
+              echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+            echo '</label>';
+
+            echo '<span class="file-info">Hintergrundbild</span>';
+            echo '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
+              // Display preview image if possible
+              if( isset($pub->values()["background_fileID"]) &&! empty($pub->values()["background_fileID"]) ) {
+                echo '<input type="hidden" name="background_fileID" value="' . $pub->values()["background_fileID"] . '" onchange="MediaHubSelected(this)">';
+                echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->values()["background_fileID"] ) . '\')"></div>';
+              }else {
+                echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
+                echo '<input type="hidden" name="background_fileID" onchange="MediaHubSelected(this)">';
+              }
+              echo '<div class="draganddrop">Klicken um auszuwählen</div>';
+            echo '</label>';
+          echo '</div>';
+
+          //Add submit button
+          echo '<input type="submit" name="update" value="Update" ' . $disabled .'/>';
+
+
+        echo '</form>';
       }else {
         // List all products
         echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="search">';

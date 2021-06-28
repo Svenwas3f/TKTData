@@ -183,8 +183,19 @@ function single_pub ( $pub_id ) {
       break;
       case "general":
       default:
+        $html .= '<div class="right-sub-menu">';
+          $html .= '<div class="right-menu-container">';
+            $html .= '<a class="right-menu-item" href="' . $url . 'pdf/menu/?pub=' . $pub->pub . '" target="_blank"><img src="' . $url . 'medias/icons/pdf.svg" alt="PDF" title="Speise und Getränkekarte als PDF ansehen"/></a>';
+            if($pub->values()["tip"] == 1) {
+              $html .= '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-on.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
+            }else {
+              $html .= '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-off.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
+            }
+          $html .= '</div>';
+        $html .= '</div>';
+
         // Form
-        $html .=  '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" enctype="multipart/form-data" accept="image/*">';
+        $html .=  '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" class="right-menu">';
           //Wirtschaftnname
           $html .=  '<div class="box">';
             $html .= '<p>Generell</p>';
@@ -495,6 +506,7 @@ switch(key($action)) {
             // Check what part needs to be updated
             $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
             $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
+            $_POST["tip"] = (empty($_POST["tip"]) ? 0 : 1);
 
             if( $pub->update_pub(  $_POST ) ) {
               Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");

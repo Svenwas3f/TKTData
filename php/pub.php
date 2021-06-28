@@ -216,7 +216,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
+    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -283,13 +283,13 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent");
+    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
     $update_query = "UPDATE " . PUB . " SET ";
     foreach( $checked_values as $key => $value ) {
-      if(! empty($value) ) {
+      if( strlen($value) > 0) { // empty does handle 0 as no value
         $update_query .= $key . " = '" . $value . "', ";
       }
     }
@@ -299,11 +299,11 @@ class Pub {
     $change = array(
       "user" => $current_user,
       "message" => "Updated pub #" . $this->pub . " (" . $this->values()["name"] . ")",
-      "table" => "pub",
+      "table" => "PUB",
       "function" => "UPDATE",
       "primary_key" => array("key" => "pub_id", "value" => $this->pub),
       "old" => array_intersect_key($this->values(), array_flip($valid_keys)),
-      "new" => $valid_keys
+      "new" => $checked_values
     );
 
     User::modifie($change);
@@ -386,7 +386,7 @@ class Pub {
     $change = array(
       "user" => $current_user,
       "message" => "Removed pub #" . $this->pub . " (" . $this->values()["name"] . ")",
-      "table" => "pub",
+      "table" => "PUB",
       "function" => "UPDATE",
       "primary_key" => array("key" => "pub_id", "value" => $this->pub),
       "old" => array_intersect_key($this->values(), array_flip(array("name", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret"))),
@@ -731,7 +731,7 @@ class Pub {
       $change = array(
         "user" => $current_user,
         "message" => "Exposed product #" . $this->product_id . " (" . $this->product()["name"] . ")",
-        "table" => PUB_PRODUCTS_META,
+        "table" => "PUB_PRODUCTS_META",
         "function" => "UPDATE",
         "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
         "old" => array("visible" => 0),
@@ -752,7 +752,7 @@ class Pub {
       $change = array(
         "user" => $current_user,
         "message" => "Hid product #" . $this->product_id . " (" . $this->product()["name"] . ")",
-        "table" => PUB_PRODUCTS_META,
+        "table" => "PUB_PRODUCTS_META",
         "function" => "UPDATE",
         "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
         "old" => array("visible" => 1),
@@ -787,7 +787,7 @@ class Pub {
     $change = array(
       "user" => $current_user,
       "message" => "Changed availability of product #" . $this->product_id . " (" . $this->product()["name"] . ")",
-      "table" => PUB_PRODUCTS_META,
+      "table" => "PUB_PRODUCTS_META",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
       "old" => array("availability" => $this->product_availability()),
