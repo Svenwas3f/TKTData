@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jun 2021 um 20:42
+-- Erstellungszeit: 28. Jun 2021 um 22:00
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -115,7 +115,8 @@ CREATE TABLE `tktdata_pub` (
   `payment_payrexx_instance` varchar(255) DEFAULT NULL,
   `payment_payrexx_secret` varchar(255) DEFAULT NULL,
   `payment_fee_percent` int(11) DEFAULT NULL,
-  `payment_fee_absolute` int(11) DEFAULT NULL
+  `payment_fee_absolute` int(11) DEFAULT NULL,
+  `tip` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -433,7 +434,7 @@ ALTER TABLE `tktdata_tickets_groups`
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=408;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=474;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
