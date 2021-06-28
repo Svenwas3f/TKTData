@@ -2332,6 +2332,10 @@ form.search button img {
   border-top: 5px solid var(--maincolor);
 }
 
+.mainpage-5 .pub .top-nav.border-none {
+  border: none;
+}
+
 .mainpage-5 .pub .top-nav a {
   display: inline-block;
   padding: 5px 20px;
@@ -2341,6 +2345,11 @@ form.search button img {
   font-family: 'Open Sans', sans-serif;
   transition: 0.25s;
   -webkit-transition: 0.25s;
+}
+
+.mainpage-5 .pub .top-nav a img {
+  height: 12pt;
+  vertical-align: sub;
 }
 
 .mainpage-5.subpage-17 .fee-info {
@@ -2519,6 +2528,8 @@ form.search button img {
 
 .mainpage-5 .pub .header .pubs.visible {
   display: block;
+  max-height: 20vh;
+  overflow: auto;
 }
 
 .mainpage-5 .pub .header .pubs a {
@@ -2527,6 +2538,15 @@ form.search button img {
   text-decoration: none;
   color: black;
   font-family: 'Open Sans', sans-serif;
+  border-top: 1px dotted var(--gray);
+}
+
+.mainpage-5 .pub .header .pubs a:nth-child(1) {
+  border: none;
+}
+
+.mainpage-5 .pub .header .pubs a:hover {
+  background-color: var(--lightergray);
 }
 
 /*Legend*/

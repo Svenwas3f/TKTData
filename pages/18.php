@@ -198,7 +198,7 @@ function single_pub ( $pub_id ) {
           $html .=  '<div class="box">';
             $html .=  '<label class="txt-input">';
               $html .=  '<textarea name="description" ' . $disabled .'/>' . $pub->values()["description"] . '</textarea>';
-              $html .=  '<span class="placeholder">Wirtschaftname</span>';
+              $html .=  '<span class="placeholder">Beschreibung</span>';
             $html .=  '</label>';
           $html .=  '</div>';
 
@@ -530,6 +530,14 @@ switch(key($action)) {
         Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
       }
     }
+
+    // Display top return button
+    echo '<div class="pub">';
+      echo '<div class="top-nav">';
+        echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
+      echo '</div>';
+    echo '</div>';
+
     // View single
     single_product( $pub->product_id );
   break;

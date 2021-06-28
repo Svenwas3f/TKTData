@@ -158,6 +158,11 @@ echo '<div class="pub">';
 
       // Check if product is accessable
       if( $pub->product()["pub_id"] == $pub->pub ) {
+        // Display top return button
+        echo '<div class="top-nav border-none">';
+          echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
+        echo '</div>';
+
         //Display right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
@@ -269,6 +274,11 @@ echo '<div class="pub">';
           echo '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden';
         echo '</div>';
 
+        // Display top return button
+        echo '<div class="top-nav border-none">';
+          echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
+        echo '</div>';
+
         // Right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
@@ -375,122 +385,130 @@ echo '<div class="pub">';
         echo '</div>';
       }
 
-      // List all products
-      echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="search">';
-        echo  '<input type="text" name="s_product" value ="' . ($_POST["s_product"] ?? "") . '" placeholder="Produktname, Preis">';
-        echo  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-      echo  '</form>';
-
-      // Define colors
-      $availability = array(
-        0 => array(
-          "color" => "#2b4476",
-          "title" => "Verfügbar",
-        ),
-        1 => array(
-          "color" => "#7c2b51",
-          "title" => "Wenige verfügbar",
-        ),
-        2 => array(
-          "color" => "#e10c23",
-          "title" => "Ausverkauft",
-        ),
-      );
-
-      // Legend
-      echo '<div class="legend">';
-        foreach( $availability as $element ) {
-          echo '<div class="legend-element">';
-            echo '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
-            echo $element["title"];
-          echo '</div>';
-        }
+      // Top navigation
+      echo '<div class="top-nav border-none">';
+        echo '<a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=products" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "selected" ) . '" title="Produkte ansehen">PRODUKTE</a>';
+        echo '<a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=settings" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "settings" ? "selected" : "") : "") . '" title="Wirtschaftseinstellungen vornehmen">EINSTELLUNGEN</a>';
       echo '</div>';
 
-      // Table
-      echo  '<table class="rows">';
-        //Headline
-        $headline_names = array('Name', 'Preis', 'Aktion');
+      // Select page
+      if( ($_GET["list"] ?? "") == "settings") {
+        // List settings
+      }else {
+        // List all products
+        echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="search">';
+          echo  '<input type="text" name="s_product" value ="' . ($_POST["s_product"] ?? "") . '" placeholder="Produktname, Preis">';
+          echo  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+        echo  '</form>';
 
-        //Start headline
-        echo  '<tr>'; //Start row
-        foreach( $headline_names as $name ){
-          echo  '<th>' . $name . '</th>';
-        }
-        echo  '</tr>'; //Close row
+        // Define colors
+        $availability = array(
+          0 => array(
+            "color" => "#2b4476",
+            "title" => "Verfügbar",
+          ),
+          1 => array(
+            "color" => "#7c2b51",
+            "title" => "Wenige verfügbar",
+          ),
+          2 => array(
+            "color" => "#e10c23",
+            "title" => "Ausverkauft",
+          ),
+        );
 
-        // Set offset and steps
-        $steps = 20;
-        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+        // Legend
+        echo '<div class="legend">';
+          foreach( $availability as $element ) {
+            echo '<div class="legend-element">';
+              echo '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
+              echo $element["title"];
+            echo '</div>';
+          }
+        echo '</div>';
 
-        // List general products
-        foreach( $pub->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
-          // set product id
-          $pub->product_id = $product["id"];
+        // Table
+        echo  '<table class="rows">';
+          //Headline
+          $headline_names = array('Name', 'Preis', 'Aktion');
 
-          // Check if global product
-          if( is_null($product["pub_id"]) ) {
-            // Global product
-            echo  '<tr class="global_product ' . (! $pub->product_visibility() ? "hidden_product" : "") . '" title="' . ($pub->product_visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
-              echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-              echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
-              echo  '<td>';
-                echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
-              echo  '</td>';
-            echo  '</tr>';
-          }else {
-            // Product of pub
-            echo  '<tr class="' . ($pub->product_visibility() ? "" : "hidden_product") . '" title="' . ($pub->product_visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
-              echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-              echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
-              echo  '<td>';
-                if( $write_access === true ) {
-                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-                }else {
+          //Start headline
+          echo  '<tr>'; //Start row
+          foreach( $headline_names as $name ){
+            echo  '<th>' . $name . '</th>';
+          }
+          echo  '</tr>'; //Close row
+
+          // Set offset and steps
+          $steps = 20;
+          $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+          // List general products
+          foreach( $pub->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
+            // set product id
+            $pub->product_id = $product["id"];
+
+            // Check if global product
+            if( is_null($product["pub_id"]) ) {
+              // Global product
+              echo  '<tr class="global_product ' . (! $pub->product_visibility() ? "hidden_product" : "") . '" title="' . ($pub->product_visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+                echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+                echo  '<td>';
                   echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
-                }
-              echo  '</td>';
-            echo  '</tr>';
+                echo  '</td>';
+              echo  '</tr>';
+            }else {
+              // Product of pub
+              echo  '<tr class="' . ($pub->product_visibility() ? "" : "hidden_product") . '" title="' . ($pub->product_visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+                echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
+                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+                echo  '<td>';
+                  if( $write_access === true ) {
+                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                  }else {
+                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                  }
+                echo  '</td>';
+              echo  '</tr>';
+            }
+
+            // reset product id
+            $pub->product_id = null;
           }
 
-          // reset product id
-          $pub->product_id = null;
+          // Menu requred
+          echo  '<tr class="nav">';
+
+            if( (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+              echo  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+              echo  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                        </td>';
+            }elseif (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
+              echo  '<td colspan="' . count( $headline_names ) . '">
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                        </td>';
+            }
+
+          echo  '</tr>';
+
+        echo  '</table>';
+
+        if( $write_access === true ) {
+          echo  '<a class="add" href="' . $url_page . '&pub=' . $pub->pub . '&add=product">
+            <span class="horizontal"></span>
+            <span class="vertical"></span>
+          </a>';
         }
 
-        // Menu requred
-        echo  '<tr class="nav">';
-
-          if( (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
-          }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                      </td>';
-          }elseif (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
-          }
-
-        echo  '</tr>';
-
-      echo  '</table>';
-
-      if( $write_access === true ) {
-        echo  '<a class="add" href="' . $url_page . '&pub=' . $pub->pub . '&add=product">
-          <span class="horizontal"></span>
-          <span class="vertical"></span>
-        </a>';
+        echo  '</div>';
       }
-
-      echo  '</div>';
-
-
-      // List default settings for pub
     break;
   }
 echo '</div>';
