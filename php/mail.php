@@ -110,7 +110,7 @@ class TKTDataMailer extends PHPMailer {
       $mediaHub = new MediaHub();
       $mediaHub->fileID = $group->values()["mail_banner_fileID"];
 
-      $backgroundImgUrl = $mediaHub->getUrl( $group->values()["mail_banner_fileID"] );
+      $imgUrl = $mediaHub->getUrl( $group->values()["mail_banner_fileID"] );
       $altImage = $mediaHub->fileDetails()["alt"];
     }else {
       $imgUrl = $url . 'medias/logo/logo-fitted.png'; //No image found\Logo of tktdata
