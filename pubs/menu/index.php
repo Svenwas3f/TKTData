@@ -1,16 +1,21 @@
 <?php
 //Require general file
-require_once(dirname(__FILE__, 2). "/general.php");
+require_once(dirname(__FILE__, 3). "/general.php");
 
 //Set current user
 $current_user = "pub";
+
+// Check if pub is set
+if(! isset($_GET["pub"]) && empty($_GET["pub"])) {
+  header("Location: " . $url . "pubs/");
+}
 
  ?>
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - STORE</title>
+    <title>TKTDATA - PUB</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,14 +44,10 @@ $current_user = "pub";
     <meta name="msapplication-TileImage" content="<?php echo $url; ?>medias/logo/logo-512.png">
 
     <!-- Custom scripts -->
-    <link rel="stylesheet" href="<?php echo $url; ?>pub/style.css" />
+    <link rel="stylesheet" href="<?php echo $url; ?>pubs/style.css" />
     <link rel="stylesheet" href="<?php echo $url; ?>fonts/fonts.css" />
 
   </head>
-    <body>
-      <article>
-      </article>
-      <footer>
-      </footer>
-    </body>
+  <body>
+  </body>
   </html>
