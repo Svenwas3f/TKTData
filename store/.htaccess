@@ -1,0 +1,11 @@
+# If you are on a windows server (IIS) you can convert this file following the link below
+# or you can use the included web.config file (not tested)
+# https://stackoverflow.com/a/26744188/10386454
+# https://docs.microsoft.com/en-us/iis/extensions/url-rewrite-module/importing-apache-modrewrite-rules
+
+# Start engine
+RewriteEngine On
+
+# Generate new links
+# URL is built: sub.domain.top/store/type/page/id
+RewriteRule ^([A-Za-z0-9-]*)\/*([A-Za-z0-9-]*)\/*([A-Za-z0-9-]*)$ index.php?type=$1&page=$2&id=$3 [NC,L]

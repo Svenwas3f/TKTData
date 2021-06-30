@@ -1,21 +1,15 @@
 <?php
-//Require general file
-require_once(dirname(__FILE__, 3). "/general.php");
-
-//Set current user for changelog
-$current_user = "Store";
-
 //Check if ticket isn'texpired/not exiting
 //Get state of group
 $group = new Group();
-$group->groupID = $_GET["group"];
+$group->groupID = $_GET["id"];
 
 if($group->values() === false) {
-  header("Location: " . $url . "/store");
+  header("Location: " . $url . "/store/" . $type);
 }elseif($group->availableTickets() <= 0) {
-  header("Location: " . $url . "/store");
+  header("Location: " . $url . "/store/" . $type);
 }elseif($group->timeWindow() === false) {
-  header("Location: " . $url . "/store");
+  header("Location: " . $url . "/store/" . $type);
 }
 
 if( $group->values() === false ||
@@ -23,7 +17,7 @@ if( $group->values() === false ||
     $group->availableTickets() <= 0 ||
     $group->timeWindow() === false ) {
       // Redirect
-      header("Location: " . $url . "/store");
+      header("Location: " . $url . "/store/" . $type);
 }
 
 //Check ADFS
@@ -51,7 +45,7 @@ if(!empty($_POST)) {
   /* Get coupon */
   if(! empty($_POST["coupon"])) {
     $coupon = new Coupon();
-    $couponID = $coupon->get_couponID( $_POST["coupon"], $_GET["group"] );
+    $couponID = $coupon->get_couponID( $_POST["coupon"], $_GET["id"] );
   }
 
   // Define values
@@ -84,50 +78,10 @@ if(!empty($_POST)) {
 
   if( $add == 1 ) {
     /* Redirect to payment */
-    header("Location: " . $url . "store/pay/?ticketToken=" . urlencode($ticket->ticketToken));
+    header("Location: " . $url . "store/" . $type . "/pay/?ticketToken=" . urlencode($ticket->ticketToken));
   }
 }
  ?>
-<!DOCTYPE html>
-<html lang="de" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>TKTDATA - BUY</title>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="cache-control" content="no-cache">
-
-    <meta name="author" content="Sven Waser">
-    <meta name="publisher" content="Sven Waser">
-    <meta name="copyright" content="Sven Waser">
-    <meta name="reply-to" content="sven.waser@sven-waser.ch">
-
-    <meta name="description" content="Wilkommen auf dem TKTData Store. Kaufen Sie sich hier ein Ticket für den nächsten Event">
-    <meta name="keywords" content="TKTData, TKTData Store, Store">
-
-    <meta name="content-language" content="de">
-    <meta name="robots" content="noindex">
-
-    <meta name="theme-color" content="#232b43">
-
-
-    <link rel="shortcut icon" type="image/x-icon" href="<?php echo $url; ?>medias/logo/favicon.ico">
-    <link rel="shortcut icon" href="<?php echo $url; ?>medias/logo/favicon.ico">
-    <link rel="icon" type="image/png" href="<?php echo $url; ?>medias/logo/favicon.png" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $url; ?>medias/logo/logo-512.png">
-    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?php echo $url; ?>medias/logo/logo-512.png">
-    <meta name="msapplication-TileColor" content="#232b43">
-    <meta name="msapplication-TileImage" content="<?php echo $url; ?>medias/logo/logo-512.png">
-
-    <!-- Custom scripts -->
-    <link rel="stylesheet" href="<?php echo $url; ?>store/style.css" />
-    <link rel="stylesheet" href="<?php echo $url; ?>fonts/fonts.css" />
-
-    <script src="<?php echo $url; ?>store/main.js"></script>
-    <script src="<?php echo $url; ?>store/buy/ajax.js"></script>
-  </head>
-  <body>
     <article class="buy">
       <?php
       if(isset($add)) {
@@ -173,9 +127,9 @@ if(!empty($_POST)) {
         </div>
 
         <div class="buy-form-container">
-          <form action="<?php echo $url . "store/buy/?group=" . $_GET["group"]; ?>" method="post">
+          <form action="<?php echo $url . "store/" . $type . "/buy/" . $_GET["id"]; ?>" method="post">
             <!-- Hidden -->
-            <input type="hidden" name="groupID" value="<?php echo $_GET["group"] ?>" />
+            <input type="hidden" name="groupID" value="<?php echo $_GET["id"] ?>" />
 
             <!-- Ticket informations -->
             <div class="general">
@@ -306,22 +260,3 @@ if(!empty($_POST)) {
           </form>
         </div>
       </div>
-    </article>
-
-    <footer>
-      <div class="container">
-        <div class="footer-element">
-          <a href="<?php echo $url; ?>store/faq#contact">Kontakt</a>
-          <a href="<?php echo $url; ?>store/find-ticket">Mein Ticket finden</a>
-        </div>
-        <div class="footer-element">
-          <a href="<?php echo $url; ?>store/faq#payment-procedure">Wie kaufe ich ein Ticket?</a>
-          <a href="<?php echo $url; ?>store/faq#payment-options">Welche Zahlungsmöglichkeiten gibt es?</a>
-        </div>
-        <div class="footer-element">
-          <span class="powered">Powered by <span>TKTDATA</span></span>
-        </div>
-      </div>
-    </footer>
-  </body>
-</html>

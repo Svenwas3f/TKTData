@@ -5,7 +5,32 @@ require_once(dirname(__FILE__, 2). "/general.php");
 //Set current user
 $current_user = "Store";
 
- ?>
+// Filedata
+// Filename stored
+$files = array(
+  ////////////////////// TICKETS //////////////////////
+  "tickets" =>  array(
+    "" => "1.php", // Default page
+    "buy" => "2.php", // single view to enter details for ticket
+    "pay" => "3.php", // Pay ticket online
+    "response" => "4.php", // payment response
+    "faq" => "5.php", // FAQ of ticket
+    "find-ticket" => "6.php", // Search your ticket
+  ),
+
+  //////////////////////// PUBS ////////////////////////
+  "pubs" => array(
+    "" => "7.php",
+  ),
+);
+
+$type = isset($files[ $_GET["type"] ]) ? $_GET["type"] : array_key_first( $files );
+$page = isset($files[$type][ $_GET["page"] ]) ? $_GET["page"] : array_key_first( $files[$type] );
+
+// Generate full get array
+parse_str( str_replace("?", "", stristr( $_SERVER["REQUEST_URI"], "?")), $APPENDED_GET); // select GET parameters and parse to array
+$_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
+?>
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
   <head>
@@ -21,7 +46,7 @@ $current_user = "Store";
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="Wilkommen auf dem TKTData Store. Kaufen Sie sich hier ein Ticket für den nächsten Event">
+    <meta name="description" content="Wilkommen auf dem TKTData Store. Kaufen Sie sich hier ein Ticket für den nächsten Event oder eine Erfrischung während dem Event">
     <meta name="keywords" content="TKTData, TKTData Store, Store">
 
     <meta name="content-language" content="de">
@@ -41,100 +66,60 @@ $current_user = "Store";
     <!-- Custom scripts -->
     <link rel="stylesheet" href="<?php echo $url; ?>store/style.css" />
     <link rel="stylesheet" href="<?php echo $url; ?>fonts/fonts.css" />
+
+    <!-- JS -->
+    <script src="<?php echo $url; ?>store/main.js"></script>
+
+    <!-- Payrexx requirement -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://media.payrexx.com/modal/v1/gateway.min.js"></script>
   </head>
   <body>
     <article>
-
-      <header>
-        <div class="banner" style="background-image: url('<?php echo $url; ?>medias/store/banner.jpg')">
-          <img class="logo" src="<?php echo $url; ?>medias/store/logo-fitted.png">
-        </div>
-      </header>
-
-
-
-      <form action="" method="post"  class="search_bar">
-        <label>
-          <input type="text" name="search" placeholder="Nach Ticket suchen"/>
-          <button class="icon"><img src="<?php echo $url; ?>medias/icons/magnifying-glass.svg"></button>
-        </label>
-      </form>
-      <div class="store-group-list">
-        <?php
-        //List all groups
-        $conn = Access::connect();
-
-        //Search set
-        if(empty($_POST)) {
-          $allGroups = $conn->prepare("SELECT * FROM  " . TICKETS_GROUPS . " WHERE payment_store='1'");
-          $allGroups->execute();
-        }else {
-          $allGroups = $conn->prepare("SELECT * FROM  " . TICKETS_GROUPS . " WHERE payment_store='1' AND name LIKE :name");
-          $allGroups->execute(array(":name" => "%" . $_POST["search"] . "%"));
-        }
-
-        foreach($allGroups->fetchAll(PDO::FETCH_ASSOC) as $group) {
-          //Get state of group
-          $groupCheck = new Group();
-          $groupCheck->groupID = $group["groupID"];
-
-          if($groupCheck->values() === false) {
-            $groupState = 3; //Group does not exist
-          }elseif($groupCheck->availableTickets() <= 0) {
-            $groupState = 2; //sold out
-          }elseif($groupCheck->timeWindow() === false) {
-            $groupState = 1; //timewindow closed
-          }else {
-            $groupState = 0; //Ok
-          }
-
-          //Define onclick
-          $onclick = ($groupState == 0) ? 'onclick="location.href = \'' . $url . 'store/buy/?group=' . $group["groupID"] . '\'"' : '';
-
-          //Display every box of group
-          echo '<div class="store-group-box" ' . $onclick . '>';
-            //Banner required
-            switch($groupState) {
-              case 1:
-                echo '<div class="banner" style="background-color: #b91657;">Abgelaufen</div>';
-              break;
-              case 2:
-                echo '<div class="banner" style="background-color: #4c4ca1;">Ausverkauft</div>';
-              break;
-              case 3:
-                echo '<div class="banner" style="background-color: #80007c;">Existiert nicht</div>';
-              break;
-            }
-
-            //Get logo
-            //Get fullscreen image
-            if( isset( $groupCheck->values()["payment_logo_fileID"] ) &&! empty( $groupCheck->values()["payment_logo_fileID"] ) ) {
-              echo '<img  src="' . MediaHub::getUrl( $groupCheck->values()["payment_logo_fileID"] ) .'"/>';
-            }else {
-              echo '<img  src="' . $url . 'medias/store/favicon-color-512.png"/>';
-            }
-            echo '<span class="title">' . $group["name"] . '</span>';
-            echo '<span class="info">' . (($group["price"] + ($group["vat"] / 10000) * $group["price"]) / 100) . ' ' . $group["currency"] . '</span>';
-          echo '</div>';
-        }
-         ?>
-      </div>
+      <?php
+      // Display page
+      if( file_exists( dirname(__FILE__) . "/pages/" . $files[$type][$page] ) ) {
+        require_once( dirname(__FILE__) . "/pages/" . $files[$type][$page] );
+      }
+       ?>
     </article>
 
     <footer>
-      <div class="container">
-        <div class="footer-element">
-          <a href="<?php echo $url; ?>store/faq#contact">Kontakt</a>
-          <a href="<?php echo $url; ?>store/find-ticket">Mein Ticket finden</a>
-        </div>
-        <div class="footer-element">
-          <a href="<?php echo $url; ?>store/faq#payment-procedure">Wie kaufe ich ein Ticket?</a>
-          <a href="<?php echo $url; ?>store/faq#payment-options">Welche Zahlungsmöglichkeiten gibt es?</a>
-        </div>
-        <div class="footer-element">
-          <span class="powered">Powered by <span>TKTDATA</span></span>
-        </div>
-      </div>
+      <?php
+      // Custom footer
+      switch( $type ) {
+        ////////////////////// TICKETS //////////////////////
+        default:
+        case "ticket":
+          echo '<div class="container">';
+                  echo '<div class="footer-element">';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#contact">Kontakt</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/find-ticket">Mein Ticket finden</a>';
+                  echo '</div>';
+                  echo '<div class="footer-element">';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-procedure">Wie kaufe ich ein Ticket?</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-options">Welche Zahlungsmöglichkeiten gibt es?</a>';
+                  echo '</div>';
+                  echo '<div class="footer-element">';
+                    echo '<span class="powered">Powered by <span>TKTDATA</span></span>';
+                  echo '</div>';
+                echo '</div>';
+        break;
+
+        //////////////////////// PUBS ////////////////////////
+        case "pubs":
+          echo '<div class="container">';
+                  echo '<div class="footer-element">';
+                  echo '</div>';
+                  echo '<div class="footer-element">';
+                  echo '</div>';
+                  echo '<div class="footer-element">';
+                    echo '<span class="powered">Powered by <span>TKTDATA</span></span>';
+                  echo '</div>';
+                echo '</div>';
+        break;
+      }
+       ?>
     </footer>
   </body>
 </html>

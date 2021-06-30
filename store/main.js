@@ -3,11 +3,13 @@
  * @Author: Sven Waser
  * @System: TKTData
  * @Version: 1.0
- * @Published: July 2020
- * @Purpose: File to do js
+ * @Published: June 2021
+ * @Purpose: File to do ajax actions
  *
  **************** All functions ****************
  * For further description please go to requested function
+ *
+ * Ajax ( page [page], callback [callback], action [Action name], values [JSON Values] )
  *
  * toggleOptions ( ele [element to toogle] )
  *
@@ -17,10 +19,42 @@
  *
  * html_coupon_info( ele [coupon name], group [Group ID] )
  *
+ * check_coupon ( name [Name of coupon], gid [group where coupon can be used], callback [callback function] )
+ *
+ * discount_price (name [Name of coupon], gid [group where coupon can be used], callback [callback function] )
+ *
+ * ajax_send_mail ( ticketToken [Token of ticket] )
+ *
  */
+/**
+ * Ajax function
+ *
+ * page: Requested page
+ * callback: Callback function
+ * action: Action name
+ * values: JSON Values that are needed
+ */
+function ajax( page, callback, action =null, values =null ) {
+  //Important infos
+  var base_url = (location.protocol + '//' + location.host + location.pathname).replace(/store(.)*/, "store");
+  var ajax_file = base_url + "/ajax.php";
+
+  //Connect
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      callback(this);
+    }
+  }
+  req.open("POST", ajax_file, true);
+  req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.send( "p=" + encodeURIComponent(page) + (action ? "&action=" + encodeURIComponent(action) : "") + (values ? "&values=" + encodeURIComponent(JSON.stringify(values)) : "") );
+}
 
 /**
  * Dropdown toogle
+ * For custom infpus
  */
 function toggleOptions(ele) {
   ele.getElementsByClassName("options")[0].classList.toggle("choose");
@@ -28,6 +62,7 @@ function toggleOptions(ele) {
 
 /**
  * Select dropdown element
+ * For custom inputs
  */
 function selectElement(ele) {
   var base = ele.parentNode.parentNode;
@@ -36,18 +71,66 @@ function selectElement(ele) {
 }
 
 /**
- * Insert display form
- */
+ * Insert display form (Enables coupon frm)
+*/
 function showCouponForm(ele, group) {
   ele.innerHTML = '<label class="txt-input"><input type="text" name="coupon" onchange="html_coupon_info(this.value, ' + group + ')"/><span class="placeholder">Coupon</label><span class="coupon_response"></span>';
 }
 
 /**
- * Check coupon and display new price
+ * Check if we have a vaild coupon (Checks validity of coupon)
+ *
+ * ex:
+ * check_coupon(name, groupID, function (resp) {
+ *   console.log(resp);
+ * })
+ *
  */
+function check_coupon(name, gid, callback) {
+  var values = new Object();
+  values["name"] = name;
+  values["gid"] = gid;
+
+  // Do Ajax
+  ajax(2, function(c) {
+    callback(c);
+  }, "check_coupon", values);
+}
+
+/**
+ * Get new price with coupon
+ *
+ * ex:
+ * discount_price(name, groupID, function (resp) {
+ *   console.log(resp);
+ * })
+ *
+ * JSON Answer {
+ *  response
+ *  code
+ *  couponName
+ *  price
+ *  currency
+ *  message
+ * }
+ */
+function discount_price(name, gid, callback) {
+  var values = new Object();
+  values["name"] = name;
+  values["gid"] = gid;
+
+  // Do Ajax
+  ajax(2, function(c) {
+    callback(c);
+  }, "get_price", values);
+}
+
+/**
+* Check coupon and display new price
+*/
 function html_coupon_info(ele, group) {
   //Check coupon
-  check_coupon(ele, group, function(r) {
+ check_coupon(ele, group, function(r) {
     //Coupon box and price tag
     var couponResponse = document.getElementsByClassName("coupon_response")[0];
     var price_tag = document.getElementsByClassName("price")[0];
@@ -106,6 +189,9 @@ function html_coupon_info(ele, group) {
   });
 }
 
+/**
+ * Used for FAQ
+ */
 function accordion(id){
   //Close all elements
   var children = document.getElementsByClassName("accordion")[0].children;
@@ -157,4 +243,23 @@ function accordion(id){
     toogler.style.transform = "rotate(225deg)";
     toogler.style.top = "15px";
   }
+}
+
+/**
+ * Send mail again
+ */
+function ajax_send_mail( email, id, offset, steps ) {
+  /* Inform user */
+  document.getElementsByClassName("ajax-response")[0].innerHTML = '  <div class="message-container"><div class="message waiting" onclick="this.remove()"><img src="' + location.protocol + '//' + location.host + location.pathname.replace(/store(.)*/, "") +  '/medias/icons/waiting.svg"><span>die Mail wird gesendet. Wir bitten um etwas Geduld.</span></div></div>';
+
+  // Ajax request
+  var values = new Object();
+  values["email"] = email;
+  values["id"] = id;
+  values["offset"] = offset;
+  values["steps"] = steps;
+
+  ajax(6, function(c) {
+    document.getElementsByClassName("ajax-response")[0].innerHTML = c.responseText;
+  }, "send_mail", values);
 }
