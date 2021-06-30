@@ -909,8 +909,11 @@ if(isset($_GET["view"])) {
   if(! empty( $_POST )) {
     //Check if user is permitted to do this action
     if(User::w_access_allowed($page, $current_user)) {
-      $values = (isset($_POST) && isset($_FILES)) ? array_merge($_POST, $_FILES) : $_POST;
-      if( $groupCustomizer->update( $groupCustomizer->subpage, $values )) {
+      // Set price and VAT
+      $_POST["price"] = isset($_POST["price"]) ? ($_POST["price"] * 100) : null;
+      $_POST["vat"] = isset($_POST["vat"]) ? ($_POST["vat"] * 100) : null;
+
+      if( $groupCustomizer->update( $groupCustomizer->subpage, $_POST )) {
         Action::success("Die Gruppe konnte <strong>erfolgreich</strong> überarbeitet werden.");
       }else{
         Action::fail("Leider konnte die Gruppe <strong>nicht</strong></b> überarbeitet werden.");

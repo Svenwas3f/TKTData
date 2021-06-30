@@ -714,13 +714,13 @@ switch(key($action)) {
   break;
   default:
     //Display form
-    echo '<form action="' . $url_page . '" method="post" class="search">';
-      echo '<input type="text" name="search_value" value ="' . (isset(  $_POST["search_value"] ) ? $_POST["search_value"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+    echo '<form action="' . $url_page . '" method="get" class="search">';
+      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
       echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     echo '</form>';
 
     //Display tickets
-    $search_value = (!empty($_POST["search_value"])) ? $_POST["search_value"] : '';
+    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
     display_tickets( $search_value );
 
     //Add button
