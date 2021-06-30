@@ -66,16 +66,16 @@ class GroupCustomizer extends Group {
 
       if( (count(Group::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $html .= '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                    <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                    <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
       }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
         $html .= '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                   </td>';
       }elseif (count(Group::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
         $html .= '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                    <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
       }
 
@@ -1002,14 +1002,16 @@ if(isset($_POST["confirm"])) {
 }
 
 if(! isset($_GET["view"]) && ! isset($_GET["add"])) {
-  //Display search form
-  echo '<form action="' . $url_page . '" method="post" class="search">';
-    echo '<input type="text" name="search_value" value ="' . (isset(  $_POST["search_value"] ) ? $_POST["search_value"] : "") . '" placeholder="Name, Preis, Beschreibung, Eigene Elemente">';
+  //Display form
+  echo '<form action="' . $url . '" method="get" class="search">';
+    echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
+    echo '<input type="hidden" name="sub" value="' . $page . '" />';
+    echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
     echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
   echo '</form>';
 
   //Display tickets
-  $search_value = (!empty($_POST["search_value"])) ? $_POST["search_value"] : '';
+  $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
 
   $groupCustomizer->list( $search_value );
 

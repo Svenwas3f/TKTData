@@ -4,6 +4,7 @@ unset($action["id"]); //Remove page
 unset($action["sub"]); //Remove subpage
 unset($action["row-start"]); //Remove tow to get only valid keys
 unset($action["pub"]);
+unset($action["s"]); //Remove search value
 
 // Start pub
 $pub = new Pub();
@@ -469,11 +470,13 @@ echo '<div class="pub">';
 
         echo '</form>';
       }else {
-        // List all products
-        echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" class="search">';
-          echo  '<input type="text" name="s_product" value ="' . ($_POST["s_product"] ?? "") . '" placeholder="Produktname, Preis">';
-          echo  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-        echo  '</form>';
+        //Display form
+        echo '<form action="' . $url . '" method="get" class="search">';
+          echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
+          echo '<input type="hidden" name="sub" value="' . $page . '" />';
+          echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+          echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+        echo '</form>';
 
         // Define colors
         $availability = array(
@@ -518,7 +521,7 @@ echo '<div class="pub">';
           $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
           // List general products
-          foreach( $pub->products( $offset, $steps, ($_POST["s_product"] ?? null), true ) as $product ) {
+          foreach( $pub->products( $offset, $steps, ($_GET["s"] ?? null), true ) as $product ) {
             // set product id
             $pub->product_id = $product["id"];
 
@@ -555,18 +558,22 @@ echo '<div class="pub">';
           // Menu requred
           echo  '<tr class="nav">';
 
-            if( (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+            if( (count($pub->products( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
               echo  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                          '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                          '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                         </td>';
             }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
               echo  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                          '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                         </td>';
-            }elseif (count($pub->products( ($offset + $steps), 1, ($_POST["s_product"] ?? null), true )) > 0) { // More pages accessable
+            }elseif (count($pub->products( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) { // More pages accessable
               echo  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . $_GET["pub"] : "") . '&list=' . ($_GET["list"] ?? "products") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                          <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                          '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                         </td>';
             }
 

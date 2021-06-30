@@ -4,12 +4,17 @@ function display_pubs ( $search_value = null ) {
   global $url;
   global $url_page;
   global $page;
+  global $mainPage;
   global $current_user;
 
   // Search form
   $html = '<div class="pub">';
-    $html .= '<form action="' . $url_page . '&list=pub" method="post" class="search">';
-      $html .= '<input type="text" name="s_pub" value ="' . (isset(  $_POST["s_pub"] ) ? $_POST["s_pub"] : "") . '" placeholder="Name der Wirtschaft">';
+    //Display form
+    $html .= '<form action="' . $url . '" method="get" class="search">';
+      $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
+      $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
+      $html .= '<input type="hidden" name="list" value="' . $_GET["list"] . '" />';
+      $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
       $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     $html .= '</form>';
 
@@ -49,16 +54,16 @@ function display_pubs ( $search_value = null ) {
 
         if( (count(Pub::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
           $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                      <a href="' . $url_page . '&list=pub&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                     </td>';
         }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
           $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                     </td>';
         }elseif (count(Pub::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
           $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                     </td>';
         }
 
@@ -300,13 +305,17 @@ function display_products ( $search_value = null ) {
   global $url;
   global $url_page;
   global $page;
+  global $mainPage;
   global $current_user;
 
-  // Search form
-  $html =  '<form action="' . $url_page . '&list=products" method="post" class="search">';
-    $html .=  '<input type="text" name="s_product" value ="' . (isset(  $_POST["s_product"] ) ? $_POST["s_product"] : "") . '" placeholder="Produktname, Preis">';
-    $html .=  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-  $html .=  '</form>';
+  //Display form
+  $html = '<form action="' . $url . '" method="get" class="search">';
+    $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
+    $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
+    $html .= '<input type="hidden" name="list" value="' . $_GET["list"] . '" />';
+    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+    $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+  $html .= '</form>';
 
   // Table
   $html .=  '<table class="rows">';
@@ -344,16 +353,16 @@ function display_products ( $search_value = null ) {
 
       if( (count(Pub::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
       }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
         $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                   </td>';
       }elseif (count(Pub::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
         $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
       }
 
@@ -750,7 +759,7 @@ switch(key($action)) {
       }
 
       // List products
-      display_products ( ($_POST["s_product"] ?? null) );
+      display_products ( ($_GET["s"] ?? null) );
     }else {
       // remove
       if(isset($_POST["confirm"])) {
@@ -768,7 +777,7 @@ switch(key($action)) {
       }
 
       // List pubs
-      display_pubs ( ($_POST["s_pub"] ?? null) );
+      display_pubs ( ($_GET["s"] ?? null) );
     }
   break;
 }
