@@ -94,10 +94,10 @@ class Pub {
       $pub->execute();
     }else {
       // Select all
-      $pub = $conn->prepare("SELECT * FROM " . PUB . " WHERE pub_id=:pub_id OR name=:name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
+      $pub = $conn->prepare("SELECT * FROM " . PUB . " WHERE pub_id=:pub_id OR name LIKE :name  ORDER BY name ASC LIMIT " . $steps . " OFFSET " . $offset);
       $pub->execute(array(
         ":pub_id" => $search_value,
-        ":name" => $search_value
+        ":name" => "%" . $search_value . "%"
       ));
     }
 
