@@ -10,14 +10,17 @@ function display_actions( $search_value = null ){
   global $url;
   global $url_page;
   global $page;
+  global $mainPage;
   global $current_user;
   global $conn;
 
-  // Search form
-  $html =  '<form action="' . $url_page . '" method="post" class="search">';
-    $html .=  '<input type="text" name="s" value ="' . (isset(  $_POST["s"] ) ? $_POST["s"] : "") . '" placeholder="Produktname, Preis">';
-    $html .=  '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-  $html .=  '</form>';
+  //Display form
+  $html = '<form action="' . $url . '" method="get" class="search">';
+    $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
+    $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
+    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+    $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
+  $html .= '</form>';
 
   //Start table
   $html .= '<table class="rows">';
@@ -62,16 +65,16 @@ function display_actions( $search_value = null ){
 
     if( (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
       $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                 </td>';
     }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
       $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
+                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                 </td>';
     }elseif (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) { // More pages accessable
       $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
+                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                 </td>';
     }
 
@@ -132,6 +135,6 @@ if( isset($_GET["restore"]) ){
 if( isset($_GET["view"])){
   single_action();
 }else{
-  display_actions( ($_POST["s"] ?? null) );
+  display_actions( ($_GET["s"] ?? null) );
 }
  ?>
