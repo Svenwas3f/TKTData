@@ -97,7 +97,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
 
     <!-- Link to onlineshop -->
     <?php
-    $onlineshop_link = $url . "pub/?id=" . $pub->pub;
+    $onlineshop_link = $url . "store/pubs/menu/" . $pub->pub;
     ?>
     <a class="onlineshop" href="<?php echo $onlineshop_link; ?>" target="_blank">
       <div class="img-container">
