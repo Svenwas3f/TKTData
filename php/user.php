@@ -84,7 +84,7 @@ class User {
     $stmt = $conn->prepare("SELECT name FROM " . USERS . " WHERE id=:user");
     $stmt->execute(array( ":user" => $user ));
 
-    return $stmt->fetch()[0];
+    return $stmt->fetch()[0] ?? null;
   }
 
   /**
