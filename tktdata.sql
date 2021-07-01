@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Jun 2021 um 22:00
+-- Erstellungszeit: 01. Jul 2021 um 21:38
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -112,6 +112,7 @@ CREATE TABLE `tktdata_pub` (
   `description` text DEFAULT NULL,
   `logo_fileID` varchar(32) DEFAULT NULL,
   `background_fileID` varchar(32) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT NULL,
   `payment_payrexx_instance` varchar(255) DEFAULT NULL,
   `payment_payrexx_secret` varchar(255) DEFAULT NULL,
   `payment_fee_percent` int(11) DEFAULT NULL,
@@ -145,7 +146,6 @@ CREATE TABLE `tktdata_pub_products` (
   `name` varchar(255) DEFAULT NULL,
   `section` varchar(255) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
-  `currency` varchar(3) DEFAULT NULL,
   `product_fileID` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -428,13 +428,13 @@ ALTER TABLE `tktdata_tickets_coupons`
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_groups`
 --
 ALTER TABLE `tktdata_tickets_groups`
-  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=474;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
