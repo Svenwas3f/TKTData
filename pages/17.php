@@ -100,12 +100,6 @@ echo '<div class="pub">';
             echo '</div>';
           echo '</div>';
 
-          //Währung
-          echo '<label class="txt-input">';
-            echo '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
-            echo '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-          echo '</label>';
-
           //Preis
           echo '<label class="txt-input">';
             echo '<input type="number" step="0.05" min="0" name="price" ' . $disabled . ' required/>';
@@ -236,17 +230,11 @@ echo '<div class="pub">';
 
           echo '</div>';
 
-          //Währung
-          echo  '<label class="txt-input">';
-            echo  '<input type="text" name="currency" value="' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
-            echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-          echo  '</label>';
-
           //Preis
           echo  '<label class="txt-input">';
             echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
             echo  '<span class="placeholder">Preis</span>';
-            echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+            echo  '<span class="unit">' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
 
           // Produktbild
@@ -328,17 +316,11 @@ echo '<div class="pub">';
             echo '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
           echo '</div>';
 
-          //Währung
-          echo  '<label class="txt-input">';
-            echo  '<input type="text" name="currency" value="' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '" min="3" max="3" disabled required/>';
-            echo  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-          echo  '</label>';
-
           //Preis
           echo  '<label class="txt-input">';
             echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" disabled required/>';
             echo  '<span class="placeholder">Preis</span>';
-            echo  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+            echo  '<span class="unit">' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
 
           // Produktbild
@@ -530,7 +512,7 @@ echo '<div class="pub">';
               // Global product
               echo  '<tr class="global_product ' . (! $pub->product_visibility() ? "hidden_product" : "") . '" title="' . ($pub->product_visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
                 echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
                 echo  '<td>';
                   echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
                 echo  '</td>';
@@ -539,7 +521,7 @@ echo '<div class="pub">';
               // Product of pub
               echo  '<tr class="' . ($pub->product_visibility() ? "" : "hidden_product") . '" title="' . ($pub->product_visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
                 echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . $product["currency"] . '</td>';
+                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
                 echo  '<td>';
                   if( $write_access === true ) {
                       echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';

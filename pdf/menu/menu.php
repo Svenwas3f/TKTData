@@ -63,7 +63,12 @@ $logo->fileID = $pub->values()["logo_fileID"];
 
       <!-- Products -->
       <?php
-      foreach($pub->sections() as $section) {
+      // Generate array
+      $sections = $pub->sections();
+      array_push($sections, array("section" => null));
+
+      // Loop
+      foreach($sections as $section) {
         // Get all products
         $products = "";
         foreach( $pub->products_by_section( $section["section"] ) as $product ) {
@@ -73,7 +78,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
           if($pub->product_visibility()) {
             $products .= '<tr>';
               $products .= '<td class="product">' . $product["name"] . '</td>';
-              $products .= '<td class="price">' . number_format(( isset($product["price"]) ? ($product["price"] / 100) : 0), 2) . ' ' . $product["currency"] . '</td>';
+              $products .= '<td class="price">' . number_format(( isset($product["price"]) ? ($product["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
             $products .= '</tr>';
           }
         }
@@ -83,7 +88,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
           // Show section
           echo'<table class="products">';
             echo '<tr>';
-              echo '<th class="product">' . $section["section"] . '</th>';
+              echo '<th class="product">' . ($section["section"] ?? "Produkte") . '</th>';
               echo '<th class="price"></th>';
             echo '</tr>';
 

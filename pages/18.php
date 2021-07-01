@@ -13,7 +13,7 @@ function display_pubs ( $search_value = null ) {
     $html .= '<form action="' . $url . '" method="get" class="search">';
       $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
       $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
-      $html .= '<input type="hidden" name="list" value="' . $_GET["list"] . '" />';
+      $html .= '<input type="hidden" name="list" value="' . ($_GET["list"] ?? "") . '" />';
       $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
       $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     $html .= '</form>';
@@ -264,6 +264,12 @@ function single_pub ( $pub_id ) {
               $html .=  '<input type="text" name="payment_payrexx_secret" value="' . $pub->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
               $html .=  '<span class="placeholder">Payrexx Secret</span>';
             $html .=  '</label>';
+
+            //Währung
+            $html .= '<label class="txt-input">';
+              $html .= '<input type="text" name="currency" value="' . ( $pub->values()["currency"] ?? DEFAULT_CURRENCY ) . '" min="3" max="3" ' . $disabled . '/>';
+              $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+            $html .= '</label>';
           $html .=  '</div>';
 
           // Fees

@@ -216,7 +216,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip", "id", "user_id", "w", "r", "section", "price", "product_fileID", "currency");
+    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "currency", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip", "id", "user_id", "w", "r", "section", "price", "product_fileID");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -283,7 +283,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip");
+    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "currency", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -337,7 +337,7 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "section", "price", "currency", "product_fileID");
+    $valid_keys = array("name", "section", "price", "product_fileID");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys
@@ -619,20 +619,36 @@ class Pub {
     //Get database connection
     $conn = Access::connect();
 
-    // Request section
-    if( isset($this->pub) ) {
-      // Get all products of pub and section (inclubing globals)
-      $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND (pub_id=:pub_id OR pub_id IS NULL) ORDER BY name ASC, price ASC");
-      $sections->execute(array(
-        ":section" => $section,
-        ":pub_id" => $this->pub,
-      ));
+    // Check if we need all products without a section
+    if(empty($section) && $section !== 0) {
+      // Request section
+      if( isset($this->pub) ) {
+        // Get all products of pub and section (inclubing globals)
+        $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section IS NULL AND (pub_id=:pub_id OR pub_id IS NULL) ORDER BY name ASC, price ASC");
+        $sections->execute(array(
+          ":pub_id" => $this->pub,
+        ));
+      }else {
+        // Get all global products and section
+        $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section IS NULL AND pub_id IS NULL ORDER BY name ASC, price ASC");
+        $sections->execute();
+      }
     }else {
-      // Get all global products and section
-      $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND pub_id IS NULL ORDER BY name ASC, price ASC");
-      $sections->execute(array(
-        ":section" => $section,
-      ));
+      // Request section
+      if( isset($this->pub) ) {
+        // Get all products of pub and section (inclubing globals)
+        $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND (pub_id=:pub_id OR pub_id IS NULL) ORDER BY name ASC, price ASC");
+        $sections->execute(array(
+          ":section" => $section,
+          ":pub_id" => $this->pub,
+        ));
+      }else {
+        // Get all global products and section
+        $sections = $conn->prepare("SELECT * FROM " . PUB_PRODUCTS . " WHERE section=:section AND pub_id IS NULL ORDER BY name ASC, price ASC");
+        $sections->execute(array(
+          ":section" => $section,
+        ));
+      }
     }
 
     // Return array
