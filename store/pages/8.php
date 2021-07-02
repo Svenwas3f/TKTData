@@ -8,6 +8,10 @@ if( empty($_GET["id"]) ) {
 $pub = new Pub();
 $pub->pub = $_GET["id"];
 
+// Start pub
+$product = new Product();
+$product->pub = $pub->pub;
+
 // Get background image
 if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["background_fileID"] ) ) {
   $mediaHub = new MediaHub();
@@ -71,31 +75,31 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
     <form class="products">
       <?php
       // Generate array
-      $sections = $pub->sections();
+      $sections = $product->sections();
       array_push($sections, array("section" => null));
 
       // Loop
       foreach($sections as $section) {
         // Get all products
         $products = "";
-        foreach( $pub->products_by_section( $section["section"] ) as $product ) {
+        foreach( $product->products_by_section( $section["section"] ) as $values ) {
           // Check if visible
-          $pub->product_id = $product["id"];
+          $product->product_id = $values["id"];
 
-          if($pub->product_visibility()) {
+          if($product->visibility()) {
             $products .= '<div class="row">';
               $products .= '<span class="product">';
-                $products .= $product["name"];
+                $products .= $values["name"];
                 // Check image
-                if(! empty($product["product_fileID"])) {
+                if(! empty($values["product_fileID"])) {
                   $products .= '<span class="icon">&#9432;</span>';
-                  $products .= '<div class="product-img" style="background-image: url(\'' . MediaHub::getUrl( $product["product_fileID"] ) . '\')"></div>';
+                  $products .= '<div class="product-img" style="background-image: url(\'' . MediaHub::getUrl( $values["product_fileID"] ) . '\')"></div>';
                 }
               $products .= '</span>';
-              $products .= '<span class="price">' . number_format(( isset($product["price"]) ? ($product["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+              $products .= '<span class="price">' . number_format(( isset($values["price"]) ? ($values["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
               $products .= '<div class="shoppingbag_options">';
                 $products .= '<span class="remove" onclick="remove_product(this.parentNode.children[1])">-</span>';
-                $products .= '<input type="text" name="' . $product["id"] . '" pattern="[0-9]{1,3}" value="0" onchange="change_total_price( this )"/>';
+                $products .= '<input type="text" name="' . $values["id"] . '" pattern="[0-9]{1,3}" value="0" onchange="change_total_price( this )"/>';
                 $products .= '<span class="add" onclick="add_product(this.parentNode.children[1])">+</span>';
               $products .= '</div>';
             $products .= '</div>';

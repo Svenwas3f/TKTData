@@ -13,6 +13,10 @@ $pub = new Pub();
 $accessable_pubs = $pub->accessable( $current_user );
 $pub->pub = $_GET["pub"] ?? $accessable_pubs[0];
 
+// Start prodcut
+$product = new Product();
+$product->pub = $pub->pub;
+
 // Get Access
 $write_page = User::w_access_allowed( $page, $current_user );
 $write_pub = boolval( $pub->access( $current_user )["w"] ?? 0 );
@@ -64,7 +68,7 @@ echo '<div class="pub">';
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
           $_POST["pub_id"] = $pub->pub;
 
-          if( $pub->add( pub::PRODUCTS_TABLE, $_POST ) ) {
+          if( $product->add( $_POST ) ) {
             Action::success("Das Produkt konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&pub=" . $pub->pub . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
           }else{
             Action::fail("Leider konnte das Produkt <strong>nicht</strong></b> erstellt werden.");
@@ -90,7 +94,7 @@ echo '<div class="pub">';
             echo '<span class="headline">Sektion</span>';
 
             echo '<div class="options">';
-              foreach( $pub->sections() as $section ) {
+              foreach( $product->sections() as $section ) {
                 echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
               }
               echo '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -123,17 +127,17 @@ echo '<div class="pub">';
     break;
     case "remove_product": // Product
       // Get name of pub
-      $pub->product_id = $_GET["remove_product"] ?? null;
+      $product->product_id = $_GET["remove_product"] ?? null;
 
       // Generate message
-      $info = "Möchtest du das Produkt <strong>" . $pub->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
+      $info = "Möchtest du das Produkt <strong>" . $product->values()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
 
       // Display message
-      Action::confirm($info, $_GET["remove_product"], "&pub=" . $pub->pub);
+      Action::confirm($info, $_GET["remove_product"], "&pub=" . $product->pub);
     break;
     case "view_product":
       // Set product id
-      $pub->product_id = $_GET["view_product"] ?? null;
+      $product->product_id = $_GET["view_product"] ?? null;
 
       // Update
       if(! empty($_POST)) {
@@ -141,10 +145,10 @@ echo '<div class="pub">';
           // Define values
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
-          if( $pub->update_product(  $_POST ) ) {
-            Action::success("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+          if( $product->update(  $_POST ) ) {
+            Action::success("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
           }else {
-            Action::fail("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+            Action::fail("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
           }
         }else {
           Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -152,7 +156,7 @@ echo '<div class="pub">';
       }
 
       // Check if product is accessable
-      if( $pub->product()["pub_id"] == $pub->pub ) {
+      if( $product->values()["pub_id"] == $pub->pub ) {
         // Display top return button
         echo '<div class="top-nav border-none">';
           echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
@@ -161,10 +165,10 @@ echo '<div class="pub">';
         //Display right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
-            if($pub->product_visibility()) {
-              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+            if($product->visibility()) {
+              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $product->pub . ', ' . $product->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
             }else {
-              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+              echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $product->pub . ', ' . $product->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
             }
           echo '</div>';
 
@@ -186,14 +190,14 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
 
           echo '<div class="right-menu-container">';
-            echo '<a href="' . $url_page . '&remove_product=' . $pub->product_id . '" class="right-menu-item"><img src="' . $url . 'medias/icons/trash.svg" alt="Mail" title="Produkt entfernen"/></a>';
+            echo '<a href="' . $url_page . '&remove_product=' . $product->product_id . '" class="right-menu-item"><img src="' . $url . 'medias/icons/trash.svg" alt="Mail" title="Produkt entfernen"/></a>';
           echo '</div>';
         echo '</div>';
 
@@ -207,18 +211,18 @@ echo '<div class="pub">';
 
           //Produktname
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
+            echo  '<input type="text" name="name" value="' . ($product->values()["name"] ?? "") . '" ' . $disabled . ' required/>';
             echo  '<span class="placeholder">Produktname</span>';
           echo  '</label>';
 
           // Section
           echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="section" ' . (isset($pub->product()["section"]) ? 'value="' . $pub->product()["section"] . '"' : "") . ' ' . $disabled . '>';
-            echo '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
+            echo '<input type="text" class="selectValue" name="section" ' . (isset($product->values()["section"]) ? 'value="' . $product->values()["section"] . '"' : "") . ' ' . $disabled . '>';
+            echo '<span class="headline">' . (isset($product->values()["section"]) ? $product->values()["section"] : "Sektion") . '</span>';
 
             if( $write_access === true ) {
               echo '<div class="options">';
-                foreach( $pub->sections() as $section ) {
+                foreach( $product->sections() as $section ) {
                   echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
                 }
                 echo '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -232,7 +236,7 @@ echo '<div class="pub">';
 
           //Preis
           echo  '<label class="txt-input">';
-            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
             echo  '<span class="placeholder">Preis</span>';
             echo  '<span class="unit">' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
@@ -241,9 +245,9 @@ echo '<div class="pub">';
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input ' . $disabled . '" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
             // Display preview image if possible
-            if( isset($pub->product()["product_fileID"]) &&! empty($pub->product()["product_fileID"]) ) {
-              echo '<input type="hidden" name="product_fileID" value="' . $pub->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
-              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->product()["product_fileID"] ) . '\')"></div>';
+            if( isset($product->values()["product_fileID"]) &&! empty($product->values()["product_fileID"]) ) {
+              echo '<input type="hidden" name="product_fileID" value="' . $product->values()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $product->values()["product_fileID"] ) . '\')"></div>';
             }else {
               echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
             }
@@ -257,7 +261,7 @@ echo '<div class="pub">';
 
           //Close form
         echo  '</form>';
-      } elseif ( is_null($pub->product()["pub_id"]) ) {
+      } elseif ( is_null($product->values()["pub_id"]) ) {
         // Banner global product
         echo '<div class="banner-global-product">';
           echo '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden';
@@ -271,10 +275,10 @@ echo '<div class="pub">';
         // Right menu
         echo '<div class="right-sub-menu">';
           echo '<div class="right-menu-container">';
-          if($pub->product_visibility()) {
-            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+          if($product->visibility()) {
+            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $product->pub . ', ' . $product->product_id . ')"><img src="' . $url . 'medias/icons/visibility-on.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
           }else {
-            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $pub->pub . ', ' . $pub->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
+            echo '<a class="right-menu-item" onclick="pub_product_visiliity_toggle(this, ' . $product->pub . ', ' . $product->product_id . ')"><img src="' . $url . 'medias/icons/visibility-off.svg" alt="Visibility" title="Sichtbarkeit wechseln"/></a>';
           }
           echo '</div>';
 
@@ -296,9 +300,9 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($pub->product_availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $pub->pub . ', ' . $pub->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
         echo '</div>';
@@ -307,18 +311,18 @@ echo '<div class="pub">';
           echo  '<h1>Produkt ansehen</h1>';
           //Produktname
           echo  '<label class="txt-input">';
-            echo  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" disabled required/>';
+            echo  '<input type="text" name="name" value="' . ($product->values()["name"] ?? "") . '" disabled required/>';
             echo  '<span class="placeholder">Produktname</span>';
           echo  '</label>';
 
           // Section
           echo '<div class="select">';
-            echo '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
+            echo '<span class="headline">' . (isset($product->values()["section"]) ? $product->values()["section"] : "Sektion") . '</span>';
           echo '</div>';
 
           //Preis
           echo  '<label class="txt-input">';
-            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" disabled required/>';
+            echo  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  "")  . '" disabled required/>';
             echo  '<span class="placeholder">Preis</span>';
             echo  '<span class="unit">' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
           echo  '</label>';
@@ -327,8 +331,8 @@ echo '<div class="pub">';
           echo '<span class="file-info">Produktbild</span>';
           echo '<label class="file-input disabled">';
             // Display preview image if possible
-            if( isset($pub->product()["product_fileID"]) &&! empty($pub->product()["product_fileID"]) ) {
-              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->product()["product_fileID"] ) . '\')"></div>';
+            if( isset($product->values()["product_fileID"]) &&! empty($product->values()["product_fileID"]) ) {
+              echo '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $product->values()["product_fileID"] ) . '\')"></div>';
             }
             echo '<div class="draganddrop">Klicken um auszuwählen</div>';
           echo '</label>';
@@ -337,7 +341,7 @@ echo '<div class="pub">';
           //Close form
         echo  '</form>';
       } else {
-        Action::fs_info("Du hast keinen Zugriff auf das Produkt (#" . $pub->product_id . ") " .  $pub->product()["name"]);
+        Action::fs_info("Du hast keinen Zugriff auf das Produkt (#" . $products->product_id . ") " .  $product->values()["name"]);
       }
     break;
     default:
@@ -345,12 +349,14 @@ echo '<div class="pub">';
       if(isset($_POST["confirm"])) {
         if( $write_access ) {
           // Get values
-          $product_remove = new Pub();
-          $product_remove->product_id = $_POST["confirm"];
-          $product_values = $product_remove->product();
+          // $product_remove = new Pub();
+          // $product_remove->product_id = $_POST["confirm"];
+          // $product_values = $product_remove->product();
+          $product->product_id = $_POST["confirm"];
+          $product_values = $product->values();
 
           // Remove
-          if( $product_remove->remove_product() ) {
+          if( $product->remove() ) {
             Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
           }else {
             Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
@@ -384,7 +390,7 @@ echo '<div class="pub">';
             $checked_values = array_intersect_key($_POST, array_flip($valid_keys));
 
             // Remove
-            if( $pub->update_pub( $checked_values ) ) {
+            if( $pub->update( $checked_values ) ) {
               Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
             }else {
               Action::fail("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
@@ -503,31 +509,31 @@ echo '<div class="pub">';
           $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
           // List general products
-          foreach( $pub->products( $offset, $steps, ($_GET["s"] ?? null), true ) as $product ) {
+          foreach( $product->all( $offset, $steps, ($_GET["s"] ?? null), true ) as $values ) {
             // set product id
-            $pub->product_id = $product["id"];
+            $product->product_id = $values["id"];
 
             // Check if global product
-            if( is_null($product["pub_id"]) ) {
+            if( is_null($values["pub_id"]) ) {
               // Global product
-              echo  '<tr class="global_product ' . (! $pub->product_visibility() ? "hidden_product" : "") . '" title="' . ($pub->product_visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
-                echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
+              echo  '<tr class="global_product ' . (! $product->visibility() ? "hidden_product" : "") . '" title="' . ($product->visibility() ? "Ein globales Produkt kann hier nicht bearbeitet werden" : "Ein globales Produkt kann hier nicht bearbeitet werden. Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+                echo  '<td><div class="color" style="background-color: ' . $availability[($product->availability() ?? 0)]["color"] . ';" title="' . $availability[($product->availability() ?? 0)]["title"] . '"></div>' . $values["name"] . '</td>';
+                echo  '<td>' . number_format(($values["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
                 echo  '<td>';
-                  echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                  echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $values["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
                 echo  '</td>';
               echo  '</tr>';
             }else {
               // Product of pub
-              echo  '<tr class="' . ($pub->product_visibility() ? "" : "hidden_product") . '" title="' . ($pub->product_visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
-                echo  '<td><div class="color" style="background-color: ' . $availability[($pub->product_availability() ?? 0)]["color"] . ';" title="' . $availability[($pub->product_availability() ?? 0)]["title"] . '"></div>' . $product["name"] . '</td>';
-                echo  '<td>' . number_format(($product["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
+              echo  '<tr class="' . ($product->visibility() ? "" : "hidden_product") . '" title="' . ($product->visibility() ? "" : "Dieses Produkt erscheint nicht in der Speise und Getränkekarte") . '">';
+                echo  '<td><div class="color" style="background-color: ' . $availability[($product->availability() ?? 0)]["color"] . ';" title="' . $availability[($product->availability() ?? 0)]["title"] . '"></div>' . $values["name"] . '</td>';
+                echo  '<td>' . number_format(($values["price"] / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
                 echo  '<td>';
                   if( $write_access === true ) {
-                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove_product=' . urlencode( $product["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $values["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
+                      echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove_product=' . urlencode( $values["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
                   }else {
-                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $product["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
+                    echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view_product=' . urlencode( $values["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
                   }
                 echo  '</td>';
               echo  '</tr>';
@@ -540,7 +546,7 @@ echo '<div class="pub">';
           // Menu requred
           echo  '<tr class="nav">';
 
-            if( (count($pub->products( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+            if( (count($product->all( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
               echo  '<td colspan="' . count( $headline_names ) . '">
                           <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                           '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
@@ -552,7 +558,7 @@ echo '<div class="pub">';
                           <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                           '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                         </td>';
-            }elseif (count($pub->products( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) { // More pages accessable
+            }elseif (count($product->all( ($offset + $steps), 1, ($_GET["s"] ?? null), true )) > 0) { // More pages accessable
               echo  '<td colspan="' . count( $headline_names ) . '">
                           <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                           '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>

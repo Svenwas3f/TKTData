@@ -9,6 +9,10 @@ require_once( dirname(__FILE__) . "/qr.php");
 $pub = new Pub();
 $pub->pub = $_GET["pub"];
 
+// Get product infos
+$product = new Product();
+$product->pub  = $pub->pub;
+
 // Get file infos
 $logo = new MediaHub();
 $logo->fileID = $pub->values()["logo_fileID"];
@@ -64,21 +68,21 @@ $logo->fileID = $pub->values()["logo_fileID"];
       <!-- Products -->
       <?php
       // Generate array
-      $sections = $pub->sections();
+      $sections = $product->sections();
       array_push($sections, array("section" => null));
 
       // Loop
       foreach($sections as $section) {
         // Get all products
         $products = "";
-        foreach( $pub->products_by_section( $section["section"] ) as $product ) {
+        foreach( $product->products_by_section( $section["section"] ) as $values ) {
           // Check if visible
-          $pub->product_id = $product["id"];
+          $product->product_id = $values["id"];
 
-          if($pub->product_visibility()) {
+          if($product->visibility()) {
             $products .= '<tr>';
-              $products .= '<td class="product">' . $product["name"] . '</td>';
-              $products .= '<td class="price">' . number_format(( isset($product["price"]) ? ($product["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
+              $products .= '<td class="product">' . $values["name"] . '</td>';
+              $products .= '<td class="price">' . number_format(( isset($values["price"]) ? ($values["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
             $products .= '</tr>';
           }
         }

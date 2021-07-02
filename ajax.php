@@ -369,13 +369,13 @@ switch($_POST["p"]) {
       case "toggleVisibility":
           if(User::w_access_allowed(18, $current_user)) {
             // Change toggle
-            $pub = new Pub();
-            $pub->pub = json_decode($_POST["values"], true)["pub"];
-            $pub->product_id = json_decode($_POST["values"], true)["product_id"];
-            $pub->toggleVisibility();
+            $product = new Product();
+            $product->pub = json_decode($_POST["values"], true)["pub"];
+            $product->product_id = json_decode($_POST["values"], true)["product_id"];
+            $product->toggleVisibility();
 
             // Return new image
-            if( $pub->product_visibility() ) {
+            if( $product->visibility() ) {
               echo json_encode(array(
                 "visibility" => "on",
                 "img_src" => $url . '/medias/icons/visibility-on.svg'
@@ -390,11 +390,11 @@ switch($_POST["p"]) {
       break;
       case "update_availability":
         // Update availability
-        $pub = new Pub();
-        $pub->pub = json_decode($_POST["values"], true)["pub"];
-        $pub->product_id = json_decode($_POST["values"], true)["product_id"];
+        $product = new Product();
+        $product->pub = json_decode($_POST["values"], true)["pub"];
+        $product->product_id = json_decode($_POST["values"], true)["product_id"];
 
-        if( $pub->update_availability( json_decode($_POST["values"], true)["availability"] ) ) {
+        if( $product->update_availability( json_decode($_POST["values"], true)["availability"] ) ) {
           echo json_encode(array(
             "status" => true,
           ));
@@ -560,7 +560,7 @@ switch($_POST["p"]) {
 
         if( $pub->values()["tip"] == 1) {
           // Change state
-          $pub->update_pub(array("tip" => 0));
+          $pub->update(array("tip" => 0));
 
           // Return values
           echo json_encode(array(
@@ -569,7 +569,7 @@ switch($_POST["p"]) {
           ));
         }else {
           // Change state
-          $pub->update_pub(array("tip" => 1));
+          $pub->update(array("tip" => 1));
 
           // Return values
           echo json_encode(array(

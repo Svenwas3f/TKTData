@@ -14,7 +14,7 @@ function display_pubs ( $search_value = null ) {
       $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
       $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
       $html .= '<input type="hidden" name="list" value="' . ($_GET["list"] ?? "") . '" />';
-      $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+      $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vorname, Nachname, Ticketinfo">';
       $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     $html .= '</form>';
 
@@ -319,7 +319,7 @@ function display_products ( $search_value = null ) {
     $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
     $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
     $html .= '<input type="hidden" name="list" value="' . $_GET["list"] . '" />';
-    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
+    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vorname, Nachname, Ticketinfo">';
     $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
   $html .= '</form>';
 
@@ -339,10 +339,10 @@ function display_products ( $search_value = null ) {
     $steps = 20;
     $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-    foreach( Pub::global_products( $offset, $steps, $search_value ) as $products ) {
+    foreach( Product::global_products( $offset, $steps, $search_value ) as $products ) {
       $html .=  '<tr>';
         $html .=  '<td>' . $products["name"] . '</td>';
-        $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . $products["currency"] . '</td>';
+        $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . DEFAULT_CURRENCY . '</td>';
         $html .=  '<td>';
           if(User::w_access_allowed($page, $current_user)) {
               $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
@@ -357,7 +357,7 @@ function display_products ( $search_value = null ) {
     // Menu requred
     $html .=  '<tr class="nav">';
 
-      if( (count(Pub::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+      if( (count(Product::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $html .=  '<td colspan="' . count( $headline_names ) . '">
                     <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                     <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
@@ -366,7 +366,7 @@ function display_products ( $search_value = null ) {
         $html .=  '<td colspan="' . count( $headline_names ) . '">
                     <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
                   </td>';
-      }elseif (count(Pub::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
+      }elseif (count(Product::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
         $html .=  '<td colspan="' . count( $headline_names ) . '">
                     <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
                   </td>';
@@ -397,8 +397,8 @@ function single_product ( $product_id ) {
   global $current_user;
 
   // Set id
-  $pub = new Pub();
-  $pub->product_id = $product_id;
+  $product = new Product();
+  $product->product_id = $product_id;
 
   // Get disabled
   $write = User::w_access_allowed( $page, $current_user );
@@ -414,18 +414,18 @@ function single_product ( $product_id ) {
       }
       //Produktname
       $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text" name="name" value="' . ($pub->product()["name"] ?? "") . '" ' . $disabled . ' required/>';
+        $html .=  '<input type="text" name="name" value="' . ($product->values()["name"] ?? "") . '" ' . $disabled . ' required/>';
         $html .=  '<span class="placeholder">Wirtschaftnname</span>';
       $html .=  '</label>';
 
       // Section
       $html .= '<div class="select" onclick="toggleOptions(this)">';
-        $html .= '<input type="text" class="selectValue" name="section" ' . (isset($pub->product()["section"]) ? 'value="' . $pub->product()["section"] . '"' : "") . ' ' . $disabled . '>';
-        $html .= '<span class="headline">' . (isset($pub->product()["section"]) ? $pub->product()["section"] : "Sektion") . '</span>';
+        $html .= '<input type="text" class="selectValue" name="section" ' . (isset($product->values()["section"]) ? 'value="' . $product->values()["section"] . '"' : "") . ' ' . $disabled . '>';
+        $html .= '<span class="headline">' . (isset($product->values()["section"]) ? $product->values()["section"] : "Sektion") . '</span>';
 
         if( User::w_access_allowed( $page, $current_user) ) {
           $html .= '<div class="options">';
-            foreach( $pub->sections() as $section ) {
+            foreach( $product->sections() as $section ) {
               $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
             }
             $html .= '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -436,26 +436,20 @@ function single_product ( $product_id ) {
         }
       $html .= '</div>';
 
-      //Währung
-      $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text" name="currency" value="' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
-        $html .=  '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-      $html .=  '</label>';
-
       //Preis
       $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($pub->product()["price"] ? number_format(($pub->product()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
+        $html .=  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
         $html .=  '<span class="placeholder">Preis</span>';
-        $html .=  '<span class="unit">' . ($pub->product()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+        $html .=  '<span class="unit"><abbr title="Es wird jeweils die Standartwährung verwendet, sofern bei einer Wirtschaft keine andere Währung angegeben wird.">' . DEFAULT_CURRENCY . '</abbr></span>';
       $html .=  '</label>';
 
       // Produktbild
       $html .= '<span class="file-info">Produktbild</span>';
       $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
         // Display preview image if possible
-        if( isset($pub->product()["product_fileID"]) &&! empty($pub->product()["product_fileID"]) ) {
-          $html .= '<input type="hidden" name="product_fileID" value="' . $pub->product()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
-          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->product()["product_fileID"] ) . '\')"></div>';
+        if( isset($product->values()["product_fileID"]) &&! empty($product->values()["product_fileID"]) ) {
+          $html .= '<input type="hidden" name="product_fileID" value="' . $product->values()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
+          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $product->values()["product_fileID"] ) . '\')"></div>';
         }else {
           $html .= '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
         }
@@ -495,11 +489,11 @@ switch(key($action)) {
   break;
   case "remove_product":
     // Get name of pub
-    $pub = new Pub();
-    $pub->product_id = $_GET["remove_product"];
+    $product = new Product();
+    $product->product_id = $_GET["remove_product"];
 
     // Generate message
-    $info = "Möchtest du das Produkt <strong>" . $pub->product()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
+    $info = "Möchtest du das Produkt <strong>" . $product->values()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
 
     // Display message
     Action::confirm($info, $_GET["remove_product"], "&list=products");
@@ -521,9 +515,8 @@ switch(key($action)) {
             // Check what part needs to be updated
             $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
             $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
-            $_POST["tip"] = (empty($_POST["tip"]) ? 0 : 1);
 
-            if( $pub->update_pub(  $_POST ) ) {
+            if( $pub->update(  $_POST ) ) {
               Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
             }else {
               Action::fail("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
@@ -540,18 +533,18 @@ switch(key($action)) {
   break;
   case "view_product":
     // set product id
-    $pub = new Pub();
-    $pub->product_id = $_GET["view_product"];
+    $product = new Product();
+    $product->product_id = $_GET["view_product"];
 
     if(! empty($_POST)) {
       if(User::w_access_allowed($page, $current_user)) {
         // Define values
         $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
-        if( $pub->update_product(  $_POST ) ) {
-          Action::success("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+        if( $product->update(  $_POST ) ) {
+          Action::success("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
         }else {
-          Action::fail("Das Produkt <strong>" . $pub->product()["name"] . " (#" . $pub->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+          Action::fail("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
         }
       }else {
         Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
@@ -566,12 +559,12 @@ switch(key($action)) {
     echo '</div>';
 
     // View single
-    single_product( $pub->product_id );
+    single_product( $product->product_id );
   break;
   case "add":
     if( ($_GET["add"] ?? "") == "product") {
       // Add product
-      $pub = new Pub();
+      $product = new Product();
 
       // Get disabled
       $write = User::w_access_allowed( $page, $current_user );
@@ -581,10 +574,8 @@ switch(key($action)) {
         if(User::w_access_allowed($page, $current_user)) {
           // Prepare post value
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
-          $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
-          $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
 
-          if( $pub->add( Pub::PRODUCTS_TABLE, $_POST ) ) {
+          if( $product->add( $_POST ) ) {
             Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
           }else{
             Action::fail("Leider konnte die Wirtschaft <strong>nicht</strong></b> erstellt werden.");
@@ -610,7 +601,7 @@ switch(key($action)) {
             echo '<span class="headline">Sektion</span>';
 
             echo '<div class="options">';
-              foreach( $pub->sections() as $section ) {
+              foreach( $product->sections() as $section ) {
                 echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
               }
               echo '<span onclick="event.stopPropagation()" class="option_add" >';
@@ -620,17 +611,11 @@ switch(key($action)) {
             echo '</div>';
           echo '</div>';
 
-          //Währung
-          echo '<label class="txt-input">';
-            echo '<input type="text" name="currency" value="' . DEFAULT_CURRENCY . '" onkeyup="document.getElementsByClassName(\'unit\')[0].innerHTML = this.value" min="3" max="3" ' . $disabled . ' required/>';
-            echo '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-          echo '</label>';
-
           //Preis
           echo '<label class="txt-input">';
             echo '<input type="number" step="0.05" min="0" name="price" ' . $disabled . ' required/>';
             echo '<span class="placeholder">Preis</span>';
-            echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
+            echo '<span class="unit"><abbr title="Es wird jeweils die Standartwährung verwendet, sofern bei einer Wirtschaft keine andere Währung angegeben wird.">' . DEFAULT_CURRENCY . '</abbr></span>';
           echo '</label>';
 
 
@@ -656,6 +641,10 @@ switch(key($action)) {
       $disabled = ($write === true ? "" : "disabled");
 
       if(! empty( $_POST )) {
+        // Prepare post
+        $_POST["payment_fee_absolute"] = ($_POST["payment_fee_absolute"] ? 100 *$_POST["payment_fee_absolute"] : 0);
+        $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
+
         if(User::w_access_allowed($page, $current_user)) {
           if( $pub->add( Pub::DEFAULT_TABLE, $_POST ) ) {
             Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_pub=" . $pub->pub . "' class='redirect'>Wirtschaft verwalten</a></strong>");
@@ -712,19 +701,25 @@ switch(key($action)) {
           echo '<span class="placeholder">Payrexx Secret</span>';
         echo '</label>';
 
+        //Währung
+        echo '<label class="txt-input">';
+            echo '<input type="text" name="currency" min="3" max="3" ' . $disabled . '/>';
+            echo '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
+          echo '</label>';
+
         // Fees
-        echo '<br />Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Proudktpreisen ändert sich dadurch nichts.';
+        echo '<br />Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Produktpreisen ändert sich dadurch nichts.';
 
         // Payrexx instance
         echo '<label class="txt-input">';
-          echo '<input type="number" name="payment_fee_absolute" />';
+          echo '<input type="number" name="payment_fee_absolute" ' . $disabled . '/>';
           echo '<span class="placeholder">Absolute Gebühren</span>';
           echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
         echo '</label>';
 
         // Payrexx secret
         echo '<label class="txt-input">';
-          echo '<input type="number" name="payment_payrexx_secret"/>';
+          echo '<input type="number" name="payment_fee_percent" ' . $disabled . '/>';
           echo '<span class="placeholder">Prozentuale Gebühren</span>';
           echo '<span class="unit">%</span>';
         echo '</label>';
@@ -752,12 +747,12 @@ switch(key($action)) {
       // remove
       if(isset($_POST["confirm"])) {
         // Get values
-        $pub = new pub();
-        $pub->product_id = $_POST["confirm"];
-        $product_values = $pub->product();
+        $product = new Product();
+        $product->product_id = $_POST["confirm"];
+        $product_values = $product->values();
 
         // Remove
-        if( $pub->remove_product() ) {
+        if( $product->remove() ) {
           Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
         }else {
           Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
@@ -775,7 +770,7 @@ switch(key($action)) {
         $pub_values = $pub->values();
 
         // Remove
-        if( $pub->remove_pub() ) {
+        if( $pub->remove() ) {
           Action::success("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
         }else {
           Action::fail("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");

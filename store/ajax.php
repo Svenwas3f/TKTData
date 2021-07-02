@@ -145,11 +145,11 @@ switch($_POST["p"] ?? null) {
         foreach( $_POST as $productID=>$quantity ) {
           if( is_int($productID) ) {
             // Get product
-            $product = new Pub();
+            $product = new Product();
             $product->product_id = $productID;
 
             // get price
-            $price = $price + ($product->product()["price"] * $quantity);
+            $price = $price + ($product->values()["price"] * $quantity);
           }
         }
 

@@ -78,6 +78,8 @@ define('PUB_PRODUCTS', 'tktdata_pub_products');
 define('PUB_PRODUCTS_META', 'tktdata_pub_products_meta');
 //Pub access
 define('PUB_ACCESS', 'tktdata_pub_access');
+//Pub transactions
+define('PUB_TRANSACTIONS', 'tktdata_pub_transactions');
 //Media hub
 define('MEDIA_HUB', 'tktdata_mediahub');
 
@@ -144,6 +146,9 @@ require_once( dirname(__FILE__) . "/php/payrexx.php");
 
 /* pub file */
 require_once( dirname(__FILE__) . "/php/pub.php");
+
+/* products file */
+require_once( dirname(__FILE__) . "/php/product.php");
 
 /* Mediahub file */
 require_once( dirname(__FILE__) . "/php/media-hub.php");
