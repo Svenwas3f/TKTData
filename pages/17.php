@@ -300,9 +300,9 @@ echo '<div class="pub">';
                   "title" => "Ausverkauft",
                 ),
               );
-              echo '<a class="right-sub-menu-item ' . ($product->availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($product->availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
-              echo '<a class="right-sub-menu-item ' . ($product->availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_prdocut_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 0 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[0]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 0)">' . $availability[0]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 1 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[1]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 1)">' . $availability[1]["title"] . '</a>';
+              echo '<a class="right-sub-menu-item ' . ($product->availability() == 2 ? "current" : "") . '" style="border-left: 5px solid ' . $availability[2]["color"] . '" onclick="pub_product_availability(this.parentNode, ' . $product->pub . ', ' . $product->product_id . ', 2)">' . $availability[2]["title"] . '</a>';
             echo '</div>';
           echo '</div>';
         echo '</div>';
