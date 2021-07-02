@@ -25,6 +25,14 @@
  *
  * ajax_send_mail ( ticketToken [Token of ticket] )
  *
+ * toggle_section ( click [HTML Element] )
+ *
+ * add_product ( input [HTML INPUT Element] )
+ *
+ * remove_product ( input [HTML INPUT Element] )
+ *
+ * change_total_price ( input [HTML INPUT Element] )
+ *
  */
 /**
  * Ajax function
@@ -262,4 +270,87 @@ function ajax_send_mail( email, id, offset, steps ) {
   ajax(6, function(c) {
     document.getElementsByClassName("ajax-response")[0].innerHTML = c.responseText;
   }, "send_mail", values);
+}
+
+/**
+ * Toogles sections
+ *
+ * click: Element where click is done
+ */
+function toggle_section( click ) {
+  var products = click.parentNode.parentNode.parentNode.getElementsByClassName("productlist")[0];
+
+  console.log(products.scrollHeight + "px");
+
+  if( products.style.maxHeight ) {
+    products.style.maxHeight = null;
+    click.innerHTML = "+";
+  }else {
+    products.style.maxHeight = products.scrollHeight + "px";
+    click.innerHTML = "-";
+  }
+}
+
+/**
+ * Moves product selection up
+ *
+ * input: Input that should be modified
+ */
+function add_product( input ) {
+  var newValue = (parseInt(input.value) + 1);
+
+  if(newValue >= 0 && newValue < 1000) {
+    input.value = newValue;
+    input.dispatchEvent( new Event('change') );
+  }
+}
+
+/**
+ * Moves product selection down
+ *
+ * input: Input that should be modified
+ */
+function remove_product( input ) {
+  var newValue = (parseInt(input.value) - 1);
+
+  if(newValue >= 0 && newValue < 1000) {
+    input.value = newValue;
+    input.dispatchEvent( new Event('change') );
+  }
+}
+
+/**
+ * Gets price of form
+ *
+ * input: Intput that requests change
+ */
+function change_total_price( input ) {
+  // Links
+  var base_url = (location.protocol + '//' + location.host + location.pathname).replace(/store(.)*/, "store");
+  var ajax_file = base_url + "/ajax.php";
+
+  // Get form value
+  var form = input.parentNode.parentNode.parentNode.parentNode.parentNode;
+  var formData = new FormData( form );
+  formData.append("p", 8);
+  formData.append("action", "calculate");
+
+  // Ajax request
+  var req = new XMLHttpRequest();
+  req.open("POST", ajax_file);
+  req.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      // Get pricebar
+      var submenu_total = document.getElementsByClassName("submenu-total")[0];
+      var price = submenu_total.getElementsByClassName("price")[0];
+
+      // get values
+      var ajax_response = JSON.parse(this.responseText);
+
+      // Add new price
+      price.innerHTML = ajax_response.formated;
+    }
+  }
+  req.send(formData);
+
 }
