@@ -5,7 +5,7 @@
  * @System: TKTData
  * @Version: 1.0
  * @Published: Mai 2021
- * @Purpose: File to manage pub ations
+ * @Purpose: File to manage product actions
  *
  ************* Class Variables *************
  * If a function requires such a variable, you will find a hint in the comments of the function
@@ -57,11 +57,6 @@ class product {
   //Variables
   public $pub;
   public $product_id;
-
-  //constants
-  const DEFAULT_TABLE = PUB;
-  const PRODUCTS_TABLE = PUB_PRODUCTS;
-  const ACCESS_TALBE = PUB_ACCESS;
 
   /**
    * Returns a list of all transactions (in steps) that belong to the pub
