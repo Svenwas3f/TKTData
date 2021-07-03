@@ -74,7 +74,7 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
     <script src="<?php echo $url; ?>store/main.js"></script>
 
     <!-- Payrexx requirement -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://media.payrexx.com/modal/v1/gateway.min.js"></script>
   </head>
   <body>

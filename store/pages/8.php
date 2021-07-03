@@ -8,9 +8,14 @@ if( empty($_GET["id"]) ) {
 $pub = new Pub();
 $pub->pub = $_GET["id"];
 
-// Start pub
+// Start product
 $product = new Product();
 $product->pub = $pub->pub;
+
+// Check if pub exits
+if(empty($pub->values())) {
+  header("Location: " . $url . "store/" . $type);
+}
 
 // Get background image
 if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["background_fileID"] ) ) {
@@ -22,6 +27,37 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
 }else {
   $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
   $altImage = "Background";
+}
+
+// Check if form is validated
+if(! empty($_POST)) {
+  // Generate array
+  $transaction_values = array();
+  foreach($_POST as $productID => $quantity) {
+    if( is_int( $productID ) && $quantity != 0 ) {
+      array_push( $transaction_values, array(
+        "productID" => $productID,
+        "quantity" => $quantity ?? 0,
+      ));
+    }
+  }
+
+  // Add tip if required
+  if( isset($_POST["tip"]) && $_POST["tip"] != 0 ) {
+    array_push( $transaction_values, array(
+      "productID" => 0,
+      "price" => floatval(str_replace(",", ".", $_POST["tip"])) * 100,
+      "quantity" => 1,
+    ));
+  }
+
+  // If success
+  $transaction = new Transaction();
+  if($transaction->add( $transaction_values, $_GET["id"] )) {
+    header("Location: " . $url . "store/" . $type . "/pay/" . $transaction->paymentID);
+  }else {
+    Action::fail("Der Zahlungsvorgang konnte nicht gestartet werden.");
+  }
 }
 
 ?>
@@ -40,7 +76,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
         <span class="currency"><?php echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY) ?></span>
       </div>
 
-      <button class="pay">BEZAHLEN</button>
+      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )">BEZAHLEN</button>
     </div>
 
     <!-- Details -->
@@ -70,9 +106,8 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
       </div>
     </div>
 
-
     <!-- Menu card -->
-    <form class="products">
+    <form class="products" action="<?php echo $url . "store/" . $type . "/" . $page . "/" . $_GET["id"]; ?>" method="post">
       <?php
       // Generate array
       $sections = $product->sections();
@@ -131,7 +166,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
             echo '<span class="product">Trinkgeld</span>';
             echo '<div class="placeholder-js">';
               echo '<span class="input">';
-                echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onchange="change_total_price( this )" />';
+                echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onkeyup="change_total_price( this )" />';
                 echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY);
               echo  '</span>';
             echo '</div>';

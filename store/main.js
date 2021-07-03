@@ -33,6 +33,8 @@
  *
  * change_total_price ( input [HTML INPUT Element] )
  *
+ * validateForm ( form [HTML FORM Element] )
+ *
  */
 /**
  * Ajax function
@@ -297,11 +299,19 @@ function toggle_section( click ) {
  * input: Input that should be modified
  */
 function add_product( input ) {
+  var form = input.closest("form");
   var newValue = (parseInt(input.value) + 1);
 
+  // Set new value
   if(newValue >= 0 && newValue < 1000) {
     input.value = newValue;
     input.dispatchEvent( new Event('change') );
+  }
+
+  // Clear outline
+  var inputs = form.getElementsByTagName("input");
+  for(var i = 0; i < inputs.length; i++) {
+    inputs[i].parentNode.style.outline = "";
   }
 }
 
@@ -352,5 +362,26 @@ function change_total_price( input ) {
     }
   }
   req.send(formData);
+}
 
+/**
+ * Check if form is valid
+ *
+ * form: HTML form
+ */
+function validateForm( form ) {
+  // Get all inputs
+  var inputs = form.getElementsByTagName("input");
+
+  for(var i = 0; i < inputs.length; i++) {
+    if( inputs[i].value != 0 && inputs[i].value != undefined && inputs[i].value != null ) {
+      form.submit();
+      return true;
+    }else{
+      inputs[i].parentNode.style.outline = "4px solid #9a2e37";
+    }
+  }
+
+  // No value found
+  return false;
 }
