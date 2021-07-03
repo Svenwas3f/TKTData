@@ -150,6 +150,9 @@ require_once( dirname(__FILE__) . "/php/pub.php");
 /* products file */
 require_once( dirname(__FILE__) . "/php/product.php");
 
+/* transaction file */
+require_once( dirname(__FILE__) . "/php/transaction.php");
+
 /* Mediahub file */
 require_once( dirname(__FILE__) . "/php/media-hub.php");
 
