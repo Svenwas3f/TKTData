@@ -373,13 +373,17 @@ function validateForm( form ) {
   // Get all inputs
   var inputs = form.getElementsByTagName("input");
 
+  // Check if amount exists
   for(var i = 0; i < inputs.length; i++) {
     if( inputs[i].value != 0 && inputs[i].value != undefined && inputs[i].value != null ) {
       form.submit();
       return true;
-    }else{
-      inputs[i].parentNode.style.outline = "4px solid #9a2e37";
     }
+  }
+
+  // add border if no value exists red
+  for(var i = 0; i < inputs.length; i++) {
+    inputs[i].parentNode.style.outline = "4px solid #9a2e37";
   }
 
   // No value found
