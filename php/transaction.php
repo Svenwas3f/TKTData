@@ -38,6 +38,16 @@
  *
  * Transaction->globalValues () [$paymentID]
  *
+ * Transaction->totalPrice () [$paymentID]
+ *
+ * Transaction->totalFees () [$paymentID]
+ *
+ **************** state and payment explanation ****************
+ * PAYMENT
+ * 0: Webpayment via PSP
+ * 1: Payment via invoice (cash)
+ * 2: payment expected
+ *
  */
 class Transaction {
   public $paymentID;
@@ -73,35 +83,35 @@ class Transaction {
     if( isset($this->pub) &&! empty($this->pub)) {
       if( is_null($search_value) || empty($search_value) ) {
         //No search
-        $tickets = $conn->prepare("SELECT * FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub_id ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+        $tickets = $conn->prepare("SELECT DISTINCT paymentID  FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub_id ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
         $tickets->execute(array(
           ":pub_id" => $this->pub,
         ));
       }else {
         // Select all
-        $tickets = $conn->prepare("SELECT * FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub ID AND (paymentID=:paymentID OR product_id=:product_id OR email=:email OR payment_time=:payment_time) ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+        $tickets = $conn->prepare("SELECT DISTINCT paymentID FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub_id AND (paymentID=:paymentID OR product_id=:product_id OR email LIKE :email OR payment_time LIKE :payment_time) ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
         $tickets->execute(array(
           ":pub_id" => $this->pub,
           ":paymentID" => $search_value,
           ":product_id" => $search_value,
-          ":email" => $search_value,
-          ":payment_time" => date("Y-m-d H:i:s", strtotime($search_value)),
+          ":email" => "%" . $search_value . "%",
+          ":payment_time" => "%" . date("Y-m-d H:i:s", strtotime($search_value)) . "%",
         ));
       }
     }else {
       if( is_null($search_value) || empty($search_value) ) {
         //No search
-        $tickets = $conn->prepare("SELECT * FROM " . PUB_TRANSACTIONS . " ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+        $tickets = $conn->prepare("SELECT DISTINCT paymentID FROM " . PUB_TRANSACTIONS . " ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
         $tickets->execute();
       }else {
         // Select all
-        $tickets = $conn->prepare("SELECT * FROM " . PUB_TRANSACTIONS . " WHERE paymentID=:paymentID OR pub_id=:pub_id OR product_id=:product_id OR email=:email OR payment_time=:payment_time ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
+        $tickets = $conn->prepare("SELECT DISTINCT paymentID FROM " . PUB_TRANSACTIONS . " WHERE paymentID=:paymentID OR pub_id=:pub_id OR product_id=:product_id OR email LIKE :email OR payment_time LIKE :payment_time ORDER BY payment_time DESC LIMIT " . $steps . " OFFSET " . $offset);//Result of all selected users in range
         $tickets->execute(array(
           ":paymentID" => $search_value,
           ":pub_id" => $search_value,
           ":product_id" => $search_value,
-          ":email" => $search_value,
-          ":payment_time" => date("Y-m-d H:i:s", strtotime($search_value)),
+          ":email" => "%" . $search_value . "%",
+          ":payment_time" => "%" . date("Y-m-d H:i:s", strtotime($search_value)) . "%",
         ));
       }
     }
@@ -124,6 +134,7 @@ class Transaction {
   public function add( $values, $pub_id, $gateway = true) {
     // Gloable
     global $url;
+    global $current_user;
 
     //Get database connection
     $conn = Access::connect();
@@ -208,12 +219,13 @@ class Transaction {
         $product->product_id = $value["productID"];
 
         // Create insert sql
-        $add = $conn->prepare("INSERT INTO " . PUB_TRANSACTIONS . " (pub_id, paymentID, payrexx_gateway, product_id, price, currency, quantity, fee_absolute, fee_percent) VALUES
-        (:pub_id, :paymentID, :payrexx_gateway, :product_id, :price, :currency, :quantity, :fee_absolute, :fee_percent)");
+        $add = $conn->prepare("INSERT INTO " . PUB_TRANSACTIONS . " (pub_id, paymentID, payrexx_gateway, payment_state, product_id, price, currency, quantity, fee_absolute, fee_percent) VALUES
+        (:pub_id, :paymentID, :payrexx_gateway, :payment_state, :product_id, :price, :currency, :quantity, :fee_absolute, :fee_percent)");
         if(! $add->execute(array(
           ":pub_id" => $pub->pub,
           ":paymentID" => $this->paymentID,
           ":payrexx_gateway" => $gateway_id ?? null,
+          ":payment_state" => $value["payment_state"] ?? 2,
           ":product_id" => $value["productID"],//edit
           ":price" => $value["price"] ?? $product->values()["price"] ?? 0,
           ":currency" => $value["currency"] ?? $pub->values()["currency"] ?? DEFAULT_CURRENCY,
@@ -226,6 +238,25 @@ class Transaction {
       }
     }
 
+    //Modifie transaction
+    $change = array(
+      "user" => $current_user,
+      "message" => "Added new pub transaction #" . $this->paymentID,
+      "table" => "PUB_TRANSACTIONS",
+      "function" => "ADD",
+      "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
+      "old" => array(),
+      "new" => array(
+        "pub_id" => $pub->pub,
+        "payrexx_gateway" => $gateway_id ?? null,
+        "currency" => $value["currency"] ?? $pub->values()["currency"] ?? DEFAULT_CURRENCY,
+        "fee_absolute" => $pub->values()["payment_fee_absolute"],
+        "fee_percent" => $pub->values()["payment_fee_percent"],
+      ),
+    );
+
+    User::modifie( $change );
+
     // everything ok
     return true;
   }
@@ -237,26 +268,66 @@ class Transaction {
    * $values: array(
    *    payrexx_transaction
    *    payrexx_gateway
+   *    payment_state
+   *    email
+   *    pick_up
    *    payment_time
    * )
    */
   public function update( $values ) {
+    // global variables
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("payrexx_transaction", "payrexx_gateway", "email", "payment_time");
+    $valid_keys = array("payrexx_transaction", "payrexx_gateway", "payment_state", "currency", "refund", "email", "pick_up", "payment_time");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
+    // Get old values
+    $old_values = array_intersect_key($this->globalValues(), array_flip($valid_keys));
+
     // Create query
-    $update = $conn->prepare("UPDATE " . PUB_TRANSACTIONS . " SET payrexx_transaction=:payrexx_transaction, payrexx_gateway=:payrexx_gateway, email=:email, payment_time=:payment_time WHERE paymentID = :paymentID");
-    return $update->execute(array(
-      ":payrexx_transaction" => $values["payrexx_transaction"] ?? $this->globalValues()["payrexx_transaction"],
-      ":payrexx_gateway" => $values["payrexx_gateway"] ?? $this->globalValues()["payrexx_gateway"],
-      ":email" => $values["email"] ?? $this->globalValues()["email"],
-      ":payment_time" => $values["payment_time"] ?? $this->globalValues()["payment_time"],
+    $update = $conn->prepare("UPDATE " . PUB_TRANSACTIONS . " SET payrexx_transaction=:payrexx_transaction, payrexx_gateway=:payrexx_gateway, payment_state=:payment_state, currency=:currency, refund=:refund, email=:email, pick_up=:pick_up, payment_time=:payment_time WHERE paymentID = :paymentID");
+    if(! $update->execute(array(
+      ":payrexx_transaction" => $checked_values["payrexx_transaction"] ?? $this->globalValues()["payrexx_transaction"],
+      ":payrexx_gateway" => $checked_values["payrexx_gateway"] ?? $this->globalValues()["payrexx_gateway"],
+      ":payment_state" => $checked_values["payment_state"] ?? $this->globalValues()["payment_state"],
+      ":currency" => $checked_values["currency"] ?? $this->globalValues()["currency"],
+      ":refund" => $checked_values["refund"] ?? $this->globalValues()["refund"],
+      ":email" => $checked_values["email"] ?? $this->globalValues()["email"],
+      "pick_up" => $checked_values["pick_up"] ?? $this->globalValues()["pick_up"],
+      ":payment_time" => $checked_values["payment_time"] ?? $this->globalValues()["payment_time"],
       ":paymentID" => $this->paymentID,
-    ));
+    ))) {
+      return false;
+    }
+
+    //Modifie transaction
+    $change = array(
+      "user" => $current_user,
+      "message" => "Updated pub transaction #" . $this->paymentID,
+      "table" => "PUB_TRANSACTIONS",
+      "function" => "UPDATE",
+      "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
+      "old" => $old_values,
+      "new" => array(
+        "payrexx_transaction" => $checked_values["payrexx_transaction"] ?? $this->globalValues()["payrexx_transaction"],
+        "payrexx_gateway" => $checked_values["payrexx_gateway"] ?? $this->globalValues()["payrexx_gateway"],
+        "payment_state" => $checked_values["payment_state"] ?? $this->globalValues()["payment_state"],
+        "currency" => $checked_values["currency"] ?? $this->globalValues()["currency"],
+        "refund" => $checked_values["refund"] ?? $this->globalValues()["refund"],
+        "email" => $checked_values["email"] ?? $this->globalValues()["email"],
+        "pick_up" => $checked_values["pick_up"] ?? $this->globalValues()["pick_up"],
+        "payment_time" => $checked_values["payment_time"] ?? $this->globalValues()["payment_time"],
+      ),
+    );
+
+    User::modifie( $change );
+
+    // All ok
+    return true;
   }
 
   /**
@@ -264,14 +335,38 @@ class Transaction {
    * requires: $paymentID
    */
   public function remove() {
+    // global variables
+    global $current_user;
+
     //Get database connection
     $conn = Access::connect();
 
+    // Get old values
+    $old_values = $this->globalValues();
+
     // Remove
     $remove = $conn->prepare("DELETE FROM " . PUB_TRANSACTIONS . " WHERE paymentID = :paymentID");
-    return $remove->execute(array(
+    if(! $remove->execute(array(
       ":paymentID" => $this->paymentID,
-    ));
+    ))) {
+      return false;
+    }
+
+    //Modifie transaction
+    $change = array(
+      "user" => $current_user,
+      "message" => "Removed pub transaction #" . $this->paymentID,
+      "table" => "PUB_TRANSACTIONS",
+      "function" => "DELETE",
+      "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
+      "old" => $old_values,
+      "new" => array(),
+    );
+
+    User::modifie( $change );
+
+    // everything ok
+    return true;
   }
 
   /**
@@ -280,7 +375,7 @@ class Transaction {
    */
   public function paymentCheck() {
     // Check if transaction is set
-    if(! empty( $this->globalValues()["payrexx_transaction"] ) ) {
+    if(! empty( $this->globalValues()["payrexx_transaction"] ) && $this->globalValues()["payment_state"] != 2 ) {
       return true;
     }
 
@@ -290,17 +385,21 @@ class Transaction {
     if( is_object($gateway) ) {
       // Check transaction
       if(! empty($gateway->getInvoices()) ) {
-        // Check if you can get transactionid
-        $transactionID = $this->getGateway()->getInvoices()[0]["transactions"][0]["id"] ?? null;
-        $payment_time = $this->getGateway()->getInvoices()[0]["transactions"][0]["time"] ?? null;
-        $email = $this->getGateway()->getInvoices()[0]["transactions"][0]["contact"]["email"] ?? null;
+        // Check payment provider
+        if( array_search( $this->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) === false) {
+          // Check if you can get transactionid
+          $transactionID = $this->getGateway()->getInvoices()[0]["transactions"][0]["id"] ?? null;
+          $payment_time = $this->getGateway()->getInvoices()[0]["transactions"][0]["time"] ?? null;
+          $email = $this->getGateway()->getInvoices()[0]["transactions"][0]["contact"]["email"] ?? null;
 
-        if(! is_null( $transactionID ) &&! is_null( $email )) {
-          $this->update(array(
-            "payrexx_transaction" => $transactionID,
-            "email" => $email,
-            "payment_time" => $payment_time,
-          ));
+          if(! is_null( $transactionID ) &&! is_null( $email )) {
+            $this->update(array(
+              "payrexx_transaction" => $transactionID,
+              "payment_state" => 0,
+              "email" => $email,
+              "payment_time" => $payment_time,
+            ));
+          }
         }
       }
     }
@@ -365,6 +464,11 @@ class Transaction {
     $pub = new Pub();
     $pub->pub = $this->globalValues()["pub_id"];
 
+    // Check if refund is possible
+    if($this->totalPrice() - $this->globalValues()["refund"] - $amount < 0) {
+      return false;
+    }
+
     //Payrexx files
     spl_autoload_register(function($class) {
         $root = dirname(__DIR__) . "/php/Payrexx-SDK";
@@ -391,7 +495,14 @@ class Transaction {
     $transaction->setAmount( $amount );
 
     try {
-        return $payrexx->refund($transaction);
+        $response = $payrexx->refund($transaction);
+
+        $refunded = $this->totalPrice() - $response->getAmount() + $amount;
+        if( $this->update( array("refund" => ($refunded ?? 0)) ) ) {
+          return $response;
+        }else {
+          return false;
+        }
     } catch (\Payrexx\PayrexxException $e) {
         return $e->getMessage();
     }
@@ -422,10 +533,45 @@ class Transaction {
     $conn = Access::connect();
 
     // Select all
-    $values = $conn->prepare("SELECT DISTINCT pub_id, payrexx_transaction, payrexx_gateway, currency, email, fee_absolute, fee_percent FROM " . PUB_TRANSACTIONS . " WHERE paymentID=:paymentID");
+    $values = $conn->prepare("SELECT DISTINCT pub_id, payrexx_transaction, payrexx_gateway, payment_state, currency, refund, email, pick_up, fee_absolute, fee_percent, payment_time FROM " . PUB_TRANSACTIONS . " WHERE paymentID=:paymentID");
     $values->execute(array(":paymentID" => $this->paymentID));
 
     // return array
     return $values->fetch( PDO::FETCH_ASSOC );
+  }
+
+  /**
+   * Calculates total price
+   * requires: $paymentID
+   */
+  public function totalPrice() {
+    // Get price
+    $price = 0;
+
+    // Calculate
+    foreach( $this->values() as $values ) {
+      $price = $price + ( $values["price"] * $values["quantity"] ?? 1);
+    }
+
+    // Return price
+    return $price;
+  }
+
+  /**
+   * Calculates total fees
+   * requires: $paymentID
+   */
+  public function totalFees() {
+    // Get fees
+    $fees = 0;
+
+    if( $this->globalValues()["payment_state"] != 1 && array_search( $this->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) === false ) {
+      // Calculate
+      $fees = $fees + ($this->globalValues()["fee_percent"] / 10000) * ($this->totalPrice() - ($this->globalValues()["refund"] ?? 0)); // Percent
+      $fees = $fees + $this->globalValues()["fee_absolute"]; //Absolute
+    }
+
+    // Return price
+    return $fees;
   }
 }

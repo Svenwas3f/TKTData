@@ -52,6 +52,11 @@
  * pub_remove_right ( link [link element], user [UserID], pub [pubID], type [access type] )
  *
  * toggleTipMoney( pub [pubID], img [HTML Element] )
+ *
+ * refundPayment ( paymentID [paymentID], amount [INT] )
+ *
+ * togglePickUp ( paymentID [paymentID], icon [HTML Element] )
+ *
  */
 
 /**
@@ -444,7 +449,7 @@ function pub_remove_right( link, user, pub, type = "r" ) {
  */
 function toggleTipMoney( pub, img ) {
   var values = new Object();
-  values["pub"] = pub,
+  values["pub"] = pub;
 
   ajax(18, function(c) {
     // Get json
@@ -453,4 +458,93 @@ function toggleTipMoney( pub, img ) {
     // Set new src
     img.src = ajax_response.img_src;
   }, "toggle_tip", values);
+}
+
+/**
+ * refunds amount
+ *
+ * paymentID. Payment ID
+ * Amount: Amount that should be refounded
+ */
+function refundPayment( paymentID, amount ) {
+  var values = new Object();
+  values["paymentID"] = paymentID;
+  values["amount"] = amount;
+
+  ajax(16, function(c) {
+    // Get json
+    var ajax_response = JSON.parse(c.responseText);
+
+    // Check answer
+    if(ajax_response.hasOwnProperty("error")) {
+      var message = new Object();
+      message["message"] = ajax_response.error;
+      message["type"] = "error";
+
+      ajax(16, function(c) {
+        document.getElementsByTagName("article")[0].innerHTML += c.responseText;
+      }, "message", message)
+    }else {
+      // Get details
+      var details = document.getElementsByClassName("details")[0];
+
+      // Change values
+      details.getElementsByClassName("refund")[0].getElementsByClassName("value")[0].innerHTML = ajax_response.formated_refund + " " + ajax_response.currency;
+      details.getElementsByClassName("fees")[0].getElementsByClassName("value")[0].innerHTML = ajax_response.formated_fees + " " + ajax_response.currency;
+      details.getElementsByClassName("new_amount")[0].getElementsByClassName("value")[0].innerHTML = ajax_response.formated_new_amount + " " + ajax_response.currency;
+
+      // Show success
+      var message = new Object();
+      message["message"] = "Erfolgreich -" + ajax_response.formated_refund + " " + ajax_response.currency + " erstattet.";
+      message["type"] = "success";
+
+      ajax(16, function(c) {
+        document.getElementsByTagName("article")[0].innerHTML += c.responseText;
+      }, "message", message)
+    }
+
+
+  }, "refundPayment", values);
+}
+
+/**
+ * Toggles pickup
+ *
+ * paymentID: Payment ID
+ * icon: HTLM Icon container
+ */
+function togglePickUp( paymentID, icon ) {
+  var values = new Object();
+  values["paymentID"] = paymentID;
+
+  ajax(16, function(c) {
+    // Get json
+    var ajax_response = JSON.parse(c.responseText);
+
+    // Change icons
+    icon.children[0].src = ajax_response.img_src;
+  }, "togglePickUp", values);
+}
+
+/**
+ *
+ */
+function confirmPayment( paymentID, icon ) {
+  var values = new Object();
+  values["paymentID"] = paymentID;
+
+  ajax(16, function(c) {
+    if( c.responseText == "true" ) {
+      icon.remove();
+    }else {
+      // Show error
+      var message = new Object();
+      message["message"] = "Konnte nicht überarbeitet werden";
+      message["type"] = "error";
+
+      ajax(16, function(c) {
+        document.getElementsByTagName("article")[0].innerHTML += c.responseText;
+      }, "message", message)
+    }
+  }, "confirmPayment", values);
 }

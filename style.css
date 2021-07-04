@@ -35,11 +35,16 @@
   --success1: #7dce82;
 
   /* Ticket states */
-  --ticket-payment-and-used: #5c6337;
+  --ticket-payment-and-used: #9a2e37;
   --ticket-blocked-and-payment: #e79c27;
-  --ticket-payment-expected: #44143e;
-  --ticket-used: #44b67e;
-  --ticket-blocked: #f24a00;
+  --ticket-payment-expected: #3d5b49;
+  --ticket-used: #41b852;
+  --ticket-blocked: #000615;
+
+  /* transaction states */
+  --transaction-payment-and-pickUp: #9a2e37;
+  --transaction-payment-expected: #45528e;
+  --transaction-no-pickUp: #f3d12d;
 
   /* Restore */
   --restore-old: #cd0717;
@@ -1471,7 +1476,12 @@ form.search button img {
 
 .mainpage-1.subpage-7 table tr.payment-and-used {
   background-color: var(--ticket-payment-and-used) !important;
-  color: black !important;
+  color: white !important;
+}
+
+.mainpage-1.subpage-7 table tr.payment-and-used img {
+  filter: brightness(0) invert(1);
+  /*Move images to white*/
 }
 
 .mainpage-1.subpage-7 table tr.blocked-and-payment {
@@ -1496,7 +1506,12 @@ form.search button img {
 
 .mainpage-1.subpage-7 table tr.blocked {
   background-color: var(--ticket-blocked) !important;
-  color: black !important;
+  color: white !important;
+}
+
+.mainpage-1.subpage-7 table tr.blocked img {
+  filter: brightness(0) invert(1);
+  /*Move images to white*/
 }
 
 .mainpage-1.subpage-7 .top-bar-ticket {
@@ -1508,7 +1523,7 @@ form.search button img {
 
 .mainpage-1.subpage-7 .top-bar-ticket.payment-and-used {
   background-color: var(--ticket-payment-and-used) !important;
-  color: black !important;
+  color: white !important;
 }
 
 .mainpage-1.subpage-7 .top-bar-ticket.blocked-and-payment {
@@ -1533,8 +1548,9 @@ form.search button img {
 
 .mainpage-1.subpage-7 .top-bar-ticket.blocked {
   background-color: var(--ticket-blocked) !important;
-  color: black !important;
+  color: white !important;
 }
+
 
 .mainpage-1.subpage-7 .ticket-payment-date {
   display: block;
@@ -1997,6 +2013,7 @@ form.search button img {
 .mainpage-3.subpage-11 .scann-result-container .payment-and-used,
 .mainpage-3.subpage-12 .scann-result-container .payment-and-used {
   background-color: var(--ticket-payment-and-used) !important;
+  color: white !important;
 }
 
 .mainpage-3.subpage-11 .scann-result-container .blocked-and-payment,
@@ -2007,6 +2024,7 @@ form.search button img {
 .mainpage-3.subpage-11 .scann-result-container .payment-expected
 .mainpage-3.subpage-12 .scann-result-container .payment-expected {
   background-color: var(--ticket-payment-expected) !important;
+  color: white !important;
 }
 
 .mainpage-3.subpage-11 .scann-result-container .payment-expected img,
@@ -2022,6 +2040,7 @@ form.search button img {
 .mainpage-3.subpage-11 .scann-result-container .blocked,
 .mainpage-3.subpage-12 .scann-result-container .blocked {
   background-color: var(--ticket-blocked) !important;
+  color: white !important;
 }
 
 .mainpage-3.subpage-11 .top-bar-ticket,
@@ -2352,6 +2371,134 @@ form.search button img {
   vertical-align: sub;
 }
 
+.mainpage-5.subpage-16 .rows .transaction.payment-and-pickUp {
+  background-color: var(--transaction-payment-and-pickUp);
+}
+
+.mainpage-5.subpage-16 .rows .transaction.payment-expected {
+  background-color: var(--transaction-payment-expected);
+}
+
+.mainpage-5.subpage-16 .rows .transaction.no-pickUp {
+  background-color: var(--transaction-no-pickUp);
+}
+
+.mainpage-5.subpage-16 .pub .view {
+  width: calc(100% - 50px);
+}
+
+.mainpage-5.subpage-16 .pub .view .details {
+  background-color: var(--lighterwhitegray);
+  box-shadow: 0px 0px 5px var(--custom-gray11);
+  padding: 10px;
+  margin: 20px;
+}
+
+.mainpage-5.subpage-16 .pub .view .details .headline {
+  font-family: 'Open Sans Bold', sans-serif;
+  font-size: 15pt;
+}
+
+.mainpage-5.subpage-16 .pub .view .details .details-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media screen and (max-width: 700px) {
+  .mainpage-5.subpage-16 .pub .view .details .details-list {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+.mainpage-5.subpage-16 .pub .view .details .details-list .detail-item {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11pt;
+  padding-top: 10px;
+}
+
+.mainpage-5.subpage-16 .pub .view .details .details-list .detail-item .type {
+  color: var(--lighternavy)
+}
+
+.mainpage-5.subpage-16 .pub .view .details .details-list .detail-item .value {
+  color: var(--lightnavy);
+  margin-left: 10px;
+}
+
+.mainpage-5.subpage-16 .pub .view .products {
+  background-color: var(--lighterwhitegray);
+  box-shadow: 0px 0px 5px var(--custom-gray11);
+  padding: 10px;
+  margin: 20px;
+}
+
+.mainpage-5.subpage-16 .pub .view .products .headline {
+  font-family: 'Open Sans Bold', sans-serif;
+  font-size: 15pt;
+}
+
+.mainpage-5.subpage-16 .pub .view .products .row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Open Sans', sans-serif;
+  padding: 9px 0px;
+  border-bottom: 2px solid var(--custom-gray3)
+}
+
+.mainpage-5.subpage-16 .pub .view .products .row .quantity {
+  color: var(--lighternavy);
+  min-width: 30px;
+}
+
+.mainpage-5.subpage-16 .pub .view .products .row .price {
+  margin-left: auto;
+}
+
+.mainpage-5.subpage-16 .pub .view .products .total {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Open Sans Bold', sans-serif;
+  padding: 7.5px 0px;
+}
+
+.mainpage-5.subpage-16 .pub .view .products .total .value {
+  margin-left: auto;
+}
+
+.mainpage-5.subpage-16 .pub .right-menu-container .right-sub-menu-container .refund-payment .container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.mainpage-5.subpage-16 .pub .right-menu-container .right-sub-menu-container .refund-payment input {
+  border: none;
+  border-bottom: 1px solid var(--maincolor);
+  outline: none;
+  box-shadow: none;
+  text-align: right;
+  width: 50px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12pt;
+}
+
+.mainpage-5.subpage-16 .pub .right-menu-container .right-sub-menu-container .refund-payment input:invalid {
+  outline: 2px solid var(--warning4);
+}
+
+.mainpage-5.subpage-16 .pub .right-menu-container .right-sub-menu-container .refund-payment .currency {
+  font-size: 12pt;
+  margin-left: 7px;
+}
+
+.mainpage-5.subpage-16 .pub .right-menu-container .right-sub-menu-container .refund-payment button {
+  margin-left: 20px;
+}
+
 .mainpage-5.subpage-17 .fee-info {
   background-color: var(--info-bar-orange);
   color: white;
@@ -2437,6 +2584,11 @@ form.search button img {
 .mainpage-5 .right-sub-menu .right-menu-container:hover .right-sub-menu-container .right-sub-menu-item:hover {
   background-color: var(--maincolor);
   color: white;
+}
+
+.mainpage-5 .right-sub-menu .right-menu-container:hover .right-sub-menu-container .right-sub-menu-item.no-hover:hover {
+  background-color: inherit;
+  color: inherit;
 }
 
 .mainpage-5 .pub .top-nav a.selected {

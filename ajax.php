@@ -362,6 +362,92 @@ switch($_POST["p"]) {
   break;
 
   /**
+   * Payments
+   */
+  case 16:
+    switch($_POST["action"]) {
+      case "refundPayment":
+        if(User::r_access_allowed(16, $current_user)) {
+          // Start transaction
+          $transaction = new Transaction();
+          $transaction->paymentID = json_decode($_POST["values"], true)["paymentID"];
+
+          // prepare amount
+          $amount = (json_decode($_POST["values"], true)["amount"]) * 100;
+
+          // Refund payment
+          $refund = $transaction->refund( $amount );
+          if( $refund === false) {
+            echo json_encode(array(
+              "error" => "Rückerstattung fehlgeschlagen",
+            ));
+          }elseif( is_string($refund) ) {
+            echo json_encode(array(
+              "error" => "Rückerstattung fehlgeschlagen. " . $refund,
+            ));
+          }else {
+            echo json_encode(array(
+              "refund" => $transaction->globalValues()["refund"],
+              "formated_refund" => number_format(($transaction->globalValues()["refund"] / 100), 2),
+              "fees" => $transaction->totalFees(),
+              "formated_fees" => number_format(($transaction->totalFees() / 100), 2),
+              "new_amount" => ($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100,
+              "formated_new_amount" => number_format(($transaction->totalPrice() - $transaction->globalValues()["refund"] ?? 0) / 100,2),
+              "currency" => $transaction->globalValues()["currency"],
+            ));
+          }
+        }else {
+          echo json_encode(array(
+            "error" => "Dieser Benutzer hat keine Berechtigung zu dieser Aktion",
+          ));
+        }
+      break;
+      case "message":
+        if(json_decode($_POST["values"], true)["type"] == "success") {
+          Action::success(json_decode($_POST["values"], true)["message"]);
+        }else {
+          Action::fail(json_decode($_POST["values"], true)["message"]);
+        }
+      break;
+      case "togglePickUp":
+        if(User::r_access_allowed(16, $current_user)) {
+          // Get transaction
+          $transaction = new Transaction();
+          $transaction->paymentID = json_decode($_POST["values"], true)["paymentID"];
+
+          // Check update variable
+          if( $transaction->globalValues()["pick_up"] == 1) {
+            $transaction->update(array("pick_up" => 0));
+
+            // Return array
+            echo json_encode(array(
+              "pickedUp" => false,
+              "img_src" => $url . '/medias/icons/pickUp.svg'
+            ));
+          }else {
+            $transaction->update(array("pick_up" => 1));
+
+            // Return array
+            echo json_encode(array(
+              "pickedUp" => true,
+              "img_src" => $url . '/medias/icons/pickedUp.svg'
+            ));
+          }
+        }
+      break;
+      case "confirmPayment":
+        if(User::r_access_allowed(16, $current_user)) {
+            // Get transaction
+            $transaction = new Transaction();
+            $transaction->paymentID = json_decode($_POST["values"], true)["paymentID"];
+
+            echo (($transaction->update(array("payment_state" => 1)) == true) ? "true" : "false");
+        }
+      break;
+    }
+  break;
+
+  /**
    * Pub products
    */
   case 17:
