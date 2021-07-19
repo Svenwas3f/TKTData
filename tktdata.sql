@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 01. Jul 2021 um 21:38
+-- Erstellungszeit: 19. Jul 2021 um 18:36
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -98,7 +98,6 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (17, 'Produkte', 5, 'pub_products.svg', 2, NULL),
 (18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
-(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -160,6 +159,46 @@ CREATE TABLE `tktdata_pub_products_meta` (
   `product_id` int(11) NOT NULL,
   `visible` int(11) DEFAULT NULL,
   `availability` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `tktdata_pub_products_meta`
+--
+
+INSERT INTO `tktdata_pub_products_meta` (`pub_id`, `product_id`, `visible`, `availability`) VALUES
+(4, 4, 0, 2),
+(4, 5, 1, NULL),
+(4, 14, 0, NULL),
+(4, 17, 0, 1),
+(4, 19, 1, 0),
+(4, 20, 1, 2),
+(4, 28, 0, NULL),
+(4, 35, 0, NULL),
+(5, 4, 0, NULL),
+(5, 25, NULL, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tktdata_pub_transactions`
+--
+
+CREATE TABLE `tktdata_pub_transactions` (
+  `pub_id` int(11) DEFAULT NULL,
+  `paymentID` int(11) DEFAULT NULL,
+  `payrexx_transaction` int(11) DEFAULT NULL,
+  `payrexx_gateway` int(11) DEFAULT NULL,
+  `payment_state` int(11) DEFAULT 2,
+  `product_id` int(11) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT NULL,
+  `refund` int(11) DEFAULT 0,
+  `quantity` int(11) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `pick_up` int(1) DEFAULT 0,
+  `fee_absolute` int(11) DEFAULT NULL,
+  `fee_percent` int(11) DEFAULT NULL,
+  `payment_time` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -252,7 +291,8 @@ CREATE TABLE `tktdata_user` (
   `id` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
+  `password` varchar(255) DEFAULT NULL,
+  `language` varchar(10) NOT NULL DEFAULT 'de'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -392,19 +432,19 @@ ALTER TABLE `tktdata_livedata_archive`
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_live`
 --
 ALTER TABLE `tktdata_livedata_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1303;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1306;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub`
 --
 ALTER TABLE `tktdata_pub`
-  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub_access`
@@ -416,7 +456,7 @@ ALTER TABLE `tktdata_pub_access`
 -- AUTO_INCREMENT für Tabelle `tktdata_pub_products`
 --
 ALTER TABLE `tktdata_pub_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
@@ -434,13 +474,13 @@ ALTER TABLE `tktdata_tickets_groups`
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3479;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3511;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
