@@ -53,6 +53,30 @@ It is recommended to use a switch statement in the `index.php` file.
 >   break;\
 > }
 
+### Languages
+
+Every plugin supports multi-language. The common languages are german and english. The language files are located in `/lang/*` and have the extension .php. The filename is the shortcode of the language following official ISO regulations.
+
+A Language file starts like this and defines the menu names
+
+> <?php
+> $language_code = "en";/
+>
+> //Menu
+>
+> $plugin = new Plugin();
+> $plugin->plugin_name = 'sample-plugin'; // Set pluginname
+>
+> // Sample pages (Use this structure for every container)
+> $plugin_container = $plugin->get_page('Test')["id"]; // Get container
+> $string[$plugin_container]["menu"] = 'Test'; // Set containername
+> $string[$plugin->get_subpage('Sub-Test 1', $plugin_container)["id"]]["menu"] = 'Sub-Test 1'; // Submenu items
+
+After that, the custom text for your plugin pages follows this structure:
+
+> $string[$plugin->get_subpage('Sub-Test 1', $plugin_container)["id"]][0] = "This is page #%pageid% called %pagename%";
+
+Visit the sample-plugin to see a working example and its comments.
 
 ### Advanced Infos
 

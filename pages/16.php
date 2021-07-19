@@ -63,50 +63,6 @@ echo '<div class="pub">';
   switch(key($action)) {
     case "add":
 
-    var_dump($_POST);
-      if(! empty($_POST)) {
-        if( $write_access ) {
-          // Add
-          if( $transaction->add( array($_POST), $pub->pub ) ) {
-            Action::success("Die Transaktion <strong> (#" . $transaction->paymentID . ")</strong> wurde <strong>erfolgreich</strong> erstellt.");
-          }else {
-            Action::fail("Die Transaktion <strong>(#" . $transaction->paymentID . ")</strong> konnte <strong>nicht</strong> erstellt werden.");
-          }
-        }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-        }
-      }
-
-      // Start html
-      echo '<form action="' . $url_page . '&pub=' . $pub->pub . '&add" method="post">';
-        // Payment state
-        echo '<div class="select" onclick="toggleOptions(this)">';
-          echo '<input type="text" class="selectValue" name="payment_state" ' . $disabled . ' required>';
-          echo '<span class="headline">Zahlungsart wählen</span>';
-
-          echo '<div class="options">';
-            echo '<span data-value="1" onclick="selectElement(this)">Barzahlung</span>';
-            echo '<span data-value="2" onclick="selectElement(this)">Zahlung erwartet</span>';
-          echo '</div>';
-        echo '</div>';
-
-        //Price
-        echo '<label class="txt-input">';
-          echo '<input type="text" name="price" ' . $disabled . ' required/>';
-          echo '<span class="placeholder">Preis</span>';
-          echo '<span class="unit">' . $pub->values()["currency"] . '</span>';
-        echo '</label>';
-
-        //Email
-        echo '<label class="txt-input">';
-          echo '<input type="text" name="email" ' . $disabled . '/>';
-          echo '<span class="placeholder">Email</span>';
-        echo '</label>';
-
-        echo '<button>Hinzufügen</button>';
-
-      echo '</form>';
-
     break;
     case "view":
       // Set ID
@@ -115,51 +71,77 @@ echo '<div class="pub">';
       // Check payment
       $transaction->paymentCheck();
 
-      echo '<div class="right-sub-menu">';
-        // pickUp
-        echo '<div class="right-menu-container">';
-          if( $transaction->globalValues()["pick_up"] == 0) {
-            echo '<a class="right-menu-item" onclick="togglePickUp(' . $transaction->paymentID . ', this)"><img src="' . $url . 'medias/icons/pickUp.svg" alt="PickUp" title="Transaktion abholen?"/></a>';
-          }else {
-            echo '<a class="right-menu-item" onclick="togglePickUp(' . $transaction->paymentID . ', this)"><img src="' . $url . 'medias/icons/pickedUp.svg" alt="PickUp" title="Transaktion abholen?"/></a>';
-          }
-        echo '</div>';
+      // Right menu
+      $rightmenu = new HTML('right-menu');
 
-        // Payment
-        if( $transaction->globalValues()["payment_state"] == 2) {
-          echo '<div class="right-menu-container" onclick="confirmPayment(' . $transaction->paymentID . ', this)">';
-            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/payment_confirm.svg" alt="state" title="Zahlungseingang bestätigen"/></a>';
-          echo '</div>';
-        }
+      // PickUp
+      if( $transaction->globalValues()["pick_up"] == 0 ) {
+        $rightmenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/pickUp.svg" alt="PickUp" title="Transaktion abholen?"/>',
+            'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
+          ),
+        );
+      }else {
+        $rightmenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/pickedUp.svg" alt="PickUp" title="Transaktion abholen?"/>',
+            'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
+          ),
+        );
+      }
 
-        // Refund
-        if( isset($transaction->globalValues()["payrexx_transaction"]) &&! empty($transaction->globalValues()["payrexx_transaction"])) {
-          echo '<div class="right-menu-container">';
-            echo '<a class="right-menu-item"><img src="' . $url . 'medias/icons/payment-refund.svg" alt="Trash" title="Betrag zurückerstatten"/></a>';
-            echo '<div class="right-sub-menu-container">';
-              echo '<div class="right-sub-menu-item no-hover refund-payment">';
-                echo '<div class="container">';
-                  echo '<input type="text" min="0" max="' . (($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100) . '"/>';
-                  echo '<span class="currency">' . $transaction->globalValues()["currency"] . '</span>';
-                  echo '<button onclick="refundPayment(' . $transaction->paymentID . ', this.parentNode.children[0].value)">Erstatten</button>';
-                echo '</div>';
-              echo '</div>';
-            echo '</div>';
-          echo '</div>';
-        }
+      // Payment
+      if( $transaction->globalValues()["payment_state"] == 2) {
+        $rightmenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/payment_confirm.svg" alt="state" title="Zahlungseingang bestätigen"/>',
+            'additional_item' => 'onclick="confirmPayment(' . $transaction->paymentID . ', this)"',
+          ),
+        );
+      }
 
-        // Remove
-        if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
-          echo '<div class="right-menu-container">';
-            echo '<a href="' . $url_page . '&remove_product=" class="right-menu-item"><img src="' . $url . 'medias/icons/trash.svg" alt="Mail" title="Produkt entfernen"/></a>';
-          echo '</div>';
-        }
-      echo '</div>';
+      // Refund
+      if( isset($transaction->globalValues()["payrexx_transaction"]) &&! empty($transaction->globalValues()["payrexx_transaction"])) {
+        $rightmenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="Trash" title="Betrag zurückerstatten"/>',
+            'dropdown' => array(
+              array(
+                'context' => '<div class="container">
+                                <input type="text" min="0" max="' . (($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100) . '"/>' .
+                                '<span class="currency">' . $transaction->globalValues()["currency"] . '</span>' .
+                                '<button onclick="refundPayment(' . $transaction->paymentID . ', this.parentNode.children[0].value)">Erstatten</button>' . '</div>',
+                'classes' => 'no-hover refund-payment',
+              ),
+            ),
+          ),
+        );
+      }
+
+      // Remove
+      if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
+        $rightmenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="Mail" title="Produkt entfernen"/>',
+            'additional_item' => 'href="' . $url_page . '&remove_product="',
+          ),
+        );
+      }
 
       // Display top return button
-      echo '<div class="top-nav border-none">';
-        echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
-      echo '</div>';
+      $topNav = new HTML('top-nav', array('classes' => 'border-none'));
+      $topNav->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+          'link' => 'Javascript:history.back()',
+          'additional' => 'title="Zur vorherigen Seite zurück"',
+        ),
+      );
+
+      // Show HTML
+      $topNav->prompt();
+      $rightmenu->prompt();
 
       // Start view
       echo '<div class="view">';
@@ -296,124 +278,173 @@ echo '<div class="pub">';
         }
       }
 
-      echo '<form action="' . $url . '" method="get" class="search">';
-        echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-        echo '<input type="hidden" name="sub" value="' . $page . '" />';
-        echo '<input type="hidden" name="pub" value="' . ($_GET["pub"] ?? null) . '" />';
-        echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Email, Zahlungs-ID, Zahlungszeit">';
-        echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-      echo '</form>';
+      // Start searchbar
+      $searchbar = new HTML('searchbar', array(
+        'action' => $url,
+        'method' => 'get',
+        'placeholder' => 'Email, Zahlungs-ID, Zahlungszeit',
+        's' => ($_GET['s'] ?? ''),
+      ));
 
+      $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+      $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
+      $searchbar->addElement( '<input type="hidden" name="pub" value="' . ($_GET["pub"] ?? null) . '" />' );
 
       // Define colors
       $availability = array(
         0 => array(
-          "color" => "var(--transaction-payment-and-pickUp)",
+          "bcolor" => "var(--transaction-payment-and-pickUp)",
           "title" => "Ohne Zahlung abgeholt",
         ),
         1 => array(
-          "color" => "var(--transaction-payment-expected)",
+          "bcolor" => "var(--transaction-payment-expected)",
           "title" => "Zahlung erwartet",
         ),
         2 => array(
-          "color" => "var(--transaction-no-pickUp)",
+          "bcolor" => "var(--transaction-no-pickUp)",
           "title" => "Abholung erwartet",
         ),
       );
 
-      // Legend
-      echo '<div class="legend">';
-        foreach( $availability as $element ) {
-          echo '<div class="legend-element">';
-            echo '<div class="legend-button" style="background-color: ' . $element["color"] . '"></div>';
-            echo $element["title"];
-          echo '</div>';
-        }
-      echo '</div>';
+      //Start Legend
+      $legend = new HTML('legend');
 
-
-      echo  '<table class="rows">';
-        //Headline
-        $headline_names = array('Email', 'Preis', 'Datum', 'Aktion');
-
-        //Start headline
-        echo  '<tr>'; //Start row
-        foreach( $headline_names as $name ){
-          echo  '<th>' . $name . '</th>';
-        }
-        echo  '</tr>'; //Close row
-
-        // Set offset and steps
-        $steps = 20;
-        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
-
-        // List general products
-        foreach( $transaction->all( $offset, $steps, ($_GET["s"] ?? null)) as $values ) {
-          // Set paymentID
-          $transaction->paymentID = $values["paymentID"];
-
-          // Check payment
-          $transaction->paymentCheck();
-
-          // Generate class
-          if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
-            $class = "transaction payment-and-pickUp";
-            $title = "Zahlung erwartet. Produkte bereits abgeholt.";
-          }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
-            $class = "transaction payment-expected";
-            $title = "Zahlung erwartet.";
-          }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
-            $class = "transaction no-pickUp";
-            $title = "Abholung erwartet";
-          }else {
-            $class = "transaction";
-            $title = "Abgeholt";
-          }
-
-          echo  '<tr class="' . $class . '" title="' . $title . '">';
-            echo  '<td>' . $transaction->globalValues()["email"] . '</td>';
-            echo  '<td>' . number_format(($transaction->totalPrice() / 100), 2) . ' ' . ($transaction->globalValues()["currency"] ?? DEFAULT_CURRENCY) . '</td>';
-            echo  '<td>' . date("d.m.Y H:i:s", strtotime($transaction->globalValues()["payment_time"])) . '</td>';
-            echo  '<td>';
-              echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view=' . urlencode( $transaction->paymentID ) . '" title="Transaktion anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
-              if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
-                echo  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove=' . urlencode( $transaction->paymentID ) . '" title="Transaktion entfernen"><img src="' . $url . '/medias/icons/trash.svg" />';
-              }
-            echo  '</td>';
-          echo  '</tr>';
-        }
-
-        // Menu requred
-        echo  '<tr class="nav">';
-
-          if( (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
-                        '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
-                        '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
-          }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
-                        '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                      </td>';
-          }elseif (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) { // More pages accessable
-            echo  '<td colspan="' . count( $headline_names ) . '">
-                        <a href="' . $url_page . (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
-                        '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                      </td>';
-          }
-
-        echo  '</tr>';
-
-      echo  '</table>';
-
-      if( $write_access === true ) {
-        echo  '<a class="add" href="' . $url_page . '&pub=' . $pub->pub . '&add">
-          <span class="horizontal"></span>
-          <span class="vertical"></span>
-        </a>';
+      foreach( $availability as $values ) {
+        $legend->addElement( array(
+          'bcolor' => $values['bcolor'],
+          'title' => $values['title']
+        ) );
       }
+
+
+      // Start table
+      $table = new HTML('table');
+
+      // Headline
+      $table->addElement(
+        array(
+          'headline' => array(
+            'items' => array(
+              array(
+                'context' => 'Email',
+              ),
+              array(
+                'context' => 'Preis',
+              ),
+              array(
+                'context' => 'Datum',
+              ),
+              array(
+                'context' => 'Atkion',
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Set offset and steps
+      $steps = 20;
+      $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+      // List general products
+      foreach( $transaction->all( $offset, $steps, ($_GET["s"] ?? null)) as $values ) {
+        // Set paymentID
+        $transaction->paymentID = $values["paymentID"];
+
+        // Check payment
+        $transaction->paymentCheck();
+
+        // Generate class
+        if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
+          $class = "transaction payment-and-pickUp";
+          $title = "Zahlung erwartet. Produkte bereits abgeholt.";
+        }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
+          $class = "transaction payment-expected";
+          $title = "Zahlung erwartet.";
+        }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
+          $class = "transaction no-pickUp";
+          $title = "Abholung erwartet";
+        }else {
+          $class = "transaction";
+          $title = "Abgeholt";
+        }
+
+        // Create actions
+        $action = '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view=' . urlencode( $transaction->paymentID ) . '"
+                    title="Transaktion anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
+        if(  $transaction->globalValues()["payment_state"] == 1 ||
+              array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
+          $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove=' . urlencode( $transaction->paymentID ) . '"
+                        title="Transaktion entfernen"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
+        }
+
+        $table->addElement(
+          array(
+            'row' => array(
+              'additional' => 'class="' . $class . '" title="' . $title . '"',
+              'items' => array(
+                array(
+                  'context' => $transaction->globalValues()["email"],
+                ),
+                array(
+                  'context' => number_format(($transaction->totalPrice() / 100), 2) . ' ' .
+                                ($transaction->globalValues()["currency"] ?? DEFAULT_CURRENCY),
+                ),
+                array(
+                  'context' => date("d.m.Y H:i:s", strtotime($transaction->globalValues()["payment_time"])),
+                ),
+                array(
+                  'context' => $action,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      // Footer
+      $last = '<a href="' .
+                $url_page .
+                (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
+                ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+                style="float: left;">Letze</a>';
+      $next = '<a href="' .
+                $url_page .
+                (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
+                ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+                style="float: right;">Weiter</a>';
+
+      if( (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $last . $next,
+            ),
+          ),
+        );
+      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $last,
+            ),
+          ),
+        );
+      }elseif (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) { // More pages accessable
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $next,
+            ),
+          ),
+        );
+      }
+
+      // Show HTML
+      $searchbar->prompt();
+      $legend->prompt();
+      $table->prompt();
     break;
   }

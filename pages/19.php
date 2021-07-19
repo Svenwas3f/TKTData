@@ -276,7 +276,7 @@ switch(key($action)) {
     //Update user
     if( isset( $_POST["update"])) {
       if( User::w_access_allowed($page, $current_user)) {
-        if($user->updateRights( $_POST ) && $user->updateInfos($_POST["name"], $_POST["mail"])) {
+        if($user->updateRights( $_POST ) && $user->updateInfos($_POST["name"], $_POST["mail"], null)) {
           Action::success("Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.");
         }else{
           Action::fail("Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden");
@@ -301,7 +301,7 @@ switch(key($action)) {
       echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
       echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
     echo '</form>';
-    
+
     //Display result
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
     display_users( $search_value );

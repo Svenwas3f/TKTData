@@ -111,6 +111,9 @@ require_once( dirname(__FILE__) . "/php/mail.php");
 /* Get access to database via Access::$conn */
 require_once( dirname(__FILE__) . "/php/db-access.php" );
 
+/* Require HTML */
+require_once( dirname(__FILE__) . "/php/html.php" );
+
 /* Plugin file */
 require_once( dirname(__FILE__) . "/php/plugin.php");
 
@@ -155,6 +158,9 @@ require_once( dirname(__FILE__) . "/php/transaction.php");
 
 /* Mediahub file */
 require_once( dirname(__FILE__) . "/php/media-hub.php");
+
+/* Language support */
+require_once( dirname(__FILE__) . "/php/language.php");
 
 /////////////////////////////
 // Require html

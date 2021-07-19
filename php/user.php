@@ -425,7 +425,7 @@ class User {
    * $name = Display name of user
    * $email = Email of user
    */
-  public function updateInfos($name, $email) {
+  public function updateInfos($name, $email, $language) {
     //Require variables
     global $current_user;
 
@@ -438,7 +438,7 @@ class User {
     $conn = Access::connect();
 
     //Read current infos and add modification
-    $old_values = $conn->prepare("SELECT name, email FROM " . USERS . " WHERE id=:id");
+    $old_values = $conn->prepare("SELECT name, email, language FROM " . USERS . " WHERE id=:id");
     $old_values->execute(array(":id" => $this->user));
 
     $change = array(
@@ -448,16 +448,20 @@ class User {
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->user),
       "old" =>  $old_values->fetch(PDO::FETCH_ASSOC),
-      "new" => array("name" => $name, "email" => $email)
+      "new" => array("name" => $name, "email" => $email, "language" => $language)
     );
 
     User::modifie( $change );
 
 
     //Update current infos
-    $newInfos = $conn->prepare("UPDATE " . USERS . " SET name=:name, email=:email WHERE id=:id");
+    $newInfos = $conn->prepare("UPDATE " . USERS . " SET name=:name, email=:email, language=:language WHERE id=:id");
 
-    return $newInfos->execute(array(":name" => $name, ":email" => $email,":id" => $this->user));
+    return $newInfos->execute(array(
+      ":name" => ($name ?? $old_values["name"]),
+      ":email" => ($email ?? $old_values["email"]),
+      ":language" => ($language ?? $old_values["language"]),
+      ":id" => $this->user));
   }
 
   /**

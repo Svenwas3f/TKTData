@@ -153,23 +153,13 @@ if(! isset($_GET["id"])){
       /**
        * Display content of current page if user has access
        */
-      if( User::w_access_allowed($displayPage, $current_user) || User::r_access_allowed($displayPage, $current_user ) || $displayPage == "profil"){
-        //Generate file
-        $page_file = dirname(__FILE__) . "/pages/" . $displayPage . ".php";
+      if( User::w_access_allowed($displayPage, $current_user) || User::r_access_allowed($displayPage, $current_user ) || $displayPage == "profile"){
+        // Check if page is a pluginpage
+        $plugin = new Plugin();
 
-        //Check file
-        if(file_exists( $page_file )) {
-          // Generate container
-          echo '<div class="mainpage-' . $mainPage . ' subpage-' . $page . '">';
-
-            //Display page
-            require_once( $page_file );
-
-          echo '</div>';
-        }else {
-          //Get plugin name
-          $name = new Plugin();
-          $name = $name->get_page( intval($displayPage) )["plugin"];
+        if( $plugin->is_pluginpage( $displayPage )) {
+          // Page contains to plugin
+          $name = $plugin->get_page( intval($displayPage) )["plugin"];
 
           //Plugin default path
           $plugin_file = dirname(__FILE__) . "/plugins/" . $name . "/index.php";
@@ -180,6 +170,14 @@ if(! isset($_GET["id"])){
           }else {
             Action::fs_info('Die Seite <strong>#' . $page . "</strong> existiert nicht.", "Zurück", $url);
           }
+        }else {
+          // Page is a default page
+          echo '<div class="mainpage-' . $mainPage . ' subpage-' . $page . '">'; // Generate container
+
+            //Display page
+            require_once( dirname(__FILE__) . "/pages/" . $displayPage . ".php" );
+
+          echo '</div>';
         }
       }else{
         /**

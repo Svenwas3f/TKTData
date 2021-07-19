@@ -16,6 +16,8 @@
  * For further description please go to requested function
  * Variables witch have to be passd throug the function are written after the function name inround brackets ().
  *
+ * Plugin->is_pluginpage ( $page [INT] )
+ *
  * Plugin->all ()
  *
  * Plugin->check_plugins ()
@@ -44,6 +46,25 @@ class Plugin {
   function __construct() {
     //get folder name
     $this->plugin_name = basename(dirname(debug_backtrace()[0]["file"])); //Gets plugin name automatically if executed in /plugin/plugin-folder
+  }
+
+  /**
+   * This function checks if the page is an plugin page or not and returns a boolen
+   *
+   * $page: requested page
+   */
+  public function is_pluginpage( $page ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Select page in database menu
+    $pluginpage = $conn->prepare("SELECT plugin FROM " . MENU . " WHERE id=:id");
+    $pluginpage->execute(array(
+      ":id" => $page,
+    ));
+
+    // Return true or false if page is pluginpage
+    return ! is_null( ($pluginpage->fetch(PDO::FETCH_ASSOC)['plugin'] ?? null) );
   }
 
   /**
@@ -243,7 +264,7 @@ class Plugin {
       //Get id
       $page_check = $conn->prepare("SELECT * FROM " . MENU . " WHERE name=:name AND plugin=:plugin AND submenu=0");
       $page_check->execute(array(
-        ":name" => $page_name,
+        ":name" => $page,
         ":plugin" => $this->plugin_name,
       ));
       return $page_check->fetch( PDO::FETCH_ASSOC );
@@ -276,7 +297,7 @@ class Plugin {
       // mainpage required
       $page_check = $conn->prepare("SELECT * FROM " . MENU . " WHERE name=:name AND submenu=:mainpage AND plugin=:plugin");
       $page_check->execute(array(
-        ":name" => $page_name,
+        ":name" => $page,
         ":mainpage" => $mainpage,
         ":plugin" => $this->plugin_name,
       ));
