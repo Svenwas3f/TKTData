@@ -42,17 +42,69 @@ $string["menu"][19] = 'All Users';
 $string["menu"][20] = 'Activities';
 $string["menu"]["profile"] = 'Profile';
 
+$string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
+$string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] of Menu #%mainmenu%';
+
+/**
+ * Page 19
+ */
+// List view
+$string[19][0] = 'Username, Prename, Name, Ticketinfo';
+$string[19][1] = 'Username';
+$string[19][2] = 'E-Mail';
+$string[19][3] = 'Activity';
+
+// Sinlgle view
+$string[19][10] = 'Userdata';
+$string[19][11] = 'Username';
+$string[19][12] = 'Name';
+$string[19][13] = 'E-Mail';
+
+$string[19][14] = 'Access rights';
+$string[19][15] = 'Write permission';
+$string[19][16] = 'Read permission';
+$string[19][17] = 'Set write permission';
+$string[19][18] = 'Set read permission';
+
+$string[19][19] = 'UPDATE';
+$string[19][20] = 'Update user';
+
+/**
+ * Page 20
+ */
+// Page
+$string[20][0] = 'User'; // Search form placeholder
+$string[20][1] = 'Initiator'; // Headlines
+$string[20][2] = 'Activity'; // Headlines
+$string[20][3] = 'Date'; // Headlines
+$string[20][4] = 'Recovery details'; // Headlines
+$string[20][5] = 'Revision details #%id%'; // Action title
+$string[20][6] = 'Last'; // Table navigation
+$string[20][7] = 'Next'; // Table navigation
+$string[20][8] = 'Previous version'; // Single action view
+$string[20][9] = 'Changed version'; // Single action view
+$string[20][10] = 'Reset changes'; // Single action view
+$string[20][11] = 'Your change was <strong>successfully</strong> implemented.'; // Action response
+$string[20][12] = 'Your change could <strong>not</strong> be implemented.'; // Action response
+$string[20][13] = 'You have <strong>no authorization</strong> to perform this action.'; // Action response
+
+// Messages
+$string[20][100] = 'Updated profile of %user%';
+$string[20][101] = 'Removed profile of %user%';
+$string[20][102] = 'Removed acces for %user%';
+$string[20][103] = 'Added profile of %user%';
+$string[20][103] = 'Version %version% restored';
 
 /**
  * Profil
  */
  // Update password
- $string["profile"][0] = 'The password was <strong> successfully </strong> changed.';
- $string["profile"][1] = 'The password could <strong> not </strong> be changed.';
+ $string["profile"][0] = 'The password was <strong>successfully</strong> changed.';
+ $string["profile"][1] = 'The password could <strong>not</strong> be changed.';
 
  // Update infos
- $string["profile"][2] = 'Your change was <strong> successfully </strong> implemented.';
- $string["profile"][3] = 'Your change could <strong> not </strong> be implemented.';
+ $string["profile"][2] = 'Your change was <strong>successfully</strong> implemented.';
+ $string["profile"][3] = 'Your change could <strong>not</strong> be implemented.';
 
  // Inputs
  $string["profile"][10] = 'Userdata';

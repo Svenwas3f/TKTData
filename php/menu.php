@@ -33,9 +33,6 @@ class Menu {
     $mainMenu = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu IS NULL OR submenu='' OR submenu='0' ORDER BY layout");
     $mainMenu->execute();
 
-    // $subMenu = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu= :mainPage ORDER BY layout");
-    // $subMenu->execute(array(":mainPage" => $mainPage));
-
     //Create html
     $nav = '<div class="mobile-nav-bar"><img src="' . $url . '/medias/icons/menu.svg" onclick="document.getElementsByTagName(\'nav\')[0].classList.toggle(\'open\')"/><a href="' . $url . '"><img src="' . $url . '/medias/logo/favicon-color-512.png" /></a></div>';
     $nav .= '<nav>';
@@ -55,14 +52,20 @@ class Menu {
             // Plugin menu element
             $nav .= '<div class="page-container">
                       <a onclick="openMenu(' . $mainMenuElement["id"] . ')"
-                        title="Menu #' . $mainMenuElement["id"] . ' [' . (Language::string( $mainMenuElement["id"] , null, 'menu') ?? $mainMenuElement["name"]) . ']">' .
+                        title="' . Language::string( 'mainpage', array(
+                          '%mainpage%' => $mainMenuElement["id"],
+                          '%mainpagename%' => (Language::string( $mainMenuElement["id"] , null, 'menu') ?? $mainMenuElement["name"]),
+                        ), 'menu' ) . '">' .
                         (Language::string( 'menu' , null, $mainMenuElement["id"]) ?? $mainMenuElement["name"]) .
                       '</a>';
           }else {
             // default menu element
             $nav .= '<div class="page-container">
                       <a onclick="openMenu(' . $mainMenuElement["id"] . ')"
-                        title="Menu #' . $mainMenuElement["id"] . ' [' . (Language::string( $mainMenuElement["id"] , null, 'menu') ?? $mainMenuElement["name"]) . ']">' .
+                        title="' . Language::string( 'mainpage', array(
+                          '%mainpage%' => $mainMenuElement["id"],
+                          '%mainpagename%' => (Language::string( $mainMenuElement["id"] , null, 'menu') ?? $mainMenuElement["name"]),
+                        ), 'menu' ) . '">' .
                         (Language::string( $mainMenuElement["id"] , null, 'menu') ?? $mainMenuElement["name"]) .
                       '</a>';
           }
@@ -91,7 +94,11 @@ class Menu {
                 // Plugin sub menu element
                 $nav .= '<div class="subpage-container ' . $class . ' mainpage'  . $mainMenuElement["id"] . '">
                           <a href="' . $url . '?id=' . $mainMenuElement["id"] . '&sub=' . $subMenuElement["id"] . '"
-                          title="Submenu #' . $subMenuElement["id"] . ' [' . (Language::string( $subMenuElement["id"] , null, 'menu') ?? $subMenuElement["name"]) . ']">
+                          title="' . Language::string( 'subpage', array(
+                            '%submenu%' => $subMenuElement["id"],
+                            '%submenuname%' => (Language::string( $subMenuElement["id"] , null, 'menu') ?? $subMenuElement["name"]),
+                            '%mainmenu%' => $mainMenuElement["id"],
+                          ), 'menu' ) . '">
                             <img src="' . $img_subpage . '" />' .
                             (Language::string( 'menu' , null, $subMenuElement["id"]) ?? $subMenuElement["name"])  .
                           '</a>
@@ -100,7 +107,11 @@ class Menu {
                 // Default sub menu element
                 $nav .= '<div class="subpage-container ' . $class . ' mainpage'  . $mainMenuElement["id"] . '">
                           <a href="' . $url . '?id=' . $mainMenuElement["id"] . '&sub=' . $subMenuElement["id"] . '"
-                          title="Submenu #' . $subMenuElement["id"] . ' [' . (Language::string( $subMenuElement["id"] , null, 'menu') ?? $subMenuElement["name"]) . ']">
+                          title="' . Language::string( 'subpage', array(
+                            '%submenu%' => $subMenuElement["id"],
+                            '%submenuname%' => (Language::string( $subMenuElement["id"] , null, 'menu') ?? $subMenuElement["name"]),
+                            '%mainmenu%' => $mainMenuElement["id"],
+                          ), 'menu' ) . '">
                             <img src="' . $img_subpage . '" />' .
                             (Language::string( $subMenuElement["id"] , null, 'menu') ?? $subMenuElement["name"])  .
                           '</a>

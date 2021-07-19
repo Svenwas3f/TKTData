@@ -4,127 +4,174 @@ $conn = Access::connect();
 
 function display_users( $search_value = null ) {
   //Require variables
-  global $url;
-  global $url_page;
-  global $conn;
-  global $page;
-  global $current_user;
+  global $url, $url_page, $page, $mainPage, $current_user;
 
-  //Define variables
-  $number_rows = 20; //Maximal number of rows listed
-  $offset = isset( $_GET["row-start"] ) ? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(0),
+    's' => $search_value,
+  ));
 
-  /**
-   * Start html
-   */
-  $html = '<table class="rows">';
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
 
-  /**
-   * Create headline
-   */
-  $headline_names = array('Benutzername', 'Email', 'Aktion');
+  // Start table
+  $table = new HTML('table');
 
-  //Start headline
-  //Headline can be changed over array $headline_names
-  $html .= '<tr>'; //Start row
-  foreach( $headline_names as $name ){
-    $html .= '<th>' . $name . '</th>';
-  }
-  $html .= '</tr>'; //Close row
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(1),
+          ),
+          array(
+            'context' => Language::string(2),
+          ),
+          array(
+            'context' => Language::string(3),
+          ),
+        ),
+      ),
+    ),
+  );
 
   // Set offset and steps
   $steps = 20;
   $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-  foreach( User::all( $offset, $steps, $search_value) as $user) {
-      $html .= '<tr class="table-list">'; //Start row
-        $html .= '<td style="width: 10%;">' . $user["id"] . '</td>'; //Display user id
-        $html .= '<td style="width: 70%;">' . $user["email"] . '</td>'; //Display Name (pre and lastname)
-
-        //Check if current user (logged in user) can edit or see the user
-        if( User::w_access_allowed($page, $current_user) ){
-          //Current user can edit and delete user
-          $html .= '<td style="width: auto;">
-                      <a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
-                      <a href="' . $url_page . '&remove=' . $user["id"] . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>
-                    </td>';
-        }elseif( User::r_access_allowed($page, $current_user) ){
-          $html .= '<td style="width: auto;">
-                      <a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
-                    </td>';
-        }
-
-      $html .= '</tr>'; //End row
+  // List general products
+  foreach(  User::all( $offset, $steps, $search_value) as $user ) {
+    //Check if current user (logged in user) can edit or see the user
+    if( User::w_access_allowed($page, $current_user) ){
+      //Current user can edit and delete user
+      $actions = '<a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
+                  <a href="' . $url_page . '&remove=' . $user["id"] . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+    }elseif( User::r_access_allowed($page, $current_user) ){
+      $actions = '<a href="' . $url_page . '&view=' . $user["id"] . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
     }
 
-    // Menu requred
-    $html .=  '<tr class="nav">';
+    $table->addElement(
+      array(
+        'row' => array(
+          // 'additional' => 'class="' . $class . '" title="' . $title . '"',
+          'items' => array(
+            array(
+              'context' => $user["id"],
+            ),
+            array(
+              'context' => $user["email"],
+            ),
+            array(
+              'context' => $actions ?? '',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-      if( (count(User::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                    <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                  </td>';
-      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  </td>';
-      }elseif (count(User::all( ($offset + $steps), 1, $search_value )) > 0) { // More pages accessable
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                  </td>';
-      }
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(6) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(7) . '</a>';
 
-    $html .=  '</tr>';
+  if( (count(User::all( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(User::all( ($offset + $steps), $steps, $search_value)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
 
-  //Close table
-  $html .= '</table>';
-
-  /**
-   * Display table
-   */
-  echo $html;
+  // Show HTML
+  $searchbar->prompt();
+  $table->prompt();
 }
 
-function single_user($user) {
+function single_user( $user_registerd ) {
   //require variables
-  global $conn;
-  global $page;
-  global $current_user;
+  global $url_page, $conn, $page, $current_user;
 
-  //Get user info
-  //TODO: Convert to user class
-  $user_info_req = $conn->prepare("SELECT * FROM " . USERS . " WHERE id=:user");
-  $user_info_req->execute(array(":user" => $user));
-  $user_info = $user_info_req->fetch();
+  // Start user
+  $user = new User();
+  $user->user = $user_registerd;
 
-  //Start form to edit, show user
-  $html = '<form action="" method="post" style="max-width: 500px;">';
-  /**
-   * Read user info
-   */
+  //////////////////////////////////////
+  // Start form
+  //////////////////////////////////////
+  $form = new HTML('form', array(
+    'action' => $url_page . '&view=' . $user_registerd,
+    'method' => 'post',
+    'additional' => 'style="max-width: 500px;"',
+  ));
 
-  //ID
-  $html .= '<label class="txt-input">';
-    $html .= '<input type="text" value="' . $user_info["id"] . '" disabled/>';
-    $html .= '<span class="placeholder">Benutzername</span>';
-  $html .= '</label>';
+  $form->customHTML('<h4>' . Language::string(10) . '</h4>');
 
-  //Name
-  $html .= '<label class="txt-input">';
-    $html .= '<input type="text" name="name" value="' . $user_info["name"] . '"/>';
-    $html .= '<span class="placeholder">Name</span>';
-  $html .= '</label>';
+  // ID
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'userID',
+      'value' => $user->values()["id"],
+      'placeholder' => Language::string(11),
+      'disabled' => true,
+    ),
+  );
 
-  //E-Mail
-  $html .= '<label class="txt-input">';
-    $html .= '<input type="text" name="mail" value="' . $user_info["email"] . '" required/>';
-    $html .= '<span class="placeholder">E-Mail</span>';
-  $html .= '</label>';
+  // Name
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'name',
+      'value' => $user->values()["name"],
+      'placeholder' => Language::string(12),
+    ),
+  );
 
-  /**
-   * Read rights
-  */
+  // Email
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'mail',
+      'value' => $user->values()["email"],
+      'placeholder' => Language::string(13),
+    ),
+  );
+
+  //////////////////////////////////////
+  // Rights
+  //////////////////////////////////////
+  $form->customHTML('<h4 style="Margin-top: 20px;">' . Language::string(14) . '</h4>');
+
   //Get all meu elements
   $menu_elements = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu IS NULL OR submenu='' OR submenu='0' ORDER BY layout");
   $menu_elements->execute();
@@ -132,43 +179,92 @@ function single_user($user) {
   //Display all menu elements
   while($menu = $menu_elements->fetch() ){
     //Display name
-    $html .= '<div class="right-menu-title"><span>' . $menu["name"] . '</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
+    $plugin = new Plugin();
+
+    if( $plugin->is_pluginpage( $menu["id"] ) ) {
+      $form->customHTML('<div class="right-menu-title">
+                          <span>' . (Language::string( 'menu' , null, $menu["id"]) ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(15) . '">W</span><span class="writeorread" title="' . Language::string(16) . '">R</span>
+                        </div>');
+    }else {
+      $form->customHTML('<div class="right-menu-title">
+                          <span>' . (Language::string( $menu["id"] , null, 'menu') ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(15) . '">W</span><span class="writeorread" title="' . Language::string(16) . '">R</span>
+                        </div>');
+    }
 
     //Get all pages of menu (submenu)
     $submenus = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu=:submenu");
     $submenus->execute(array(":submenu" => $menu["id"]));
+
     //Go through every submenu
     while($submenu = $submenus->fetch()){
       //Check if they have a right
       $right_req = $conn->prepare("SELECT * FROM " . USER_RIGHTS . " WHERE page=:submenu AND userid=:user") ;//Select all rights of user and page
-      $right_req->execute(array(":submenu" => $submenu["id"], ":user" => $user));
+      $right_req->execute(array(":submenu" => $submenu["id"], ":user" => $user_registerd));
       $right = $right_req->fetch();
 
-      //If user can only read, disable buttons
-      $disabled = User::w_access_allowed( $page, $current_user ) === true?'':'disabled'; //Set input disabled if user has only readaccess
-      $wChecked = (isset($right["w"]) ? ($right["w"] == 1?'checked':'') : ""); //Write access
-      $rChecked = (isset($right["w"]) && isset($right["r"])) ? (( $right["r"] == 1 || $right["w"] == 1 )?'checked':'') : ""; //Read access if you have read access or write access
+      $form->customHTML('<div class="submenu-rights">');
 
-      //Display content
-      $html .= '<div class="submenu-rights">';
-        $html .= '<span title="Submenu #' . $submenu["id"] . ' [' . $submenu["name"] . '] von dem Menu #' . $menu["id"] . ' [' . $menu["name"] . ']">' . $submenu["name"] . '</span>'; //Menu name
-        $html .= '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="w" ' . $disabled . ' ' . $wChecked . '/><div class="checkbox-btn" title="Schreibberechtigung setzen"></div></label>'; //Write checkbox
-        $html .= '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="r" ' . $disabled . ' ' . $rChecked . '/><div class="checkbox-btn" title="Leseberechtigung setzen"></div></label>'; //Read checkbox
-      $html .= '</div>';
+        // Check name and plugin
+        if( $plugin->is_pluginpage( $submenu["id"] ) ) {
+        $form->customHTML('<span title="' .
+                            Language::string( 'subpage', array(
+                              '%submenu%' => $submenu["id"],
+                              '%submenuname%' => (Language::string( $submenu["id"] , null, 'menu') ?? $submenu["name"]),
+                              '%mainmenu%' => $menu["id"],
+                            ), 'menu' ) . '">' .
+                              (Language::string( 'menu' , null, $submenu["id"]) ?? $submenu["name"]) .
+                            '</span>');
+        }else {
+          $form->customHTML('<span
+                              title="' .
+                              Language::string( 'subpage', array(
+                                '%submenu%' => $submenu["id"],
+                                '%submenuname%' => (Language::string( $submenu["id"] , null, 'menu') ?? $submenu["name"]),
+                                '%mainmenu%' => $menu["id"],
+                              ), 'menu') . '">' .
+                                (Language::string( $submenu["id"], null, 'menu' ) ?? $submenu["name"]) .
+                              '</span>');
+        }
+
+        $form->addElement(
+          array(
+            'type' => 'checkbox',
+            'name' => $submenu["id"] . '[]',
+            'value' => 'w',
+            'checked' => User::w_access_allowed( $submenu["id"], $user_registerd ),
+            'classes' => 'user-rights-checkbox',
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+            'additional_div' => 'title="' . Language::string(17) . '"',
+          )
+        );
+
+        $form->addElement(
+          array(
+            'type' => 'checkbox',
+            'name' => $submenu["id"] . '[]',
+            'value' => 'r',
+            'checked' => User::r_access_allowed( $submenu["id"], $user_registerd ),
+            'classes' => 'user-rights-checkbox',
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+            'additional_div' => 'title="' . Language::string(18) . '"',
+          )
+        );
+
+      $form->customHTML('</div>');
     }
-
   }
 
-  //Add submit button
-  $html .= '<input type="submit" name="update" value="UPDATE" title="Benutzer aktualisieren" ' . $disabled . '/>';
+  $form->addElement(
+    array(
+      'type' => 'button',
+      'name' => 'update',
+      'value' => Language::string(19),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+      'additional' => 'title="' . Language::string(20) . '"'
+    )
+  );
 
-  //Close form
-  $html .= '</form>';
-
-  /**
-   * Display content
-   */
-  echo $html;
+  $form->prompt();
 }
 
 //Remove user finaly
@@ -294,14 +390,6 @@ switch(key($action)) {
     Action::confirm('Möchten Sie den Benutzer ' . User::name($_GET["remove"]) . ' (' . $_GET["remove"] . ') unwiederruflich entfernen?', $_GET["remove"]);
   break;
   default:
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
     //Display result
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
     display_users( $search_value );

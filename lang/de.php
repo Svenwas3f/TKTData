@@ -42,12 +42,64 @@ $string["menu"][19] = 'Alle Benutzer';
 $string["menu"][20] = 'Aktivitäten';
 $string["menu"]["profile"] = 'Profil';
 
+$string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
+$string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] von Menu #%mainmenu%';
 
 
 /**
  * Page 16
  */
 $string[1][1] = "Hello World";
+
+/**
+ * Page 19
+ */
+// List view
+$string[19][0] = 'Benutzername, Vorname, Nachname, Ticketinfo';
+$string[19][1] = 'Benutzername';
+$string[19][2] = 'E-Mail';
+$string[19][3] = 'Aktion';
+
+// Sinlgle view
+$string[19][10] = 'Benutzerdaten';
+$string[19][11] = 'Benutzername';
+$string[19][12] = 'Name';
+$string[19][13] = 'E-Mail';
+
+$string[19][14] = 'Zugriffsrechte';
+$string[19][15] = 'Schreibberechtigung';
+$string[19][16] = 'Leseberechtigung';
+$string[19][17] = 'Schreibberechtigung setzen';
+$string[19][18] = 'Leseberechtigung seetzen';
+
+$string[19][19] = 'UPDATE';
+$string[19][20] = 'Benutzer aktualisieren';
+
+/**
+ * Page 20
+ */
+// Page
+$string[20][0] = 'Benutzer'; // Search form placeholder
+$string[20][1] = 'Initiator'; // Headlines
+$string[20][2] = 'Tätigkeit'; // Headlines
+$string[20][3] = 'Datum'; // Headlines
+$string[20][4] = 'Wiederherstellungsdetails'; // Headlines
+$string[20][5] = 'Revisionsdetails #%id%'; // Action title
+$string[20][6] = 'Letze'; // Table navigation
+$string[20][7] = 'Weiter'; // Table navigation
+$string[20][8] = 'Vorherige Version';  // Action response
+$string[20][9] = 'Geänderte Version'; // Single action view
+$string[20][10] = 'Änderungen zurücksetzen'; // Single action view
+$string[20][11] = 'Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.'; // Action response
+$string[20][12] = 'Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden'; // Action response
+$string[20][13] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Action response
+
+// Messages
+$string[20][100] = 'Profil von %user% überarbeitet';
+$string[20][101] = 'Profil von %user% entfernt';
+$string[20][102] = 'Zugriffsrechte von %user% entfernt';
+$string[20][103] = 'Profil von %user% hinzugefügt';
+$string[20][103] = 'Version %version% wiederhergestellt';
 
 /**
  * Profil

@@ -7,108 +7,166 @@ $conn = Access::connect();
  */
 function display_actions( $search_value = null ){
   //Define variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $mainPage;
-  global $current_user;
-  global $conn;
+  global $url, $url_page, $page, $mainPage, $current_user, $conn;
 
-  //Display form
-  $html = '<form action="' . $url . '" method="get" class="search">';
-    $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
-    $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
-    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-    $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-  $html .= '</form>';
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(0),
+    's' => $search_value,
+  ));
 
-  //Start table
-  $html .= '<table class="rows">';
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
 
-  //Headline
-  $headline_names = array('Initiator', 'Tätigkeit', 'Datum', 'Wiederherstellungsdetails');
+  // Start table
+  $table = new HTML('table');
 
-  //Start headline
-  //Headline can be changed over array $headline_names
-  $html .= '<tr>'; //Start row
-  foreach( $headline_names as $name ){
-    $html .= '<th>' . $name . '</th>';
-  }
-  $html .= '</tr>'; //Close row
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(1),
+          ),
+          array(
+            'context' => Language::string(2),
+          ),
+          array(
+            'context' => Language::string(3),
+          ),
+          array(
+            'context' => Language::string(4),
+          ),
+        ),
+      ),
+    ),
+  );
 
   // Set offset and steps
   $steps = 50;
   $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-  foreach( User::actions( $offset, $steps, $search_value) as $action ) {
-    $html .= '<tr class="table-list">'; //Start row
-      $html .= '<td style="width: 20%;">' . User::name( $action["userID"] ) . ' (' . $action["userID"] . ')</td>'; //Display user id
-      $html .= '<td style="width: 50%;">' . $action["print_message"] . '</td>'; //Display Name (pre and lastname)
-      $html .= '<td style="width: 20%;">' . date("d.m.Y H:i:s", strtotime( $action["modification_time"])) . '</td>'; //Display purchase date
-
-          //Check if current user (logged in user) can edit or see the user
-      if( User::w_access_allowed($page, $current_user) ){
-        //Current user can edit and delete user
-        $html .= '<td style="width: auto;">';
-        if(! empty($action["old_value"]) && ! empty($action["new_value"])){
-          $html .= '<a href="' . $url_page . '&view=' . $action["id"] . '" title="Revisionsdetails #' . $action["id"] . '"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
-        }
-        $html .= '</td>';
-      }else{
-        $html .= '<td style="width: auto;"></td>';
+  // List general products
+  foreach(  User::actions( $offset, $steps, $search_value) as $action ) {
+    if( User::w_access_allowed($page, $current_user) ){
+      //Current user can edit and delete user
+      if(! empty($action["old_value"]) && ! empty($action["new_value"])){
+        $actions = '<a
+                      href="' . $url_page . '&view=' . $action["id"] . '"
+                      title="' .  Language::string(5, array('%id%' => $action["id"])) . '">
+                        <img src="' . $url . '/medias/icons/restore.svg" />
+                      </a>';
       }
-    $html .= '</tr>'; //End row
-  }
-
-  // Menu requred
-  $html .=  '<tr class="nav">';
-
-    if( (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-      $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
-    }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-      $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                </td>';
-    }elseif (count(User::actions( ($offset + $steps), 1, $search_value )) > 0) { // More pages accessable
-      $html .=  '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
     }
 
-  $html .=  '</tr>';
+    // Get action string
+    if( json_decode($action["print_message"]) === null ) {
+      // No json
+      $print_message = $action["print_message"];
+    }else {
+      // valid json
+      $values = json_decode($action["print_message"], true);
 
-  //Close table
-  $html .= '</table>';
+      $print_message = Language::string( $values["id"], ($values["replacements"] ?? null) );
+    }
 
-  /**
-   * Display table
-   */
-  echo $html;
+    $table->addElement(
+      array(
+        'row' => array(
+          // 'additional' => 'class="' . $class . '" title="' . $title . '"',
+          'items' => array(
+            array(
+              'context' => User::name( $action["userID"] ) . ' (' . $action["userID"] . ')',
+            ),
+            array(
+              'context' => $print_message,
+            ),
+            array(
+              'context' => date("d.m.Y H:i:s", strtotime( $action["modification_time"])),
+            ),
+            array(
+              'context' => $actions ?? '',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(6) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(7) . '</a>';
+
+  if( (count(User::actions( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(User::actions( ($offset + $steps), $steps, $search_value)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
+
+  // Show HTML
+  $searchbar->prompt();
+  $table->prompt();
 }
 
 function single_action(){
   //Define variables
-  global $url;
-  global $url_page;
-  global $conn;
-
+  global $url, $url_page, $conn;
 
   //Get infos from db
   $action_req = $conn->prepare("SELECT * FROM " . USER_ACTIONS . " WHERE id=:id");
   $action_req->execute(array(":id" => $_GET["view"]));
   $action = $action_req->fetch();
 
+  // Get action string
+  if( json_decode($action["print_message"]) === null ) {
+    // No json
+    $print_message = $action["print_message"];
+  }else {
+    // valid json
+    $values = json_decode($action["print_message"], true);
+
+    $print_message = Language::string( $values["id"], ($values["replacements"] ?? null) );
+  }
+
   //Create html
   $html = '<div class="restore-action">';
-    $html .= '<h1>' . $action["print_message"] . '</h1>';
+    $html .= '<h1>' . $print_message . '</h1>';
     $html .= '<div class="version-container">';
-      $html .= '<div class="old"><pre>' . json_encode( json_decode( $action["old_value"] ), JSON_PRETTY_PRINT) . '</pre><span>Vorherige Version</span></div>';
-      $html .= '<div class="new"><pre>' . json_encode( json_decode( $action["new_value"] ), JSON_PRETTY_PRINT) . '</pre><span>Geänderte Version</span></div>';
+      $html .= '<div class="old"><pre>' . json_encode( json_decode( $action["old_value"] ), JSON_PRETTY_PRINT) . '</pre><span>' . Language::string(8) . '</span></div>';
+      $html .= '<div class="new"><pre>' . json_encode( json_decode( $action["new_value"] ), JSON_PRETTY_PRINT) . '</pre><span>' . Language::string(9) . '</span></div>';
     $html .= '</div>';
-    $html .= '<a href="' . $url_page . '&restore=' . $_GET["view"] . '">Änderungen zurücksetzen</a>';
+    $html .= '<a href="' . $url_page . '&restore=' . $_GET["view"] . '">' . Language::string(10) . '</a>';
   $html .= '</div>';
 
   //Display html
@@ -120,12 +178,12 @@ function single_action(){
 if( isset($_GET["restore"]) ){
   if( User::w_access_allowed($page, $current_user)){
     if( User::restore_action( $_GET["restore"] )) {
-      Action::success("Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.");
+      Action::success( Language::string(11) );
     }else {
-      Action::fail("Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden");
+      Action::fail( Language::string(12) );
     }
   }else{
-    Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+    Action::fail( Language::string(13) );
   }
 }
 

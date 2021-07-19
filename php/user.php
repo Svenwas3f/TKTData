@@ -404,7 +404,13 @@ class User {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Updated profile from  " . $this->user,
+      // "message" => "Updated profile from  " . $this->user,
+      "message" => json_encode(array(
+        "id" => 100,
+        "replacements" => array(
+          '%user%' => $this->user,
+        ),
+      )),
       "table" => "USER_RIGHTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "userId", "value" => $this->user),
@@ -440,14 +446,20 @@ class User {
     //Read current infos and add modification
     $old_values = $conn->prepare("SELECT name, email, language FROM " . USERS . " WHERE id=:id");
     $old_values->execute(array(":id" => $this->user));
+    $old_values = $old_values->fetch(PDO::FETCH_ASSOC);
 
     $change = array(
       "user" => $current_user,
-      "message" => "Updated profile from  " . $this->user,
+      "message" => json_encode(array(
+        "id" => 100,
+        "replacements" => array(
+          '%user%' => $this->user,
+        ),
+      )),
       "table" => "USERS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->user),
-      "old" =>  $old_values->fetch(PDO::FETCH_ASSOC),
+      "old" => $old_values,
       "new" => array("name" => $name, "email" => $email, "language" => $language)
     );
 
@@ -564,7 +576,13 @@ class User {
 
     $change_user = array(
       "user" => $current_user,
-      "message" => "Removed " . $this->user . "'s profile",
+      // "message" => "Removed " . $this->user . "'s profile",
+      "message" => json_encode(array(
+        "id" => 101,
+        "replacements" => array(
+          '%user%' => $this->user,
+        ),
+      )),
       "table" => "USERS",
       "function" => "DELETE",
       "primary_key" => array("key" => "userId", "value" => $this->user),
@@ -574,7 +592,13 @@ class User {
 
     $change_rights = array(
       "user" => $current_user,
-      "message" => "Removed  " . $this->user . "'s rights",
+      // "message" => "Removed  " . $this->user . "'s rights",
+      "message" => json_encode(array(
+        "id" => 102,
+        "replacements" => array(
+          '%user%' => $this->user,
+        ),
+      )),
       "table" => "USER_RIGHTS",
       "function" => "DELETE",
       "primary_key" => array("key" => "userId", "value" => $this->user),
@@ -688,7 +712,13 @@ class User {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Added User " . $name . " (" . $this->user . ")",
+      // "message" => "Added User " . $name . " (" . $this->user . ")",
+      "message" => json_encode(array(
+        "id" => 103,
+        "replacements" => array(
+          '%user%' => $this->user,
+        ),
+      )),
       "table" => "USERS",
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "id", "value" => $this->user),
@@ -819,8 +849,13 @@ class User {
     //Modifie user
     User::modifie(array(
       "user" => $current_user,
-      "message" => "Restored version #" . $data["id"],
-      "table" => $data["affected_table"],
+      // "message" => "Restored version #" . $data["id"],
+      "message" => json_encode(array(
+        "id" => 104,
+        "replacements" => array(
+          '%version%' => $data["id"],
+        ),
+      )),      "table" => $data["affected_table"],
       "function" => $data["sql_modification"],
       "primary_key" => $primary_key,
       "old" => $acctual_data,

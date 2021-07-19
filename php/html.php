@@ -304,21 +304,21 @@ class HTML {
        * @string value^
        * @string checked
        * @string context
-       * @string title
+       * @string additional_div
        * @boolen disabled
        * @boolen required
        * @string classes
-       * @string multiple [ex. id]
+       * @string additional [ex. id]
        */
       case "checkbox":
-        $this->substance .= '<label class="checkbox' . ($values["classes"] ?? '') . '" ' . ($values["multiple"] ?? '') . '>';
+        $this->substance .= '<label class="checkbox ' . ($values["classes"] ?? '') . '" ' . ($values["additional"] ?? '') . '>';
           $this->substance .= '<input type="checkbox"
               name="' . $values["name"] . '"
               value="' . $values["value"] . '" ' .
               (($values["checked"] ?? false) === true ? "checked" : '') . ' ' .
               (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
               (($values["required"] ?? false) === true ? "required" : '')  .' />';
-          $this->substance .= '<div class="checkbox-btn" title="' . ($values["title"] ?? '') . '"></div>' . ($values["context"] ?? '');
+          $this->substance .= '<div class="checkbox-btn" ' . ($values["additional_div"] ?? '') . '></div>' . ($values["context"] ?? '');
         $this->substance .= '</label>';
       break;
 
@@ -391,14 +391,14 @@ class HTML {
        * @string name^
        * @string value^
        * @boolen disabled
-       * @string multiple
+       * @string additional
        */
       case "button":
         $this->substance .= '<input type="submit"
             name="' . $values["name"] . '"
             value="' . $values["value"] . '" ' .
             (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
-            ($values["multiple"] ?? '') . '/>';
+            ($values["additional"] ?? '') . '/>';
       break;
 
       /**
@@ -414,13 +414,13 @@ class HTML {
        * @boolen disabled
        * @boolen required
        * @string classes
-       * @string multiple [ex. id]
+       * @string additional [ex. id]
        */
       default:
-        $this->substance .= '<label class="txt-input ' . ($values["classes"] ?? '') . '"  ' . ($values["multiple"] ?? '') . '>';
+        $this->substance .= '<label class="txt-input ' . ($values["classes"] ?? '') . '"  ' . ($values["additional"] ?? '') . '>';
           $this->substance .= '<input
               type="' . $values["type"] . '"
-              name="' . $values["name"] . '"' .
+              name="' . $values["name"] . '" ' .
               (isset($values["value"]) ? 'value="' . $values["value"] . '"' : "") . ' ' .
               (isset($values["regex"]) ? 'pattern="' . $values["regex"] . '"' : "") . ' ' .
               (($values["disabled"] ?? false) === true ? "disabled" : '') .' ' .
