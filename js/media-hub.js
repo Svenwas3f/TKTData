@@ -57,6 +57,23 @@ class MediaHub {
     req.send( "p=" + encodeURIComponent("MediaHub") + (action ? "&action=" + encodeURIComponent(action) : "") + (values ? "&values=" + encodeURIComponent(JSON.stringify(values)) : "") );
   }
 
+  /**
+   * Ajax function to get translated string
+   *
+   * id: ID of string
+   * callback: Callback function
+   */
+  static getString( id, callback ) {
+    // Define values
+    var values = new Object();
+    values["id"] = id;
+
+    // Request string
+    MediaHub.ajax(function(c) {
+      callback(c.responseText);
+    }, 'string', values);
+  }
+
   // Manage window
   static window = {
     /**
@@ -76,12 +93,16 @@ class MediaHub {
                 mediaNavLink1.setAttribute("onclick", "MediaHub.window.page( this )");
                 mediaNavLink1.setAttribute("class", "left active");
                 mediaNavLink1.setAttribute("data-page-class", "media-list");
-                mediaNavLink1.appendChild( document.createTextNode("Übersicht") );
+                MediaHub.getString( 0, function(response) {
+                  mediaNavLink1.appendChild( document.createTextNode( response ) );
+                } )
             var mediaNavLink2 = document.createElement("a");
                 mediaNavLink2.setAttribute("onclick", "MediaHub.window.page( this )");
                 mediaNavLink2.setAttribute("class", "left");
                 mediaNavLink2.setAttribute("data-page-class", "media-upload");
-                mediaNavLink2.appendChild( document.createTextNode("Bild hinzufügen") );
+                MediaHub.getString( 1, function(response) {
+                  mediaNavLink2.appendChild( document.createTextNode( response ) );
+                } )
             var mediaCloseWindow = document.createElement("a");
                 mediaCloseWindow.setAttribute("onclick", "this.parentNode.parentNode.parentNode.remove()");
                 mediaCloseWindow.setAttribute("class", "right");
@@ -99,7 +120,7 @@ class MediaHub {
               mediaList.setAttribute("class", "media-list");
 
               MediaHub.medias.load( function( html ) {
-                mediaList.innerHTML = html;
+                mediaList.innerHTML = html.innerHTML;
               } );
           // Details
           var mediaDetails = document.createElement("div");
@@ -121,10 +142,13 @@ class MediaHub {
                   var mediaDetailsValuesInput2 = document.createElement("div");
                       mediaDetailsValuesInput2.setAttribute("class", "value");
                       mediaDetailsValuesInput2.appendChild(
-                        document.createElement("span").appendChild(
-                          document.createTextNode("Alt:")
-                        )
+                        document.createElement("span")
                       );
+                      MediaHub.getString( 2, function(response) {
+                        mediaDetailsValuesInput2.children[0].appendChild( document.createTextNode( response ) );
+                      });
+
+
                       var mediaDetailsValuesInput2Input = document.createElement("textarea");
                           mediaDetailsValuesInput2Input.setAttribute("name", "alt");
                       mediaDetailsValuesInput2.appendChild( mediaDetailsValuesInput2Input );
@@ -132,10 +156,13 @@ class MediaHub {
                   var mediaDetailsValuesInput3 = document.createElement("div");
                       mediaDetailsValuesInput3.setAttribute("class", "value");
                       mediaDetailsValuesInput3.appendChild(
-                        document.createElement("span").appendChild(
-                          document.createTextNode("Benutzer:")
-                        )
+                        document.createElement("span")
                       );
+                      MediaHub.getString( 3, function(response) {
+                        mediaDetailsValuesInput3.children[0].appendChild( document.createTextNode( response ) );
+                      });
+
+
                       var mediaDetailsValuesInput3Input = document.createElement("input");
                           mediaDetailsValuesInput3Input.setAttribute("type", "text");
                           mediaDetailsValuesInput3Input.setAttribute("disabled", "");
@@ -144,10 +171,12 @@ class MediaHub {
                   var mediaDetailsValuesInput4 = document.createElement("div");
                       mediaDetailsValuesInput4.setAttribute("class", "value");
                       mediaDetailsValuesInput4.appendChild(
-                        document.createElement("span").appendChild(
-                          document.createTextNode("Hochgeladen:")
-                        )
+                        document.createElement("span")
                       );
+                      MediaHub.getString( 4, function(response) {
+                        mediaDetailsValuesInput4.children[0].appendChild( document.createTextNode( response ) );
+                      });
+
                       var mediaDetailsValuesInput4Input = document.createElement("input");
                           mediaDetailsValuesInput4Input.setAttribute("type", "text");
                           mediaDetailsValuesInput4Input.setAttribute("disabled", "");
@@ -165,12 +194,16 @@ class MediaHub {
                       var mediaDetailsActionsLinks1 = document.createElement("a");
                           mediaDetailsActionsLinks1.setAttribute("onclick", "MediaHub.window.page( this )");
                           mediaDetailsActionsLinks1.setAttribute("class", "remove");
-                          mediaDetailsActionsLinks1.appendChild( document.createTextNode("Löschen") );
+                          MediaHub.getString( 5, function(response) {
+                            mediaDetailsActionsLinks1.appendChild( document.createTextNode( response ) );
+                          });
                       var mediaDetailsActionsLinks2 = document.createElement("a");
                           mediaDetailsActionsLinks2.setAttribute("class", "view_fullscreen");
                           mediaDetailsActionsLinks2.setAttribute("target", "_blank");
                           mediaDetailsActionsLinks2.setAttribute("href", "");
-                          mediaDetailsActionsLinks2.appendChild( document.createTextNode("Vollbild") );
+                          MediaHub.getString( 6, function(response) {
+                            mediaDetailsActionsLinks2.appendChild( document.createTextNode( response ) );
+                          });
                   mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks1 );
                   mediaDetailsActionsLinks.appendChild( document.createTextNode(" | ") );
                   mediaDetailsActionsLinks.appendChild( mediaDetailsActionsLinks2 );
@@ -178,7 +211,9 @@ class MediaHub {
                 var mediaDetailsActionsButton = document.createElement("a");
                     mediaDetailsActionsButton.setAttribute("class", "button");
                     mediaDetailsActionsButton.setAttribute("onclick", "MediaHub.medias.use(this, '" + name + "')");
-                    mediaDetailsActionsButton.appendChild( document.createTextNode("VERWENDEN") );
+                    MediaHub.getString( 7, function(response) {
+                      mediaDetailsActionsButton.appendChild( document.createTextNode( response ) );
+                    });
 
               mediaDetailsActions.appendChild( mediaDetailsActionsLinks );
               mediaDetailsActions.appendChild( mediaDetailsActionsButton );
@@ -200,12 +235,16 @@ class MediaHub {
 
                   var mediaUploadLabelPrompt = document.createElement("span");
                       mediaUploadLabelPrompt.setAttribute("class", "upload_prompt")
-                      mediaUploadLabelPrompt.appendChild( document.createTextNode("Dokument hineinziehen oder klicken") );
+                      MediaHub.getString( 8, function(response) {
+                        mediaUploadLabelPrompt.appendChild( document.createTextNode( response ) );
+                      });
                   var mediaUploadLabelProgress = document.createElement("div");
                       mediaUploadLabelProgress.setAttribute("class", "progress_bar");
                       var mediaUploadLabelProgressSpan = document.createElement("span");
                           mediaUploadLabelProgressSpan.setAttribute("class", "textoverlay");
-                          mediaUploadLabelProgressSpan.appendChild( document.createTextNode("Hochladen ...") );
+                          MediaHub.getString( 9, function(response) {
+                            mediaUploadLabelProgressSpan.appendChild( document.createTextNode( response ) );
+                          });
                       mediaUploadLabelProgress.appendChild( mediaUploadLabelProgressSpan );
                   var mediaUploadLabelUploadedFiles = document.createElement("div");
                       mediaUploadLabelUploadedFiles.setAttribute("class", "uploaded_files");
@@ -274,8 +313,8 @@ class MediaHub {
          * List all medias
          */
         case "media-list":
-          MediaHub.medias.load(function(c) {
-            document.getElementsByClassName("media-list")[0].innerHTML = c;
+          MediaHub.medias.load(function(html) {
+            document.getElementsByClassName("media-list")[0].innerHTML = html.innerHTML;
           });
         break;
       }
@@ -331,13 +370,13 @@ class MediaHub {
      * offset: Number where to start
      */
     "moreMedias" : function( list, offset ) {
-      // Add new content
-      MediaHub.medias.load(function( html ) {
-        list.innerHTML += html;
-      }, offset);
-
       // Remove old button
       list.getElementsByClassName("button")[0].remove();
+
+      // Add new content
+      MediaHub.medias.load(function( html ) {
+        list.innerHTML += html.innerHTML;
+      }, offset);
     }
   };
 
@@ -359,22 +398,52 @@ class MediaHub {
       MediaHub.ajax(function(c) {
         //Get response text
         var ajax_response = JSON.parse(c.responseText);
-        var html = "";
 
-        // Load images
+        // Start html
+        var html = document.createElement("div");
+
+        // Append input
         for( var i = 0; i < Math.min(steps, ajax_response.length) ; i++ ) {
-          html += '<input type="radio" id="' + ajax_response[i].fileID + '" name="media">';
-          html += '<label onclick="MediaHub.window.details( this )" for="' + ajax_response[i].fileID + '">';
-          html += '<div class="img" style="background-image: url(\'' + ajax_response[i].url + '\')"></div>';
-          html += '</label>';
+          var input = document.createElement("input");
+              input.setAttribute("type", "radio");
+              input.setAttribute("id", ajax_response[i].fileID);
+              input.setAttribute("name", "media");
+
+          html.appendChild( input );
+        }
+
+        // Append label
+        for( var i = 0; i < Math.min(steps, ajax_response.length) ; i++ ) {
+          var label = document.createElement("label");
+              label.setAttribute("onclick", 'MediaHub.window.details( this )');
+              label.setAttribute("for", ajax_response[i].fileID);
+
+              var img = document.createElement("div");
+                  img.setAttribute("class", "img");
+                  img.setAttribute("style", "background-image: url('" + ajax_response[i].url + "')");
+
+              label.appendChild( img );
+
+          html.appendChild( label );
         }
 
         // Check if load more is required
         if( ajax_response.length >= steps ) {
-          html += "<a class='button' onclick='MediaHub.window.moreMedias(this.parentNode, " + (offset + steps) + " )'>Weitere laden</a>";
-        }
+          MediaHub.getString( 10, function(response) {
+            var moreImages = document.createElement("a");
+                moreImages.setAttribute("class", "button");
+                moreImages.setAttribute("onclick", "MediaHub.window.moreMedias(this.parentNode, " + (offset + steps) + " )");
+                moreImages.appendChild( document.createTextNode( response ) );
 
-        callback( html );
+            html.appendChild( moreImages );
+
+            // List all images
+            callback( html );
+          });
+        }else { // No more button required
+          // List all images
+          callback( html );
+        }
 
       }, "loadMedias", values);
     },
@@ -394,7 +463,9 @@ class MediaHub {
       // Request
       MediaHub.ajax( function(c) {
         if( c == "false") {
-          window.alert("Das überarbeiten des Alt-Text ist fehlgeschlagen")
+          MediaHub.getString( 11, function(response) {
+            window.alert( response );
+          });
         }
       }, "update", values );
     },
@@ -406,24 +477,29 @@ class MediaHub {
      * fileID: ID of file that will be deleted
      */
     "remove" : function ( link, fileID ) {
-      var checkDelete = window.confirm("Sicher, dass Sie das Dokument löschen wollen?");
+      MediaHub.getString( 12, function(response) {
+        var checkDelete = window.confirm( response );
 
-      if( checkDelete ) {
-        // Generate values
-        var values = new Object();
-        values["fileID"] = fileID;
+        // Remove if required
+        if( checkDelete ) {
+          // Generate values
+          var values = new Object();
+          values["fileID"] = fileID;
 
-        // Request
-        MediaHub.ajax( function(c) {
-          if( c == "false") {
-            window.alert("Das entfernen des Bildes ist fehlgeschlagen")
-          }else {
-            document.getElementById(fileID).remove();
-            document.querySelectorAll('[for="' + fileID + '"]')[0].remove();
-            link.closest(".media-details").style.display = "none";
-          }
-        }, "remove", values );
-      }
+          // Request
+          MediaHub.ajax( function(c) {
+            if( c == "false") {
+              MediaHub.getString( 13, function(response) {
+                window.alert( response );
+              });
+            }else {
+              document.getElementById(fileID).remove();
+              document.querySelectorAll('[for="' + fileID + '"]')[0].remove();
+              link.closest(".media-details").style.display = "none";
+            }
+          }, "remove", values );
+        }
+      });
     },
 
     /**
@@ -498,7 +574,9 @@ class MediaHub {
 
     progressbar.style.display = "block";
     progressbar.classList.add("animate");
-    textoverlay.innerHTML = "Hochladen ...";
+    MediaHub.getString( 9, function(response) {
+      textoverlay.innerHTML = response;
+    });
 
     for( var i = 0; i < files.length; i++) {
       // Get form
@@ -526,7 +604,12 @@ class MediaHub {
           }else {
             // Add file
             dropzone.getElementsByClassName("uploaded_files")[0].style.display = "Block";
-            dropzone.getElementsByClassName("uploaded_files")[0].innerHTML += "<span class='failed'>" + ajax_response["alt"] + " (Fehler beim hochladen)</span>";
+            dropzone.getElementsByClassName("uploaded_files")[0].innerHTML += "<span class='failed'>";
+              dropzone.getElementsByClassName("uploaded_files")[0].innerHTML += ajax_response["alt"];
+              MediaHub.getString( 14, function(response) {
+                dropzone.getElementsByClassName("uploaded_files")[0].innerHTML += " " + response;
+              });
+            dropzone.getElementsByClassName("uploaded_files")[0].innerHTML += "</span>";
           }
         }
       }

@@ -46,28 +46,68 @@ $string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
 $string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] of Menu #%mainmenu%';
 
 /**
+ * ^Media hub
+ */
+$string["mediahub"][0] = 'Overview';
+$string["mediahub"][1] = 'Add image';
+$string["mediahub"][2] = 'Alt:';
+$string["mediahub"][3] = 'User:';
+$string["mediahub"][4] = 'Uploadtime:';
+$string["mediahub"][5] = 'Delete';
+$string["mediahub"][6] = 'Fullscreen';
+$string["mediahub"][7] = 'APPLY';
+$string["mediahub"][8] = 'Klick or drag document';
+$string["mediahub"][9] = 'Upload ...';
+$string["mediahub"][10] = 'Load more';
+$string["mediahub"][11] = 'The revision of the alt text failed';
+$string["mediahub"][12] = 'Are you sure you want to delete the document?';
+$string["mediahub"][13] = 'Removing the document failed';
+$string["mediahub"][14] = '(Error while uploading)';
+/**
  * Page 19
  */
 // List view
-$string[19][0] = 'Username, Prename, Name, Ticketinfo';
-$string[19][1] = 'Username';
-$string[19][2] = 'E-Mail';
-$string[19][3] = 'Activity';
+$string[19][0] = 'Username, Prename, Name, Ticketinfo'; // Search form placeholder
+$string[19][1] = 'Username'; // Headlines
+$string[19][2] = 'E-Mail'; // Headlines
+$string[19][3] = 'Activity'; // Headlines
+$string[19][4] = 'Last'; // Table navigation
+$string[19][5] = 'Next'; // Table navigation
 
 // Sinlgle view
-$string[19][10] = 'Userdata';
-$string[19][11] = 'Username';
-$string[19][12] = 'Name';
-$string[19][13] = 'E-Mail';
+$string[19][10] = 'Userdata'; // Input placeholder
+$string[19][11] = 'Username'; // Input placeholder
+$string[19][12] = 'Name'; // Input placeholder
+$string[19][13] = 'E-Mail'; // Input placeholder
+$string[19][14] = 'Select language'; // Input placeholder
 
-$string[19][14] = 'Access rights';
-$string[19][15] = 'Write permission';
-$string[19][16] = 'Read permission';
-$string[19][17] = 'Set write permission';
-$string[19][18] = 'Set read permission';
+$string[19][15] = 'Access rights'; // Page access title
+$string[19][16] = 'Write permission'; // Page access title
+$string[19][17] = 'Read permission'; // Page access title
+$string[19][18] = 'Set write permission'; // Page access title
+$string[19][19] = 'Set read permission'; // Page access title
 
-$string[19][19] = 'UPDATE';
-$string[19][20] = 'Update user';
+$string[19][20] = 'Send credentials to users'; // Send access checkbox
+$string[19][21] = 'Send mail to new user'; // Send access checkbox
+
+$string[19][22] = 'UPDATE'; // Update
+$string[19][23] = 'Update user'; // Update title
+
+// Update user
+$string[19][50] = 'Your change was <strong>successfully</strong> implemented.';
+$string[19][51] = 'Your change could <strong>not</strong> be implemented.';
+$string[19][52] = 'You have <strong>no authorization</strong> to perform this action.';
+
+// Add user
+$string[19][55] = 'The user was added <strong>successfully</strong>.';
+$string[19][56] = 'The user could <strong>not</strong> be added.';
+$string[19][57] = 'You have <strong>no authorization</strong> to perform this action.';
+
+// Remove user
+$string[19][60] = 'Do you want to permanently remove the user %username% (%user%)?';
+$string[19][61] = 'The user (%user%) was successfully removed.';
+$string[19][62] = 'The user (%user%) could not be removed.';
+$string[19][63] = 'You have <strong>no authorization</strong> to perform this action.';
 
 /**
  * Page 20

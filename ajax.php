@@ -724,6 +724,9 @@ switch($_POST["p"]) {
           echo "false";
         }
       break;
+      case "string":
+        echo Language::string( json_decode($_POST["values"], true)["id"], null, 'mediahub' );
+      break;
     }
   break;
 }
