@@ -322,6 +322,14 @@ $string[20][102] = 'Removed acces for %user%';
 $string[20][103] = 'Added profile of %user%';
 $string[20][103] = 'Version %version% restored';
 
+$string[20][110] = 'New pub added (%name%)';
+$string[20][111] = 'New global product (%name%) added';
+$string[20][112] = 'New product (%name%) added for pub %pbu% ';
+$string[20][113] = 'Added access to pub #%pub% for user (%user%) %name% ';
+$string[20][114] = 'Pub #%pub% (%name%) revised';
+$string[20][115] = 'Pub #%pub% (%name%) removed ';
+$string[20][116] = 'Removed access for the user #%user% (%username%) for the pub #%pub% (%pubname%) ';
+
 /**
  * Profil
  */

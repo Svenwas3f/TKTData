@@ -139,13 +139,13 @@ $string[17][62] = 'Das Produkt konnte <strong>erfolgreich</strong> erstellt werd
 $string[17][63] = 'Leider konnte das Produkt <strong>nicht</strong> erstellt werden.'; // Error while adding product
 $string[17][64] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
 $string[17][65] = 'Das Produkt <strong>%name% (#%product%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.'; // Update of product successfull
-$string[17][66] = '"Das Produkt <strong>%name% (#%product%)</strong> konnte <strong>nicht</strong> überarbeitet werden."'; // Update of product failed
+$string[17][66] = 'Das Produkt <strong>%name% (#%product%)</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update of product failed
 $string[17][67] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
 $string[17][68] = 'Das Produkt <strong>%name% (#%product%)</strong> wurde <strong>erfolgreich</strong> gelöscht.'; // Removed product successful
 $string[17][69] = '"Das Produkt <strong>%name% (#%product%)</strong> konnte <strong>nicht</strong> gelöscht werden."'; // Removed product failed
 $string[17][70] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
 $string[17][71] = 'Die Wirtschaft <strong>%name% (#%pub%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.';
-$string[17][72] = 'Die Wirtschaft <strong>"%name% (#%pub%)</strong> konnte <strong>nicht</strong> überarbeitet werden.';
+$string[17][72] = 'Die Wirtschaft <strong>%name% (#%pub%)</strong> konnte <strong>nicht</strong> überarbeitet werden.';
 $string[17][73] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
 
 // $string[17][40] = '';
@@ -334,6 +334,26 @@ $string[20][101] = 'Profil von %user% entfernt';
 $string[20][102] = 'Zugriffsrechte von %user% entfernt';
 $string[20][103] = 'Profil von %user% hinzugefügt';
 $string[20][103] = 'Version %version% wiederhergestellt';
+
+$string[20][110] = 'Neue Wirtschaft hinzugefügt (%name%)';
+$string[20][111] = 'Neues globales Produkt (%name%) hinzugefügt';
+$string[20][112] = 'Neues Produkt (%name%) hinzugefügt für Wirschaft %pbu%';
+$string[20][113] = 'Zugriff zur Wirtschaft #%pub% für den Benutzer (%user%) %name% hinzugefügt';
+$string[20][114] = 'Wirtschaft #%pub% (%name%) überarbeitet';
+$string[20][115] = 'Wirtschaft #%pub% (%name%) entfernt';
+$string[20][116] = 'Zugriff für den Benuter #%user% (%username%) für die Wirtschaft #%pub% (%pubname%) entfernt';
+
+$string[20][120] = '';
+$string[20][121] = '';
+$string[20][122] = '';
+$string[20][123] = '';
+$string[20][124] = '';
+$string[20][125] = '';
+$string[20][126] = '';
+$string[20][127] = '';
+$string[20][128] = '';
+$string[20][129] = '';
+
 
 /**
  * Profil

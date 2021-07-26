@@ -121,16 +121,42 @@ class Pub {
     $add_query .= "VALUES ('" . implode("', '", $checked_values) . "')";
 
     // Restore message
+    // $restore_message = array(
+    //   "pub" => "Added new pub (" . ($checked_values["name"] ?? '') . ")",
+    //   "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
+    //   "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
+    // );
+
     $restore_message = array(
-      "pub" => "Added new pub (" . ($checked_values["name"] ?? '') . ")",
-      "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
-      "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
+      "pub" => array(
+        "id" => 110,
+        "replacements" => array(
+          "%name%" => ($checked_values["name"] ?? ''),
+        ),
+      ),
+
+      "product" => array(
+        "id" => (is_null($checked_values["pub_id"] ?? null) ? 111 : 112),
+        "replacements" => array(
+          "%name%" => $checked_values["name"] ?? "unknown",
+          "%pub%" => $checked_values["pub_id"] ?? "unknown",
+        ),
+      ),
+
+      "access" => array(
+        "id" => 113,
+        "replacements" => array(
+          "%pub%" => ($checked_values["pub_id"] ?? "unknown"),
+          "%user%" => $current_user,
+          "%name%" => User::name( $current_user ),
+        ),
+      ),
     );
 
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => ($table == SELF::DEFAULT_TABLE ? $restore_message["pub"] : ($table == SELF::PRODUCTS_TABLE ? $restore_message["product"] : $restore_message["access"])),
+      "message" => json_encode(($table == SELF::DEFAULT_TABLE ? $restore_message["pub"] : ($table == SELF::PRODUCTS_TABLE ? $restore_message["product"] : $restore_message["access"]))),
       "table" => ($table == SELF::DEFAULT_TABLE ? "pub" : ($table == SELF::PRODUCTS_TABLE ? "PUB_PRODUCTS" : "PUB_ACCESS")),
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "pub_id", "value" => ""),
@@ -194,7 +220,14 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      // "message" => "Updated pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 114,
+        "replacements" => array(
+          "%pub%" => $this->pub,
+          "%name%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB",
       "function" => "UPDATE",
       "primary_key" => array("key" => "pub_id", "value" => $this->pub),
@@ -225,7 +258,14 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      // "message" => "Removed pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 115,
+        "replacements" => array(
+          "%pub%" => $this->pub,
+          "%name%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB",
       "function" => "UPDATE",
       "primary_key" => array("key" => "pub_id", "value" => $this->pub),
@@ -266,7 +306,16 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed access for User #" . $user . " (" . User::name( $user ) . ") on pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      // "message" => "Removed access for User #" . $user . " (" . User::name( $user ) . ") on pub #" . $this->pub . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 116,
+        "replacements" => array(
+          "%user%" => $user,
+          "%username%" => User::name( $user ),
+          "%pub%" => $this->pub,
+          "%pubname%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB_ACCESS",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "user_id", "value2" => $user),
