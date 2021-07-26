@@ -294,6 +294,9 @@ class HTML {
    * optional.
    */
   public function addInput( $values ) {
+    // Get global variables
+    global $url;
+
     switch( $values["type"] ) {
       /**
        * checkbox input
@@ -355,12 +358,13 @@ class HTML {
        * @string type^
        * @string name^
        * @string value
-       * @string options^
+       * @array options^
        * @string headline
        * @boolen disabled
        * @boolen required
        * @string classes
        * @string multiple [ex. id]
+       * @string custom_options
        */
       case "select":
           $this->substance .= '<div class="select ' . ($values["classes"] ?? '') . '" onclick="toggleOptions(this)" ' . ($values["multiple"] ?? '') . '>';
@@ -379,8 +383,73 @@ class HTML {
 
                 $i++;
               }
+              $this->substance .= ($values["custom_options"] ?? '');
             $this->substance .= '</div>';
           $this->substance .= '</div>';
+      break;
+
+      /**
+       * Textarea
+       *
+       * The following keys must contain $values
+       * @string name^
+       * @string value^
+       * @string placeholder^
+       * @string rows
+       * @string cols
+       * @boolen disabled
+       * @boolen required
+       * @string classes
+       * @string additional
+       */
+      case "textarea":
+        $this->substance .=  '<label class="txt-input" ' . ($values["classes"] ?? '') . '"  ' . ($values["additional"] ?? '') . '>';
+          $this->substance .=  '<textarea
+          name="' . $values["name"] . '" ' .
+          (isset($values["rows"]) ? "rows='" . $values["rows"] . "'" : '') .
+          (isset($values["cols"]) ? "rows='" . $values["cols"] . "'" : '') .
+          (($values["disabled"] ?? false) === true ? "disabled" : '') .' ' .
+          (($values["required"] ?? false) === true ? "required" : '') . '/>' .
+            ($values["value"] ?? '') .
+          '</textarea>';
+          $this->substance .=  '<span class="placeholder">' . $values["placeholder"] . '</span>';
+        $this->substance .=  '</label>';
+      break;
+
+      /**
+       * Image
+       *
+       * @string classes
+       * @string additional
+       * @string headline^
+       * @string name^
+       * @string select_info^
+       * @boolen disabled
+       * @string classes_label
+       * @string additional_label
+       * @string preview_image
+       */
+      case "image":
+        $this->substance .= '<span
+                              class="file-info ' .
+                              ($values["classes"] ?? '') . '" ' .
+                              ($values["additional"] ?? '') . '>' . $values["headline"] . '</span>';
+        $this->substance .= '<label
+                              class="file-input ' .
+                              ((isset($values["disabled"]) && $values["disabled"]) ? 'disabled' : '' ) . ' ' .
+                              ($values["classes_label"] ?? '') . '" ' .
+                              ((isset($values["disabled"]) && $values["disabled"]) ? '' : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"') .
+                              ($values["additional_label"] ?? '') . '>';
+            $this->substance .= '<div
+                                  class="preview-image"
+                                  style="background-image: url(\'' . ($values["preview_image"] ?? $url . 'medias/store/favicon-color-512.png') . '\')">
+                                </div>';
+            $this->substance .= '<input
+                                    type="hidden"
+                                    name="' . $values["name"] . '"
+                                    onchange="MediaHubSelected(this)" value="' . ($values["value"] ?? '') . '">'; // Input for mediahub support
+          $this->substance .= '<div class="draganddrop">' . $values["select_info"] .'</div>';
+        $this->substance .= '</label>';
       break;
 
       /**

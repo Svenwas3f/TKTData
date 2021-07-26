@@ -63,6 +63,110 @@ $string["mediahub"][11] = 'The revision of the alt text failed';
 $string["mediahub"][12] = 'Are you sure you want to delete the document?';
 $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
+
+/**
+ * Page 18
+ */
+// List pubs
+$string[18][0] = 'Name, ID'; // Search form placeholder
+$string[18][1] = 'Name'; // Headlines
+$string[18][2] = 'Activity'; // Headlines
+$string[18][3] = 'View pubdetails'; // Action title
+$string[18][4] = 'Remove pub'; // Action title
+$string[18][5] = 'Last'; // Table navigation
+$string[18][6] = 'Next'; // Table navigation
+
+// List products
+$string[18][10] = 'Name, Price'; // Search form placeholder
+$string[18][11] = 'Name'; // Headlines
+$string[18][12] = 'Price'; // Headlines
+$string[18][13] = 'Activity'; // Headlines
+$string[18][14] = 'Show product details'; // Action title
+$string[18][15] = 'Remove product'; // Action title
+$string[18][16] = 'Last'; // Table navigation
+$string[18][17] = 'Next'; // Table navigation
+
+// Single pub
+$string[18][20] = 'Generally'; // Top nav item
+$string[18][21] = 'Rights'; // Top nav item
+$string[18][22] = 'Manage pub'; // Top nav item title
+$string[18][23] = 'Manage rights'; // Top nav item title
+
+$string[18][24] = 'PDF'; // Right menu alt pdf
+$string[18][25] = 'View the menu as a PDF'; // Right menu title pdf
+$string[18][26] = 'Visibility'; // Right menu alt tip money
+$string[18][27] = 'Show / hide tips'; // Right menu title tip money
+
+$string[18][28] = 'Generally'; // generally title
+$string[18][29] = 'Pubname'; // Input name
+$string[18][30] = 'Description'; // Input name
+$string[18][31] = 'Images'; // images title
+$string[18][32] = 'Click to select'; // Image input select info
+$string[18][33] = 'Logo'; // Image name
+$string[18][34] = 'Backgroundimage'; // Image name
+$string[18][35] = 'Payrexx'; // Payrexx title
+$string[18][36] = 'To be able to receive a payment directly online, you need an account at <a href="https://www.payrexx.com" title="Visit the website of Payrexx" target="_blank">Payrexx</a> . Payrexx is a Swiss company. If you would like to have Stripe as your <abbr title = "Payment service provider">PSP</abbr>, you can visit <a href = "https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/ "target =" _ blank ">this page</a>.'; // Payrexx info
+$string[18][37] = 'Payrexx Instance'; // Input name
+$string[18][38] = 'Payrexx Secret'; // Input name
+$string[18][39] = 'Currency'; // Input name
+$string[18][40] = 'Fees'; // Fees title
+$string[18][41] = 'The provider charges corresponding fees for each transaction. Please define here which fees your payment provider requires in order to receive the evaluation correctly. The two fees are added together and offset accordingly. This does not change the product prices. '; // Fees info
+$string[18][42] = 'Absolute fees'; // Input name
+$string[18][43] = 'Percentage Gebühren'; // Input name
+$string[18][44] = 'Update'; // Button value
+
+$string[18][45] = 'Username'; // Input name
+$string[18][46] = 'Email'; // Input name
+$string[18][47] = 'Write | Read'; // Input name
+$string[18][48] = '%user% has write access to this pub'; // Toggle title
+$string[18][49] = '%user% has no write access to this pub'; // Toggle title
+$string[18][50] = '%user% has reading access to this pub'; // Toggle title
+$string[18][51] = '%user% has no reading access to this pub'; // Toggle title
+$string[18][52] = 'The rights could not be added.'; // Fail info
+$string[18][53] = 'You have <strong>no authorization</strong> to perform this action.'; // Fail info
+
+//Single product
+$string[18][60] = 'Return to the previous page'; // Top nav title
+$string[18][61] = 'Edit product'; // Headline
+$string[18][62] = 'View product'; // Headline
+$string[18][63] = 'Productname'; // Input name
+$string[18][64] = 'GO'; // Input select button
+$string[18][65] = 'Price'; // Input name
+$string[18][66] = 'The standard currency is used in each case, unless another currency is specified for an pub.'; // Abbr info price
+$string[18][67] = 'Productimage'; // Input name
+$string[18][68] = 'Click to select'; // Input name
+$string[18][69] = 'Update'; // Input name
+
+// Actions
+$string[18][70] = 'Do you really want to delete the pub <strong>%name% (#%id%)</strong>? '; // Remove pub message
+$string[18][71] = 'Do you really want to delete the product <strong>%name% (#%id%)</strong>?'; // Remove product message
+
+$string[18][72] = 'The pub <strong>%name% (#%id%)</strong> has been <strong>successfully</strong> redesigned.'; // Update pub success
+$string[18][73] = 'The pub <strong>%name% (#%id%)</strong> could <strong>not</strong> be redesigned.'; // Update pub fail
+$string[18][74] = 'You have <strong>no authorization</strong> to perform this action'; // Update pub no access
+
+$string[18][75] = 'The product <strong>%name% (#%id%)</strong> has been <strong>successfully</strong> redesigned.'; // Update product success
+$string[18][76] = 'The product <strong>%name% (#%id%)</strong> could <strong>not</strong> be revised.'; // Update product fail
+$string[18][77] = 'You have <strong>no authorization</strong> to perform this action'; // Update product no access
+
+$string[18][78] = 'The pub could be created <strong>successfully</strong>. <strong><a href="%url_page%&view_product=%productid%" class="redirect">Manage product</a></strong>'; // Add product success
+$string[18][79] = 'Unfortunately, the pub <strong>could not</strong> be created.'; // Add product fail
+$string[18][80] = 'You have <strong>no authorization</strong> to perform this action'; // Add product no access
+$string[18][81] = 'Add product'; // Add product
+$string[18][82] = 'Choose group'; // Select info
+$string[18][83] = 'Create'; // Create product
+$string[18][84] = 'Create'; // Create pub
+
+// List pubs and products actions
+$string[18][90] = 'PUBS';
+$string[18][91] = 'List pubs';
+$string[18][92] = 'GLOBAL PRODUCTS';
+$string[18][93] = 'List products';
+$string[18][94] = 'The product <strong>%name% (#%id%)</strong> was <strong> successfully </strong> deleted.';
+$string[18][95] = 'The product <strong>%name% (#%id%)</strong> could <strong>not</strong> be deleted.';
+$string[18][96] = 'The pub <strong>%name% (#%id%)</strong> was <strong>successfully</strong> deleted.';
+$string[18][97] = 'The pub <strong>%name% (#%id%)</strong> could <strong>not</strong> be deleted.';
+
 /**
  * Page 19
  */

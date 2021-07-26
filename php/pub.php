@@ -122,7 +122,7 @@ class Pub {
 
     // Restore message
     $restore_message = array(
-      "pub" => "Added new pub (" . $checked_values["name"] . ")",
+      "pub" => "Added new pub (" . ($checked_values["name"] ?? '') . ")",
       "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
       "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
     );

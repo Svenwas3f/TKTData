@@ -65,6 +65,10 @@ $string["mediahub"][12] = 'Sicher, dass Sie das Dokument löschen wollen?';
 $string["mediahub"][13] = 'Das entfernen des Dokuments ist fehlgeschlagen';
 $string["mediahub"][14] = '(Fehler beim hochladen)';
 
+/**
+ * Page 17
+ */
+
 
 /**
  * Page 18
@@ -93,24 +97,81 @@ $string[18][20] = 'Allgemein'; // Top nav item
 $string[18][21] = 'Rechte'; // Top nav item
 $string[18][22] = 'Wirtschaft verwalten'; // Top nav item title
 $string[18][23] = 'Rechte verwalten'; // Top nav item title
+
 $string[18][24] = 'PDF'; // Right menu alt pdf
 $string[18][25] = 'Speise und Getränkekarte als PDF ansehen'; // Right menu title pdf
 $string[18][26] = 'Sichtbarkeit'; // Right menu alt tip money
 $string[18][27] = 'Trinkgeld anzeigen/verbergen'; // Right menu title tip money
-$string[18][28] = '';
-$string[18][29] = '';
 
-// Single products
-$string[18][30] = '';
-$string[18][31] = '';
-$string[18][32] = '';
-$string[18][33] = '';
-$string[18][34] = '';
-$string[18][35] = '';
-$string[18][36] = '';
-$string[18][37] = '';
-$string[18][38] = '';
-$string[18][39] = '';
+$string[18][28] = 'Generell'; // generally title
+$string[18][29] = 'Wirtschaftsname'; // Input name
+$string[18][30] = 'Beschreibung'; // Input name
+$string[18][31] = 'Bilder'; // images title
+$string[18][32] = 'Klicken um auszuwählen'; // Image input select info
+$string[18][33] = 'Logo'; // Image name
+$string[18][34] = 'Hintergrundbild'; // Image name
+$string[18][35] = 'Payrexx'; // Payrexx title
+$string[18][36] = 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.'; // Payrexx info
+$string[18][37] = 'Payrexx Instance'; // Input name
+$string[18][38] = 'Payrexx Secret'; // Input name
+$string[18][39] = 'Währung'; // Input name
+$string[18][40] = 'Gebühren'; // Fees title
+$string[18][41] = 'Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechend verrechnet. An den Produktpreisen ändert sich dadurch nichts.'; // Fees info
+$string[18][42] = 'Absolute Gebühren'; // Input name
+$string[18][43] = 'Prozentuale Gebühren'; // Input name
+$string[18][44] = 'Update'; // Button value
+
+$string[18][45] = 'Benutzername'; // Input name
+$string[18][46] = 'Email'; // Input name
+$string[18][47] = 'Schreiben | Lesen'; // Input name
+$string[18][48] = '%user% hat Schreibrechte auf diese Wirtschaft'; // Toggle title
+$string[18][49] = '%user% hat keine Schreibrechte auf diese Wirtschaft'; // Toggle title
+$string[18][50] = '%user% hat Leserechte auf diese Wirtschaft'; // Toggle title
+$string[18][51] = '%user% hat keine Leserechte auf diese Wirtschaft'; // Toggle title
+$string[18][52] = 'Die Rechte konnten nicht hinzugefügt werden.'; // Fail info
+$string[18][53] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Fail info
+
+//Single product
+$string[18][60] = 'Zur vorherigen Seite zurück'; // Top nav title
+$string[18][61] = 'Produkt bearbeiten'; // Headline
+$string[18][62] = 'Produkt ansehen'; // Headline
+$string[18][63] = 'Produktname'; // Input name
+$string[18][64] = 'GO'; // Input select button
+$string[18][65] = 'Preis'; // Input name
+$string[18][66] = 'Es wird jeweils die Standartwährung verwendet, sofern bei einer Wirtschaft keine andere Währung angegeben wird.'; // Abbr info price
+$string[18][67] = 'Produktbild'; // Input name
+$string[18][68] = 'Klicken um auszuwählen'; // Input name
+$string[18][69] = 'Update'; // Input name
+
+// Actions
+$string[18][70] = 'Möchtest du die Wirtschaft <strong>%name% (#%id%)</strong> wirklich löschen?'; // Remove pub message
+$string[18][71] = 'Möchtest du das Produkt <strong>%name% (#%id%)</strong>  wirklich löschen?'; // Remove product message
+
+$string[18][72] = 'Die Wirtschaft <strong>%name% (#%id%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.'; // Update pub success
+$string[18][73] = 'Die Wirtschaft <strong>%name% (#%id%)</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update pub fail
+$string[18][74] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update pub no access
+
+$string[18][75] = 'Das Produkt <strong>%name% (#%id%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.'; // Update product success
+$string[18][76] = 'Das Produkt <strong>%name% (#%id%)</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update product fail
+$string[18][77] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update product no access
+
+$string[18][78] = 'Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href="%url_page%&view_product=%productid%" class="redirect">Produkt verwalten</a></strong>'; // Add product success
+$string[18][79] = 'Leider konnte die Wirtschaft <strong>nicht</strong> erstellt werden.'; // Add product fail
+$string[18][80] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Add product no access
+$string[18][81] = 'Produkt hinzufügen'; // Add product
+$string[18][82] = 'Gruppe wählen'; // Select info
+$string[18][83] = 'Erstellen'; // Create product
+$string[18][84] = 'Erstellen'; // Create pub
+
+// List pubs and products actions
+$string[18][90] = 'WIRTSCHAFTEN';
+$string[18][91] = 'Wirtschaften auflisten';
+$string[18][92] = 'GLOBALE PRODUKTE';
+$string[18][93] = 'Produkte auflisten';
+$string[18][94] = 'Das Produkt <strong>%name% (#%id%)</strong> wurde <strong>erfolgreich</strong> gelöscht.';
+$string[18][95] = 'Das Produkt <strong>%name% (#%id%)</strong> konnte <strong>nicht</strong> gelöscht werden.';
+$string[18][96] = 'Die Wirtschaft <strong>%name% (#%id%)</strong> wurde <strong>erfolgreich</strong> gelöscht.';
+$string[18][97] = 'Die Wirtschaft <strong>%name% (#%id%)</strong> konnte <strong>nicht</strong> gelöscht werden.';
 
 /**
  * Page 19
@@ -208,6 +269,4 @@ $string["profile"][17] = 'Passwort bestätigen';
 
 // Confirm form
 $string["profile"][18] = 'UPDATE';
-
-
  ?>

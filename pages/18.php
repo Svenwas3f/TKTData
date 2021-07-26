@@ -1,392 +1,614 @@
 <?php
 function display_pubs ( $search_value = null ) {
   //Require variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $mainPage;
-  global $current_user;
+  global $url, $url_page, $page, $mainPage, $current_user;
 
-  // Search form
-  $html = '<div class="pub">';
-    //Display form
-    $html .= '<form action="' . $url . '" method="get" class="search">';
-      $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
-      $html .= '<input type="hidden" name="list" value="' . ($_GET["list"] ?? "") . '" />';
-      $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vorname, Nachname, Ticketinfo">';
-      $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    $html .= '</form>';
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(0),
+    's' => $search_value,
+  ));
 
-    // Table
-    $html .= '<table class="rows">';
-      //Headline
-      $headline_names = array('Name', 'Aktion');
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="list" value="' . ($_GET["list"] ?? '') . '" />' );
 
-      //Start headline
-      $html .= '<tr>'; //Start row
-      foreach( $headline_names as $name ){
-        $html .= '<th>' . $name . '</th>';
-      }
-      $html .= '</tr>'; //Close row
+  // Start table
+  $table = new HTML('table');
 
-      // Set offset and steps
-      $steps = 20;
-      $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(1),
+          ),
+          array(
+            'context' => Language::string(2),
+          ),
+        ),
+      ),
+    ),
+  );
 
-      // Get content
-      foreach( Pub::all( $offset, $steps, $search_value ) as $pub ) {
-        $html .= '<tr>';
-          $html .= '<td>' . $pub["name"] . '</td>';
-          $html .= '<td>';
-            if(User::w_access_allowed($page, $current_user)) {
-                $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaftdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-                $html .= '<a href="' . $url_page . '&remove_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaft entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-            }else {
-              $html .= '<a href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '" title="Wirtschaftdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
-            }
-          $html .= '</td>';
-        $html .= '</tr>';
-      }
+  // Set offset and steps
+  $steps = 20;
+  $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-      // Menu requred
-      $html .= '<tr class="nav">';
-
-        if( (count(Pub::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-          $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                    </td>';
-        }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-          $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                    </td>';
-        }elseif (count(Pub::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
-          $html .= '<td colspan="' . count( $headline_names ) . '">
-                      <a href="' . $url_page . '&list=pub' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                    </td>';
-        }
-
-      $html .= '</tr>';
-
-    $html .= '</table>';
-
-    if(User::w_access_allowed($page, $current_user)) {
-      $html .= '<a class="add" href="' . $url_page . '&add=pub">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
+  // List general products
+  foreach(  Pub::all( $offset, $steps, $search_value) as $pub ) {
+    if( User::w_access_allowed($page, $current_user) ) {
+        $actions = '<a
+                      href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '"
+                      title="' . Language::string(3) . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+        $actions .= '<a
+                      href="' . $url_page . '&remove_pub=' . urlencode( $pub["pub_id"] ) . '"
+                      title="' . Language::string(4) . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+    }else {
+      $actions = '<a
+                    href="' . $url_page . '&view_pub=' . urlencode( $pub["pub_id"] ) . '"
+                    title="' . Language::string(3) . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
     }
 
-    // Display content
-    echo $html;
+    $table->addElement(
+      array(
+        'row' => array(
+          'items' => array(
+            array(
+              'context' => $pub["name"],
+            ),
+            array(
+              'context' => ($actions ?? ''),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(5) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(6) . '</a>';
+
+  if( (count(Pub::all( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(Pub::all( ($offset + $steps), $steps, $search_value)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
+
+
+  // Display
+  echo '<div class="pub">';
+
+    $searchbar->prompt();
+    $table->prompt();
+
+  echo '</div>';
 }
 
 function single_pub ( $pub_id ) {
   //Require variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $current_user;
+  global $url, $url_page, $page, $current_user;
 
   // Set id
   $pub = new Pub();
   $pub->pub = $pub_id;
 
-  // Get disabled
-  $write = User::w_access_allowed( $page, $current_user );
-  $disabled = ($write === true ? "" : "disabled");
-
   // Start HTML
   $html =  '<div class="pub">';
-    $html .=  '<div class="top-nav">';
-      $html .=  '<a href="' . $url_page . '&view_pub=' . $pub->pub . '&type=general" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" title="Wirtschaft verwalten">Allgemein</a>';
-      $html .=  '<a href="' . $url_page . '&view_pub=' . $pub->pub . '&type=access" class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "access" ? "selected" : "") : "") . '" title="Rechte verwalten">Rechte</a>';
-    $html .=  '</div>';
 
-    switch( $_GET["type"] ?? "") {
-      case "access":
-        //Define variables
-        $number_rows = 20; //Maximal number of rows listed
-        $offset = isset( $_GET["row-start"] ) ? (intval($_GET["row-start"]) * $number_rows) : 0; //Start position of listet users
+  $topNav = new HTML('top-nav');
 
-        /**
-         * Start html
-         */
-        $html .= '<table class="rows">';
+  $topNav->addElement(
+    array(
+      'context' => Language::string(20),
+      'link' => $url_page . '&view_pub=' . $pub->pub . '&type=general',
+      'additional' => 'class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "general" ? "selected" : "") : "selected" ) . '" ' .
+                      'title="' . Language::string(22) . '"',
+    ),
+  );
 
-        /**
-         * Create headline
-         */
-        $headline_names = array('Benutzername', 'Email', 'Schreiben | Lesen');
+  $topNav->addElement(
+    array(
+      'context' => Language::string(21),
+      'link' => $url_page . '&view_pub=' . $pub->pub . '&type=access',
+      'additional' => 'class="' . (isset( $_GET["type"] ) ? ($_GET["type"] == "access" ? "selected" : "") : "") . '" ' .
+                      'title="' . Language::string(23) . '"',
+    ),
+  );
 
-        //Start headline
-        //Headline can be changed over array $headline_names
-        $html .= '<tr>'; //Start row
-        foreach( $headline_names as $name ){
-          $html .= '<th>' . $name . '</th>';
+  ////////////////////
+  // Select page
+  ////////////////////
+  switch( $_GET["type"] ?? "") {
+    ////////////////////
+    // Manage access
+    ////////////////////
+    case "access":
+      // Start table
+      $table = new HTML('table');
+
+      // Headline
+      //     $headline_names = array('Benutzername', 'Email', 'Schreiben | Lesen');
+      $table->addElement(
+        array(
+          'headline' => array(
+            'items' => array(
+              array(
+                'context' => Language::string(45),
+              ),
+              array(
+                'context' => Language::string(46),
+              ),
+              array(
+                'context' => Language::string(47),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Set offset and steps
+      $steps = 20;
+      $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+      // List all users
+      foreach(  User::all( $offset, $steps ) as $user ) {
+        // Check user infos
+        $write_access = $pub->access( $user["id"] )["w"] ?? false;
+        $read_access = $pub->access( $user["id"] )["r"] ?? false;
+
+        if( User::w_access_allowed($page, $current_user) ){
+          //Current user can edit
+          $actions = '<a
+                      onclick="' . ($write_access ? "pub_remove_right" : "pub_add_right") .
+                        '(this, \'' . $user["id"] . '\', ' . $pub->pub . ', \'w\')"
+                        title="' . ($write_access ?
+                        Language::string(48, array(
+                          '%user%' => User::name( $user["id"] ),
+                        )) : Language::string(49, array(
+                          '%user%' => User::name( $user["id"] ),
+                        ))) . '">' .
+                      '<img src="' . $url . '/medias/icons/' .
+                        ($write_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" />' .
+                    '</a>';
+          $actions .= '<a
+                      onclick="' . ($read_access ? "pub_remove_right" : "pub_add_right") .
+                        '(this, \'' . $user["id"] . '\', ' . $pub->pub . ', \'r\')"
+                        title="' . ($read_access ?
+                        Language::string(50, array(
+                          '%user%' => User::name( $user["id"] ),
+                        )) : Language::string(51, array(
+                          '%user%' => User::name( $user["id"] ),
+                        ))) . '">' .
+                      '<img src="' . $url . '/medias/icons/' .
+                        ($read_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" />' .
+                    '</a>';
+        }else {
+          // Current user can not edit
+          $actions = '<a
+                        title="' . ($write_access ?
+                        Language::string(48, array(
+                          '%user%' => User::name( $user["id"] ),
+                        )) : Language::string(49, array(
+                          '%user%' => User::name( $user["id"] ),
+                        ))) . '">' .
+                      '<img src="' . $url . '/medias/icons/' .
+                        ($write_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" />' .
+                    '</a>';
+          $actions .= '<a
+                        title="' . ($read_access ?
+                        Language::string(50, array(
+                          '%user%' => User::name( $user["id"] ),
+                        )) : Language::string(51, array(
+                          '%user%' => User::name( $user["id"] ),
+                        ))) . '">' .
+                      '<img src="' . $url . '/medias/icons/' .
+                        ($read_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" />' .
+                    '</a>';
         }
-        $html .= '</tr>'; //Close row
 
-        // Set offset and steps
-        $steps = 20;
-        $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+        $table->addElement(
+          array(
+            'row' => array(
+              'items' => array(
+                array(
+                  'context' => User::name( $user["id"] ) . ' (' . $user["id"] . ')',
+                ),
+                array(
+                  'context' => $user["email"],
+                ),
+                array(
+                  'context' => $actions ?? '',
+                ),
+              ),
+            ),
+          ),
+        );
+      }
 
-        foreach( User::all( $offset, $steps, null) as $user) {
-            $html .= '<tr class="table-list">'; //Start row
-              $html .= '<td style="width: 10%;">' . $user["id"] . '</td>'; //Display user id
-              $html .= '<td style="width: 70%;">' . $user["email"] . '</td>'; //Display Name (pre and lastname)
+      // Footer
+      $last = '<a href="' .
+                $url_page .
+                ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+                style="float: left;">' . Language::string(6) . '</a>';
+      $next = '<a href="' .
+                $url_page .
+                ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+                '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+                style="float: right;">' . Language::string(7) . '</a>';
 
-              //Check if current user (logged in user) can edit or see the user
-              if( User::w_access_allowed($page, $current_user) ){
-                //Current user can edit and delete user
-                $write_access = $pub->access( $user["id"] )["w"] ?? false;
-                $pub_access = $pub->access( $user["id"] )["r"] ?? false;
+      if( (count(User::all( ($offset + $steps), $steps )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $last . $next,
+            ),
+          ),
+        );
+      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $last,
+            ),
+          ),
+        );
+      }elseif (count(User::all( ($offset + $steps), $steps )) > 0) { // More pages accessable
+        $table->addElement(
+          array(
+            'footer' => array(
+              'context' => $next,
+            ),
+          ),
+        );
+      }
+    break;
+    ////////////////////
+    // General options
+    ////////////////////
+    case "general":
+    default:
+      // Start right menu
+      $rightMenu = new HTML('right-menu');
 
-                $html .= '<td style="width: auto;">';
-                  $html .= '<a onclick="' . ($write_access ? "pub_remove_right" : "pub_add_right") . '(this, \'' . $user["id"] . '\', ' . $pub_id . ', \'w\')"
-                  title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft">                  <img src="' . $url . '/medias/icons/' . ($write_access ? "togglePubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
-                  $html .= '<a onclick="' . ($pub_access ? "pub_remove_right" : "pub_add_right") . '(this, \'' . $user["id"] . '\', ' . $pub_id . ', \'r\')"
-                  title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglePubRights1.svg") . '" /></a>';
-                $html .= '</td>';
-              }elseif( User::r_access_allowed($page, $current_user) ){
-                //Current user can not edit and delete user
-                $write_access = $pub->access( $user["id"] )["w"] ?? false;
-                $pub_access = $pub->access( $user["id"] )["r"] ?? false;
+      $rightMenu->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/pdf.svg" alt="' . Language::string(24) . '" title="' . Language::string(25) . '"/>',
+          'additional_item' => 'href="' . $url . 'pdf/menu/?pub=' . $pub->pub . '"
+                          target="_blank"',
+        ),
+      );
 
-                $html .= '<td style="width: auto;" class="disabled">';
-                  $html .= '<a title="' . $user["id"] . ' hat' . ($write_access ? " " : " keine ") . 'Schreibrechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($write_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
-                  $html .= '<a title="' . $user["id"] . ' hat' . ($pub_access ? " " : " keine ") . 'Leserechte auf diese Wirtschaft"><img src="' . $url . '/medias/icons/' . ($pub_access ? "togglepubRights2.svg" : "togglepubRights1.svg") . '" /></a>';
-                $html .= '</td>';
-              }
-
-            $html .= '</tr>'; //End row
-          }
-
-          // Menu requred
-          $html .=  '<tr class="nav">';
-
-            if( (count(User::all( ($offset + $steps), 1, null )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-              $html .=  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                        </td>';
-            }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-              $html .=  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                        </td>';
-            }elseif (count(User::all( ($offset + $steps), 1, null )) > 0) { // More pages accessable
-              $html .=  '<td colspan="' . count( $headline_names ) . '">
-                          <a href="' . $url_page . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                        </td>';
-            }
-
-          $html .=  '</tr>';
-
-        //Close table
-        $html .= '</table>';
-      break;
-      case "general":
-      default:
-        $html .= '<div class="right-sub-menu">';
-          $html .= '<div class="right-menu-container">';
-            $html .= '<a class="right-menu-item" href="' . $url . 'pdf/menu/?pub=' . $pub->pub . '" target="_blank"><img src="' . $url . 'medias/icons/pdf.svg" alt="PDF" title="Speise und Getränkekarte als PDF ansehen"/></a>';
-            if($pub->values()["tip"] == 1) {
-              $html .= '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-on.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
-            }else {
-              $html .= '<a class="right-menu-item" onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"><img src="' . $url . 'medias/icons/tip-money-off.svg" alt="Visibility" title="Trinkgeld anzeigen/verbergen"/></a>';
-            }
-          $html .= '</div>';
-        $html .= '</div>';
-
-        // Form
-        $html .=  '<form method="post" action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" class="right-menu">';
-          //Wirtschaftnname
-          $html .=  '<div class="box">';
-            $html .= '<p>Generell</p>';
-            $html .=  '<label class="txt-input">';
-              $html .=  '<input type="text" name="name" value="' . $pub->values()["name"] . '" ' . $disabled .'/>';
-              $html .=  '<span class="placeholder">Wirtschaftname</span>';
-            $html .=  '</label>';
-          $html .=  '</div>';
-
-          //Beschreibung
-          $html .=  '<div class="box">';
-            $html .=  '<label class="txt-input">';
-              $html .=  '<textarea name="description" ' . $disabled .'/>' . $pub->values()["description"] . '</textarea>';
-              $html .=  '<span class="placeholder">Beschreibung</span>';
-            $html .=  '</label>';
-          $html .=  '</div>';
-
-          // Images
-          $html .=  '<div class="box">';
-            $html .=  '<p>Bilder</p>';
-            $html .= '<span class="file-info">Logo</span>';
-            $html .= '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
-              // Display preview image if possible
-              if( isset($pub->values()["logo_fileID"]) &&! empty($pub->values()["logo_fileID"]) ) {
-                $html .= '<input type="hidden" name="logo_fileID" value="' . $pub->values()["logo_fileID"] . '" onchange="MediaHubSelected(this)">';
-                $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->values()["logo_fileID"] ) . '\')"></div>';
-              }else {
-                $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
-                $html .= '<input type="hidden" name="logo_fileID" onchange="MediaHubSelected(this)">';
-              }
-              $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
-            $html .= '</label>';
-
-            $html .= '<span class="file-info">Hintergrundbild</span>';
-            $html .= '<label class="file-input ' . $disabled .'" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
-              // Display preview image if possible
-              if( isset($pub->values()["background_fileID"]) &&! empty($pub->values()["background_fileID"]) ) {
-                $html .= '<input type="hidden" name="background_fileID" value="' . $pub->values()["background_fileID"] . '" onchange="MediaHubSelected(this)">';
-                $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $pub->values()["background_fileID"] ) . '\')"></div>';
-              }else {
-                $html .= '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
-                $html .= '<input type="hidden" name="background_fileID" onchange="MediaHubSelected(this)">';
-              }
-              $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
-            $html .= '</label>';
-          $html .= '</div>';
-
-          // Payrexx
-          $html .=  '<div class="box">';
-            $html .=  '<p>Payrexx</p>';
-            $html .=  'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
-
-            // Payrexx instance
-            $html .=  '<label class="txt-input">';
-              $html .=  '<input type="text" name="payment_payrexx_instance" value="' . $pub->values()["payment_payrexx_instance"] . '" ' . $disabled . '/>';
-              $html .=  '<span class="placeholder">Payrexx Instance</span>';
-            $html .=  '</label>';
-
-            // Payrexx secret
-            $html .=  '<label class="txt-input">';
-              $html .=  '<input type="text" name="payment_payrexx_secret" value="' . $pub->values()["payment_payrexx_secret"] . '" ' . $disabled . '/>';
-              $html .=  '<span class="placeholder">Payrexx Secret</span>';
-            $html .=  '</label>';
-
-            //Währung
-            $html .= '<label class="txt-input">';
-              $html .= '<input type="text" name="currency" value="' . ( $pub->values()["currency"] ?? DEFAULT_CURRENCY ) . '" min="3" max="3" ' . $disabled . '/>';
-              $html .= '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-            $html .= '</label>';
-          $html .=  '</div>';
-
-          // Fees
-          $html .=  '<div class="box">';
-            $html .=  '<p>Gebühren</p>';
-            $html .=  'Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Produktpreisen ändert sich dadurch nichts.';
-
-            // Payrexx instance
-            $html .=  '<label class="txt-input">';
-              $html .=  '<input type="number" name="payment_fee_absolute" value="' . ($pub->values()["payment_fee_absolute"] / 100) . '" ' . $disabled . '/>';
-              $html .=  '<span class="placeholder">Absolute Gebühren</span>';
-              $html .=  '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
-            $html .=  '</label>';
-
-            // Payrexx secret
-            $html .=  '<label class="txt-input">';
-              $html .=  '<input type="number" name="payment_fee_percent" value="' . ($pub->values()["payment_fee_percent"] / 100) . '" ' . $disabled . '/>';
-              $html .=  '<span class="placeholder">Prozentuale Gebühren</span>';
-              $html .=  '<span class="unit">%</span>';
-            $html .=  '</label>';
-          $html .=  '</div>';
-
-          //Add submit button
-          $html .=  '<input type="submit" name="update" value="Update" ' . $disabled .'/>';
+      if($pub->values()["tip"] == 1) {
+        $rightMenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/tip-money-on.svg" alt="' . Language::string(26) . '" title="' . Language::string(27) . '"/>',
+            'additional_item' => 'onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"',
+          ),
+        );
+      }else {
+        $rightMenu->addElement(
+          array(
+            'context' => '<img src="' . $url . 'medias/icons/tip-money-off.svg" alt="' . Language::string(26) . '" title="' . Language::string(27) . '"/>',
+            'additional_item' => 'onclick="toggleTipMoney(\'' . $pub->pub . '\', this.children[0])"',
+          ),
+        );
+      }
 
 
-        $html .=  '</form>';
-      break;
-    }
+      // Start from
+      $form = new HTML('form', array(
+        'action' => $url . '?' . $_SERVER["QUERY_STRING"],
+        'method' => 'post',
+        'additional' => 'class="right-menu"',
+      ));
 
-  $html .=  '</div>';
+      // Pubname
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(28) . '</p>');
 
-  // Display content
-  echo $html;
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'name',
+            'value' => ($pub->values()["name"] ?? ''),
+            'placeholder' => Language::string(29),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+            'required' => true,
+          ),
+        );
+      $form->customHTML('</div>');
+
+      // Description
+      $form->customHTML('<div class="box">');
+        $form->addElement(
+          array(
+            'type' => 'textarea',
+            'name' => 'description',
+            'value' => ($pub->values()["description"] ?? ''),
+            'placeholder' => Language::string(30),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+      $form->customHTML('</div>');
+
+      // Images
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(31) . '</p>');
+      $form->customHTML('</div>');
+
+      $form->addElement(
+        array(
+          'type' => 'image',
+          'headline' => Language::string(33),
+          'name' => 'logo_fileID',
+          'select_info' => Language::string(32),
+          'value' => ($pub->values()["logo_fileID"] ?? null),
+          'preview_image' => ((isset($pub->values()["logo_fileID"]) &&! empty($pub->values()["logo_fileID"])) ? MediaHub::getUrl( $pub->values()["logo_fileID"] ) : null),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'image',
+          'headline' => Language::string(34),
+          'name' => 'background_fileID',
+          'select_info' => Language::string(32),
+          'value' => ($pub->values()["background_fileID"] ?? null),
+          'preview_image' => ((isset($pub->values()["background_fileID"]) &&! empty($pub->values()["background_fileID"])) ? MediaHub::getUrl( $pub->values()["background_fileID"] ) : null),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      // Payrexx
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(35) . '</p>');
+        $form->customHTML( Language::string(36) );
+
+        // Payrexx instance
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_payrexx_instance',
+            'value' => ($pub->values()["payment_payrexx_instance"] ?? ''),
+            'placeholder' => Language::string(37),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+
+        // Payrexx secret
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_payrexx_secret',
+            'value' => ($pub->values()["payment_payrexx_secret"] ?? ''),
+            'placeholder' => Language::string(38),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+
+        // Currency
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'currency',
+            'value' => ($pub->values()["currency"] ?? ''),
+            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(39) . '</a>',
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+
+      $form->customHTML('</div>');
+
+      // Fees
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(40) . '</p>');
+        $form->customHTML( Language::string(41) );
+
+        // Fees absolute
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_fee_absolute',
+            'value' => (isset($pub->values()["payment_fee_absolute"]) ? number_format($pub->values()["payment_fee_absolute"] / 100, 2) : 0),
+            'unit' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+            'placeholder' => Language::string(42),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+
+        // Fees percent
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_fee_percent',
+            'value' => (isset($pub->values()["payment_fee_percent"]) ? number_format($pub->values()["payment_fee_percent"] / 100, 2) : 0),
+            'unit' => '%',
+            'placeholder' => Language::string(43),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+
+      $form->customHTML('</div>');
+
+      $form->addelement(
+        array(
+          'type' => 'button',
+          'name' => 'update',
+          'value' => Language::string(44),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+    break;
+  }
+
+  // Display
+  echo '<div class="pub">';
+
+    isset($topNav) ? $topNav->prompt() : '';
+    isset($rightMenu) ? $rightMenu->prompt() : '';
+    isset($form) ? $form->prompt() : '';
+    isset($table) ? $table->prompt() : '';
+
+  echo '</div>';
 }
 
 function display_products ( $search_value = null ) {
   //Require variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $mainPage;
-  global $current_user;
+  global $url, $url_page, $page, $mainPage, $current_user;
 
-  //Display form
-  $html = '<form action="' . $url . '" method="get" class="search">';
-    $html .= '<input type="hidden" name="id" value="' . $mainPage . '" />';
-    $html .= '<input type="hidden" name="sub" value="' . $page . '" />';
-    $html .= '<input type="hidden" name="list" value="' . $_GET["list"] . '" />';
-    $html .= '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vorname, Nachname, Ticketinfo">';
-    $html .= '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-  $html .= '</form>';
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(10),
+    's' => $search_value,
+  ));
 
-  // Table
-  $html .=  '<table class="rows">';
-    //Headline
-    $headline_names = array('Name', 'Preis', 'Aktion');
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="list" value="' . ($_GET["list"] ?? '') . '" />' );
 
-    //Start headline
-    $html .=  '<tr>'; //Start row
-    foreach( $headline_names as $name ){
-      $html .=  '<th>' . $name . '</th>';
+  // Start table
+  $table = new HTML('table');
+
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(11),
+          ),
+          array(
+            'context' => Language::string(12),
+          ),
+          array(
+            'context' => Language::string(13),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  // Set offset and steps
+  $steps = 20;
+  $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
+
+  // List general products
+  foreach(  Product::global_products( $offset, $steps, $search_value) as $products ) {
+    if( User::w_access_allowed($page, $current_user) ) {
+      $actions =  '<a
+                    href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '"
+                    title="' . Language::string(14) . '"><img src="' . $url . '/medias/icons/pencil.svg" />';
+      $actions .=  '<a
+                    href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '"
+                    title="' . Language::string(15) . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+    }else {
+      $actions .=  '<a
+                    href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '"
+                    title="' . Language::string(14) . '"><img src="' . $url . '/medias/icons/view-eye.svg" />';
     }
-    $html .=  '</tr>'; //Close row
 
-    // Set offset and steps
-    $steps = 20;
-    $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
-
-    foreach( Product::global_products( $offset, $steps, $search_value ) as $products ) {
-      $html .=  '<tr>';
-        $html .=  '<td>' . $products["name"] . '</td>';
-        $html .=  '<td>' . number_format(($products["price"] / 100), 2) . ' ' . DEFAULT_CURRENCY . '</td>';
-        $html .=  '<td>';
-          if(User::w_access_allowed($page, $current_user)) {
-              $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" />';
-              $html .=  '<a href="' . $url_page . '&remove_product=' . urlencode( $products["id"] ) . '" title="Produkt entfernen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-          }else {
-            $html .=  '<a href="' . $url_page . '&view_product=' . urlencode( $products["id"] ) . '" title="Produktdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" />';
-          }
-        $html .=  '</td>';
-      $html .=  '</tr>';
-    }
-
-    // Menu requred
-    $html .=  '<tr class="nav">';
-
-      if( (count(Product::global_products( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                  </td>';
-      }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  </td>';
-      }elseif (count(Product::global_products( ($offset + $steps), 1 )) > 0) { // More pages accessable
-        $html .=  '<td colspan="' . count( $headline_names ) . '">
-                    <a href="' . $url_page . '&list=products' . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                  </td>';
-      }
-
-    $html .=  '</tr>';
-
-  $html .=  '</table>';
-
-  if(User::w_access_allowed($page, $current_user)) {
-    $html .=  '<a class="add" href="' . $url_page . '&add=product">
-      <span class="horizontal"></span>
-      <span class="vertical"></span>
-    </a>';
+    $table->addElement(
+      array(
+        'row' => array(
+          'items' => array(
+            array(
+              'context' => $products["name"],
+            ),
+            array(
+              'context' => number_format(($products["price"] / 100), 2) . ' ' . DEFAULT_CURRENCY,
+            ),
+            array(
+              'context' => ($actions ?? ''),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  $html .=  '</div>';
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(16) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(17) . '</a>';
 
-  // Display content
-  echo $html;
+  if( (count(Product::global_products( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(Product::global_products( ($offset + $steps), $steps, $search_value)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
+
+
+  // Display
+  echo '<div class="pub">';
+
+    $searchbar->prompt();
+    $table->prompt();
+
+  echo '</div>';
 }
 
 function single_product ( $product_id ) {
@@ -400,73 +622,85 @@ function single_product ( $product_id ) {
   $product = new Product();
   $product->product_id = $product_id;
 
-  // Get disabled
-  $write = User::w_access_allowed( $page, $current_user );
-  $disabled = ($write === true ? "" : "disabled");
+  $form = new HTML('form', array(
+    'action' => $url . '?' . $_SERVER["QUERY_STRING"],
+    'method' => 'post',
+    'additional' => 'style="width: 100%; max-width: 750px;" class="box-width"',
+  ));
 
-  // Start html
-  $html =  '<div class="pub">';
-    $html .=  '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-      if( User::w_access_allowed( $page, $current_user) ) {
-        $html .=  '<h1>Produkt bearbeiten</h1>';
-      }else {
-        $html .=  '<h1>Produkt ansehen</h1>';
-      }
-      //Produktname
-      $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text" name="name" value="' . ($product->values()["name"] ?? "") . '" ' . $disabled . ' required/>';
-        $html .=  '<span class="placeholder">Wirtschaftnname</span>';
-      $html .=  '</label>';
+  if( User::w_access_allowed( $page, $current_user )) {
+    $form->customHTML('<h1>' . Language::string(61) . '</h1>');
+  }else {
+    $form->customHTML('<h1>' . Language::string(52) . '</h1>');
+  }
 
-      // Section
-      $html .= '<div class="select" onclick="toggleOptions(this)">';
-        $html .= '<input type="text" class="selectValue" name="section" ' . (isset($product->values()["section"]) ? 'value="' . $product->values()["section"] . '"' : "") . ' ' . $disabled . '>';
-        $html .= '<span class="headline">' . (isset($product->values()["section"]) ? $product->values()["section"] : "Sektion") . '</span>';
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'name',
+      'placeholder' => Language::string(63),
+      'value' => ($product->values()["name"] ?? ""),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
 
-        if( User::w_access_allowed( $page, $current_user) ) {
-          $html .= '<div class="options">';
-            foreach( $product->sections() as $section ) {
-              $html .= '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
-            }
-            $html .= '<span onclick="event.stopPropagation()" class="option_add" >';
-              $html .= '<input type="text"/>';
-              $html .= '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
-            $html .= '</span>';
-          $html .= '</div>';
-        }
-      $html .= '</div>';
+  // Generate options
+  $options = array();
 
-      //Preis
-      $html .=  '<label class="txt-input">';
-        $html .=  '<input type="text type="number" step="0.05" min="0" name="price" value="' . ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  "")  . '" ' . $disabled . ' required/>';
-        $html .=  '<span class="placeholder">Preis</span>';
-        $html .=  '<span class="unit"><abbr title="Es wird jeweils die Standartwährung verwendet, sofern bei einer Wirtschaft keine andere Währung angegeben wird.">' . DEFAULT_CURRENCY . '</abbr></span>';
-      $html .=  '</label>';
+  foreach($product->sections() as $section) {
+    $options[$section["section"]] = $section["section"];
+  }
 
-      // Produktbild
-      $html .= '<span class="file-info">Produktbild</span>';
-      $html .= '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
-        // Display preview image if possible
-        if( isset($product->values()["product_fileID"]) &&! empty($product->values()["product_fileID"]) ) {
-          $html .= '<input type="hidden" name="product_fileID" value="' . $product->values()["product_fileID"] . '" onchange="MediaHubSelected(this)">';
-          $html .= '<div class="preview-image" style="background-image: url(\'' . MediaHub::getUrl( $product->values()["product_fileID"] ) . '\')"></div>';
-        }else {
-          $html .= '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
-        }
-        $html .= '<div class="draganddrop">Klicken um auszuwählen</div>';
-      $html .= '</label>';
+  $form->addElement(
+    array(
+      'type' => 'select',
+      'name' => 'section',
+      'value' => (isset($product->values()["section"]) ? $product->values()["section"] : ''),
+      'options' => $options,
+      'custom_options' => '<span onclick="event.stopPropagation()" class="option_add" ><input type="text"/><span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">' . Language::string(64) . '</span></span>',
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
 
-      //Add submit button
-      if( $disabled != "disabled" ) {
-        $html .=  '<input type="submit" name="update" value="Update"/>';
-      }
 
-      //Close form
-    $html .=  '</form>';
-  $html .=  '</div>';
+  $form->addElement(
+    array(
+      'type' => 'number',
+      'name' => 'price',
+      'placeholder' => Language::string(65),
+      'value' => ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  ""),
+      'unit' => '<abbr title="' . Language::string(66) . '">' . DEFAULT_CURRENCY . '</abbr>',
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
 
-  // Display content
-  echo $html;
+  $form->addElement(
+    array(
+      'type' => 'image',
+      'name' => 'product_fileID',
+      'headline' => Language::string(67),
+      'select_info' => Language::string(68),
+      'preview_image' => ((isset($product->values()["product_fileID"]) &&! empty($product->values()["product_fileID"])) ? MediaHub::getUrl( $product->values()["product_fileID"] ) : null),
+      'value' => ($product->values()["product_fileID"] ?? null),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
+
+  $form->addElement(
+    array(
+      'type' => 'button',
+      'name' => 'update',
+      'value' => Language::string(69),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
+
+
+  echo '<div class="pub">';
+
+    $form->prompt();
+
+  echo '</div>';
 }
 
 //Get current action
@@ -482,7 +716,12 @@ switch(key($action)) {
     $pub->pub = $_GET["remove_pub"];
 
     // Generate message
-    $info = "Möchtest du die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $_GET["remove_pub"] . ")</strong>  wirklich löschen?";
+    $info = Language::string( 70,
+      array(
+        '%name%' => $pub->values()["name"],
+        '%id%' => $_GET["remove_pub"],
+      ),
+    );
 
     // Display message
     Action::confirm($info, $_GET["remove_pub"], "&list=pub");
@@ -493,7 +732,12 @@ switch(key($action)) {
     $product->product_id = $_GET["remove_product"];
 
     // Generate message
-    $info = "Möchtest du das Produkt <strong>" . $product->values()["name"] . " (#" . $_GET["remove_product"] . ")</strong>  wirklich löschen?";
+    $info = Language::string( 71,
+      array(
+        '%name%' => $product->values()["name"],
+        '%id%' => $_GET["remove_product"],
+      ),
+    );
 
     // Display message
     Action::confirm($info, $_GET["remove_product"], "&list=products");
@@ -517,14 +761,24 @@ switch(key($action)) {
             $_POST["payment_fee_percent"] = ($_POST["payment_fee_percent"] ? 100 * $_POST["payment_fee_percent"] : 0);
 
             if( $pub->update(  $_POST ) ) {
-              Action::success("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+              Action::success(Language::string( 72,
+                array(
+                  '%name%' => $pub->values()["name"],
+                  '%id%' => $pub->pub,
+                ),
+              ));
             }else {
-              Action::fail("Die Wirtschaft <strong>" . $pub->values()["name"] . " (#" . $pub->pub . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+              Action::fail( Language::string( 73,
+                array(
+                  '%name%' => $pub->values()["name"],
+                  '%id%' => $pub->pub,
+                ),
+              ));
             }
           break;
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(74) );
       }
     }
 
@@ -542,21 +796,38 @@ switch(key($action)) {
         $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
         if( $product->update(  $_POST ) ) {
-          Action::success("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> wurde <strong>erfolgreich</strong> überarbeitet.");
+          Action::success( Language::string( 75,
+            array(
+              '%name%' => $product->values()["name"],
+              '%id%' => $product->product_id,
+            ),
+          ));
         }else {
-          Action::fail("Das Produkt <strong>" . $product->values()["name"] . " (#" . $product->product_id . ")</strong> konnte <strong>nicht</strong> überarbeitet werden.");
+          Action::fail( Language::string( 76,
+            array(
+              '%name%' => $product->values()["name"],
+              '%id%' => $product->product_id,
+            ),
+          ));
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(77) );
       }
     }
 
     // Display top return button
-    echo '<div class="pub">';
-      echo '<div class="top-nav">';
-        echo '<a href="Javascript:history.back()" title="Zur vorherigen Seite zurück"><img src="' . $url . 'medias/icons/history-back.svg"></a>';
-      echo '</div>';
-    echo '</div>';
+    $topNav = new HTML('top-nav');
+
+    $topNav->addElement(
+      array(
+        'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+        'link' => 'Javascript:history.back()',
+        'additional' => 'title="' . Language::string(60) . '"',
+      ),
+    );
+
+
+    $topNav->prompt();
 
     // View single
     single_product( $product->product_id );
@@ -576,61 +847,94 @@ switch(key($action)) {
           $_POST["price"] = ($_POST["price"] ? 100 * $_POST["price"] : 0);
 
           if( $product->add( $_POST ) ) {
-            Action::success("Die Wirtschaft konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href='" . $url_page . "&view_product=" . $pub->product_id . "' class='redirect'>Produkt verwalten</a></strong>");
+            Action::success( Language::string( 78,
+              array(
+                '%url_page%' => $url_page,
+                '%productid%' => $product->product_id,
+              ),
+             ) );
           }else{
-            Action::fail("Leider konnte die Wirtschaft <strong>nicht</strong></b> erstellt werden.");
+            Action::fail( Language::string(79) );
           }
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string(80) );
         }
       }
 
-      //Start form to edit, show user
+      $form = new HTML('form', array(
+        'action' => $url . '?' . $_SERVER["QUERY_STRING"],
+        'method' => 'post',
+        'additional' => 'style="width: 100%; max-width: 750px;" class="box-width"',
+      ));
+
+      if( User::w_access_allowed( $page, $current_user )) {
+        $form->customHTML('<h1>' . Language::string(81) . '</h1>');
+      }
+
+      $form->addElement(
+        array(
+          'type' => 'text',
+          'name' => 'name',
+          'placeholder' => Language::string(63),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          'required' => true,
+        ),
+      );
+
+      // Generate options
+      $options = array();
+      $product = new Product();
+
+      foreach($product->sections() as $section) {
+        $options[$section["section"]] = $section["section"];
+      }
+
+      $form->addElement(
+        array(
+          'type' => 'select',
+          'name' => 'section',
+          'options' => $options,
+          'headline' => Language::string(82),
+          'custom_options' => '<span onclick="event.stopPropagation()" class="option_add" ><input type="text"/><span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">' . Language::string(64) . '</span></span>',
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+
+      $form->addElement(
+        array(
+          'type' => 'number',
+          'name' => 'price',
+          'placeholder' => Language::string(65),
+          'unit' => '<abbr title="' . Language::string(66) . '">' . DEFAULT_CURRENCY . '</abbr>',
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'image',
+          'name' => 'product_fileID',
+          'headline' => Language::string(67),
+          'select_info' => Language::string(68),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'button',
+          'name' => 'create',
+          'value' => Language::string(83),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+
       echo '<div class="pub">';
-        echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-          echo '<h1>Produkt hinzufügen</h1>';
-          //Produktname
-          echo '<label class="txt-input">';
-            echo '<input type="text" name="name" ' . $disabled . ' required/>';
-            echo '<span class="placeholder">Produktname</span>';
-          echo '</label>';
 
-          // Section
-          echo '<div class="select" onclick="toggleOptions(this)">';
-            echo '<input type="text" class="selectValue" name="section" ' . $disabled . '>';
-            echo '<span class="headline">Sektion</span>';
+        $form->prompt();
 
-            echo '<div class="options">';
-              foreach( $product->sections() as $section ) {
-                echo '<span data-value="' . $section["section"] . '" onclick="selectElement(this)">' . $section["section"] . '</span>';
-              }
-              echo '<span onclick="event.stopPropagation()" class="option_add" >';
-                echo '<input type="text"/>';
-                echo '<span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">GO</span>';
-              echo '</span>';
-            echo '</div>';
-          echo '</div>';
-
-          //Preis
-          echo '<label class="txt-input">';
-            echo '<input type="number" step="0.05" min="0" name="price" ' . $disabled . ' required/>';
-            echo '<span class="placeholder">Preis</span>';
-            echo '<span class="unit"><abbr title="Es wird jeweils die Standartwährung verwendet, sofern bei einer Wirtschaft keine andere Währung angegeben wird.">' . DEFAULT_CURRENCY . '</abbr></span>';
-          echo '</label>';
-
-
-          // Produktbild
-          echo '<span class="file-info">Produktbild</span>';
-          echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'product_fileID\' )"' ) . '>';
-            echo '<input type="hidden" name="product_fileID" onchange="MediaHubSelected(this)">';
-            echo '<div class="draganddrop">Klicken um auszuwählen</div>';
-          echo '</label>';
-
-          //Add submit button
-          echo '<input type="submit" name="create" value="Erstellen"/>';
-
-          //Close form
-        echo '</form>';
       echo '</div>';
     }elseif( ($_GET["add"] ?? "") == "pub") {
       // Add pub
@@ -656,93 +960,182 @@ switch(key($action)) {
         }
       }
 
-      //Start form to edit, show user
-      echo '<form action="' . $url . '?' . $_SERVER["QUERY_STRING"] . '" method="post" style="width: 100%; max-width: 750px;" class="box-width">';
-        echo '<h1>Wirtschaft hinzufügen</h1>';
-        //Wirtschaftnname
-        echo '<label class="txt-input">';
-          echo '<input type="text" name="name" ' . $disabled . '/>';
-          echo '<span class="placeholder">Wirtschaftname</span>';
-        echo '</label>';
+      // Start from
+      $form = new HTML('form', array(
+        'action' => $url . '?' . $_SERVER["QUERY_STRING"],
+        'method' => 'post',
+        'additional' => ' style="width: 100%; max-width: 750px;" class="box-width"',
+      ));
 
-        //Beschreibung
-        echo '<label class="txt-input">';
-            echo '<textarea name="description" ' . $disabled .'/></textarea>';
-            echo '<span class="placeholder">Wirtschaftname</span>';
-          echo '</label>';
+      // Pubname
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(28) . '</p>');
 
-        // Images
-        echo '<span class="file-info">Logo</span>';
-        echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"' ) . '>';
-          echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
-          echo '<input type="hidden" name="logo_fileID" onchange="MediaHubSelected(this)">';
-          echo '<div class="draganddrop">Klicken um auszuwählen</div>';
-        echo '</label>';
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'name',
+            'placeholder' => Language::string(29),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+            'required' => true,
+          ),
+        );
+      $form->customHTML('</div>');
 
-        echo '<span class="file-info">Hintergrundbild</span>';
-        echo '<label class="file-input" ' . ( $disabled == "disabled" ? "" : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'background_fileID\' )"' ) . '>';
-            echo '<div class="preview-image" style="background-image: url(\'' . $url . 'medias/store/favicon-color-512.png\')"></div>';
-            echo '<input type="hidden" name="background_fileID" onchange="MediaHubSelected(this)">';
-          echo '<div class="draganddrop">Klicken um auszuwählen</div>';
-        echo '</label>';
+      // Description
+      $form->customHTML('<div class="box">');
+        $form->addElement(
+          array(
+            'type' => 'textarea',
+            'name' => 'description',
+            'placeholder' => Language::string(30),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
+      $form->customHTML('</div>');
 
-        // Payrexx
-        echo '<br />Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.';
+      // Images
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(31) . '</p>');
+      $form->customHTML('</div>');
+
+      $form->addElement(
+        array(
+          'type' => 'image',
+          'headline' => Language::string(33),
+          'name' => 'logo_fileID',
+          'select_info' => Language::string(32),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'image',
+          'headline' => Language::string(34),
+          'name' => 'background_fileID',
+          'select_info' => Language::string(32),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      // Payrexx
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(35) . '</p>');
+        $form->customHTML( Language::string(36) );
 
         // Payrexx instance
-        echo '<label class="txt-input">';
-          echo '<input type="text" name="payment_payrexx_instance" ' . $disabled . '/>';
-          echo '<span class="placeholder">Payrexx Instance</span>';
-        echo '</label>';
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_payrexx_instance',
+            'value' => ($pub->values()["payment_payrexx_instance"] ?? ''),
+            'placeholder' => Language::string(37),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
 
         // Payrexx secret
-        echo '<label class="txt-input">';
-          echo '<input type="text" name="payment_payrexx_secret" ' . $disabled . '/>';
-          echo '<span class="placeholder">Payrexx Secret</span>';
-        echo '</label>';
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_payrexx_secret',
+            'value' => ($pub->values()["payment_payrexx_secret"] ?? ''),
+            'placeholder' => Language::string(38),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
 
-        //Währung
-        echo '<label class="txt-input">';
-            echo '<input type="text" name="currency" min="3" max="3" ' . $disabled . '/>';
-            echo '<span class="placeholder"><a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">Währung</a></span>';
-          echo '</label>';
+        // Currency
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'currency',
+            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(39) . '</a>',
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
 
-        // Fees
-        echo '<br />Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechent verrechnet. An den Produktpreisen ändert sich dadurch nichts.';
+      $form->customHTML('</div>');
 
-        // Payrexx instance
-        echo '<label class="txt-input">';
-          echo '<input type="number" name="payment_fee_absolute" ' . $disabled . '/>';
-          echo '<span class="placeholder">Absolute Gebühren</span>';
-          echo '<span class="unit">' . DEFAULT_CURRENCY . '</span>';
-        echo '</label>';
+      // Fees
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(40) . '</p>');
+        $form->customHTML( Language::string(41) );
 
-        // Payrexx secret
-        echo '<label class="txt-input">';
-          echo '<input type="number" name="payment_fee_percent" ' . $disabled . '/>';
-          echo '<span class="placeholder">Prozentuale Gebühren</span>';
-          echo '<span class="unit">%</span>';
-        echo '</label>';
+        // Fees absolute
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_fee_absolute',
+            'unit' => DEFAULT_CURRENCY,
+            'placeholder' => Language::string(42),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
 
-        //Add submit button
-        echo '<input type="submit" name="create" value="Erstellen"/>';
+        // Fees percent
+        $form->addElement(
+          array(
+            'type' => 'text',
+            'name' => 'payment_fee_percent',
+            'unit' => '%',
+            'placeholder' => Language::string(43),
+            'disabled' => ! User::w_access_allowed( $page, $current_user ),
+          ),
+        );
 
-      //Close form
-      echo '</form>';
+      $form->customHTML('</div>');
+
+      $form->addelement(
+        array(
+          'type' => 'button',
+          'name' => 'create',
+          'value' => Language::string(84),
+          'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        ),
+      );
+
+      echo '<div class="pub">';
+
+        $form->prompt();
+
+      echo '</div>';
     }else {
       Action::fs_info('Die Unterseite existiert nicht . ', "Zurück", $url_page );
     }
   break;
   case "list":
   default:
-    // Display top menu
+    $topNav = new HTML('top-nav');
+
+    $topNav->addElement(
+      array(
+        'context' => Language::string(90),
+        'link' => $url_page . '&list=pub',
+        'additional' => 'class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "pub" ? "selected" : "") : "selected" ) . '" ' .
+                        'title="' . Language::string(91) . '"',
+      ),
+    );
+
+    $topNav->addElement(
+      array(
+        'context' => Language::string(92),
+        'link' => $url_page . '&list=products',
+        'additional' => 'class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "") . '" ' .
+                        'title="' . Language::string(93) . '"',
+      ),
+    );
+
     echo '<div class="pub">';
-      echo '<div class="top-nav">';
-        echo '<a href="' . $url_page . '&list=pub" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "pub" ? "selected" : "") : "selected" ) . '" title="Wirtschaften auflisten">WIRTSCHAFTEN</a>';
-        echo '<a href="' . $url_page . '&list=products" class="' . (isset( $_GET["list"] ) ? ($_GET["list"] == "products" ? "selected" : "") : "") . '" title="Produkte auflisten">GLOBALE PRODUKTE</a>';
-      echo '</div>';
+
+      $topNav->prompt();
+
     echo '</div>';
 
+    /////////////////////////////
+    // LIST GLOBAL PRODUCTS
+    /////////////////////////////
     if( ($_GET["list"] ?? "") == "products") {
       // remove
       if(isset($_POST["confirm"])) {
@@ -753,14 +1146,35 @@ switch(key($action)) {
 
         // Remove
         if( $product->remove() ) {
-          Action::success("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+          Action::success( Language::string(94,
+            array(
+              '%name%' => $product_values["name"],
+              '%id%' => $_POST["confirm"],
+            ),
+          ));
         }else {
-          Action::fail("Das Produkt <strong>" . $product_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+          Action::fail( Language::string(94,
+            array(
+              '%name%' => $product_values["name"],
+              '%id%' => $_POST["confirm"],
+            ),
+          ));
         }
       }
 
       // List products
       display_products ( ($_GET["s"] ?? null) );
+
+      if(User::w_access_allowed($page, $current_user)) {
+        echo '<a class="add" href="' . $url_page . '&add=product">
+          <span class="horizontal"></span>
+          <span class="vertical"></span>
+        </a>';
+      }
+
+    /////////////////////////////
+    // LIST PUBS
+    /////////////////////////////
     }else {
       // remove
       if(isset($_POST["confirm"])) {
@@ -771,14 +1185,31 @@ switch(key($action)) {
 
         // Remove
         if( $pub->remove() ) {
-          Action::success("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> wurde <strong>erfolgreich</strong> gelöscht.");
+          Action::success( Language::string( 96,
+            array(
+              '%name%' => $pub_values["name"],
+              '%id%' => $_POST["confirm"],
+            ),
+          ));
         }else {
-          Action::fail("Die Wirtschaft <strong>" . $pub_values["name"] . " (#" . $_POST["confirm"] . ")</strong> konnte <strong>nicht</strong> gelöscht werden.");
+          Action::fail( Language::string( 96,
+            array(
+              '%name%' => $pub_values["name"],
+              '%id%' => $_POST["confirm"],
+            ),
+          ));
         }
       }
 
       // List pubs
       display_pubs ( ($_GET["s"] ?? null) );
+
+      if(User::w_access_allowed($page, $current_user)) {
+        echo '<a class="add" href="' . $url_page . '&add=pub">
+          <span class="horizontal"></span>
+          <span class="vertical"></span>
+        </a>';
+      }
     }
   break;
 }

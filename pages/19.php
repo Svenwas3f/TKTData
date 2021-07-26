@@ -79,12 +79,12 @@ function display_users( $search_value = null ) {
             $url_page .
             ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
             '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
-            style="float: left;">' . Language::string(6) . '</a>';
+            style="float: left;">' . Language::string(4) . '</a>';
   $next = '<a href="' .
             $url_page .
             ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
             '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
-            style="float: right;">' . Language::string(7) . '</a>';
+            style="float: right;">' . Language::string(5) . '</a>';
 
   if( (count(User::all( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
     $table->addElement(
@@ -154,6 +154,7 @@ function single_user( $user_registerd ) {
       'name' => 'name',
       'value' => $user->values()["name"],
       'placeholder' => Language::string(12),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
     ),
   );
 
@@ -164,13 +165,31 @@ function single_user( $user_registerd ) {
       'name' => 'mail',
       'value' => $user->values()["email"],
       'placeholder' => Language::string(13),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+    ),
+  );
+
+  // Languages
+  $options = array();
+  foreach( Language::all() as $language ) {
+    $options[$language["code"]] = $language["loc"] . ' (' . $language["int"] . ')';
+  }
+
+  $form->addElement(
+    array(
+      'type' => 'select',
+      'name' => 'language',
+      'value' => ($user->values()["language"] ?? null),
+      'headline' => (isset($user->values()["language"]) ? $options[$user->values()["language"]] : Language::string(14)),
+      'disabled' => ! User::w_access_allowed( $page, $current_user ),
+      'options' => $options
     ),
   );
 
   //////////////////////////////////////
   // Rights
   //////////////////////////////////////
-  $form->customHTML('<h4 style="Margin-top: 20px;">' . Language::string(14) . '</h4>');
+  $form->customHTML('<h4 style="Margin-top: 20px;">' . Language::string(15) . '</h4>');
 
   //Get all meu elements
   $menu_elements = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu IS NULL OR submenu='' OR submenu='0' ORDER BY layout");
@@ -183,11 +202,11 @@ function single_user( $user_registerd ) {
 
     if( $plugin->is_pluginpage( $menu["id"] ) ) {
       $form->customHTML('<div class="right-menu-title">
-                          <span>' . (Language::string( 'menu' , null, $menu["id"]) ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(15) . '">W</span><span class="writeorread" title="' . Language::string(16) . '">R</span>
+                          <span>' . (Language::string( 'menu' , null, $menu["id"]) ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(16) . '">W</span><span class="writeorread" title="' . Language::string(17) . '">R</span>
                         </div>');
     }else {
       $form->customHTML('<div class="right-menu-title">
-                          <span>' . (Language::string( $menu["id"] , null, 'menu') ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(15) . '">W</span><span class="writeorread" title="' . Language::string(16) . '">R</span>
+                          <span>' . (Language::string( $menu["id"] , null, 'menu') ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(16) . '">W</span><span class="writeorread" title="' . Language::string(17) . '">R</span>
                         </div>');
     }
 
@@ -234,7 +253,7 @@ function single_user( $user_registerd ) {
             'checked' => User::w_access_allowed( $submenu["id"], $user_registerd ),
             'classes' => 'user-rights-checkbox',
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
-            'additional_div' => 'title="' . Language::string(17) . '"',
+            'additional_div' => 'title="' . Language::string(18) . '"',
           )
         );
 
@@ -246,7 +265,7 @@ function single_user( $user_registerd ) {
             'checked' => User::r_access_allowed( $submenu["id"], $user_registerd ),
             'classes' => 'user-rights-checkbox',
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
-            'additional_div' => 'title="' . Language::string(18) . '"',
+            'additional_div' => 'title="' . Language::string(19) . '"',
           )
         );
 
@@ -258,30 +277,13 @@ function single_user( $user_registerd ) {
     array(
       'type' => 'button',
       'name' => 'update',
-      'value' => Language::string(19),
+      'value' => Language::string(22),
       'disabled' => ! User::w_access_allowed( $page, $current_user ),
-      'additional' => 'title="' . Language::string(20) . '"'
+      'additional' => 'title="' . Language::string(23) . '"'
     )
   );
 
   $form->prompt();
-}
-
-//Remove user finaly
-if( isset($_POST["confirm"])) {
-  //Create new user
-  $user = new User();
-  $user->user = $_POST["confirm"];
-
-  if( User::w_access_allowed($page, $current_user)) {
-    if( $user->remove()) {
-      Action::success('Der Benutzer (' . $_POST["confirm"] . ') wurde erfolgreich entfernt . ');
-    }else {
-      Action::fail('Der Benutzer (' . $_POST["confirm"] . ') konnte nicht entfernt werden . ');
-    }
-  }else {
-    Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-  }
 }
 
 //Get current action
@@ -297,72 +299,178 @@ switch(key($action)) {
       if( User::w_access_allowed($page, $current_user)) {
         $user = new User();
         if($user->add($_POST["mail"], $_POST["userID"], $_POST["name"], $_POST, (isset($_POST["sendMail"])) ? true : false)) {
-          Action::success("Der Benutzer wurde <strong>erfolgreich</strong> hinzugefügt.");
+          Action::success( Language::string(55) );
         }else{
-          Action::fail("Der Benutzer konnte <strong>nicht</strong> hinzugefügt werden");
+          Action::fail( Language::string(56) );
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(57) );
       }
     }
 
-    //Start form to edit, show user
-    echo '<form action="" method="post" style="max-width: 500px;">';
-    /**
-     * Read user info
-     */
+    //////////////////////////////////////
+    // Start form
+    //////////////////////////////////////
+    $form = new HTML('form', array(
+      'action' => $url_page . '&add',
+      'method' => 'post',
+      'additional' => 'style="max-width: 500px;"',
+    ));
 
-    //ID
-    echo '<label class="txt-input">';
-      echo '<input type="text" name="userID"/>';
-      echo '<span class="placeholder">Benutzername</span>';
-    echo '</label>';
+    $form->customHTML('<h4>' . Language::string(10) . '</h4>');
 
-    //Name
-    echo '<label class="txt-input">';
-      echo '<input type="text" name="name"/>';
-      echo '<span class="placeholder">Name</span>';
-    echo '</label>';
+    // ID
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'userID',
+        'placeholder' => Language::string(11),
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+      ),
+    );
 
-    //E-Mail
-    echo '<label class="txt-input">';
-      echo '<input type="email" name="mail" required/>';
-      echo '<span class="placeholder">E-Mail</span>';
-    echo '</label>';
+    // Name
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'name',
+        'placeholder' => Language::string(12),
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+      ),
+    );
 
-    /**
-     * User rights
-     */
+    // Email
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'mail',
+        'placeholder' => Language::string(13),
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        'required' => true,
+      ),
+    );
 
+    // Languages
+    $options = array();
+    foreach( Language::all() as $language ) {
+      $options[$language["code"]] = $language["loc"] . ' (' . $language["int"] . ')';
+    }
+
+    $form->addElement(
+      array(
+        'type' => 'select',
+        'name' => 'language',
+        'headline' => Language::string(14),
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        'options' => $options
+      ),
+    );
+
+    //////////////////////////////////////
+    // Rights
+    //////////////////////////////////////
+    $form->customHTML('<h4 style="Margin-top: 20px;">' . Language::string(15) . '</h4>');
+
+    //Get all meu elements
     $menu_elements = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu IS NULL OR submenu='' OR submenu='0' ORDER BY layout");
     $menu_elements->execute();
 
     //Display all menu elements
     while($menu = $menu_elements->fetch() ){
       //Display name
-      echo '<div class="right-menu-title"><span>' . $menu["name"] . '</span><span class="writeorread" title="Schreibberechtigung">W</span><span class="writeorread" title="Leseberechtigung">R</span></div>';
+      $plugin = new Plugin();
+
+      if( $plugin->is_pluginpage( $menu["id"] ) ) {
+        $form->customHTML('<div class="right-menu-title">
+                            <span>' . (Language::string( 'menu' , null, $menu["id"]) ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(16) . '">W</span><span class="writeorread" title="' . Language::string(17) . '">R</span>
+                          </div>');
+      }else {
+        $form->customHTML('<div class="right-menu-title">
+                            <span>' . (Language::string( $menu["id"] , null, 'menu') ?? $menu["name"]) . '</span><span class="writeorread" title="' . Language::string(16) . '">W</span><span class="writeorread" title="' . Language::string(17) . '">R</span>
+                          </div>');
+      }
 
       //Get all pages of menu (submenu)
       $submenus = $conn->prepare("SELECT * FROM " . MENU . " WHERE submenu=:submenu");
       $submenus->execute(array(":submenu" => $menu["id"]));
+
       //Go through every submenu
       while($submenu = $submenus->fetch()){
-        //Display content
-        echo '<div class="submenu-rights">';
-        echo '<span title="Submenu #' . $submenu["id"] . ' [' . $submenu["name"] . '] von dem Menu #' . $menu["id"] . ' [' . $menu["name"] . ']">' . $submenu["name"] . '</span>'; //Menu name
-        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="w"/><div class="checkbox-btn" title="Schreibberechtigung setzen"></div></label>'; //Write checkbox
-        echo '<label class="checkbox user-rights-checkbox"><input type="checkbox" name="' . $submenu["id"] . '[]" value="r"/><div class="checkbox-btn" title="Leseberechtigung setzen"></div></label>'; //Read checkbox
-        echo '</div>';
+        $form->customHTML('<div class="submenu-rights">');
+
+          // Check name and plugin
+          if( $plugin->is_pluginpage( $submenu["id"] ) ) {
+          $form->customHTML('<span title="' .
+                              Language::string( 'subpage', array(
+                                '%submenu%' => $submenu["id"],
+                                '%submenuname%' => (Language::string( $submenu["id"] , null, 'menu') ?? $submenu["name"]),
+                                '%mainmenu%' => $menu["id"],
+                              ), 'menu' ) . '">' .
+                                (Language::string( 'menu' , null, $submenu["id"]) ?? $submenu["name"]) .
+                              '</span>');
+          }else {
+            $form->customHTML('<span
+                                title="' .
+                                Language::string( 'subpage', array(
+                                  '%submenu%' => $submenu["id"],
+                                  '%submenuname%' => (Language::string( $submenu["id"] , null, 'menu') ?? $submenu["name"]),
+                                  '%mainmenu%' => $menu["id"],
+                                ), 'menu') . '">' .
+                                  (Language::string( $submenu["id"], null, 'menu' ) ?? $submenu["name"]) .
+                                '</span>');
+          }
+
+          $form->addElement(
+            array(
+              'type' => 'checkbox',
+              'name' => $submenu["id"] . '[]',
+              'value' => 'w',
+              'checked' => false,
+              'classes' => 'user-rights-checkbox',
+              'disabled' => ! User::w_access_allowed( $page, $current_user ),
+              'additional_div' => 'title="' . Language::string(18) . '"',
+            )
+          );
+
+          $form->addElement(
+            array(
+              'type' => 'checkbox',
+              'name' => $submenu["id"] . '[]',
+              'value' => 'r',
+              'checked' => false,
+              'classes' => 'user-rights-checkbox',
+              'disabled' => ! User::w_access_allowed( $page, $current_user ),
+              'additional_div' => 'title="' . Language::string(19) . '"',
+            )
+          );
+
+        $form->customHTML('</div>');
       }
     }
 
-    //Display mail button
-    echo '<label class="checkbox"><input type="checkbox" name="sendMail" value="true" checked/><div class="checkbox-btn" title="Mail an neuen Benutzer senden."></div> Zugangsdaten an Benutzer senden.</label>';
+    $form->addElement(
+      array(
+        'type' => 'checkbox',
+        'name' => 'sendMail',
+        'value' => 'true',
+        'checked' => true,
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        'additional_div' => 'title="' . Language::string(21) . '"',
+        'context' => Language::string(20),
+      )
+    );
 
-    //Confirm form
-    echo '<input type="submit" name="add" value="Hinzufügen" title="Benutzer hinzufügen"/>';
+    $form->addElement(
+      array(
+        'type' => 'button',
+        'name' => 'update',
+        'value' => Language::string(22),
+        'disabled' => ! User::w_access_allowed( $page, $current_user ),
+        'additional' => 'title="' . Language::string(23) . '"'
+      )
+    );
 
-    echo '</form>';
+    $form->prompt();
   break;
   case "view":
     //Create new user
@@ -372,13 +480,13 @@ switch(key($action)) {
     //Update user
     if( isset( $_POST["update"])) {
       if( User::w_access_allowed($page, $current_user)) {
-        if($user->updateRights( $_POST ) && $user->updateInfos($_POST["name"], $_POST["mail"], null)) {
-          Action::success("Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.");
+        if($user->updateRights( $_POST ) && $user->updateInfos($_POST["name"], $_POST["mail"], $_POST["language"])) {
+          Action::success( Language::string(50) );
         }else{
-          Action::fail("Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden");
+          Action::fail( Language::string(51) );
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(52) );
       }
     }
 
@@ -387,9 +495,43 @@ switch(key($action)) {
   break;
   case "remove":
     //display remove form
-    Action::confirm('Möchten Sie den Benutzer ' . User::name($_GET["remove"]) . ' (' . $_GET["remove"] . ') unwiederruflich entfernen?', $_GET["remove"]);
+    Action::confirm( Language::string( 60,
+        array(
+          '%username%' => User::name($_GET["remove"]),
+          '%user%' => $_GET["remove"],
+        ),
+      ),
+    );
   break;
   default:
+    //Remove user finaly
+    if( isset($_POST["confirm"])) {
+      //Create new user
+      $user = new User();
+      $user->user = $_POST["confirm"];
+
+      if( User::w_access_allowed($page, $current_user)) {
+        if( $user->remove()) {
+          Action::success( Language::string( 61,
+              array (
+                '%user%' => $_POST["confirm"],
+              ),
+            ),
+          );
+        }else {
+          Action::fail('Der Benutzer (' . $_POST["confirm"] . ') konnte nicht entfernt werden . ');
+          Action::success( Language::string( 62,
+              array (
+                '%user%' => $_POST["confirm"],
+              ),
+            ),
+          );
+        }
+      }else {
+        Action::fail( Language::string( 63 ) );
+      }
+    }
+
     //Display result
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
     display_users( $search_value );
@@ -402,6 +544,4 @@ switch(key($action)) {
       </a>';
     }
 }
-
-
  ?>

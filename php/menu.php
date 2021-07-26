@@ -133,7 +133,7 @@ class Menu {
       $nav .= '</div>'; //Close submenu container
 
       //Logout
-      $nav .= '<a href="' . $url . 'auth.php?logout" title="Abmelden" class="logout">';
+      $nav .= '<a href="' . $url . 'auth.php?logout" title="' . Language::string('logout', null, 'menu')  . '" class="logout">';
         $nav .= '<img src="' . $url . 'medias/icons/logout.svg" />';
       $nav .= '</a>';
 
