@@ -46,6 +46,11 @@
   --transaction-payment-expected: #45528e;
   --transaction-no-pickUp: #f3d12d;
 
+  /* Product availability */
+  --product-available: #2b4476;
+  --product-less-available: #7c2b51;
+  --product-sold: #e10c23;
+
   /* Restore */
   --restore-old: #cd0717;
   --restore-old-light: #f5cdd1;

@@ -569,7 +569,7 @@ class HTML {
      * @string classes
      * @string additional
      */
-    $columns = (substr_count( $this->substance, "th") / 2);
+    $columns = (substr_count( $this->substance, "<th"));
 
     $this->substance .= '<tr
                             class="nav ' . ($values["classes"]  ?? '') . '" ' .
@@ -671,7 +671,7 @@ class HTML {
 
         foreach( $values["dropdown"] as $dropdown) {
           $this->substance .= '<div
-                                class="right-sub-menu-item' . ($dropdown["classes"] ?? '') . '"' .
+                                class="right-sub-menu-item ' . ($dropdown["classes"] ?? '') . '"' .
                                 ($dropdown["additional"] ?? '') . '>';
             $this->substance .= $dropdown["context"];
           $this->substance .= '</div>';

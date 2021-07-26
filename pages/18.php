@@ -662,7 +662,6 @@ function single_product ( $product_id ) {
     ),
   );
 
-
   $form->addElement(
     array(
       'type' => 'number',

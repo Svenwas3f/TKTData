@@ -65,6 +65,89 @@ $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
 
 /**
+ * Page 17
+ */
+// Default
+$string[17][0] = 'Unfortunately, online payments are not entirely free, which is why <strong>%fee_absolute%%currency%</strong> and <strong>%fee_percent%% </strong> must be given away from the sales price.'; // Fees info
+$string[17][1] = 'PRODUCTS'; // Top nav item
+$string[17][2] = 'View products'; // Top nav item title
+$string[17][3] = 'SETTINGS'; // Top nav item
+$string[17][4] = 'Carry pubsettings'; // Top nav item title
+
+$string[17][5] = 'PDF'; // Right menu alt
+$string[17][6] = 'View the menu as a PDF'; // Right menu title
+$string[17][7] = 'Visibility'; // Right menu alt
+$string[17][8] = 'Enabled/Disable Tip';
+
+$string[17][9] = 'Details'; // Form header
+$string[17][10] = 'Description'; // Input name
+$string[17][11] = 'Images'; // Form header
+$string[17][12] = 'Logo'; // Input name
+$string[17][13] = 'Click to select'; // Select info
+$string[17][14] = 'Background image'; // Input name
+$string[17][15] = 'Click to select'; // Select info
+$string[17][16] = 'Update'; // Update
+
+$string[17][17] = 'Productname, Price'; // Search form placeholder
+$string[17][18] = 'Available'; // Availability types
+$string[17][19] = 'Little available'; // Availability types
+$string[17][20] = 'Sold out'; // Availability types
+
+$string[17][21] = 'Name'; // headlines
+$string[17][22] = 'Price'; // headlines
+$string[17][23] = 'Activity'; // headlines
+$string[17][24] = 'View productdetails'; // Top nav title
+$string[17][25] = 'Remove product'; // Top nav title
+$string[17][26] = 'A global product cannot be edited here'; // Product list info
+$string[17][27] = 'This product does not appear in the menu'; // Product list info
+$string[17][28] = 'Last'; // Table navigation
+$string[17][29] = 'Next'; // Table navigation
+
+// view
+$string[17][30] = 'Visibility'; // Right menu alt
+$string[17][31] = 'Change visibility'; // Right menu title
+$string[17][32] = 'state'; //Right menu  alt
+$string[17][33] = 'Determine product status '; //Right menu title
+$string[17][34] = 'RMF'; // Remove alt
+$string[17][35] = 'Remove product'; // Title action remove
+$string[17][36] = 'Edit product'; // Title action edit
+$string[17][37] = 'View Product'; // Title action view
+
+$string[17][38] = 'Productname'; // Input name
+$string[17][39] = 'Choose group'; // Input name
+$string[17][40] = 'GO'; // Input name
+$string[17][41] = 'Price'; // Input name
+$string[17][42] = 'Product image'; // Input name
+$string[17][43] = 'Click to select'; // Image headline
+$string[17][44] = 'Update';
+$string[17][45] = '&#9888; This is a global product and can only be edited by the administrator.'; // Global message info
+$string[17][46] = 'Return to the previous page '; // Return button
+$string[17][47] = 'You do not have access to the product (#%product%) %name%';
+
+// Add
+$string[17][48] = 'Add product'; // Input name
+$string[17][49] = 'Create'; // Input name
+
+// Remove
+$string[17][50] = 'Do you really want to delete the product <strong>%name% (#%product%)</strong>?'; // Message
+
+// Actions
+$string[17][60] = 'You have no access to the pub (#%pub%) <strong>%name% </strong>'; // No access to pub message
+$string[17][61] = 'Back'; // No access to pub, return button
+$string[17][62] = 'The product could be <strong> successfully </strong>created.<strong> <a href="%url_page%&pub=%pub%&view_product=%product%" class="redirect">Manage product</a></strong>'; // Successfully added product
+$string[17][63] = 'Unfortunately the product <strong>could not</strong> be created.'; // Error while adding product
+$string[17][64] = 'You have <strong>no authorization</strong> to perform this action.'; // No access
+$string[17][65] = 'The product <strong>%name% (#%product%) </strong>has been <strong> successfully</strong> revised.'; // Update of product successfull
+$string[17][66] = 'The product <strong>%name% (#%product%)</strong> could <strong>not</strong> be revised.'; // Update of product failed
+$string[17][67] = 'You have <strong> no authorization </strong> to perform this action '; // No access
+$string[17][68] = 'The product <strong>%name% (#%product%)</strong> was <strong>successfully</strong> deleted.'; // Removed product successful
+$string[17][69] = 'The product <strong>%name% (#%product%)</strong> could <strong>not</strong> be deleted.'; // Removed product failed
+$string[17][70] = 'You have <strong>no authorization</strong> to perform this action.'; // No access
+$string[17][71] = 'The pub <strong>%name% (#%pub%)</strong> has been <strong>successfully</strong> redesigned.';
+$string[17][72] = 'The pub <strong>%name% (#%pub%)</strong> could <strong>not</strong> be redesigned.';
+$string[17][73] = 'You have <strong>no authorization</strong> to perform this action.';
+
+/**
  * Page 18
  */
 // List pubs

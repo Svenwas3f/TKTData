@@ -68,6 +68,96 @@ $string["mediahub"][14] = '(Fehler beim hochladen)';
 /**
  * Page 17
  */
+// Default
+$string[17][0] = 'Onlinezahlungen sind leider nicht ganz gratis, weshalb vom Verkauspreis jeweils <strong>%fee_absolute% %currency%</strong> und <strong>%fee_percent%%</strong> abgegeben werden muss.'; // Fees info
+$string[17][1] = 'PRODUKTE'; // Top nav item
+$string[17][2] = 'Produkte ansehen'; // Top nav item title
+$string[17][3] = 'EINSTELLUNGEN'; // Top nav item
+$string[17][4] = 'Wirtschaftseinstellungen vornehmen'; // Top nav item title
+
+$string[17][5] = 'PDF'; // Right menu alt
+$string[17][6] = 'Speise und Getränkekarte als PDF ansehen'; // Right menu title
+$string[17][7] = 'Visibility'; // Right menu alt
+$string[17][8] = 'Trinkgeld anzeigen/verbergen';
+
+$string[17][9] = 'Details'; // Form header
+$string[17][10] = 'Beschreibung'; // Input name
+$string[17][11] = 'Bilder'; // Form header
+$string[17][12] = 'Logo'; // Input name
+$string[17][13] = 'Klicken um auszuwählen'; // Select info
+$string[17][14] = 'Hintergrundbild'; // Input name
+$string[17][15] = 'Klicken um auszuwählen'; // Select info
+$string[17][16] = 'Update'; // Update
+
+$string[17][17] = 'Produktname, Preis'; // Search form placeholder
+$string[17][18] = 'Verfügbar'; // Availability types
+$string[17][19] = 'Wenige verfügbar'; // Availability types
+$string[17][20] = 'Ausverkauft'; // Availability types
+
+$string[17][21] = 'Name'; // headlines
+$string[17][22] = 'Preis'; // headlines
+$string[17][23] = 'Aktion'; // headlines
+$string[17][24] = 'Produktdetails anzeigen'; // Top nav title
+$string[17][25] = 'Produkt entfernen'; // Top nav title
+$string[17][26] = 'Ein globales Produkt kann hier nicht bearbeitet werden'; // Product list info
+$string[17][27] = 'Dieses Produkt erscheint nicht in der Speise und Getränkekarte'; // Product list info
+$string[17][28] = 'Zurück'; // Table navigation
+$string[17][29] = 'Weiter'; // Table navigation
+
+// view
+$string[17][30] = 'Visibility'; // Right menu alt
+$string[17][31] = 'Sichtbarkeit wechseln'; // Right menu title
+$string[17][32] = 'state'; //Right menu  alt
+$string[17][33] = 'Produktstatus bestimmen'; //Right menu title
+$string[17][34] = 'RMF'; // Remove alt
+$string[17][35] = 'Produkt entfernen'; // Title action remove
+$string[17][36] = 'Produkt bearbeiten'; // Title action edit
+$string[17][37] = 'Produkt ansehen'; // Title action view
+
+$string[17][38] = 'Produktname'; // Input name
+$string[17][39] = 'Gruppe wählen'; // Input name
+$string[17][40] = 'GO'; // Input name
+$string[17][41] = 'Preis'; // Input name
+$string[17][42] = 'Produktbild'; // Input name
+$string[17][43] = 'Klicken um auszuwählen'; // Image headline
+$string[17][44] = 'Update';
+$string[17][45] = '&#9888; Dies ist ein globales Produkt und kann nur vom Administrator bearbeitet werden.'; // Global message info
+$string[17][46] = 'Zur vorherigen Seite zurück'; // Return button
+$string[17][47] = 'Du hast keinen Zugriff auf das Produkt (#%product%) %name%';
+
+// Add
+$string[17][48] = 'Produkt hinzufügen'; // Input name
+$string[17][49] = 'Erstellen'; // Input name
+
+// Remove
+$string[17][50] = 'Möchtest du das Produkt <strong>%name% (#%product%)</strong>  wirklich löschen?'; // Message
+
+// Actions
+$string[17][60] = 'Du hast keinen Zugriff auf die Wirtschaft (#%pub%) <strong>%name%</strong>'; // No access to pub message
+$string[17][61] = 'Zurück'; // No access to pub, return button
+$string[17][62] = 'Das Produkt konnte <strong>erfolgreich</strong> erstellt werden.<strong><a href="%url_page%&pub=%pub%&view_product=%product%" class="redirect">Produkt verwalten</a></strong>'; // Successfully added product
+$string[17][63] = 'Leider konnte das Produkt <strong>nicht</strong> erstellt werden.'; // Error while adding product
+$string[17][64] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+$string[17][65] = 'Das Produkt <strong>%name% (#%product%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.'; // Update of product successfull
+$string[17][66] = '"Das Produkt <strong>%name% (#%product%)</strong> konnte <strong>nicht</strong> überarbeitet werden."'; // Update of product failed
+$string[17][67] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+$string[17][68] = 'Das Produkt <strong>%name% (#%product%)</strong> wurde <strong>erfolgreich</strong> gelöscht.'; // Removed product successful
+$string[17][69] = '"Das Produkt <strong>%name% (#%product%)</strong> konnte <strong>nicht</strong> gelöscht werden."'; // Removed product failed
+$string[17][70] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+$string[17][71] = 'Die Wirtschaft <strong>%name% (#%pub%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.';
+$string[17][72] = 'Die Wirtschaft <strong>"%name% (#%pub%)</strong> konnte <strong>nicht</strong> überarbeitet werden.';
+$string[17][73] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
+
+// $string[17][40] = '';
+// $string[17][41] = '';
+// $string[17][42] = '';
+// $string[17][43] = '';
+// $string[17][44] = '';
+// $string[17][45] = '';
+// $string[17][46] = '';
+// $string[17][47] = '';
+// $string[17][48] = '';
+// $string[17][49] = '';
 
 
 /**
@@ -79,7 +169,7 @@ $string[18][1] = 'Name'; // Headlines
 $string[18][2] = 'Aktion'; // Headlines
 $string[18][3] = 'Wirtschaftdetails anzeigen'; // Action title
 $string[18][4] = 'Wirtschaft entfernen'; // Action title
-$string[18][5] = 'Letzte'; // Table navigation
+$string[18][5] = 'Zurück'; // Table navigation
 $string[18][6] = 'Weiter'; // Table navigation
 
 // List products
@@ -89,7 +179,7 @@ $string[18][12] = 'Preis'; // Headlines
 $string[18][13] = 'Aktion'; // Headlines
 $string[18][14] = 'Produktdetails anzeigen'; // Action title
 $string[18][15] = 'Produkt entfernen'; // Action title
-$string[18][16] = 'Letzte'; // Table navigation
+$string[18][16] = 'Zurück'; // Table navigation
 $string[18][17] = 'Weiter'; // Table navigation
 
 // Single pub
@@ -181,7 +271,7 @@ $string[19][0] = 'Benutzername, Vorname, Nachname, Ticketinfo'; // Search form p
 $string[19][1] = 'Benutzername'; // Headlines
 $string[19][2] = 'E-Mail'; // Headlines
 $string[19][3] = 'Aktion'; // Headlines
-$string[19][4] = 'Letzte'; // Table navigation
+$string[19][4] = 'Zurück'; // Table navigation
 $string[19][5] = 'Weiter'; // Table navigation
 
 // Sinlgle view
@@ -229,7 +319,7 @@ $string[20][2] = 'Tätigkeit'; // Headlines
 $string[20][3] = 'Datum'; // Headlines
 $string[20][4] = 'Wiederherstellungsdetails'; // Headlines
 $string[20][5] = 'Revisionsdetails #%id%'; // Action title
-$string[20][6] = 'Letzte'; // Table navigation
+$string[20][6] = 'Zurück'; // Table navigation
 $string[20][7] = 'Weiter'; // Table navigation
 $string[20][8] = 'Vorherige Version';  // Action response
 $string[20][9] = 'Geänderte Version'; // Single action view
