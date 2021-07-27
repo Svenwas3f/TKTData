@@ -204,11 +204,28 @@ class product {
     $add_query .= "(" . implode(", ", array_keys($checked_values)) . ") ";
     $add_query .= "VALUES ('" . implode("', '", $checked_values) . "')";
 
+    // Generate message
+    if( is_null($checked_values["pub_id"]) ) {
+      $message = array(
+        "id" => 120,
+        "replacements" => array(
+          "%name%" => ($checked_values["name"] ?? "unknown"),
+        ),
+      );
+    }else {
+      $message = array(
+        "id" => 121,
+        "replacements" => array(
+          "%name%" => ($checked_values["name"] ?? "unknown"),
+          "%pub%" => $checked_values["pub_id"],
+        ),
+      );
+    }
+
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ?
-       "" : ("for pub #" . $checked_values["pub_id"])),
+      "message" => json_encode($message),
       "table" => "PUB_PRODUCTS",
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "pub_id", "value" => ""),
@@ -269,7 +286,13 @@ class product {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated product #" . $this->product_id . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 122,
+        "replacements" => array(
+          "%id%" => $this->product_id,
+          "%name%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
@@ -301,7 +324,13 @@ class product {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed product #" . $this->product_id . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 123,
+        "replacements" => array(
+          "%id%" => $this->product_id,
+          "%name%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB_PRODUCTS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "id", "value" => $this->product_id),
@@ -497,7 +526,14 @@ class product {
       //Create modification
       $change = array(
         "user" => $current_user,
-        "message" => "Exposed product #" . $this->product_id . " (" . $this->values()["name"] . ")",
+        "message" => json_encode(array(
+          "id" => 124,
+          "replacements" => array(
+            "%id%" => $this->product_id,
+            "%name%" => $this->values()["name"],
+            "%pub%" => $this->pub,
+          ),
+        ),),
         "table" => "PUB_PRODUCTS_META",
         "function" => "UPDATE",
         "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
@@ -518,7 +554,14 @@ class product {
       //Create modification
       $change = array(
         "user" => $current_user,
-        "message" => "Hid product #" . $this->product_id . " (" . $this->values()["name"] . ")",
+        "message" => json_encode(array(
+          "id" => 125,
+          "replacements" => array(
+            "%id%" => $this->product_id,
+            "%name%" => $this->values()["name"],
+            "%pub%" => $this->pub,
+          ),
+        ),),
         "table" => "PUB_PRODUCTS_META",
         "function" => "UPDATE",
         "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),
@@ -553,7 +596,13 @@ class product {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Changed availability of product #" . $this->product_id . " (" . $this->values()["name"] . ")",
+      "message" => json_encode(array(
+        "id" => 126,
+        "replacements" => array(
+          "%id%" => $this->product_id,
+          "%name%" => $this->values()["name"],
+        ),
+      ),),
       "table" => "PUB_PRODUCTS_META",
       "function" => "UPDATE",
       "primary_key" => array("key1" => "pub_id", "value1" => $this->pub, "key2" => "product_id", "value2" => $this->product_id),

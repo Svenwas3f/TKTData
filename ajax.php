@@ -556,14 +556,12 @@ switch($_POST["p"]) {
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights2.svg",
-              // "title_w" => $values["user"] . " hat Schreibrechte auf diese Kasse",
               "title_w" => Language::string( 48, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              // "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
               "title_r" => Language::string( 50, array(
                 '%user%' => $values["user"],
               ), 18 ),
@@ -572,14 +570,12 @@ switch($_POST["p"]) {
           }else {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              // "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
               "title_w" => Language::string( 49, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              // "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
               "title_r" => Language::string( 50, array(
                 '%user%' => $values["user"],
               ), 18 ),
@@ -629,14 +625,12 @@ switch($_POST["p"]) {
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              // "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
               "title_w" => Language::string( 49, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              // "title_r" => $values["user"] . " hat Leserechte auf diese Kasse",
               "title_r" => Language::string( 50, array(
                 '%user%' => $values["user"],
               ), 18 ),
@@ -645,14 +639,12 @@ switch($_POST["p"]) {
           }else {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              // "title_w" => $values["user"] . " hat keine Schreibrechte auf diese Kasse",
               "title_w" => Language::string( 49, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights1.svg",
-              // "title_r" => $values["user"] . " hat keine Leserechte auf diese Kasse",
               "title_r" => Language::string( 51, array(
                 '%user%' => $values["user"],
               ), 18 ),

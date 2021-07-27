@@ -337,22 +337,19 @@ $string[20][103] = 'Version %version% wiederhergestellt';
 
 $string[20][110] = 'Neue Wirtschaft hinzugefügt (%name%)';
 $string[20][111] = 'Neues globales Produkt (%name%) hinzugefügt';
-$string[20][112] = 'Neues Produkt (%name%) hinzugefügt für Wirschaft %pbu%';
+$string[20][112] = 'Neues Produkt (%name%) hinzugefügt für Wirschaft %pub%';
 $string[20][113] = 'Zugriff zur Wirtschaft #%pub% für den Benutzer (%user%) %name% hinzugefügt';
 $string[20][114] = 'Wirtschaft #%pub% (%name%) überarbeitet';
 $string[20][115] = 'Wirtschaft #%pub% (%name%) entfernt';
 $string[20][116] = 'Zugriff für den Benuter #%user% (%username%) für die Wirtschaft #%pub% (%pubname%) entfernt';
 
-$string[20][120] = '';
-$string[20][121] = '';
-$string[20][122] = '';
-$string[20][123] = '';
-$string[20][124] = '';
-$string[20][125] = '';
-$string[20][126] = '';
-$string[20][127] = '';
-$string[20][128] = '';
-$string[20][129] = '';
+$string[20][120] = 'Neues globales Produkt (%name%) hinzugefügt';
+$string[20][121] = 'Neues Produkt (%name%) hinzugefügt für Wirtschaft #%pub%';
+$string[20][122] = 'Produkt #%id% (%name%) überarbeitet';
+$string[20][123] = 'Produkt #%id% (%name%) entfernt';
+$string[20][124] = 'Produkt #%id% (%name%) ins Menu (#%pub%) aufgenommen';
+$string[20][125] = 'Produkt #%id% (%name%) aus dem Menu (#%pub%) entfernt';
+$string[20][126] = 'Verfügbarkeit von Produkt #%id% (%name%) angepasst';
 
 
 /**

@@ -59,6 +59,8 @@ function display_actions( $search_value = null ){
                       title="' .  Language::string(5, array('%id%' => $action["id"])) . '">
                         <img src="' . $url . '/medias/icons/restore.svg" />
                       </a>';
+      }else {
+        $actions = '';
       }
     }
 

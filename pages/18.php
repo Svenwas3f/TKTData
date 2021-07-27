@@ -1186,7 +1186,7 @@ switch(key($action)) {
         if( $pub->remove() ) {
           Action::success( Language::string( 96,
             array(
-              '%name%' => $pub_values["name"],
+              '%name%' => $pub_values["name"] ?? '',
               '%id%' => $_POST["confirm"],
             ),
           ));

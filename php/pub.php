@@ -121,12 +121,6 @@ class Pub {
     $add_query .= "VALUES ('" . implode("', '", $checked_values) . "')";
 
     // Restore message
-    // $restore_message = array(
-    //   "pub" => "Added new pub (" . ($checked_values["name"] ?? '') . ")",
-    //   "product" => "Added new" . (is_null($checked_values["pub_id"] ?? null) ? " global" : " ") .  " product (" . ($checked_values["name"] ?? "unknown") . ") " . (is_null($checked_values["pub_id"] ?? null) ? "" : ("for pub #" . $checked_values["pub_id"])),
-    //   "access" => "Added access to pub #" . ($checked_values["pub_id"] ?? "unknown") . " for User (" . $current_user . ") " . User::name( $current_user ),
-    // );
-
     $restore_message = array(
       "pub" => array(
         "id" => 110,
@@ -220,7 +214,6 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      // "message" => "Updated pub #" . $this->pub . " (" . $this->values()["name"] . ")",
       "message" => json_encode(array(
         "id" => 114,
         "replacements" => array(
@@ -258,7 +251,6 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      // "message" => "Removed pub #" . $this->pub . " (" . $this->values()["name"] . ")",
       "message" => json_encode(array(
         "id" => 115,
         "replacements" => array(
@@ -275,11 +267,39 @@ class Pub {
 
     User::modifie($change);
 
+    // Remove user access
+    function remove_full_access( $pub_id, $offset = 0, $steps = 20 ) {
+      // Start pub
+      $pub = new Pub();
+      $pub->pub = $pub_id;
+
+      // Remove
+      foreach( $pub->access( null, $offset, $steps) as $user ) {
+        if(! $pub->remove_access( $user["user_id"] )) {
+          return false; // Access remove failed
+        }
+      }
+
+      // Check recursive
+      if( count($pub->access( null, ($offset + 1), $steps)) > 0) {
+        if(! remove_full_access( $class, $offset + $steps )) {
+          return false; // Access remove failed
+        }
+      }
+
+      // Access remove successfull
+      return true;
+    }
+
     // Remove
     $remove = $conn->prepare("DELETE FROM " . PUB . " WHERE pub_id=:pub_id");
-    return $remove->execute(array(
+    if($remove->execute(array(
       ":pub_id" => $this->pub,
-    ));
+    ))) {
+      return remove_full_access( $this->pub ); // Remove user access
+    }else {
+      return false; // Failed to remove pub
+    }
   }
 
   /**
@@ -306,14 +326,13 @@ class Pub {
     //Modifie
     $change = array(
       "user" => $current_user,
-      // "message" => "Removed access for User #" . $user . " (" . User::name( $user ) . ") on pub #" . $this->pub . " (" . $this->values()["name"] . ")",
       "message" => json_encode(array(
         "id" => 116,
         "replacements" => array(
           "%user%" => $user,
           "%username%" => User::name( $user ),
           "%pub%" => $this->pub,
-          "%pubname%" => $this->values()["name"],
+          "%pubname%" => $this->values()["name"] ?? '',
         ),
       ),),
       "table" => "PUB_ACCESS",
@@ -347,9 +366,9 @@ class Pub {
 
     if( is_null($user) ) {
       // Get all users that have access to this pub
-      $users = $conn->prepare("SELECT * FROM " . PUB_ACCESS . " WHERE user_id=:user_id LIMIT " . $steps . " OFFSET " . $offset);
+      $users = $conn->prepare("SELECT * FROM " . PUB_ACCESS . " WHERE pub_id=:pub_id LIMIT " . $steps . " OFFSET " . $offset);
       $users->execute(array(
-        ":user_id" => $user,
+        ":pub_id" => $this->pub,
       ));
 
       return $users->fetchAll( PDO::FETCH_ASSOC );

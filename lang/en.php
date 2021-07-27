@@ -68,7 +68,7 @@ $string["mediahub"][14] = '(Error while uploading)';
  * Page 17
  */
 // Default
-$string[17][0] = 'Unfortunately, online payments are not entirely free, which is why <strong>%fee_absolute%%currency%</strong> and <strong>%fee_percent%% </strong> must be given away from the sales price.'; // Fees info
+$string[17][0] = 'Unfortunately, online payments are not entirely free, which is why <strong>%fee_absolute% %currency%</strong> and <strong>%fee_percent%%</strong> must be given away from the sales price.'; // Fees info
 $string[17][1] = 'PRODUCTS'; // Top nav item
 $string[17][2] = 'View products'; // Top nav item title
 $string[17][3] = 'SETTINGS'; // Top nav item
