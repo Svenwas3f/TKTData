@@ -19,7 +19,7 @@ $groupValues = $group->values();
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TICKET - <?php echo $group->values()["name"]; ?></title>
+    <title><?php echo Language::string( 0, null, "pdf" ); ?> - <?php echo $group->values()["name"]; ?></title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="../fonts/fonts.css" />
   </head>
@@ -90,7 +90,7 @@ $groupValues = $group->values();
 
     <footer>
       <div>
-        Ticket provided by <span>TKTDATA</span>
+        <?php echo Language::string( 1, null, "pdf" ); ?>
       </div>
     </footer>
   </body>

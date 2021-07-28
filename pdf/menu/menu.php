@@ -21,7 +21,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>MENUKARTE - <?php echo $pub->values()["name"]; ?></title>
+    <title><?php echo Language::string( 2, null, "pdf"); ?> - <?php echo $pub->values()["name"]; ?></title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="../fonts/fonts.css" />
   </head>
@@ -31,7 +31,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
 
     <!-- Default footer text -->
     <footer>
-      Menulist provided by <span>TKTDATA</span>
+      <?php echo Language::string( 3, null, "pdf" ); ?>
     </footer>
 
     <!-- Content / Menu -->

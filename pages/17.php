@@ -309,6 +309,7 @@ echo '<div class="pub">';
             'name' => 'section',
             'value' => (isset($product->values()["section"]) ? $product->values()["section"] : ''),
             'options' => $options,
+            'headline' => (isset($product->values()["section"]) ? $product->values()["section"] : Language::string(39)),
             'custom_options' => '<span onclick="event.stopPropagation()" class="option_add" ><input type="text"/><span class="button" onclick="useNewOption( this.parentNode.children[0].value, this.parentNode.parentNode.parentNode )">' . Language::string(40) . '</span></span>',
             'disabled' => ! $write_access,
           ),
@@ -448,6 +449,7 @@ echo '<div class="pub">';
           array(
             'type' => 'select',
             'name' => 'section',
+            'headline' => (isset($product->values()["section"]) ? $product->values()["section"] : Language::string(39)),
             'value' => (isset($product->values()["section"]) ? $product->values()["section"] : ''),
             'options' => array(),
             'disabled' => true,

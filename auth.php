@@ -57,7 +57,7 @@ if((isset($_SESSION["login"]) && $_SESSION["login"]) && (isset($_SESSION["user"]
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - TICKETVERWALTUNG</title>
+    <title><?php echo Language::string( 0, null, "general" ); ?></title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,8 +68,8 @@ if((isset($_SESSION["login"]) && $_SESSION["login"]) && (isset($_SESSION["user"]
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="KDATA. Eine Verwaltungssoftware für die Kantonsschule Solothurn">
-    <meta name="keywords" content="KDATA">
+    <meta name="description" content="<?php echo Language::string( 1, null, "general" ); ?>">
+    <meta name="keywords" content="<?php echo Language::string( 2, null, "general" ); ?>">
 
     <meta name="content-language" content="de">
     <meta name="robots" content="noindex">
@@ -92,23 +92,47 @@ if((isset($_SESSION["login"]) && $_SESSION["login"]) && (isset($_SESSION["user"]
   <body class="auth-background">
 
     <div class="auth-form">
-      <form action="<?php echo (!empty($_GET["rdrp"])) ? $url . "auth.php?rdrp=" . urlencode($_GET["rdrp"]) : $url . "auth.php"; ?>" method="post">
-        <a href="<?php $url; ?>"><img src="<?php echo $url; ?>medias/logo/logo-fitted.png"></a>
-        <!-- User -->
-        <label class="txt-input">
-          <input type="text" name="id" required/>
-          <span class="placeholder">Benutzername</span>
-        </label>
-        <!-- Password -->
-        <label class="txt-input">
-          <input type="password" name="password" required/>
-          <span class="placeholder">Passwort</span>
-        </label>
 
-        <input type="submit" name="login" value="LOGIN" title="Einloggen"/>
+      <?php
+      $form = new HTML('form', array(
+        'action' => (!empty($_GET["rdrp"])) ? $url . "auth.php?rdrp=" . urlencode($_GET["rdrp"]) : $url . "auth.php",
+        'method' => 'post',
+      ),);
 
-        <a class="reset-link" href="<?php echo $url; ?>reset.php" title="Passwort zurücksetzen">Passwort vergessen</a>
-      </form>
+      $form->customHTML('<a href="' . $url . '"><img src="' . $url . 'medias/logo/logo-fitted.png"></a>');
+
+      $form->addElement(
+        array(
+          'type' => 'text',
+          'name' => 'id',
+          'placeholder' => Language::string( 0, null, "auth" ),
+          'required' => true,
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'password',
+          'name' => 'password',
+          'placeholder' => Language::string( 1, null, "auth" ),
+          'required' => true,
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'button',
+          'name' => 'login',
+          'value' => Language::string( 2, null, "auth" ),
+          'additional' => 'title="' . Language::string( 3, null, "auth" ) . '"',
+        ),
+      );
+
+      $form->customHTML('<a class="reset-link" href="' . $url . 'reset.php" title="' . Language::string( 5, null, "auth" ) . '">' . Language::string( 4, null, "auth" ) . '</a>');
+
+      $form->prompt();
+      ?>
+
     </div>
 
       <?php

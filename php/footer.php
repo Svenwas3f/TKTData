@@ -1,5 +1,5 @@
 <?php
 function footer(){
-  echo '<footer>&copy; '.date("Y").' by <span>TKTDATA</span> & Sven Waser</footer>';
+  echo '<footer>' . Language::string( 0, null, "footer" ) . '</footer>';
 }
  ?>

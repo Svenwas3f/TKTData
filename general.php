@@ -7,80 +7,85 @@
 // @Purpose: This file is used to configure this system at your choice. Please do not make any changes in this file, while you use it in production
 ///////////////////////////////////////////
 
-//Define system info
+// Define system info
 define("SYSTEM_VERSION", "1.0.0");
 
-//Define system version name
+// Define system version name
 define("SYSTEM_NAME", "Gauli");
 
-//Set default time zone
-//https://www.php.net/manual/en/timezones.php (unfinished list)
-//https://en.wikipedia.org/wiki/List_of_tz_database_time_zones (Full detailed list)
+// Set default time zone
+// https://www.php.net/manual/en/timezones.php (unfinished list)
+// https://en.wikipedia.org/wiki/List_of_tz_database_time_zones (Full detailed list)
 define("SYSTEM_TIMEZONE", "Europe/Zurich");
 
-//Set default email where mails will be sent from
-//Ex: no-reply@company.com
+// Set default email where mails will be sent from
+// Ex: no-reply@company.com
 define("EMAIL", "no-reply@tktdata.ch");
 
-//Define path to ini file
-//This file contains database access informations
-//Please use an absolute path that full system will work
-//Ex. https://coderwall.com/p/91nk1a/php-database-connection-with-file-ini
+// Define path to ini file
+// This file contains database access informations
+// Please use an absolute path that full system will work
+// Ex. https://coderwall.com/p/91nk1a/php-database-connection-with-file-ini
 define("PATH_TO_INI", "C:/xampp/htdocs/www.tktdata.ch/logindata.ini");
 
-//Define string as salt key
-//Do not change this value after your system is working!! This string will disable your selled tickets, yoru login informations and secret keys.
-//Warning: Do not use any unicode chars like äöü. They are not supported.
-//https://www.random.org/strings/?num=1&len=12&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new (Generator)
+// Define default language
+// Use one of the language code that is listed in the lang/ folder. The language code
+// follows official ISO language code http://www.loc.gov/standards/iso639-2/php/code_list.php
+define("DEFAULT_LANGUAGE", "de");
+
+// Define string as salt key
+// Do not change this value after your system is working!! This string will disable your selled tickets, yoru login informations and secret keys.
+// Warning: Do not use any unicode chars like äöü. They are not supported.
+// https://www.random.org/strings/?num=1&len=12&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new (Generator)
 define("SALT_STRING", "YJqOQZ29VqqE");
 
-//Set default currency
-//Please use the ISO Code
-//https://en.wikipedia.org/wiki/List_of_circulating_currencies
+// Set default currency
+// Please use the ISO Code
+// https://en.wikipedia.org/wiki/List_of_circulating_currencies
 define("DEFAULT_CURRENCY", "CHF");
 
-//Define path to simple saml config file
+// Define path to simple saml config file
 // Set value to null if you do not use SimpleSAMLphp otherwise enter a String with the path to the simpleSAMLphp autoload file (../../lib/_autoload.php)
-//SimpleSAMLphp Webpage https://simplesamlphp.org/
+// SimpleSAMLphp Webpage https://simplesamlphp.org/
 define("SIMPLE_SAML_CONFIG", null);
 
-//define restore availability after deleting a ticketgroup
-//True: Restore images and database, images will not be deleted (Recomended in production)
-//False: Restore only database (Recomended while testing)
+// define restore availability after deleting a ticketgroup
+// True: Restore images and database, images will not be deleted (Recomended in production)
+// False: Restore only database (Recomended while testing)
 define("FULL_RESTORE", true);
 
 /////////////////////////////
 // Define db table names
 /////////////////////////////
-//Menu elements stored
+// Menu elements stored
 define('MENU', 'tktdata_menu');
-//Users who are able to access the system
+// Users who are able to access the system
 define('USERS', 'tktdata_user');
-//Rights for user to access menuelements
+// Rights for user to access menuelements
 define('USER_RIGHTS', 'tktdata_user_rights');
-//Changelog of all actions made by a user
+// Changelog of all actions made by a user
 define('USER_ACTIONS', 'tktdata_user_actions');
-//All tickets
+// All tickets
 define('TICKETS', 'tktdata_tickets');
-//Groups of tickets
+// Groups of tickets
 define('TICKETS_GROUPS', 'tktdata_tickets_groups');
-//Coupons for tickets
+// Coupons for tickets
 define('TICKETS_COUPONS', 'tktdata_tickets_coupons');
-//Livedata live
+// Livedata live
 define('LIVEDATA', 'tktdata_livedata_live');
-//Livdata Archiv
+// Livdata Archiv
 define('LIVEDATA_ARCHIVE', 'tktdata_livedata_archive');
-//Pub
+// Pub
 define('PUB', 'tktdata_pub');
-//Pub price list
+// Pub price list
 define('PUB_PRODUCTS', 'tktdata_pub_products');
-//Pub price meta
+// Pub price meta
 define('PUB_PRODUCTS_META', 'tktdata_pub_products_meta');
-//Pub access
+// Pub access
 define('PUB_ACCESS', 'tktdata_pub_access');
-//Pub transactions
+// Pub transactions
 define('PUB_TRANSACTIONS', 'tktdata_pub_transactions');
-//Media hub
+// Media hub
 define('MEDIA_HUB', 'tktdata_mediahub');
 
 /////////////////////////////
@@ -92,7 +97,7 @@ $url = $_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"] . "/www.tktdata.ch
 $url_page = $url . '?id=' . $mainPage . ((isset( $_GET["sub"] )) ? "&sub=" . $_GET["sub"] : ""); //Create url with parameters (first id then if required sub and after that add row-start)
 $current_user = (empty($_SESSION["user"])) ? null : $_SESSION["user"]; //Define current logged in user
 
-//Set default timezone
+// Set default timezone
 date_default_timezone_set(SYSTEM_TIMEZONE);
 
 /////////////////////////////

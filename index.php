@@ -38,7 +38,7 @@ if(! isset($_GET["id"])){
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - TICKETVERWALTUNG</title>
+    <title><?php echo Language::string( 0, null, "general" ); ?></title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,8 +49,8 @@ if(! isset($_GET["id"])){
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="TKTData. Eine simple und benutzerfreundliche Ticket-Verwaltungssoftware">
-    <meta name="keywords" content="TKTData">
+    <meta name="description" content="<?php echo Language::string( 1, null, "general" ); ?>">
+    <meta name="keywords" content="<?php echo Language::string( 2, null, "general" ); ?>">
 
     <meta name="content-language" content="de">
     <meta name="robots" content="noindex">
@@ -105,14 +105,14 @@ if(! isset($_GET["id"])){
       <div class="fullscreen center">
         <form>
           <img src="medias/logo/logo-fitted.png" />
-          <span>Bitte aktiviere JavaScript um diese Webseite zu nutzen</span>
+          <span><?php echo Language::string( 3, null, "general" ); ?></span>
         </form>
       </div>
     </noscript>
 
 
     <div class="loader">
-    	<span class="text">Building page...</span>
+    	<span class="text"><?php echo Language::string( 4, null, "general" ); ?></span>
     	<div class="letter">
     		<span class="base"></span>
     		<span class="top"></span>
@@ -168,7 +168,13 @@ if(! isset($_GET["id"])){
           if(file_exists( $plugin_file )) {
             require_once( $plugin_file );
           }else {
-            Action::fs_info('Die Seite <strong>#' . $page . "</strong> existiert nicht.", "Zurück", $url);
+            Action::fs_info(
+              Language::string( 5, array(
+                '%page%' => $page,
+              ), "general" ),
+              Language::string( 6, null, "general" ),
+              $url
+            );
           }
         }else {
           // Page is a default page
@@ -190,7 +196,14 @@ if(! isset($_GET["id"])){
           $main = Menu::main_id($sub);
 
           //Denied access and button to return to first available page
-          Action::fs_info('Zugriff auf die Seite <strong>#' . $page . "</strong> verweigert.", "Zurück", $url);
+          Action::fs_info(
+            Language::string( 7, array(
+              '%page%' => $page,
+            ), "general" ),
+            Language::string( 8, null, "general" ),
+            $url
+          );
+
           }else{
           //Redirect to error page
           header("location: ". $url ."/error?error=1");

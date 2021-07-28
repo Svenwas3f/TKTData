@@ -32,23 +32,27 @@ class ERR {
     switch ( $this->error ){
       case 1:
         return array(
-          "code" => "No access to system",
-          "message" =>  "Sie haben noch keine Berechtigungen um auf dieses System zuzugreifen. Bitte melden Sie sich bei dem Administrator")[$id];
+          "code" => Language::string( 0, null, "error" ),
+          "message" => Language::string( 1, null, "error" ),
+        )[$id];
       break;
       case 2:
         return array(
-          "code" => "invalid ticket accessed",
-          "message" =>  "Sie haben versucht ein ungültiges Ticket abzurufen")[$id];
+          "code" => Language::string( 2, null, "error" ),
+          "message" =>  Language::string( 3, null, "error" ),
+        )[$id];
       break;
       case "sql":
         return array(
-          "code" => "DB Connetion failed",
-          "message" => "Es konnte keine Verbindung zur Datenbank aufgebaut werden.")[$id];
+          "code" => Language::string( 4, null, "error" ),
+          "message" => Language::string( 5, null, "error" ),
+        )[$id];
       break;
       case "pub":
         return array(
-          "code" => "Keine Wirtschaft angegeben",
-          "message" => "Für die Getränke und Speisekarte benötigt es eine Wirtschaft.")[$id];
+          "code" => Language::string( 6, null, "error" ),
+          "message" => Language::string( 7, null, "error",
+        ))[$id];
       break;
       default:
         if(! empty(http_response_code())) {
@@ -56,17 +60,20 @@ class ERR {
             case 404:
             return array(
               "code" => "404",
-              "message" =>  "404 - Page not found")[$id];;
+              "message" =>  Language::string( 9, null, "error"),
+            )[$id];;
             break;
             default:
             return array(
               "code" => http_response_code(),
-              "message" =>  http_response_code() . " - Error during request")[$id];;
+              "message" =>  http_response_code() . " - " . Language::string( 9, null, "error"),
+            )[$id];;
           }
         }else{
           return array(
-            "code" => "Unknwon error",
-            "message" =>  "Unbekannter Fehler. Melden Sie sich bei wiederholtem Auftreten beim Administrator")[$id];
+            "code" => Language::string( 10, null, "error"),
+            "message" => Language::string( 11, null, "error"),
+          )[$id];
         }
     }
   }

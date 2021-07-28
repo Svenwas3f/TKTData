@@ -2,9 +2,18 @@
 //Start session
 session_start();
 
-//Require general file
-require_once(dirname(__FILE__, 2) .  "/general.php");
+//Require files
 require_once(dirname(__FILE__) . "/error.php"); //Error class
+require_once(dirname(__FILE__, 2) . "/general.php"); //Action
+
+// Get url
+$general_path = dirname(__FILE__, 2) . "/general.php" ;
+$general = fopen( $general_path, "r" );
+$general_content = fread( $general, filesize($general_path) );
+fclose( $general );
+
+// Extract $url
+preg_match('/(\$url)+(\s)*=(.)*(;){1}/', $general_content, $matches) ? eval($matches[0]) : '';
 
 //Create error
 $e = new ERR();
@@ -21,7 +30,7 @@ if( ($_GET["error"] ?? 0) == 1){
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - TICKETVERWALTUNG</title>
+    <title><?php echo Language::string( 0, null, "general" ); ?></title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,8 +41,8 @@ if( ($_GET["error"] ?? 0) == 1){
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="TKTData. Eine simple und benutzerfreundliche Ticket-Verwaltungssoftware">
-    <meta name="keywords" content="TKTData">
+    <meta name="description" content="<?php echo Language::string( 1, null, "general" ); ?>">
+    <meta name="keywords" content="<?php echo Language::string( 2, null, "general" ); ?>">
 
     <meta name="content-language" content="de">
     <meta name="robots" content="noindex">
@@ -73,14 +82,14 @@ if( ($_GET["error"] ?? 0) == 1){
         <div class="fullscreen center">
           <form>
             <img src="medias/logo/logo-fitted.png" />
-            <span>Bitte aktiviere JavaScript um diese Webseite zu nutzen</span>
+            <span><?php echo Language::string( 3, null, "general" ); ?></span>
           </form>
         </div>
       </noscript>
 
 
       <div class="loader">
-        <span class="text">Building page...</span>
+        <span class="text"><?php echo Language::string( 4, null, "general" ); ?></span>
         <div class="letter">
           <span class="base"></span>
           <span class="top"></span>

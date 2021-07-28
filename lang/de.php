@@ -18,6 +18,68 @@ $language_int = "German";
  */
 
 /**
+* General
+*/
+$string["general"][0] = 'TKTDATA - EVENTVERWALTUNG'; // Page title
+$string["general"][1] = 'TKTDATA - Ihr Eventverwaltungssystem gemacht mit liebe in der Schweiz.'; // Page description
+$string["general"][2] = 'TKTDATA, Ticketverwaltung, Eventverwaltung, Events'; // Keywords
+
+$string["general"][3] = 'Bitte aktiviere JavaScript um diese Webseite zu nutzen'; // JavaScript information
+$string["general"][4] = 'Lade Seite...'; // Building page...
+$string["general"][5] = 'Die Seite <strong>#%page%</strong> existiert nicht.'; // Fullscreen info (page does not exist)
+$string["general"][6] = 'Zurück'; // Fullscreen info (page does not exist)
+$string["general"][7] = 'Zugriff auf die Seite <strong>#%page%</strong> verweigert.'; // Fullscreen info (page access denied)
+$string["general"][8] = 'Zurück'; // Fullscreen info (page access denied)
+
+/**
+ * Footer
+ */
+$string["footer"][0] = '&copy; ' . date("Y") . ' bei <span>TKTDATA</span>';
+
+/**
+ * Errors
+ */
+$string["error"][0] = 'Kein Zugriff auf das System';
+$string["error"][1] = 'Sie haben noch keine Berechtigungen um auf dieses System zuzugreifen. Bitte melden Sie sich bei dem Administrator';
+$string["error"][2] = 'Zugriff auf ungültiges Ticket';
+$string["error"][3] = 'Sie haben versucht ein ungültiges Ticket abzurufen';
+$string["error"][4] = 'Datenbankverbindung fehlgeschlagen';
+$string["error"][5] = 'Es konnte keine Verbindung zur Datenbank aufgebaut werden.';
+$string["error"][6] = 'Keine Wirtschaft angegeben';
+$string["error"][7] = 'Für die Getränke und Speisekarte benötigt es eine Wirtschaft.';
+$string["error"][8] = '404 - Seite nicht gefunden';
+$string["error"][9] = 'Fehler während der Anfrage';
+$string["error"][10] = 'Unbekannter Fehler';
+$string["error"][11] = 'Unbekannter Fehler. Melden Sie sich bei wiederholtem Auftreten beim Administrator';
+
+/**
+* Login / Auth
+*/
+$string["auth"][0] = 'Benutzername'; // Input name
+$string["auth"][1] = 'Passwort'; // Input name
+$string["auth"][2] = 'LOGIN'; // Input name
+$string["auth"][3] = 'Anmelden'; // Input title
+$string["auth"][4] = 'Passwort vergessen'; // Link name
+$string["auth"][5] = 'Passwort zurücksetzen'; // Link title
+$string["auth"][6] = 'Benutzername / E-Mail'; // Input name
+$string["auth"][7] = 'Zurücksetzen'; // Input name
+$string["auth"][8] = 'Aktuelles Passwort zurücksetzen'; // Input title
+$string["auth"][9] = 'Zum Login'; // Link title
+$string["auth"][10] = 'Anmelden'; // Link name
+
+/**
+ * Actions
+ */
+
+/**
+ * PDF
+ */
+$string["pdf"][0] = 'TICKET'; // Ticket title
+$string["pdf"][1] = 'Ticket bereitgestellt von <span>TKTDATA</span>'; // Ticket footer
+$string["pdf"][2] = 'MENUKARTE'; // Menu title
+$string["pdf"][3] = 'Menüliste bereitgestellt von <span>TKTDATA</span> '; // Menu footer
+
+/**
  * Menu
  */
 $string["menu"][1] = 'Ticket';
@@ -46,6 +108,8 @@ $string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
 $string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] von Menu #%mainmenu%';
 $string["menu"]["logout"] = 'Abmelden';
 
+
+
 /**
  * ^Media hub
  */
@@ -64,6 +128,31 @@ $string["mediahub"][11] = 'Das überarbeiten des Alt-Text ist fehlgeschlagen';
 $string["mediahub"][12] = 'Sicher, dass Sie das Dokument löschen wollen?';
 $string["mediahub"][13] = 'Das entfernen des Dokuments ist fehlgeschlagen';
 $string["mediahub"][14] = '(Fehler beim hochladen)';
+
+/**
+ * Page 16
+ */
+ $string[16][0] = '';
+ $string[16][1] = '';
+ $string[16][2] = '';
+ $string[16][3] = '';
+ $string[16][4] = '';
+ $string[16][5] = '';
+ $string[16][6] = '';
+ $string[16][7] = '';
+ $string[16][8] = '';
+ $string[16][9] = '';
+
+ // $string[17][40] = '';
+ // $string[17][41] = '';
+ // $string[17][42] = '';
+ // $string[17][43] = '';
+ // $string[17][44] = '';
+ // $string[17][45] = '';
+ // $string[17][46] = '';
+ // $string[17][47] = '';
+ // $string[17][48] = '';
+ // $string[17][49] = '';
 
 /**
  * Page 17
@@ -147,18 +236,6 @@ $string[17][70] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion
 $string[17][71] = 'Die Wirtschaft <strong>%name% (#%pub%)</strong> wurde <strong>erfolgreich</strong> überarbeitet.';
 $string[17][72] = 'Die Wirtschaft <strong>%name% (#%pub%)</strong> konnte <strong>nicht</strong> überarbeitet werden.';
 $string[17][73] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
-
-// $string[17][40] = '';
-// $string[17][41] = '';
-// $string[17][42] = '';
-// $string[17][43] = '';
-// $string[17][44] = '';
-// $string[17][45] = '';
-// $string[17][46] = '';
-// $string[17][47] = '';
-// $string[17][48] = '';
-// $string[17][49] = '';
-
 
 /**
  * Page 18

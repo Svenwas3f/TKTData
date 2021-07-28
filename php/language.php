@@ -29,10 +29,16 @@ class Language {
     $user = $user ?? $current_user;
     $p = $p ?? $page;
 
-    // Check if page is plugin or not
-    $plugin = new Plugin();
+    // Check class
+    if(class_exists('Plugin')) {
+      // Check if page is plugin or not
+      $plugin = new Plugin();
+    }
 
-    if( $plugin->is_pluginpage( $p ) ) {
+    // Check if page is plugin or not
+    // $plugin = new Plugin();
+
+    if( isset($plugin) && $plugin->is_pluginpage( $p ) ) {
       // Generate path to language file
       $language_file_path = dirname(__FILE__, 2) . "/plugins/" . $plugin->get_page( intval( $p ) )["plugin"] . "/lang/" . Language::user_preference( $user ) . ".php";
 
@@ -95,7 +101,7 @@ class Language {
     $language->user = $user ?? $current_user;
 
     // Get user language selection
-    return $language->values()["language"];
+    return $language->values()["language"] ?? DEFAULT_LANGUAGE;
   }
 
   /**

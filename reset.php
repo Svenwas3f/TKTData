@@ -63,7 +63,7 @@ if(! empty($_POST)) {
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - TICKETVERWALTUNG</title>
+    <title><?php echo Language::string( 0, null, "general" ); ?></title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,13 +74,13 @@ if(! empty($_POST)) {
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="KDATA. Eine Verwaltungssoftware für die Kantonsschule Solothurn">
-    <meta name="keywords" content="KDATA">
+    <meta name="description" content="<?php echo Language::string( 1, null, "general" ); ?>">
+    <meta name="keywords" content="<?php echo Language::string( 2, null, "general" ); ?>">
 
     <meta name="content-language" content="de">
     <meta name="robots" content="noindex">
 
-    <meta name="theme-color" content="#1e6e6c">
+    <meta name="theme-color" content="#232b43">
 
 
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo $url; ?>medias/logo/favicon.ico">
@@ -88,7 +88,7 @@ if(! empty($_POST)) {
     <link rel="icon" type="image/png" href="<?php echo $url; ?>medias/logo/favicon.png" sizes="32x32">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $url; ?>medias/logo/logo-512.png">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?php echo $url; ?>medias/logo/logo-512.png">
-    <meta name="msapplication-TileColor" content="#34727a">
+    <meta name="msapplication-TileColor" content="#232b43">
     <meta name="msapplication-TileImage" content="<?php echo $url; ?>medias/logo/logo-512.png">
 
     <!-- Custom scripts -->
@@ -98,18 +98,38 @@ if(! empty($_POST)) {
   <body class="auth-background">
 
     <div class="auth-form">
-      <form action="<?php echo $url . "reset.php"; ?>" method="post">
-        <a href="<?php $url; ?>"><img src="<?php echo $url; ?>medias/logo/logo-fitted.png"></a>
-        <!-- User -->
-        <label class="txt-input">
-          <input type="text" name="id" required/>
-          <span class="placeholder">Benutzername / E-Mail</span>
-        </label>
 
-        <input type="submit" name="reset" value="Zurücksetzen" title="Aktuelles Passwort zurücksetzen"/>
+      <?php
+      $form = new HTML('form', array(
+        'action' => $url . "reset.php",
+        'method' => 'post',
+      ),);
 
-        <a class="reset-link" href="<?php echo $url; ?>auth.php" title="Zum Login">Anmelden</a>
-      </form>
+      $form->customHTML('<a href="' . $url . '"><img src="' . $url . 'medias/logo/logo-fitted.png"></a>');
+
+
+      $form->addElement(
+        array(
+          'type' => 'text',
+          'name' => 'id',
+          'placeholder' => Language::string( 6, null, "auth" ),
+          'required' => true,
+        ),
+      );
+
+      $form->addElement(
+        array(
+          'type' => 'button',
+          'name' => 'reset',
+          'value' => Language::string( 7, null, "auth" ),
+          'additional' => 'title="' . Language::string( 8, null, "auth" ) . '"',
+        ),
+      );
+
+      $form->customHTML('<a class="reset-link" href="' . $url . 'auth.php" title="' . Language::string( 9, null, "auth" ) . '">' . Language::string( 10, null, "auth" ) . '</a>');
+
+      $form->prompt();
+      ?>
     </div>
 
     <div class="auth-footer">

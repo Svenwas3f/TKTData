@@ -36,7 +36,8 @@ class Access {
 
       return $pdo;
     } catch (PDOException $e) {
-      header("Location: error/?error=sql" );
+      global $url; // Get global variable $url
+      header("Location: " . $url . "error/?error=sql" );
       exit;
     }
   }

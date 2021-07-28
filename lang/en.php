@@ -18,6 +18,68 @@ $language_int = "English";
  */
 
 /**
+* General
+*/
+$string["general"][0] = 'TKTDATA - EVENTMANAGEMENT '; // Page title
+$string["general"][1] = 'TKTDATA - Your event management system made with love in Switzerland.'; // Page description
+$string["general"][2] = 'TKTDATA, Ticketverwaltung, Eventverwaltung, Events'; // Keywords
+
+$string["general"][3] = 'Please activate JavaScript to use this website'; // JavaScript information
+$string["general"][4] = 'Building page...'; // Building page...
+$string["general"][5] = 'The page <strong>#%page%</strong> does not exits.'; // Fullscreen info (page does not exist)
+$string["general"][6] = 'Back'; // Fullscreen info (page does not exist)
+$string["general"][7] = 'Access to the page <strong>#%page%</strong> denied. '; // Fullscreen info (page access denied)
+$string["general"][8] = 'Back'; // Fullscreen info (page access denied)
+
+/**
+* Footer
+*/
+$string["footer"][0] = '&copy; ' . date("Y") . ' by <span>TKTDATA</span>';
+
+/**
+* Errors
+*/
+$string["error"][0] = 'No access to the system';
+$string["error"][1] = 'You do not yet have authorizations to access this system. Please log in to the administrator';
+$string["error"][2] = 'Access to invalid ticket';
+$string["error"][3] = 'You tried to get an invalid ticket';
+$string["error"][4] = 'Database connection failed';
+$string["error"][5] = 'A connection to the database could not be established. ';
+$string["error"][6] = 'No pub registerd';
+$string["error"][7] = 'You need a pub to access the menu';
+$string["error"][8] = '404 - Page not found';
+$string["error"][9] = 'Error during request';
+$string["error"][10] = 'Unknown error';
+$string["error"][11] = 'Unknown error. If this occurs repeatedly, please contact the administrator ';
+
+/**
+* Login / Auth
+*/
+$string["auth"][0] = 'Username'; // Input name
+$string["auth"][1] = 'Password'; // Input name
+$string["auth"][2] = 'LOGIN'; // Input name
+$string["auth"][3] = 'Sign in'; // Input title
+$string["auth"][4] = 'Forgot password'; // Link name
+$string["auth"][5] = 'Reset password'; // Link title
+$string["auth"][6] = 'Username / E-Mail'; // Input name
+$string["auth"][7] = 'Reset'; // Input name
+$string["auth"][8] = 'Reset current password'; // Input title
+$string["auth"][9] = 'Return to login'; // Link title
+$string["auth"][10] = 'Sign in'; // Link name
+
+/**
+* Actions
+*/
+
+/**
+* PDF
+*/
+$string["pdf"][0] = 'TICKET'; // Ticket title
+$string["pdf"][1] = 'Ticket provided by <span>TKTDATA</span>'; // Ticket footer
+$string["pdf"][2] = 'MENULIST'; // Menu title
+$string["pdf"][3] = 'Menüliste provided by <span>TKTDATA</span>'; // Menu footer
+
+/**
  * Menu
  */
 $string["menu"][1] = 'Ticket';
@@ -329,6 +391,14 @@ $string[20][113] = 'Added access to pub #%pub% for user (%user%) %name% ';
 $string[20][114] = 'Pub #%pub% (%name%) revised';
 $string[20][115] = 'Pub #%pub% (%name%) removed ';
 $string[20][116] = 'Removed access for the user #%user% (%username%) for the pub #%pub% (%pubname%) ';
+
+$string[20][120] = 'New global product (%name%) added';
+$string[20][121] = 'New product (%name%) added for pub #%pub%';
+$string[20][122] = 'Product #%id% (%name%) revised';
+$string[20][123] = 'Product #%id% (%name%) deleted';
+$string[20][124] = 'Product #%id% (%name%) added to the menu (#%pub%)';
+$string[20][125] = 'Product #%id% (%name%) removed from the menu (#%pub%)';
+$string[20][126] = 'Availability of product #%id% (%name%) adjusted';
 
 /**
  * Profil
