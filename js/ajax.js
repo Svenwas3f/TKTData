@@ -477,13 +477,10 @@ function refundPayment( paymentID, amount ) {
 
     // Check answer
     if(ajax_response.hasOwnProperty("error")) {
-      var message = new Object();
-      message["message"] = ajax_response.error;
-      message["type"] = "error";
-
       ajax(16, function(c) {
         document.getElementsByTagName("article")[0].innerHTML += c.responseText;
-      }, "message", message)
+      }, "message", ajax_response.error)
+
     }else {
       // Get details
       var details = document.getElementsByClassName("details")[0];
@@ -493,14 +490,10 @@ function refundPayment( paymentID, amount ) {
       details.getElementsByClassName("fees")[0].getElementsByClassName("value")[0].innerHTML = ajax_response.formated_fees + " " + ajax_response.currency;
       details.getElementsByClassName("new_amount")[0].getElementsByClassName("value")[0].innerHTML = ajax_response.formated_new_amount + " " + ajax_response.currency;
 
-      // Show success
-      var message = new Object();
-      message["message"] = "Erfolgreich -" + ajax_response.formated_refund + " " + ajax_response.currency + " erstattet.";
-      message["type"] = "success";
-
+      // // Show success
       ajax(16, function(c) {
         document.getElementsByTagName("article")[0].innerHTML += c.responseText;
-      }, "message", message)
+      }, "message", ajax_response.success)
     }
 
 
@@ -521,8 +514,13 @@ function togglePickUp( paymentID, icon ) {
     // Get json
     var ajax_response = JSON.parse(c.responseText);
 
-    // Change icons
+    console.log(ajax_response.message);
+
+    // Change icon
     icon.children[0].src = ajax_response.img_src;
+
+    // Change info text
+    document.getElementsByClassName('detail-item state')[0].getElementsByClassName("value")[0].innerHTML = ajax_response.message;
   }, "togglePickUp", values);
 }
 
@@ -537,9 +535,9 @@ function confirmPayment( paymentID, icon ) {
     if( c.responseText == "true" ) {
       icon.remove();
     }else {
-      // Show error
+      // Generate error
       var message = new Object();
-      message["message"] = "Konnte nicht überarbeitet werden";
+      message["id"] = 74;
       message["type"] = "error";
 
       ajax(16, function(c) {

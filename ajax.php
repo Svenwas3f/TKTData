@@ -379,11 +379,20 @@ switch($_POST["p"]) {
           $refund = $transaction->refund( $amount );
           if( $refund === false) {
             echo json_encode(array(
-              "error" => "Rückerstattung fehlgeschlagen",
+              "error" => array(
+                "id" => 70,
+                "type" => "error",
+              ),
             ));
           }elseif( is_string($refund) ) {
             echo json_encode(array(
-              "error" => "Rückerstattung fehlgeschlagen. " . $refund,
+              "error" => array(
+                "id" => 71,
+                "type" => "error",
+                "replacements" => array(
+                  "%refund%" => $refund,
+                ),
+              ),
             ));
           }else {
             echo json_encode(array(
@@ -393,20 +402,39 @@ switch($_POST["p"]) {
               "formated_fees" => number_format(($transaction->totalFees() / 100), 2),
               "new_amount" => ($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100,
               "formated_new_amount" => number_format(($transaction->totalPrice() - $transaction->globalValues()["refund"] ?? 0) / 100,2),
-              "currency" => $transaction->globalValues()["currency"],
+              "currency" => $transaction->globalValues()["currency"] ?? DEFAULT_CURRENCY,
+              "success" => array(
+                "id" => 73,
+                "type" => "success",
+                "replacements" => array(
+                  "%refund%" => number_format(($transaction->globalValues()["refund"] / 100), 2),
+                  "%currency%" => $transaction->globalValues()["currency"] ?? DEFAULT_CURRENCY,
+                ),
+              ),
             ));
           }
         }else {
           echo json_encode(array(
-            "error" => "Dieser Benutzer hat keine Berechtigung zu dieser Aktion",
+            "error" => array(
+              "id" => 72,
+              "type" => "error",
+            ),
           ));
         }
       break;
       case "message":
         if(json_decode($_POST["values"], true)["type"] == "success") {
-          Action::success(json_decode($_POST["values"], true)["message"]);
+          Action::success( Language::string(
+            json_decode($_POST["values"], true)["id"],
+            (json_decode($_POST["values"], true)["replacements"] ?? null),
+             16,
+          ));
         }else {
-          Action::fail(json_decode($_POST["values"], true)["message"]);
+          Action::success( Language::string(
+            json_decode($_POST["values"], true)["id"],
+            (json_decode($_POST["values"], true)["replacements"] ?? null),
+             16,
+          ));
         }
       break;
       case "togglePickUp":
@@ -415,21 +443,49 @@ switch($_POST["p"]) {
           $transaction = new Transaction();
           $transaction->paymentID = json_decode($_POST["values"], true)["paymentID"];
 
+          if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
+            echo Language::string(18);
+          }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
+            echo Language::string(19);
+          }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
+            echo Language::string(20);
+          }else {
+            echo Language::string(21);
+          }
+
           // Check update variable
           if( $transaction->globalValues()["pick_up"] == 1) {
             $transaction->update(array("pick_up" => 0));
 
+            // Get message
+            if($transaction->globalValues()["payment_state"] == 2) { // Payment expected
+              $message = Language::string(19, null, 16);
+            }else {
+              $message = Language::string(20, null, 16);
+            }
+
             // Return array
             echo json_encode(array(
               "pickedUp" => false,
+              "message" => $message,
               "img_src" => $url . '/medias/icons/pickUp.svg'
             ));
           }else {
             $transaction->update(array("pick_up" => 1));
 
+            // Get message
+            if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
+              $message = Language::string(18, null, 16);
+            }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
+              $message = Language::string(19, null, 16);
+            }else {
+              $message = Language::string(21, null, 16);
+            }
+
             // Return array
             echo json_encode(array(
               "pickedUp" => true,
+              "message" => $message,
               "img_src" => $url . '/medias/icons/pickedUp.svg'
             ));
           }

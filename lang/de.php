@@ -70,6 +70,8 @@ $string["auth"][10] = 'Anmelden'; // Link name
 /**
  * Actions
  */
+$string["action"][0] = 'Abbrechen';
+$string["action"][1] = 'Bestätigen';
 
 /**
  * PDF
@@ -108,10 +110,8 @@ $string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
 $string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] von Menu #%mainmenu%';
 $string["menu"]["logout"] = 'Abmelden';
 
-
-
 /**
- * ^Media hub
+ * Media hub
  */
 $string["mediahub"][0] = 'Übersicht';
 $string["mediahub"][1] = 'Bild hinzufügen';
@@ -132,16 +132,75 @@ $string["mediahub"][14] = '(Fehler beim hochladen)';
 /**
  * Page 16
  */
- $string[16][0] = '';
- $string[16][1] = '';
- $string[16][2] = '';
- $string[16][3] = '';
- $string[16][4] = '';
- $string[16][5] = '';
- $string[16][6] = '';
- $string[16][7] = '';
- $string[16][8] = '';
- $string[16][9] = '';
+// View
+$string[16][0] = 'PickUp'; // Img alt
+$string[16][1] = 'Transaktion abholen?'; // Img title
+$string[16][2] = 'state'; // Img alt
+$string[16][3] = 'Zahlungseingang bestätigen'; // Img title
+$string[16][4] = 'Refund'; // Img alt
+$string[16][5] = 'Betrag zurückerstatten'; // Img tittle
+$string[16][6] = 'Erstatten'; // Button info text
+$string[16][7] = 'Trash'; // Img alt
+$string[16][8] = 'Transaktion entfernen'; // Img title
+$string[16][9] = 'Zur vorherigen Seite zurück'; // Top nav title
+$string[16][10] = 'Transaktion'; // Details headline
+$string[16][11] = 'E-Mail:'; // Details
+$string[16][12] = 'Zahlungs-ID:'; // Details
+$string[16][13] = 'Betrag:'; // Details
+$string[16][14] = 'Effektiv:'; // Details
+$string[16][15] = 'Rückerstattet:'; // Details
+$string[16][16] = 'Gebühren:'; // Details
+$string[16][17] = 'Status:'; // Details
+$string[16][18] = 'Zahlung erwartet, Abgeholt'; // Pickup state
+$string[16][19] = 'Zahlung erwartet'; // Pickup state
+$string[16][20] = 'Nicht abgeholt'; // Pickup state
+$string[16][21] = 'Abgeholt'; // Pickup state
+$string[16][22] = 'Zahlungstyp:'; // Detail
+$string[16][23] = 'Onlinezahlung'; // Payment type
+$string[16][24] = 'Barzahlung'; // Payment type
+$string[16][25] = 'Zahlungszeit'; // Detail
+
+$string[16][26] = 'Produkte'; // Products headline
+$string[16][27] = 'Trinkgeld'; // Tip money info
+$string[16][28] = 'Name unbekannt'; // Name of product not found
+$string[16][29] = 'Total:'; // Total info
+
+// List
+$string[16][30] = 'Email, Zahlungs-ID, Zahlungszeit'; // Search form placeholder
+$string[16][31] = 'Ohne Zahlung abgeholt'; // Pickup states
+$string[16][32] = 'Zahlung erwartet'; // Pickup states
+$string[16][33] = 'Abholung erwartet'; // Pickup states
+$string[16][34] = 'Email'; // Headline
+$string[16][35] = 'Preis'; // Headline
+$string[16][36] = 'Datum'; // Headline
+$string[16][37] = 'Aktion'; // Headline
+$string[16][38] = 'Zahlung erwartet. Produkte bereits abgeholt.'; // Pickup states title
+$string[16][39] = 'Zahlung erwartet.'; // Pickup states title
+$string[16][40] = 'Abholung erwartet'; // Pickup states title
+$string[16][41] = 'Abgeholt'; // Pickup states title
+$string[16][42] = 'Transaktion anzeigen'; // Link title
+$string[16][43] = 'Transaktion entfernen'; // Link title
+$string[16][44] = 'Zurück'; // Footer nav
+$string[16][45] = 'Weiter'; // Footer nav
+
+$string[16][46] = 'Die Transaktion <strong>%email% (#%id%)</strong> wurde <strong>erfolgreich</strong> gelöscht.'; // Remove message success
+$string[16][47] = 'Die Transaktion <strong>%email% (#%id%)</strong> konnte <strong>nicht</strong> gelöscht werden.'; // Remove message fail
+$string[16][48] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+
+// Remove
+$string[16][50] = 'Möchtest du die Transaktion <strong>%email% (#%id%)</strong>  wirklich löschen?';
+
+// No access to pub
+$string[16][60] = 'Du hast keinen Zugriff auf die Wirtschaft (#%id%) <strong>%name%</strong>'; // Fullscreen message
+$string[16][61] = 'Zurück'; // Fullscreen return button
+
+// Ajax messages
+$string[16][70] = 'Rückerstattung fehlgeschlagen.';
+$string[16][71] = 'Rückerstattung fehlgeschlagen. %refund%';
+$string[16][72] = 'Dieser Benutzer hat keine Berechtigung zu dieser Aktion';
+$string[16][73] = 'Erfolgreich -%refund% %currency% erstattet.';
+$string[16][74] = 'Zahlungseingang konnte nicht bestätigt werden';
+
 
  // $string[17][40] = '';
  // $string[17][41] = '';

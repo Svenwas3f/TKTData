@@ -567,11 +567,13 @@ function display_products ( $search_value = null ) {
   $last = '<a href="' .
             $url_page .
             ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&list=products' .
             '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
             style="float: left;">' . Language::string(16) . '</a>';
   $next = '<a href="' .
             $url_page .
             ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&list=products' .
             '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
             style="float: right;">' . Language::string(17) . '</a>';
 

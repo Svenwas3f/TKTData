@@ -70,6 +70,8 @@ $string["auth"][10] = 'Sign in'; // Link name
 /**
 * Actions
 */
+$string["action"][0] = 'Cancel';
+$string["action"][1] = 'Confirm';
 
 /**
 * PDF
@@ -108,7 +110,7 @@ $string["menu"]["mainpage"] = 'Menu #%mainpage% [%mainpagename%]';
 $string["menu"]["subpage"] = 'Submenu #%submenu% [%submenuname%] of Menu #%mainmenu%';
 
 /**
- * ^Media hub
+ * Media hub
  */
 $string["mediahub"][0] = 'Overview';
 $string["mediahub"][1] = 'Add image';
@@ -125,6 +127,79 @@ $string["mediahub"][11] = 'The revision of the alt text failed';
 $string["mediahub"][12] = 'Are you sure you want to delete the document?';
 $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
+
+/**
+ * Page 16
+ */
+// View
+$string[16][0] = 'PickUp'; // Img alt
+$string[16][1] = 'Pick up transaction?'; // Img title
+$string[16][2] = 'state'; // Img alt
+$string[16][3] = 'Confirm payment'; // Img title
+$string[16][4] = 'Refund'; // Img alt
+$string[16][5] = 'Refund amount'; // Img tittle
+$string[16][6] = 'Refund'; // Button info text
+$string[16][7] = 'Trash'; // Img alt
+$string[16][8] = 'Remove transaction'; // Img title
+$string[16][9] = 'Return to the previous page'; // Top nav title
+$string[16][10] = 'Transaction'; // Details headline
+$string[16][11] = 'E-Mail:'; // Details
+$string[16][12] = 'Payment-ID:'; // Details
+$string[16][13] = 'Amount:'; // Details
+$string[16][14] = 'Effectively:'; // Details
+$string[16][15] = 'Refunded:'; // Details
+$string[16][16] = 'Fees:'; // Details
+$string[16][17] = 'State:'; // Details
+$string[16][18] = 'Payment expected, picked up'; // Pickup state
+$string[16][19] = 'Payment expected'; // Pickup state
+$string[16][20] = 'Unclaimed'; // Pickup state
+$string[16][21] = 'Picked up'; // Pickup state
+$string[16][22] = 'Payment type:'; // Detail
+$string[16][23] = 'Online'; // Payment type
+$string[16][24] = 'cash'; // Payment type
+$string[16][25] = 'Payment time:'; // Detail
+
+$string[16][26] = 'Products'; // Products headline
+$string[16][27] = 'Tip'; // Tip money info
+$string[16][28] = 'Unknown name'; // Name of product not found
+$string[16][29] = 'Total:'; // Total info
+
+// List
+$string[16][30] = 'Email, Payment-ID, Payment time'; // Search form placeholder
+$string[16][31] = 'Picked up without payment'; // Pickup states
+$string[16][32] = 'Payment expected'; // Pickup states
+$string[16][33] = 'Pick up expected'; // Pickup states
+$string[16][34] = 'Email'; // Headline
+$string[16][35] = 'Price'; // Headline
+$string[16][36] = 'Date'; // Headline
+$string[16][37] = 'Activity'; // Headline
+$string[16][38] = 'Payment expected. Product already picked up.'; // Pickup states title
+$string[16][39] = 'Payment expected.'; // Pickup states title
+$string[16][40] = 'Pick up expected'; // Pickup states title
+$string[16][41] = 'Picked up'; // Pickup states title
+$string[16][42] = 'View transaction'; // Link title
+$string[16][43] = 'Remove transaction'; // Link title
+$string[16][44] = 'Last'; // Footer nav
+$string[16][45] = 'Next'; // Footer nav
+
+$string[16][46] = 'The transaction <strong>%email% (#%id%)</strong> was deleted <strong>successfully</strong>.'; // Remove message success
+$string[16][47] = 'The transaction <strong>%email% (#%id%)</strong> could <strong>not</strong> be deleted.'; // Remove message fail
+$string[16][48] = 'You have <strong>no authorization</strong> to perform this action'; // No access
+
+// Remove
+$string[16][50] = 'Do you really want to delete the transaction <strong>%email% (#%id%)</strong>? ';
+
+// No access to pub
+$string[16][60] = 'You have no access to the pub (#%id%) <strong>%name%</strong> '; // Fullscreen message
+$string[16][61] = 'Back'; // Fullscreen return button
+
+// Ajax messages
+$string[16][70] = 'Refund failed.';
+$string[16][71] = 'Refund failed. %refund%';
+$string[16][72] = 'This user does not have authorization for this action ';
+$string[16][73] = 'Successful -%refund% %currency% reimbursed.';
+$string[16][74] = 'Receipt of payment could not be confirmed ';
+
 
 /**
  * Page 17

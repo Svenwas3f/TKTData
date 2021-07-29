@@ -67,8 +67,8 @@ class Action {
       echo '<form action="' . $url_page . $advanceUrl . '" method="post">';
       echo '<img src="' . $url . 'medias/logo/logo-fitted.png" />';
         echo '<span>' . $info . '</span>';
-        echo '<button name="denie">Abbrechen</button>';
-        echo '<button name="confirm" value="' . $value . '">Bestätigen</button>';
+        echo '<button name="denie">' . Language::string( 0, null, "action" ) . '</button>';
+        echo '<button name="confirm" value="' . $value . '">' . Language::string( 1, null, "action" ) .'</button>';
       echo '</form>';
     echo '</div>';
   }
