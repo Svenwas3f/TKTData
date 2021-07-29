@@ -130,6 +130,22 @@ $string["mediahub"][13] = 'Das entfernen des Dokuments ist fehlgeschlagen';
 $string["mediahub"][14] = '(Fehler beim hochladen)';
 
 /**
+ * Page 15
+ */
+$string[15][0] = 'Besucher'; // Visitors
+
+ // $string[17][40] = '';
+ // $string[17][41] = '';
+ // $string[17][42] = '';
+ // $string[17][43] = '';
+ // $string[17][44] = '';
+ // $string[17][45] = '';
+ // $string[17][46] = '';
+ // $string[17][47] = '';
+ // $string[17][48] = '';
+ // $string[17][49] = '';
+
+/**
  * Page 16
  */
 // View
@@ -200,18 +216,6 @@ $string[16][71] = 'Rückerstattung fehlgeschlagen. %refund%';
 $string[16][72] = 'Dieser Benutzer hat keine Berechtigung zu dieser Aktion';
 $string[16][73] = 'Erfolgreich -%refund% %currency% erstattet.';
 $string[16][74] = 'Zahlungseingang konnte nicht bestätigt werden';
-
-
- // $string[17][40] = '';
- // $string[17][41] = '';
- // $string[17][42] = '';
- // $string[17][43] = '';
- // $string[17][44] = '';
- // $string[17][45] = '';
- // $string[17][46] = '';
- // $string[17][47] = '';
- // $string[17][48] = '';
- // $string[17][49] = '';
 
 /**
  * Page 17

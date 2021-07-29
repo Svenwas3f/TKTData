@@ -235,7 +235,6 @@ function livedata_down() {
 function livedata_visitors(callback) {
   ajax(15, function(c) {
     //Display error message
-    var reqAnswer = c.responseText;
     callback( c.responseText );
   }, "visitors");
 }
