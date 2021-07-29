@@ -3,29 +3,29 @@
  * Archive
  */
 if(isset($_GET["archive"])) { //Display confirmation
-  Action::confirm("Möchten Sie den aktuellen Stand tatsächlich archivieren?");
+  Action::confirm( Language::string(7) );
 }
 
 // Archive if required
 if(isset($_POST["confirm"])) {
   if(User::w_access_allowed($page, $current_user)) {
     if(Livedata::archive()) {
-      Action::success("Ihre Daten wurden erfolgreich archiviert");
+      Action::success( Language::string(8) );
     }else {
-      Action::fail("Es ist ein Fehler beim archivieren Ihrer Daten aufgetreten");
+      Action::fail( Language::string(9) );
     }
   }else {
-    Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+    Action::fail( Language::string(10) );
   }
 }
  ?>
 <div class="livedata-live-info">
   <div class="visitors">
-    <span class="title">Aktuelle Besucher</span>
+    <span class="title"><?php echo Language::string(5); ?></span>
     <span class="content"><?php echo Livedata::visitors(); ?></span>
   </div>
   <div class="trend">
-    <span class="title">Aktueller Trend</span>
+    <span class="title"><?php echo Language::string(6); ?></span>
     <?php
     switch(Livedata::trend()) {
       case 0:
@@ -44,7 +44,7 @@ if(isset($_POST["confirm"])) {
 
   <?php
   if(User::w_access_allowed($page, $current_user)) {
-    echo '<a class="archive-button" href="' . $url_page . '&archive">Archive</a>';
+    echo '<a class="archive-button" href="' . $url_page . '&archive">' . Language::string(0) . '</a>';
   }
   ?>
 </div>
@@ -84,7 +84,7 @@ function live_chart(crt, dataX, dataY, title) {
       data: {
           labels: dataY,
           datasets: [{
-              label: '# Besucher',
+              label: <?php echo '"' . Language::string(1) . '"'; ?>,
               data: dataX,
               backgroundColor: 'rgba(35, 43, 67, 0.25)',
               borderColor: 'rgb(46, 29, 141)',
@@ -141,9 +141,24 @@ function live_chart(crt, dataX, dataY, title) {
   });
 }
 
-var chartHistory = live_chart(historyData, <?php echo json_encode($history["x"]); ?>, <?php echo json_encode($history["y"]); ?>, "Verlauf");
-var chartHistoryUp = live_chart(historyUp, <?php echo json_encode($historyUp["x"]); ?>, <?php echo json_encode($historyUp["y"]); ?>, "Eintritte");
-var chartHistoryDown = live_chart(historyDownData, <?php echo json_encode($historyDown["x"]); ?>, <?php echo json_encode($historyDown["y"]); ?>, "Austritte");
+var chartHistory = live_chart(
+  historyData,
+  <?php echo json_encode($history["x"]); ?>,
+  <?php echo json_encode($history["y"]); ?>,
+  <?php echo '"' . Language::string(2) . '"'; ?>,
+);
+var chartHistoryUp = live_chart(
+  historyUp,
+  <?php echo json_encode($historyUp["x"]); ?>,
+  <?php echo json_encode($historyUp["y"]); ?>,
+  <?php echo '"' . Language::string(3) . '"'; ?>,
+);
+var chartHistoryDown = live_chart(
+  historyDownData,
+  <?php echo json_encode($historyDown["x"]); ?>,
+  <?php echo json_encode($historyDown["y"]); ?>,
+  <?php echo '"' . Language::string(4) . '"'; ?>,
+);
 
 //Chart interval
 setInterval(function () {

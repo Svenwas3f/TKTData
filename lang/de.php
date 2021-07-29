@@ -129,21 +129,60 @@ $string["mediahub"][12] = 'Sicher, dass Sie das Dokument löschen wollen?';
 $string["mediahub"][13] = 'Das entfernen des Dokuments ist fehlgeschlagen';
 $string["mediahub"][14] = '(Fehler beim hochladen)';
 
+// $string[17][40] = '';
+// $string[17][41] = '';
+// $string[17][42] = '';
+// $string[17][43] = '';
+// $string[17][44] = '';
+// $string[17][45] = '';
+// $string[17][46] = '';
+// $string[17][47] = '';
+// $string[17][48] = '';
+// $string[17][49] = '';
+
+/**
+ * Page 13
+ */
+$string[13][0] = 'Archivieren'; // Export button
+$string[13][1] = '# Besucher'; // label
+$string[13][2] = 'Verlauf'; // Diagramm title
+$string[13][3] = 'Eintritte'; // Diagramm title
+$string[13][4] = 'Austritte'; // Diagramm title
+$string[13][5] = 'Aktuelle Besucher'; // Title
+$string[13][6] = 'Aktueller Trend'; // Title
+$string[13][7] = 'Möchten Sie den aktuellen Stand tatsächlich archivieren?';
+$string[13][8] = 'Ihre Daten wurden erfolgreich archiviert';
+$string[13][9] = 'Es ist ein Fehler beim archivieren Ihrer Daten aufgetreten';
+$string[13][10] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
+
+/**
+ * Page 14
+ */
+$string[14][0] = 'Archiv'; // Select headline
+$string[14][1] = 'Exportieren'; // Export button
+$string[14][2] = '# Besucher'; // label
+$string[14][3] = 'Verlauf'; // Diagramm title
+$string[14][4] = 'Eintritte'; // Diagramm title
+$string[14][5] = 'Austritte'; // Diagramm title
+
+$string[14][6] = 'Sek.'; // Diagramm labels
+$string[14][7] = 'Min.'; // Diagramm labels
+$string[14][8] = 'Std.'; // Diagramm labels
+$string[14][9] = 'Tage'; // Diagramm labels
+$string[14][10] = 'Woche'; // Diagramm labels
+$string[14][11] = 'Mo.'; // Diagramm labels
+$string[14][12] = 'Jahr'; // Diagramm labels
+$string[14][13] = 'Jz.'; // Diagramm labels
+
 /**
  * Page 15
  */
 $string[15][0] = 'Besucher'; // Visitors
+$string[15][1] = 'Es konnte nicht hochgezählt werden.'; // Up error message
+$string[15][2] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Up error message
+$string[15][3] = 'Es konnte nicht heruntergezählt werden.'; // Down error message
+$string[15][4] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Down error message
 
- // $string[17][40] = '';
- // $string[17][41] = '';
- // $string[17][42] = '';
- // $string[17][43] = '';
- // $string[17][44] = '';
- // $string[17][45] = '';
- // $string[17][46] = '';
- // $string[17][47] = '';
- // $string[17][48] = '';
- // $string[17][49] = '';
 
 /**
  * Page 16

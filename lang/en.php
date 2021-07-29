@@ -129,6 +129,49 @@ $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
 
 /**
+ * Page 13
+ */
+$string[13][0] = 'Archiving'; // Export button
+$string[13][1] = '# Visitors'; // label
+$string[13][2] = 'Progress'; // Diagramm title
+$string[13][3] = 'Entrances'; // Diagramm title
+$string[13][4] = 'Exits'; // Diagramm title
+$string[13][5] = 'Current visitors'; // Title
+$string[13][6] = 'Current trend'; // Title
+$string[13][7] = 'Do you really want to archive the current status?';
+$string[13][8] = 'Your data has been successfully archived';
+$string[13][9] = 'An error occurred while archiving your data';
+$string[13][10] = 'You have <strong>no authorization</strong> to perform this action ';
+
+/**
+ * Page 14
+ */
+$string[14][0] = 'Archive'; // Select headline
+$string[14][1] = 'Export'; // Export button
+$string[14][2] = '# Visitors'; // label
+$string[14][3] = 'Progress'; // Diagramm title
+$string[14][4] = 'Entrances'; // Diagramm title
+$string[14][5] = 'Exits'; // Diagramm title
+
+$string[14][6] = 'Sec.'; // Diagramm labels
+$string[14][7] = 'Min.'; // Diagramm labels
+$string[14][8] = 'Hrs.'; // Diagramm labels
+$string[14][9] = 'Days'; // Diagramm labels
+$string[14][10] = 'Weeks'; // Diagramm labels
+$string[14][11] = 'Mo.'; // Diagramm labels
+$string[14][12] = 'Year'; // Diagramm labels
+$string[14][13] = 'Jz.'; // Diagramm labels
+
+/**
+ * Page 15
+ */
+$string[15][0] = 'Visitors'; // Visitors
+$string[15][1] = 'It couldn\'t be counted up.'; // Up error message
+$string[15][2] = 'You have <strong>no authorization</strong> to perform this action'; // Up error message
+$string[15][3] = 'It couldn\'t be counted down.'; // Down error message
+$string[15][4] = 'You have <strong>no authorization</strong> to perform this action'; // Down error message
+
+/**
  * Page 16
  */
 // View

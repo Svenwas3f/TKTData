@@ -255,9 +255,9 @@ function livedata_trend() {
 function livedata_history() {
   ajax(15, function(c) {
     //Display message
-    var data = c.responseText;
+    var values = JSON.parse( c.responseText );
     var historyData = document.getElementById('history');
-    var chartHistory = live_chart(historyData, JSON.parse(data).x, JSON.parse(data).y, "Verlauf");
+    var chartHistory = live_chart(historyData, values.data.x, values.data.y, values[3]);
   }, "history");
 }
 
@@ -267,9 +267,9 @@ function livedata_history() {
 function livedata_historyUp() {
   ajax(15, function(c) {
     //Display message
-    var data = c.responseText;
+    var values = JSON.parse( c.responseText );
     var historyData = document.getElementById('historyUp');
-    var chartHistory = live_chart(historyData, JSON.parse(data).x, JSON.parse(data).y, "Eintritte");
+    var chartHistory = live_chart(historyData, values.data.x, values.data.y, values[4]);
   }, "historyUp");
 }
 
@@ -279,9 +279,9 @@ function livedata_historyUp() {
 function livedata_historyDown() {
   ajax(15, function(c) {
     //Display message
-    var data = c.responseText;
+    var values = JSON.parse( c.responseText );
     var historyData = document.getElementById('historyDown');
-    var chartHistory = live_chart(historyData, JSON.parse(data).x, JSON.parse(data).y, "Eintritte");
+    var chartHistory = live_chart(historyData, values.data.x, values.data.y, values[5]);
   }, "historyDown");
 }
 

@@ -123,8 +123,6 @@ class Livedata {
     $stmt = $conn->prepare("SELECT liveAction, COUNT(liveAction) as trend FROM " . LIVEDATA . " WHERE action_timestamp > '" . date("Y-m-d H:i:s", strtotime("-15 minutes")) . "' GROUP BY liveAction");
     $stmt->execute();
 
-    // echo "SELECT liveAction, COUNT(liveAction) as trend FROM " . LIVEDATA . " WHERE action_timestamp > '" . date("Y-m-d H:i:s", strtotime("-15 minutes")) . "' GROUP BY liveAction";
-
     //Get result
     $trendData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -217,8 +215,17 @@ class Livedata {
     //Get difference
     $diff = (self::is_archive($end)) ? ((strtotime($end) - strtotime($start)) / 8) : ((time() - strtotime($start)) / 8);
 
-    //Get seconds, minutes, hours, days, months, years, decades
-    $units = array('Sek.', 'Min.', 'Std.', 'Tage.', 'Woch.', 'Mo.', 'Jahr.', 'Jz.');
+    //Get seconds, minutes, hours, days, weeks, months, years, decades
+    $units = array(
+      Language::string(6, null, 14),
+      Language::string(7, null, 14),
+      Language::string(8, null, 14),
+      Language::string(9, null, 14),
+      Language::string(10, null, 14),
+      Language::string(11, null, 14),
+      Language::string(12, null, 14),
+      Language::string(13, null, 14),
+    );
     if($diff < 60) { // return seconds
       $unit = $units[0];
       $unitDv = 1;
@@ -278,7 +285,16 @@ class Livedata {
     $diff = (self::is_archive($end)) ? ((strtotime($end) - strtotime($start)) / 8) : ((time() - strtotime($start)) / 8);
 
     //Get seconds, minutes, hours, days, months, years, decades
-    $units = array('Sek.', 'Min.', 'Std.', 'Tage.', 'Woch.', 'Mo.', 'Jahr.', 'Jz.');
+    $units = array(
+      Language::string(6, null, 14),
+      Language::string(7, null, 14),
+      Language::string(8, null, 14),
+      Language::string(9, null, 14),
+      Language::string(10, null, 14),
+      Language::string(11, null, 14),
+      Language::string(12, null, 14),
+      Language::string(13, null, 14),
+    );
     if($diff < 60) { // return seconds
       $unit = $units[0];
       $unitDv = 1;
@@ -355,7 +371,16 @@ class Livedata {
     $diff = (self::is_archive($end)) ? ((strtotime($end) - strtotime($start)) / 8) : ((time() - strtotime($start)) / 8);
 
     //Get seconds, minutes, hours, days, months, years, decades
-    $units = array('Sek.', 'Min.', 'Std.', 'Tage.', 'Woch.', 'Mo.', 'Jahr.', 'Jz.');
+    $units = array(
+      Language::string(6, null, 14),
+      Language::string(7, null, 14),
+      Language::string(8, null, 14),
+      Language::string(9, null, 14),
+      Language::string(10, null, 14),
+      Language::string(11, null, 14),
+      Language::string(12, null, 14),
+      Language::string(13, null, 14),
+    );
     if($diff < 60) { // return seconds
       $unit = $units[0];
       $unitDv = 1;
