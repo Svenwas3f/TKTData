@@ -141,6 +141,53 @@ $string["mediahub"][14] = '(Fehler beim hochladen)';
 // $string[17][49] = '';
 
 /**
+ * Page 10
+ */
+$string[10][0] = 'Doppelklick in Textfeld um zu bearbeiten. Die Änderungen werden automatisch gespeichert.'; // Admin top bar
+$string[10][1] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update text no access
+
+/**
+ * Page 11
+ */
+$string[11][0] = '🎥 Zugriff auf Videostream nicht möglich (bitte stellen Sie sicher, dass Ihre Webcam aktiviert ist)'; // Webcam message
+$string[11][1] = '⌛ Video wird geladen...'; // Loading message
+
+$string[11][2] = 'Dieses Ticket existiert nicht. Bitte melden Sie sich beim Personal'; // Ticket does not exist
+$string[11][3] = 'Dieses Ticket wurde noch nicht bezahlt. Bitte melden Sie sich beim Personal'; // Not payed
+$string[11][4] = 'Herzlich Willkommen'; // Ticket activated successfuly
+$string[11][5] = 'Beim einlösen des Tickets ist ein Fehler aufgetreten. Bitte melden Sie sich beim Personal'; // Error while activating
+$string[11][6] = 'Dieses Ticket wurde bereits verwendet. Bitte melden Sie sich beim Personal'; // Ticket already activated
+$string[11][7] = 'Dieses Ticket wurde blockiert. Bitte melden Sie sich beim Personal'; // Ticket blocked
+$string[11][8] = 'Ein unbekannter Fehler ist aufgetreten. Bitte melden Sie sich beim Personal'; // Unknown error
+$string[11][9] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+$string[11][10] = 'Verstanden'; // Button Text
+
+// Ticket not found
+$string["scanner"][0] = 'TKTDATA'; // Image title
+$string["scanner"][1] = 'Das angeforderte Ticket existiert nicht!'; // Error message
+$string["scanner"][2] = 'Abbrechen'; // Button
+
+// Ticket infos
+$string["scanner"][3] = 'Ticket benützt um %date%, Zahlung nicht getätigt.'; // Payment and ticket state
+$string["scanner"][4] = 'Blockiertes Ticket, bereits bezahlt.'; // Payment and ticket state
+$string["scanner"][5] = 'Zahlung nicht getätigt.'; // Payment and ticket state
+$string["scanner"][6] = 'Ticket eingelöst am %date%.'; // Payment and ticket state
+$string["scanner"][7] = 'Ticket blockiert.'; // Payment and ticket state
+$string["scanner"][8] = 'TKTDATA'; // Title
+$string["scanner"][9] = 'E-Mail:'; // Name
+$string["scanner"][10] = 'Einlösen'; // Button
+$string["scanner"][11] = 'Abbrechen'; // Button
+
+$string["scanner"][12] = 'Das Ticket wurde <strong>erfolgreich eingelöst</strong>'; // Message
+$string["scanner"][13] = 'Das Ticket wurde <strong>nicht eingelöst</strong>'; // Message
+$string["scanner"][14] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Message
+
+/**
+ * Page 12
+ */
+$string[12][0] = 'TicketToken';
+
+/**
  * Page 13
  */
 $string[13][0] = 'Archivieren'; // Export button

@@ -129,6 +129,53 @@ $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
 
 /**
+ * Page 10
+ */
+$string[10][0] = 'Double click in text field to edit. The changes are saved automatically.'; // Admin top bar
+$string[10][1] = 'You have <strong>no authorization</strong> to perform this action'; // Update text no access
+
+/**
+ * Page 11
+ */
+$string[11][0] = '🎥 Unable to access video stream (please make sure you have a webcam enabled)'; // Webcam message
+$string[11][1] = '⌛ Loading video...'; // Loading message
+
+$string[11][2] = 'This ticket does not exist. Please report to the staff'; // Ticket does not exist
+$string[11][3] = 'This ticket has not been paid. Please report to the staff '; // Not payed
+$string[11][4] = 'Welcome'; // Ticket activated successfuly
+$string[11][5] = 'An error occurred while redeeming the ticket. Please report to the staff'; // Error while activating
+$string[11][6] = 'This ticket has already been used. Please report to the staff'; // Ticket already activated
+$string[11][7] = 'This ticket has been blocked. Please report to the staff'; // Ticket blocked
+$string[11][8] = 'An unknown error has occurred. Please report to the staff'; // Unknown error
+$string[11][9] = 'You have <strong>no authorization</strong> to perform this action'; // No access
+$string[11][10] = 'Understood'; // Button Text
+
+// Ticket not found
+$string["scanner"][0] = 'TKTDATA'; // Image title
+$string["scanner"][1] = 'The requested ticket does not exist!'; // Error message
+$string["scanner"][2] = 'Cancel'; // Button
+
+// Ticket infos
+$string["scanner"][3] = 'Ticket used at %date%, payment not made.'; // Payment and ticket state
+$string["scanner"][4] = 'Blocked ticket, already paid.'; // Payment and ticket state
+$string["scanner"][5] = 'Payment not made.'; // Payment and ticket state
+$string["scanner"][6] = 'Ticket redeemed on %date%.'; // Payment and ticket state
+$string["scanner"][7] = 'Ticket blocked.'; // Payment and ticket state
+$string["scanner"][8] = 'TKTDATA'; // Title
+$string["scanner"][9] = 'E-Mail:'; // Name
+$string["scanner"][10] = 'Redeem'; // Button
+$string["scanner"][11] = 'Cancel'; // Button
+
+$string["scanner"][12] = 'The ticket was <strong>successfully redeemed</strong>'; // Message
+$string["scanner"][13] = 'The ticket was <strong>not redeemed</strong>'; // Message
+$string["scanner"][14] = 'You have <strong>no authorization</strong> to perform this action'; // Message
+
+/**
+ * Page 12
+ */
+$string[12][0] = 'TicketToken';
+
+/**
  * Page 13
  */
 $string[13][0] = 'Archiving'; // Export button

@@ -2117,6 +2117,7 @@ form.search button img {
   border-radius: 5px;
   background-color: white;
   box-shadow: 0px 0px 5px var(--maincolor);
+  overflow: hidden;
 }
 
 @media screen and (max-width: 700px) {
@@ -2155,15 +2156,10 @@ form.search button img {
   background-color: var(--ticket-blocked-and-payment) !important;
 }
 
-.mainpage-3.subpage-11 .scann-result-container .payment-expected
+.mainpage-3.subpage-11 .scann-result-container .payment-expected,
 .mainpage-3.subpage-12 .scann-result-container .payment-expected {
   background-color: var(--ticket-payment-expected) !important;
   color: white !important;
-}
-
-.mainpage-3.subpage-11 .scann-result-container .payment-expected img,
-.mainpage-3.subpage-12 .scann-result-container .payment-expected img {
-  filter: brightness(0) invert(1);
 }
 
 .mainpage-3.subpage-11 .scann-result-container .used,

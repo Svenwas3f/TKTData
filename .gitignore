@@ -1,0 +1,21 @@
+# Remove ignore file 
+.gitignore
+
+# Remove all plugins 
+tktdata_plugins/*
+
+# Remove all zips
+*.zip
+
+# no qr codes from pdf
+pdf/ticket/qrcodes/*
+pdf/menu/qrcodes/*
+
+# No images 
+medias/hub/*
+
+# No sdk file 
+sdk/tktdata.php.txt
+
+# No plugins 
+plugins/*

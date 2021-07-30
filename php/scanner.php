@@ -36,6 +36,8 @@ class Scanner extends Ticket {
    */
   public function ticketInfo() {
     $accessabel_tokenInfo = array("groupID", "state", "amount", "payment", "purchase_time", "payment_time", "employ_time", "coupon", "email", "custom"); //Availabel infos
+
+    // Return values
     return array_intersect_key($this->values(), array_flip($accessabel_tokenInfo));
   }
 
@@ -57,18 +59,18 @@ class Scanner extends Ticket {
       $html = '<div class="scann-result-container">';
 
         //Header image
-        $html .= '<div class="header-img" title="TKTDATA"/></div>';
+        $html .= '<div class="header-img" title="' . Language::string( 0, null, "scanner" ) . '"/></div>';
 
         //Infos
         $html .= '<div class="infos">';
           $html .= '<div class="row">';
-            $html .= '<div style="color: #cf650d; text-align: center; padding: 40px;">Das angeforderte Ticket existiert nicht!</div>';
+            $html .= '<div style="color: #cf650d; text-align: center; padding: 40px;">' . Language::string( 1, null, "scanner" ) . '</div>';
           $html .= '</div>';
         $html .= '</div>';
 
         //Buttons
         $html .= '<div class="button-container">';
-          $html .= '<button class="cancel" onclick="scanner_cancel_ticket(' . $qr . ')">Abbrechen</button>';
+          $html .= '<button class="cancel" onclick="scanner_cancel_ticket(' . $qr . ')">' . Language::string( 2, null, "scanner" ) . '</button>';
         $html .= '</div>';
 
       $html .= '</div>';
@@ -80,21 +82,35 @@ class Scanner extends Ticket {
     //Define ticket state
     $state_css = ['payment-and-used', 'blocked-and-payment', 'payment-expected', 'used', 'blocked'];
     if( $ticketInfo["payment"] == 2 && $ticketInfo["state"] == 1) { //no payment but used
-      $html .= "<div class='top-bar-ticket " . $state_css[0] . "'>Ticket benützt um " . date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])) . ", Zahlung nicht getätigt.</div>";
+      $html .= "<div class='top-bar-ticket " . $state_css[0] . "'>" .
+                  Language::string( 3, array(
+                    '%date%' => date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])),
+                  ), "scanner") .
+                "</div>"; //Ticket benützt um " . date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])) . ", Zahlung nicht getätigt.
     }elseif( $ticketInfo["payment"] != 2 && $ticketInfo["state"] == 2) { //Blocked/deleted and payed
-      $html .= "<div class='top-bar-ticket " . $state_css[1] . "'>Blockiertes Ticket, bereits bezahlt.</div>";
+      $html .= "<div class='top-bar-ticket " . $state_css[1] . "'>" .
+                  Language::string( 4, null, "scanner") .
+                "</div>";
     }elseif( $ticketInfo["payment"] == 2 && $ticketInfo["state"] != 2) { //Payment expected
-      $html .= "<div class='top-bar-ticket " . $state_css[2] . "'>Zahlung nicht getätigt.</div>";
+      $html .= "<div class='top-bar-ticket " . $state_css[2] . "'>" .
+                  Language::string( 5, null, "scanner") .
+                "</div>";
     }elseif( $ticketInfo["state"] == 1) { //Ticket used
-      $html .= "<div class='top-bar-ticket " . $state_css[3] . "'>Ticket eingelöst am " . date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])) . ".</div>";
+      $html .= "<div class='top-bar-ticket " . $state_css[3] . "'>" .
+                  Language::string( 6, array(
+                    '%date%' => date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])),
+                  ), "scanner") .
+                "</div>"; //Ticket eingelöst am " . date("d.m.Y H:i:s", strtotime($ticketInfo["employ_time"])) . ".
     }elseif( $ticketInfo["state"] == 2) { //Ticked blocked and no payment
-      $html .= "<div class='top-bar-ticket " . $state_css[4] . "'>Ticket blockiert.</div>";
+      $html .= "<div class='top-bar-ticket " . $state_css[4] . "'>" .
+                  Language::string( 7, null, "scanner") .
+                "</div>";
     }else {
       $html .= '';
     }
 
     //Header image
-    $html .= '<div class="header-img" title="TKTDATA"/></div>';
+    $html .= '<div class="header-img" title="' . Language::string( 81, null, "scanner" ) . '"/></div>';
 
     //Group name
     $group = new Group();
@@ -104,7 +120,7 @@ class Scanner extends Ticket {
     //General infos
     $html .= '<div class="infos">';
       $html .= '<div class="row">';
-        $html .= '<div class="cell-4">E-Mail:</div>';
+        $html .= '<div class="cell-4">' . Language::string( 9, null, "scanner" ) . '</div>';
         $html .= '<div class="cell-4-3"><a href="mailto:' . $ticketInfo["email"] . '">' . $ticketInfo["email"] . '</a></div>';
       $html .= '</div>';
 
@@ -155,12 +171,13 @@ class Scanner extends Ticket {
                 $html .= '<div class="cell-4">' . $custom["name"] . ':</div>';
                 $html .= '<div class="cell-4-3">' . date("d.m.Y", strtotime($custom["value"]))  . ' <span class="date-count" style="background-color: ' . $color . ';">' . $difference . '</span></div>';
               $html .= '</div>';
-              break;
+            break;
             default:
-            $html .= '<div class="row">';
-              $html .= '<div class="cell-4">' . $custom["name"] . ':</div>';
-              $html .= '<div class="cell-4-3">' . $custom["value"]  . '</div>';
-            $html .= '</div>';
+              $html .= '<div class="row">';
+                $html .= '<div class="cell-4">' . $custom["name"] . ':</div>';
+                $html .= '<div class="cell-4-3">' . $custom["value"]  . '</div>';
+              $html .= '</div>';
+            break;
           }
         }
       }
@@ -170,9 +187,9 @@ class Scanner extends Ticket {
     //Buttons
     $html .= '<div class="button-container">';
       if( $ticketInfo["state"] == 0) {
-        $html .= '<button class="activate" onclick="scanner_employ_ticket(\'' . $this->ticketToken . '\')">Aktivieren</button>';
+        $html .= '<button class="activate" onclick="scanner_employ_ticket(\'' . $this->ticketToken . '\')">' . Language::string( 10, null, "scanner" ) . '</button>';
       }
-      $html .= '<button class="cancel" onclick="scanner_cancel_ticket(' . $qr . ')">Abbrechen</button>';
+      $html .= '<button class="cancel" onclick="scanner_cancel_ticket(' . $qr . ')">' . Language::string( 11, null, "scanner" ) . '</button>';
     $html .= '</div>';
 
     return $html;
@@ -200,7 +217,7 @@ class Scanner extends Ticket {
    */
   public function updateInfo( $content ) {
     //Path where file is
-    $path = dirname(__FILE__, 2) . "/medias/files/scanner/9_info.html";
+    $path = dirname(__FILE__, 2) . "/medias/files/scanner/info.html";
 
     //Check if file exists
     if(! file_exists($path)) {
@@ -216,7 +233,7 @@ class Scanner extends Ticket {
    * $html: true = Returns with <br />. false = Returns with linebreaks \r\n
    */
   public function readInfo( $html = true ) {
-    $path = dirname(__FILE__, 2) . "/medias/files/scanner/9_info.html";
+    $path = dirname(__FILE__, 2) . "/medias/files/scanner/info.html";
     $fileContent = file_get_contents( $path ); //Get info of file
     return ($html === true) ? $fileContent : str_replace(array("<br />", "<br>"), "\r\n", $fileContent); //Return html
   }

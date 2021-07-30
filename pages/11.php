@@ -1,7 +1,7 @@
 <!-- Video -->
 <div class="qr-scanner">
   <video muted playsinline></video>
-  <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+  <div id="loadingMessage"><?php echo Language::string(0); ?></div>
   <div class="video">
     <canvas hidden></canvas>
   </div>
@@ -43,7 +43,7 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", height
 });
 
 function tick() {
-  loadingMessage.innerText = "⌛ Loading video..."
+  loadingMessage.innerText = <?php echo '"' . Language::string(1) . '"'; ?>;
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
     loadingMessage.hidden = true;
     canvasElement.hidden = false;

@@ -127,11 +127,12 @@ function scanner_request_fullscreen_message(ticketToken) {
         }
       html += '</audio>';
     }
-    if (ajax_response.button == true) {
-      html += '<button onclick="scanner_cancel_fullscreen_message()">Verstanden</button>';
-    } else {
+    if (ajax_response.button == false) {
       setTimeout(scanner_cancel_fullscreen_message, 2000);
+    } else {
+      html += '<button onclick="scanner_cancel_fullscreen_message()">' + ajax_response.button + '</button>';
     }
+
     html += '</div>';
     html += '</div>';
 

@@ -138,7 +138,7 @@ switch($_POST["p"]) {
       break;
     }
   break;
-  
+
   /**
    * Information page
    */
@@ -150,10 +150,10 @@ switch($_POST["p"]) {
         }
       break;
       case "update_info":
-        if(User::w_access_allowed(9, $current_user)) {
+        if(User::w_access_allowed(10, $current_user)) {
           Scanner::updateInfo( json_decode($_POST["values"], true)["content"] );
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string( 1, null, 10 ) );
         }
       break;
     }
@@ -165,7 +165,7 @@ switch($_POST["p"]) {
   case 11:
     switch($_POST["action"]) {
       case "get_ticket":
-        if(User::r_access_allowed(10, $current_user)) {
+        if(User::r_access_allowed(11, $current_user)) {
           $scann = new Scanner();
           $scann->ticketToken = json_decode($_POST["values"], true)["ticketToken"];
 
@@ -192,9 +192,9 @@ switch($_POST["p"]) {
               array(
                 "color" => "#df2383",
                 "img" => $url . "medias/icons/error.svg",
-                "message" => "Dieses Ticket existiert nicht. Bitte melden Sie sich beim Personal",
+                "message" => Language::string(2, null, 11),
                 "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                "button" => true
+                "button" => Language::string( 10, null, 11 ),
               )
             );
           }elseif($payment == 2) {//payment expected
@@ -202,9 +202,9 @@ switch($_POST["p"]) {
               array(
                 "color" => "#e53af8",
                 "img" => $url . "medias/icons/error.svg",
-                "message" => "Dieses Ticket wurde noch nicht bezahlt. Bitte melden Sie sich beim Personal",
+                "message" => Language::string(3, null, 11),
                 "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                "button" => true
+                "button" => Language::string( 10, null, 11 ),
               )
             );
           }elseif($state == 0) {//Ticket available
@@ -214,7 +214,7 @@ switch($_POST["p"]) {
                   "color" => "#35e25e",
                   "img" => $url . "medias/icons/success.svg",
                   "sound" => array($url . "medias/audio/success.mp3", $url . "medias/audio/success.oog", $url . "medias/audio/success.wav"),
-                  "message" => "Herzlich Willkommen",
+                  "message" => Language::string(4, null, 11),
                   "button" => false
                 )
               );
@@ -223,9 +223,9 @@ switch($_POST["p"]) {
                 array(
                   "color" => "#3f4a57",
                   "img" => $url . "medias/icons/error.svg",
-                  "message" => "Beim einlösen des Tickets ist ein Fehler aufgetreten. Bitte melden Sie sich beim Personal",
+                  "message" => Language::string(5, null, 11),
                   "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                  "button" => true
+                  "button" => Language::string( 10, null, 11 ),
                 )
               );
             }
@@ -234,9 +234,9 @@ switch($_POST["p"]) {
               array(
                 "color" => "#2a78a9",
                 "img" => $url . "medias/icons/error.svg",
-                "message" => "Dieses Ticket wurde bereits verwendet. Bitte melden Sie sich beim Personal",
+                "message" => Language::string(6, null, 11),
                 "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                "button" => true
+                "button" => Language::string( 10, null, 11 ),
               )
             );
           }elseif($state == 2) {//Ticket blocked
@@ -244,9 +244,9 @@ switch($_POST["p"]) {
               array(
                 "color" => "#d9003d",
                 "img" => $url . "medias/icons/error.svg",
-                "message" => "Dieses Ticket wurde blockiert. Bitte melden Sie sich beim Personal",
+                "message" => Language::string(7, null, 11),
                 "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                "button" => true
+                "button" => Language::string( 10, null, 11 ),
               )
             );
           }else { //Unknown error
@@ -254,14 +254,14 @@ switch($_POST["p"]) {
               array(
                 "color" => "#3c2583",
                 "img" => $url . "medias/icons/error.svg",
-                "message" => "Ein unbekannter Fehler ist aufgetreten. Bitte melden Sie sich beim Personal",
+                "message" => Language::string(8, null, 11),
                 "sound" => array($url . "medias/audio/error.mp3", $url . "medias/audio/error.oog", $url . "medias/audio/error.wav"),
-                "button" => true
+                "button" => Language::string( 10, null, 11 ),
               )
             );
           }
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string(9, null, 11) );
         }
       break;
       case "employ_ticket":
@@ -273,15 +273,13 @@ switch($_POST["p"]) {
           checkPayment( $scann->ticketToken );
 
           if($scann->ticketEmploy()) {
-            return Action::success("Das Ticket wurde <b>erfolgreich aktiviert</b>");
+            return Action::success( Language::string( 12, null, "scanner") );
           }else {
-            return Action::fail("Das Ticket wurde <b>nicht aktiviert</b>");
+            return Action::fail( Language::string( 13, null, "scanner") );
           }
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string( 14, null, "scanner") );
         }
-      break;
-      case "reactivate_ticket";
       break;
     }
   break;
@@ -294,19 +292,19 @@ switch($_POST["p"]) {
       case "up":
         if(User::w_access_allowed(15, $current_user)) {
           if(! Livedata::up()) {
-            Action::fail("Es konnte nicht hochgezählt werden.");
+            Action::fail( Language::string( 1, null, 15 ));
           }
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string( 2, null, 15 ));
         }
       break;
       case "down":
         if(User::w_access_allowed(15, $current_user)) {
           if(! Livedata::down()) {
-            Action::fail("Es konnte nicht heruntergezählt werden.");
+            Action::fail( Language::string( 3, null, 15 ));
           }
         }else {
-          Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+          Action::fail( Language::string( 4, null, 15 ));
         }
       break;
       case "trend":
@@ -346,7 +344,14 @@ switch($_POST["p"]) {
           $min = Livedata::live_time()["min"];
 
           //Get data
-          echo json_encode(Livedata::historyUp($min, $max));
+          echo json_encode(
+            array(
+              'data' => Livedata::historyUp($min, $max),
+              '3' => Language::string( 3, null, 14 ),
+              '4' => Language::string( 4, null, 14 ),
+              '5' => Language::string( 5, null, 14 ),
+            ),
+          );
         }
       break;
       case "historyDown":
@@ -356,7 +361,14 @@ switch($_POST["p"]) {
           $min = Livedata::live_time()["min"];
 
           //Get data
-          echo json_encode(Livedata::historyDown($min, $max));
+          echo json_encode(
+            array(
+              'data' => Livedata::historyDown($min, $max),
+              '3' => Language::string( 3, null, 14 ),
+              '4' => Language::string( 4, null, 14 ),
+              '5' => Language::string( 5, null, 14 ),
+            ),
+          );
         }
       break;
     }
@@ -443,16 +455,6 @@ switch($_POST["p"]) {
           // Get transaction
           $transaction = new Transaction();
           $transaction->paymentID = json_decode($_POST["values"], true)["paymentID"];
-
-          if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
-            echo Language::string(18);
-          }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
-            echo Language::string(19);
-          }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
-            echo Language::string(20);
-          }else {
-            echo Language::string(21);
-          }
 
           // Check update variable
           if( $transaction->globalValues()["pick_up"] == 1) {
