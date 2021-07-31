@@ -141,6 +141,55 @@ $string["mediahub"][14] = '(Fehler beim hochladen)';
 // $string[17][49] = '';
 
 /**
+ * Page 9
+ */
+// List
+$string[9][0] = 'Name, Coupon-ID, Gruppen-ID';
+$string[9][1] = 'Name';
+$string[9][2] = 'Verwendung';
+$string[9][3] = 'Discount';
+$string[9][4] = 'Aktion';
+$string[9][5] = 'Name: %name%&#013;ID: %id%';
+$string[9][6] = 'Coupondetails anzeigen';
+$string[9][7] = 'Coupon löschen';
+$string[9][8] = 'Weiter';
+$string[9][9] = 'Zurück';
+
+// Single
+$string[9][10] = 'Name: %name%&#013;ID: %id%';
+$string[9][11] = 'Zur vorherigen Seite zurück';
+$string[9][12] = 'Name';
+$string[9][13] = 'Discount';
+$string[9][14] = 'Benützt';
+$string[9][15] = 'Verfügbare Benützung';
+$string[9][16] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Leerlassen um Gruppendaten zu verwenden">Startdatum</abbr>';
+$string[9][17] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Leerlassen um Gruppendaten zu verwenden">Enddatum</abbr>';
+$string[9][18] = 'Update';
+
+// Remove
+$string[9][20] = 'Möchtest du den Coupon <strong>#%id%</strong> mit dem Namen <strong>%name%</strong> wirklich löschen?';
+$string[9][21] = 'Der Coupon konnte <strong>erfolgreich</strong> entfernt werden';
+$string[9][22] = 'Der Coupon konnte <strong>nicht</strong> entfernt werden';
+$string[9][23] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
+
+// Add
+$string[9][30] = 'Gruppe auswählen';
+$string[9][31] = 'Absolut';
+$string[9][32] = 'Hinzufügen';
+$string[9][33] = 'Verfügbare Tickets: %availableTickets%/%maxTickets%&#013;Tickets pro Benutzer: %tpu%&#013;Preis: %price% %currency% + %vat%% MwST.&#013;';
+
+$string[9][34] = 'Der Name und die Gruppe werden benötigt, um einen Coupon hinzuzufügen';
+$string[9][35] = 'Dieser Coupon <strong>existiert bereits</strong>';
+$string[9][36] = 'Der Coupon wurde <strong>nicht</strong> hinzugefügt';
+$string[9][37] = 'Der Coupon wurde <strong>erfolgreich</strong> hinzugefügt';
+$string[9][38] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
+
+// Update
+$string[9][40] = 'Der Coupon konnte <strong>erfolgreich</strong> überarbeitet werden';
+$string[9][41] = 'Der Coupon konnte <strong>nicht</strong> überarbeitet werden';
+$string[9][42] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
+
+/**
  * Page 10
  */
 $string[10][0] = 'Doppelklick in Textfeld um zu bearbeiten. Die Änderungen werden automatisch gespeichert.'; // Admin top bar

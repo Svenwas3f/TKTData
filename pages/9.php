@@ -1,101 +1,145 @@
 <?php
-//Get database connection
-$conn = Access::connect();
-
 function display_coupons( $search_value = null ){
   //Define variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $current_user;
-  global $conn;
+  global  $url_page, $url, $mainPage, $page, $current_user;
 
-  /**
-   * Start html
-   */
-  //Start table
-  $html = '<table class="rows">';
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(0),
+    's' => (isset( $_GET["s"] ) ? $_GET["s"] : ""),
+  ));
 
-  //Headline
-  $headline_names = array('Name', 'Verwendung', 'Discount', 'Aktion');
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
 
-  //Start headline
-  //Headline can be changed over array $headline_names
-  $html .= '<tr>'; //Start row
-  foreach( $headline_names as $name ){
-    $html .= '<th>'.$name.'</th>';
-  }
-  $html .= '</tr>'; //Close row
+  // Start table
+  $table = new HTML('table');
+
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(1),
+          ),
+          array(
+            'context' => Language::string(2),
+          ),
+          array(
+            'context' => Language::string(3),
+          ),
+          array(
+            'context' => Language::string(4),
+          ),
+        ),
+      ),
+    ),
+  );
 
   // Set offset and steps
   $steps = 20;
   $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-  // Get content
-  foreach( Coupon::all( $offset, $steps, $search_value ) as $coupon ) {
+  // List coupons
+  foreach( Coupon::all( $offset, $steps, ($_GET["s"] ?? null), true) as $coupon ) {
     //define color of goup
     $group = new Group();
     $group->groupID = $coupon["groupID"];
     $groupInfo = $group->values();
 
-
-    $html .= '<tr class="table-list">'; //Start row
-      $html .= '<td><div class="color" style="background-color: ' . $groupInfo["color"] . ';" title="Name: ' . $groupInfo["name"] . '&#013;ID: ' . $groupInfo["groupID"] . '"></div>' . $coupon["name"].'</td>';
-      $html .= '<td>' . ($coupon["used"] ?? 0) .'/' . $coupon["available"] . '</td>';
-      $html .= '<td>-' . (empty($coupon["discount_percent"]) ? number_format(($coupon["discount_absolute"] / 100), 2) . " " . $groupInfo["currency"] : ($coupon["discount_percent"] / 100 . "%")) . '</td>'; //Display discount
-
-      //Check if current user (logged in user) can edit or see the user
-      if( User::w_access_allowed($page, $current_user) ){
-        //Current user can edit and delete user
-        $html .= '<td style="width: auto;">
-                    <a href="' . $url_page . '&view=' . $coupon["couponID"] . '" title="Coupondetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
-          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&remove=' . $coupon["couponID"] . '" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-        $html .= '</td>';
-      }elseif( User::r_access_allowed($page, $current_user) ){
-        $html .= '<td style="width: auto;">
-                    <a href="' . $url_page . '&view=' . $coupon["couponID"] . '" title="Coupondetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
-                  </td>';
-      }
-    $html .= '</tr>'; //End row
-  }
-
-  // Menu requred
-  $html .= '<tr class="nav">';
-
-    if( (count(Coupon::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
-    }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                </td>';
-    }elseif (count(Coupon::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . (isset( $_GET["s"] ) ? "&s=" . urlencode($_GET["s"]) : "") . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
+    // Generate action
+    if( User::w_access_allowed( $page, $current_user ) ) {
+        $actions = '<a
+                      href="' . $url_page . '&view=' . urlencode($coupon["couponID"]) . '"
+                      title="' . Language::string(6) . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+        $actions .= '<a
+                      href="' . $url_page . '&remove=' . urlencode( $coupon["couponID"] ) . '"
+                      title="' . Language::string(7) . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+    }else {
+      $actions = '<a
+                    href="' . $url_page . '&view=' . urlencode($coupon["couponID"]) . '"
+                    title="' . Language::string(6) . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
     }
 
-  $html .= '</tr>';
+    // Coupon
+    $table->addElement(
+      array(
+        'row' => array(
+          'items' => array(
+            array(
+              'context' => '<div
+                              class="color"
+                              style="background-color: ' . $groupInfo["color"] . ';"
+                              title="' . Language::string( 5, array(
+                                '%name%' => $groupInfo["name"],
+                                '%id%' => $groupInfo["groupID"],
+                              ), ) . '"></div>' .
+                              $coupon["name"],
+            ),
+            array(
+              'context' => ($coupon["used"] ?? 0) .'/' . $coupon["available"],
+            ),
+            array(
+              'context' => (empty($coupon["discount_percent"]) ?
+                              number_format(($coupon["discount_absolute"] / 100), 2) . " " . $groupInfo["currency"] : ($coupon["discount_percent"] / 100 . "%")),
+            ),
+            array(
+              'context' => ($actions ?? ''),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-  //Close table
-  $html .= '</table>';
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(28) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(29) . '</a>';
 
-  /**
-   * Display table
-   */
-  echo $html;
+  if( (count(Coupon::all( ($offset + $steps), $steps, ($_GET["s"] ?? null), true)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(Coupon::all( ($offset + $steps), $steps, ($_GET["s"] ?? null), true)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
+
+  $searchbar->prompt();
+  $table->prompt();
 }
 
 function single_coupon() {
   //require variables
-  global $page;
-  global $current_user;
-  global $url;
-
-  //Get disabled
-  $disabled = (! User::w_access_allowed($page, $current_user)) ? "disabled":"";
+  global $page, $current_user, $url;
 
   //Get coupon
   $coupon = new Coupon();
@@ -105,68 +149,155 @@ function single_coupon() {
   $group = new Group();
   $group->groupID = $coupon->values()["groupID"];
 
-  $html = '<div class="headline-maincolor" style="background-color: ' . $group->values()["color"] . '" title="Name: ' . $group->values()["name"] . '&#013;ID: ' . $group->values()["groupID"] . '"></div>';
+  // Display top return button
+  $topNav = new HTML('top-nav', array(
+    'classes' => 'border-none',
+  ));
 
-  //Display full form with value
-  $html .= '<form action="' . $url . basename($_SERVER['REQUEST_URI']) . ' " method="post">';
-    // $html .= '<span class="unit">' . $coupon->values()["name"] . '</span>';
-    //Name
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="name" value="' . $coupon->values()["name"] . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">Name</span>';
-    $html .= '</label>';
+  $topNav->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+      'link' => 'Javascript:history.back()',
+      'additional' => 'title="' . Language::string(46) . '"',
+    ),
+  );
 
-    //Discount
-    $html .= '<h4>Discount</h4>';
-    $html .= '<div style="display: flex;">';
-      $html .= '<label class="radio" onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'%\';" style="display: flex;">';
-        $html .= '<input type="radio" name="discount_selection" value="discount_percent" ' . (! empty($coupon->values()["discount_percent"]) ? "checked" : "" ) . ' ' . $disabled . ' required />';
-        $html .= '<div></div>%';
-      $html .= '</label>';
-      $html .= '<label class="radio" onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'' . $group->values()["currency"] . '\';" style="display: flex; margin-left: 10px;">';
-        $html .= '<input type="radio" name="discount_selection" value="discount_absolute" ' . (! empty($coupon->values()["discount_absolute"]) ? "checked" : "" ) . ' ' . $disabled . ' required />';
-        $html .= '<div></div>' . $group->values()["currency"];
-      $html .= '</label>';
-    $html .= '</div>';
+  $form = new HTML('form', array(
+    'action' =>  $url . basename($_SERVER['REQUEST_URI']),
+    'method' => 'post',
+  ));
 
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'name',
+      'value' => $coupon->values()["name"] ?? null,
+      'placeholder' => Language::string(12),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+      'required' => true,
+    ),
+  );
 
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="number" min="0" step="0.05" name="discount" value="' . (empty($coupon->values()["discount_percent"]) ? number_format(($coupon->values()["discount_absolute"] / 100), 2) : ($coupon->values()["discount_percent"] / 100)) . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">Discount</span>';
-      $html .= '<span class="unit">' . (empty($coupon->values()["discount_percent"]) ? $group->values()["currency"] : "%") . '</span>';
-    $html .= '</label>';
+  //Discount
+  $form->customHTML('<h4>' . Language::string(13) . '</h4>');
+  $form->customHTML('<div style="display: flex;">');
 
-    //Used
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="number" step="1" min="0" name="used" value="' . $coupon->values()["used"] . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">Benützt</span>';
-    $html .= '</label>';
+    $form->addElement(
+      array(
+        'type' => 'radio',
+        'name' => 'discount_selection',
+        'value' => 'discount_percent',
+        'context' => '%',
+        'checked' => ! empty($coupon->values()["discount_percent"]),
+        'additional' => 'onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'%\';"
+                         style="display: flex;"',
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-    //Available
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="number" step="1" min="0" name="available" value="' . $coupon->values()["available"] . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">Verfügbare Benützung</span>';
-    $html .= '</label>';
+    $form->addElement(
+      array(
+        'type' => 'radio',
+        'name' => 'discount_selection',
+        'value' => 'discount_absolute',
+        'context' => $group->values()["currency"] ?? DEFAULT_CURRENCY,
+        'checked' => ! empty($coupon->values()["discount_absolute"]),
+        'additional' => 'onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'' . $group->values()["currency"] . '\';"
+                         style="display: flex; margin-left: 10px;"',
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-    //Start date
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="startDate" value="' . $coupon->values()["startDate"] . '" ' . $disabled . '/>';
-      $html .= '<span class="placeholder"><abbr title="Leerlassen um Gruppendaten zu verwenden">Startdatum</abbr></span>';
-    $html .= '</label>';
+  $form->customHTML('</div>');
 
-    //End date
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="endDate" value="' . $coupon->values()["endDate"] . '" ' . $disabled . '/>';
-      $html .= '<span class="placeholder"><abbr title="Leerlassen um Gruppendaten zu verwenden">Enddatum</abbr></span>';
-    $html .= '</label>';
+  // Discount
+  $form->addElement(
+    array(
+      'type' => 'number',
+      'name' => 'discount',
+      'value' => (empty($coupon->values()["discount_percent"]) ?
+                    number_format(($coupon->values()["discount_absolute"] / 100), 2) :
+                    ($coupon->values()["discount_percent"] / 100)),
+      'placeholder' => Language::string(13),
+      'unit' => (empty($coupon->values()["discount_percent"]) ? ($group->values()["currency"] ?? DEFAULT_CURRENCY) : "%"),
+      'input_attributes' => 'min="0" step="0.05"',
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+      'required' => true,
+    ),
+  );
 
-    //Submit button
-    $html .= '<input type="submit" value="Update" ' . $disabled . '/>';
+  // Used
+  $form->addElement(
+    array(
+      'type' => 'number',
+      'name' => 'used',
+      'value' => $coupon->values()["used"] ?? null,
+      'placeholder' => Language::string(14),
+      'input_attributes' => 'min="0" step="1"',
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+      'required' => true,
+    ),
+  );
 
-  $html .= '</form>';
+  // Available
+  $form->addElement(
+    array(
+      'type' => 'number',
+      'name' => 'available',
+      'value' => $coupon->values()["available"] ?? null,
+      'placeholder' => Language::string(15),
+      'input_attributes' => 'min="0" step="1"',
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+      'required' => true,
+    ),
+  );
 
-  echo $html;
+  // Start date
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'startDate',
+      'value' => $coupon->values()["startDate"] ?? null,
+      'placeholder' => Language::string(16),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
 
+  // End date
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'endDate',
+      'value' => $coupon->values()["endDate"] ?? null,
+      'placeholder' => Language::string(17),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
+
+  // Update
+  $form->addElement(
+    array(
+      'type' => 'button',
+      'name' => 'update',
+      'value' => Language::string(18),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
+
+  // Show html
+  echo '<div
+          class="headline-maincolor"
+          style="background-color: ' . $group->values()["color"] . '"
+          title="' . Language::string( 10, array(
+            '%name%' => $group->values()["name"],
+            '%id%' => $group->values()["groupID"],
+          ), ) . '">
+        </div>';
+
+  $topNav->prompt();
+  $form->prompt();
 }
 
 //Get current action
@@ -195,12 +326,12 @@ switch(key($action)) {
 
         //Update
         if($coupon->update($updateValues)) {
-          Action::success("Der Coupon konnte <strong>erfolgreich</strong> überarbeitet werden");
+          Action::success( Language::string(40) );
         }else {
-          Action::fail("Der Coupon konnte <strong>nicht</strong> überarbeitet werden");
+          Action::fail( Language::string(41) );
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(42) );
       }
     }
 
@@ -211,7 +342,15 @@ switch(key($action)) {
     //Get coupon informations
     $coupon = new Coupon();
     $coupon->couponID = $_GET["remove"];
-    Action::confirm("Möchtest du den Coupon <b>#" . $_GET["remove"] . "</b> mit dem Namen <b>" . $coupon->values()["name"] . "</b> wirklich löschen?", $_GET["remove"]);
+
+    // Generate info
+    $info = Language::string( 20, array(
+      '%id%' => $_GET["remove"],
+      '%name%' => $coupon->values()["name"],
+    ), );
+
+    // Display
+    Action::confirm( $info, $_GET["remove"] );
   break;
   case "add":
     //add coupon if required
@@ -230,97 +369,175 @@ switch(key($action)) {
 
         switch($coupon->add($add_values)) {
           case 0: //Array does not contain important informations
-            Action::fail("Der Name und die Gruppe werden benötigt, um einen Coupon hinzuzufügen");
+            Action::fail( Language::string(34) );
           break;
           case 1: //Coupon already exists
-            Action::fail("Dieser Coupon <strong>existiert bereits</strong>");
+            Action::fail( Language::string(35) );
           break;
           case 2: //Failed to add Coupon
-            Action::fail("Der Coupon wurde <strong>nicht</strong> hinzugefügt");
+            Action::fail( Language::string(36) );
           break;
           case 3: //Successfully added coupon
-            Action::success("Der Coupon wurde <strong>erfolgreich</strong> hinzugefügt");
+            Action::success( Language::string(37) );
           break;
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(34) );
       }
     }
 
+    // Display top return button
+    $topNav = new HTML('top-nav', array(
+      'classes' => 'border-none',
+    ));
 
-    //Get disabled
-    $disabled = (! User::r_access_allowed($page, $current_user)) ? "disabled":"";
+    $topNav->addElement(
+      array(
+        'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+        'link' => 'Javascript:history.back()',
+        'additional' => 'title="' . Language::string(46) . '"',
+      ),
+    );
 
-    //Start form
-    echo '<form action="' . $url . basename($_SERVER['REQUEST_URI']) . ' " method="post" style="overflow-x: visible;">';
+    // Start form
+    $form = new HTML('form', array(
+      'action' =>  $url . basename($_SERVER['REQUEST_URI']),
+      'method' => 'post',
+    ));
 
-      //Select group
-      echo '<div class="select" onclick="toggleOptions(this)">';
-        echo '<input type="text" class="selectValue" name="groupID" required>';
-        echo '<span class="headline">Gruppe auswählen</span>';
+    //Select group
+    $options = array();
 
-        //Select all groups
-        $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS);
-        $groups->execute();
-        echo '<div class="options">';
-        while($row = $groups->fetch(PDO::FETCH_ASSOC)) {
-          $group = new Group();
-          $group->groupID = $row["groupID"];
+    $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS);
+    $groups->execute();
+    foreach($groups->fetchAll(PDO::FETCH_ASSOC) as $row) {
+      $group = new Group();
+      $group->groupID = $row["groupID"];
 
-          $title = 'Verfügbare Tickets: ' . $group->availableTickets() . '/' . $row["maxTickets"] . '&#013;Tickets pro Benutzer: ' . $row["tpu"]. '&#013;Preis: ' . ($row["price"]/100) . ' ' . $row["currency"] . ' + ' . $row["vat"] . '% MwST.&#013;'
-          ;
-          echo '<span data-value="' . $row["groupID"] . '" onclick="selectElement(this)" style="border-left: 5px solid ' . $row["color"] . ';" title="' . $title . '">' . $row["name"] . '</span>'; //Display group option
-        }
-        echo '</div>';
+      $options[$row["groupID"] . "\"
+                style='border-left: 5px solid " . $row["color"] . ";'
+                title='" .
+                  Language::string( 33, array(
+                    '%availableTickets%' => $group->availableTickets(),
+                    '%maxTickets%' => $row["maxTickets"],
+                    '%tpu%' => $row["tpu"],
+                    '%price%' => ($row["price"]/100),
+                    '%currency%' => $row["currency"],
+                    '%vat%' => $row["vat"],
+                  ),) . "'"] =
+        $row["name"];
+    }
 
-      echo '</div>';
+    $form->addElement(
+      array(
+        'type' => 'select',
+        'name' => 'groupID',
+        'headline' => Language::string(30),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'options' => $options,
+        'required' => true,
+      ),
+    );
 
-      //Set name
-      echo '<label class="txt-input">';
-        echo '<input type="text" name="name" ' . $disabled . ' required/>';
-        echo '<span class="placeholder">Name</span>';
-      echo '</label>';
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'name',
+        'placeholder' => Language::string(12),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-      //Set discount
-      echo '<h4>Discount</h4>';
-      echo '<div style="display: flex;">';
-        echo '<label class="radio" onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'%\';" style="display: flex;">';
-          echo '<input type="radio" name="discount_selection" value="discount_percent" ' . $disabled . ' checked required />';
-          echo '<div></div>%';
-        echo '</label>';
-        echo '<label class="radio" onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'Absolut\';" style="display: flex; margin-left: 10px;">';
-          echo '<input type="radio" name="discount_selection" value="discount_absolute" ' . $disabled . ' required />';
-          echo '<div></div>Absolut';
-        echo '</label>';
-      echo '</div>';
+    //Discount
+    $form->customHTML('<h4>' . Language::string(13) . '</h4>');
+    $form->customHTML('<div style="display: flex;">');
 
+      $form->addElement(
+        array(
+          'type' => 'radio',
+          'name' => 'discount_selection',
+          'value' => 'discount_percent',
+          'context' => '%',
+          'additional' => 'onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'%\';"
+                           style="display: flex;"',
+          'disabled' => ! User::w_access_allowed($page, $current_user),
+          'required' => true,
+        ),
+      );
 
-      echo '<label class="txt-input">';
-        echo '<input type="number" min="0" step="0.05" name="discount" ' . $disabled . ' required/>';
-        echo '<span class="placeholder">Discount</span>';
-        echo '<span class="unit">%</span>';
-      echo '</label>';
+      $form->addElement(
+        array(
+          'type' => 'radio',
+          'name' => 'discount_selection',
+          'value' => 'discount_absolute',
+          'context' => Language::string(31),
+          'additional' => 'onclick="document.getElementsByClassName(\'unit\')[0].innerHTML = \'' . Language::string(31) . '\';"
+                           style="display: flex; margin-left: 10px;"',
+          'disabled' => ! User::w_access_allowed($page, $current_user),
+          'required' => true,
+        ),
+      );
 
-      //Set useage
-      echo '<label class="txt-input">';
-        echo '<input type="number" step="1" min="0" name="available" ' . $disabled . ' required/>';
-        echo '<span class="placeholder">Verfügbare Benützung</span>';
-      echo '</label>';
+    $form->customHTML('</div>');
 
-      //Set dates
-      echo '<label class="txt-input">';
-        echo '<input type="text" name="startDate" ' . $disabled . '/>';
-        echo '<span class="placeholder"><abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Leerlassen um Gruppendaten zu verwenden">Startdatum</abbr></span>';
-      echo '</label>';
+    // Discount
+    $form->addElement(
+      array(
+        'type' => 'number',
+        'name' => 'discount',
+        'placeholder' => Language::string(13),
+        'unit' => "%",
+        'input_attributes' => 'min="0" step="0.05"',
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-      echo '<label class="txt-input">';
-        echo '<input type="text" name="endDate" ' . $disabled . '/>';
-        echo '<span class="placeholder"><abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Leerlassen um Gruppendaten zu verwenden">Enddatum</abbr></span>';
-      echo '</label>';
+    // Available
+    $form->addElement(
+      array(
+        'type' => 'number',
+        'name' => 'available',
+        'placeholder' => Language::string(15),
+        'input_attributes' => 'min="0" step="1"',
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-      //Submit button
-      echo '<input type="submit" name="add" value="Hinzufügen" ' . $disabled . '/>';
-    echo '</form>';
+    // Start date
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'startDate',
+        'placeholder' => Language::string(16),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
+
+    // End date
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'endDate',
+        'placeholder' => Language::string(17),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
+
+    // Update
+    $form->addElement(
+      array(
+        'type' => 'button',
+        'name' => 'add',
+        'value' => Language::string(32),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
+
+    $topNav->prompt();
+    $form->prompt();
   break;
   default:
     //Remove coupon if required
@@ -329,22 +546,14 @@ switch(key($action)) {
         $coupon = new Coupon();
         $coupon->couponID = $_POST["confirm"];
         if($coupon->remove()) {
-          Action::success("Der Coupon konnte <strong>erfolgreich</strong> entfernt werden");
+          Action::success( Language::string(21) );
         }else {
-          Action::fail("Der Coupon konnte <strong>nicht</strong> entfernt werden");
+          Action::fail( Language::string(22) );
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(23) );
       }
     }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
 
     //Display tickets
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
@@ -358,5 +567,4 @@ switch(key($action)) {
       </a>';
   }
 }
-
  ?>

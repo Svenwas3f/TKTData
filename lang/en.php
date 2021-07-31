@@ -129,6 +129,55 @@ $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
 
 /**
+ * Page 9
+ */
+// List
+$string[9][0] = 'Name, Coupon-ID, Gruppen-ID';
+$string[9][1] = 'Name';
+$string[9][2] = 'Usage';
+$string[9][3] = 'Discount';
+$string[9][4] = 'Activity';
+$string[9][5] = 'Name: %name%&#013;ID: %id%';
+$string[9][6] = 'View coupondetails';
+$string[9][7] = 'Delete coupon';
+$string[9][8] = 'Next';
+$string[9][9] = 'Last';
+
+// Single
+$string[9][10] = 'Name: %name%&#013;ID: %id%';
+$string[9][11] = 'Return to the previous page';
+$string[9][12] = 'Name';
+$string[9][13] = 'Discount';
+$string[9][14] = 'Used';
+$string[9][15] = 'Available use';
+$string[9][16] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, however any format can be used &#13; Leave blank to use group data">Start Date</abbr>';
+$string[9][17] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, however any format can be used &#13; Leave blank to use group data">End Date</abbr>';
+$string[9][18] = 'Update';
+
+// Remove
+$string[9][20] = 'Do you really want to delete the coupon <strong>#%id%</strong> with the name <strong>%name%</strong>?';
+$string[9][21] = 'The coupon could be removed <strong>successfully</strong>';
+$string[9][22] = 'The coupon could <strong>not</strong> be removed';
+$string[9][23] = 'You have <strong>no authorization</strong> to perform this action';
+
+// Add
+$string[9][30] = 'Choose group';
+$string[9][31] = 'Absolute';
+$string[9][32] = 'Add';
+$string[9][33] = 'Available tickets: %availableTickets%/%maxTickets%&#013;Tickets per user: %tpu%&#013;Preis: %price% %currency% + %vat%% VAT.&#013;';
+
+$string[9][34] = 'The name and group are required to add a coupon';
+$string[9][35] = 'This coupon <strong>already exists</strong>';
+$string[9][36] = 'The coupon was <strong>not</strong> added';
+$string[9][37] = 'The coupon was added <strong>successfully</strong>';
+$string[9][38] = 'You have <strong>no authorization</strong> to perform this action';
+
+// Update
+$string[9][40] = 'The coupon was <strong>successfully</strong> revised';
+$string[9][41] = 'The coupon could <strong>not</strong> be revised';
+$string[9][42] = 'You have <strong>no authorization</strong> to perform this action';
+
+/**
  * Page 10
  */
 $string[10][0] = 'Double click in text field to edit. The changes are saved automatically.'; // Admin top bar

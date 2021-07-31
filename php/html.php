@@ -337,10 +337,10 @@ class HTML {
        * @boolen disabled
        * @boolen required
        * @string classes
-       * @string multiple [ex. id]
+       * @string additional [ex. id]
        */
       case "radio":
-        $this->substance .= '<label class="radio ' . ($values["classes"] ?? '') . '" ' . ($values["multiple"] ?? '') . '>';
+        $this->substance .= '<label class="radio ' . ($values["classes"] ?? '') . '" ' . ($values["additional"] ?? '') . '>';
           $this->substance .= '<input type="radio"
               name="' . $values["name"] . '"
               value="' . $values["value"] . '" ' .
@@ -479,7 +479,7 @@ class HTML {
        * @string value
        * @string placeholder^
        * @string unit
-       * @string regex
+       * @string input_attributes
        * @boolen disabled
        * @boolen required
        * @string classes
@@ -491,7 +491,7 @@ class HTML {
               type="' . $values["type"] . '"
               name="' . $values["name"] . '" ' .
               (isset($values["value"]) ? 'value="' . $values["value"] . '"' : "") . ' ' .
-              (isset($values["regex"]) ? 'pattern="' . $values["regex"] . '"' : "") . ' ' .
+              (isset($values["input_attributes"]) ? $values["input_attributes"] : "") . ' ' .
               (($values["disabled"] ?? false) === true ? "disabled" : '') .' ' .
               (($values["required"] ?? false) === true ? "required" : '') . '/>';
           $this->substance .= '<span class="placeholder">' . $values["placeholder"] . '</span>';
