@@ -568,6 +568,9 @@ $string[19][21] = 'Mail an neuen Benutzer senden'; // Send access checkbox
 $string[19][22] = 'UPDATE'; // Update
 $string[19][23] = 'Benutzer aktualisieren'; // Update title
 
+$string[19][24] = 'Zur vorherigen Seite zurück'; // Return button
+
+
 // Update user
 $string[19][50] = 'Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.';
 $string[19][51] = 'Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden.';
@@ -602,6 +605,8 @@ $string[20][10] = 'Änderungen zurücksetzen'; // Single action view
 $string[20][11] = 'Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.'; // Action response
 $string[20][12] = 'Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden'; // Action response
 $string[20][13] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Action response
+$string[19][14] = 'Zur vorherigen Seite zurück'; // Return button
+
 
 // Messages
 $string[20][100] = 'Profil von %user% überarbeitet';

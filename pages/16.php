@@ -80,58 +80,60 @@ echo '<div class="pub">';
       $rightmenu = new HTML('right-menu');
 
       // PickUp
-      if( $transaction->globalValues()["pick_up"] == 0 ) {
-        $rightmenu->addElement(
-          array(
-            'context' => '<img src="' . $url . 'medias/icons/pickUp.svg" alt="' . Language::string(0) . '" title="' . Language::string(1) . '"/>',
-            'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
-          ),
-        );
-      }else {
-        $rightmenu->addElement(
-          array(
-            'context' => '<img src="' . $url . 'medias/icons/pickedUp.svg" alt="' . Language::string(0) . '" title="' . Language::string(1) . '"/>',
-            'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
-          ),
-        );
-      }
+      if( $write_access ) {
+        if( $transaction->globalValues()["pick_up"] == 0 ) {
+          $rightmenu->addElement(
+            array(
+              'context' => '<img src="' . $url . 'medias/icons/pickUp.svg" alt="' . Language::string(0) . '" title="' . Language::string(1) . '"/>',
+              'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
+            ),
+          );
+        }else {
+          $rightmenu->addElement(
+            array(
+              'context' => '<img src="' . $url . 'medias/icons/pickedUp.svg" alt="' . Language::string(0) . '" title="' . Language::string(1) . '"/>',
+              'additional_item' => 'onclick="togglePickUp(' . $transaction->paymentID . ', this)"',
+            ),
+          );
+        }
 
-      // Payment
-      if( $transaction->globalValues()["payment_state"] == 2) {
-        $rightmenu->addElement(
-          array(
-            'context' => '<img src="' . $url . 'medias/icons/payment_confirm.svg" alt="' . Language::string(2) . '" title="' . Language::string(3) . '"/>',
-            'additional_item' => 'onclick="confirmPayment(' . $transaction->paymentID . ', this)"',
-          ),
-        );
-      }
+        // Payment
+        if( $transaction->globalValues()["payment_state"] == 2) {
+          $rightmenu->addElement(
+            array(
+              'context' => '<img src="' . $url . 'medias/icons/payment_confirm.svg" alt="' . Language::string(2) . '" title="' . Language::string(3) . '"/>',
+              'additional_item' => 'onclick="confirmPayment(' . $transaction->paymentID . ', this)"',
+            ),
+          );
+        }
 
-      // Refund
-      if( isset($transaction->globalValues()["payrexx_transaction"]) &&! empty($transaction->globalValues()["payrexx_transaction"])) {
-        $rightmenu->addElement(
-          array(
-            'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="' . Language::string(4) . '" title="' . Language::string(5) . '"/>',
-            'dropdown' => array(
-              array(
-                'context' => '<div class="container">
-                                <input type="text" min="0" max="' . (($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100) . '"/>' .
-                                '<span class="currency">' . $transaction->globalValues()["currency"] . '</span>' .
-                                '<button onclick="refundPayment(' . $transaction->paymentID . ', this.parentNode.children[0].value)">' . Language::string(6) . '</button>' . '</div>',
-                'classes' => 'no-hover refund-payment',
+        // Refund
+        if( isset($transaction->globalValues()["payrexx_transaction"]) &&! empty($transaction->globalValues()["payrexx_transaction"])) {
+          $rightmenu->addElement(
+            array(
+              'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="' . Language::string(4) . '" title="' . Language::string(5) . '"/>',
+              'dropdown' => array(
+                array(
+                  'context' => '<div class="container">
+                                  <input type="text" min="0" max="' . (($transaction->totalPrice() - $transaction->globalValues()["refund"]) / 100) . '"/>' .
+                                  '<span class="currency">' . $transaction->globalValues()["currency"] . '</span>' .
+                                  '<button onclick="refundPayment(' . $transaction->paymentID . ', this.parentNode.children[0].value)">' . Language::string(6) . '</button>' . '</div>',
+                  'classes' => 'no-hover refund-payment',
+                ),
               ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      // Remove
-      if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
-        $rightmenu->addElement(
-          array(
-            'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(7) . '" title="' . Language::string(8) . '"/>',
-            'additional_item' => 'href="' . $url_page . '&remove=' . $transaction->paymentID . '"',
-          ),
-        );
+        // Remove
+        if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
+          $rightmenu->addElement(
+            array(
+              'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(7) . '" title="' . Language::string(8) . '"/>',
+              'additional_item' => 'href="' . $url_page . '&remove=' . $transaction->paymentID . '"',
+            ),
+          );
+        }
       }
 
       // Display top return button

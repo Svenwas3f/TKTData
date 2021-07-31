@@ -161,6 +161,21 @@ function single_action(){
     $print_message = Language::string( $values["id"], ($values["replacements"] ?? null) );
   }
 
+  //////////////////////////////////////
+  // Start top nav
+  //////////////////////////////////////
+  $topNav = new HTML('top-nav', array(
+    'classes' => 'border-none',
+  ));
+
+  $topNav->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+      'link' => 'Javascript:history.back()',
+      'additional' => 'title="' . Language::string(14) . '"',
+    ),
+  );
+
   //Create html
   $html = '<div class="restore-action">';
     $html .= '<h1>' . $print_message . '</h1>';
@@ -172,6 +187,8 @@ function single_action(){
   $html .= '</div>';
 
   //Display html
+  $topNav->prompt();
+
   echo $html;
 }
 /**

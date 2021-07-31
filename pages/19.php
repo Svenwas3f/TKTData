@@ -119,11 +119,26 @@ function display_users( $search_value = null ) {
 
 function single_user( $user_registerd ) {
   //require variables
-  global $url_page, $conn, $page, $current_user;
+  global $url_page, $url, $conn, $page, $current_user;
 
   // Start user
   $user = new User();
   $user->user = $user_registerd;
+
+  //////////////////////////////////////
+  // Start top nav
+  //////////////////////////////////////
+  $topNav = new HTML('top-nav', array(
+    'classes' => 'border-none',
+  ));
+
+  $topNav->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+      'link' => 'Javascript:history.back()',
+      'additional' => 'title="' . Language::string(24) . '"',
+    ),
+  );
 
   //////////////////////////////////////
   // Start form
@@ -283,6 +298,7 @@ function single_user( $user_registerd ) {
     )
   );
 
+  $topNav->prompt();
   $form->prompt();
 }
 

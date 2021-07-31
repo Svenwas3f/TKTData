@@ -132,7 +132,7 @@ $string["mediahub"][14] = '(Error while uploading)';
  * Page 9
  */
 // List
-$string[9][0] = 'Name, Coupon-ID, Gruppen-ID';
+$string[9][0] = 'Name, Coupon-ID, Group-ID';
 $string[9][1] = 'Name';
 $string[9][2] = 'Usage';
 $string[9][3] = 'Discount';
@@ -556,6 +556,9 @@ $string[19][21] = 'Send mail to new user'; // Send access checkbox
 $string[19][22] = 'UPDATE'; // Update
 $string[19][23] = 'Update user'; // Update title
 
+$string[19][24] = 'Return to the previous page '; // Return button
+
+
 // Update user
 $string[19][50] = 'Your change was <strong>successfully</strong> implemented.';
 $string[19][51] = 'Your change could <strong>not</strong> be implemented.';
@@ -590,6 +593,7 @@ $string[20][10] = 'Reset changes'; // Single action view
 $string[20][11] = 'Your change was <strong>successfully</strong> implemented.'; // Action response
 $string[20][12] = 'Your change could <strong>not</strong> be implemented.'; // Action response
 $string[20][13] = 'You have <strong>no authorization</strong> to perform this action.'; // Action response
+$string[20][14] = 'Return to the previous page '; // Return button
 
 // Messages
 $string[20][100] = 'Updated profile of %user%';

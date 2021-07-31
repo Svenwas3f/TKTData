@@ -158,7 +158,7 @@ function single_coupon() {
     array(
       'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
       'link' => 'Javascript:history.back()',
-      'additional' => 'title="' . Language::string(46) . '"',
+      'additional' => 'title="' . Language::string(11) . '"',
     ),
   );
 
@@ -233,7 +233,7 @@ function single_coupon() {
     array(
       'type' => 'number',
       'name' => 'used',
-      'value' => $coupon->values()["used"] ?? null,
+      'value' => $coupon->values()["used"] ?? 0,
       'placeholder' => Language::string(14),
       'input_attributes' => 'min="0" step="1"',
       'disabled' => ! User::w_access_allowed($page, $current_user),
@@ -395,7 +395,7 @@ switch(key($action)) {
       array(
         'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
         'link' => 'Javascript:history.back()',
-        'additional' => 'title="' . Language::string(46) . '"',
+        'additional' => 'title="' . Language::string(11) . '"',
       ),
     );
 
