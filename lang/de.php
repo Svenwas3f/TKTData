@@ -605,32 +605,50 @@ $string[20][10] = 'Änderungen zurücksetzen'; // Single action view
 $string[20][11] = 'Ihre Änderung wurde <strong>erfolgreich</strong> durchgeführt.'; // Action response
 $string[20][12] = 'Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden'; // Action response
 $string[20][13] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Action response
-$string[19][14] = 'Zur vorherigen Seite zurück'; // Return button
+$string[20][14] = 'Zur vorherigen Seite zurück'; // Return button
 
 
 // Messages
-$string[20][100] = 'Profil von %user% überarbeitet';
-$string[20][101] = 'Profil von %user% entfernt';
-$string[20][102] = 'Zugriffsrechte von %user% entfernt';
-$string[20][103] = 'Profil von %user% hinzugefügt';
-$string[20][103] = 'Version %version% wiederhergestellt';
+$string[20][100] = 'Profil von %user% überarbeitet'; // User.php
+$string[20][101] = 'Profil von %user% entfernt'; // User.php
+$string[20][102] = 'Zugriffsrechte von %user% entfernt'; // User.php
+$string[20][103] = 'Profil von %user% hinzugefügt'; // User.php
+$string[20][103] = 'Version %version% wiederhergestellt'; // User.php
 
-$string[20][110] = 'Neue Wirtschaft hinzugefügt (%name%)';
-$string[20][111] = 'Neues globales Produkt (%name%) hinzugefügt';
-$string[20][112] = 'Neues Produkt (%name%) hinzugefügt für Wirschaft %pub%';
-$string[20][113] = 'Zugriff zur Wirtschaft #%pub% für den Benutzer (%user%) %name% hinzugefügt';
-$string[20][114] = 'Wirtschaft #%pub% (%name%) überarbeitet';
-$string[20][115] = 'Wirtschaft #%pub% (%name%) entfernt';
-$string[20][116] = 'Zugriff für den Benuter #%user% (%username%) für die Wirtschaft #%pub% (%pubname%) entfernt';
+$string[20][110] = 'Neue Wirtschaft hinzugefügt (%name%)'; // pub.php
+$string[20][111] = 'Neues globales Produkt (%name%) hinzugefügt'; // pub.php
+$string[20][112] = 'Neues Produkt (%name%) hinzugefügt für Wirschaft %pub%'; // pub.php
+$string[20][113] = 'Zugriff zur Wirtschaft #%pub% für den Benutzer (%user%) %name% hinzugefügt'; // pub.php
+$string[20][114] = 'Wirtschaft #%pub% (%name%) überarbeitet'; // pub.php
+$string[20][115] = 'Wirtschaft #%pub% (%name%) entfernt'; // pub.php
+$string[20][116] = 'Zugriff für den Benuter #%user% (%username%) für die Wirtschaft #%pub% (%pubname%) entfernt'; // pub.php
 
-$string[20][120] = 'Neues globales Produkt (%name%) hinzugefügt';
-$string[20][121] = 'Neues Produkt (%name%) hinzugefügt für Wirtschaft #%pub%';
-$string[20][122] = 'Produkt #%id% (%name%) überarbeitet';
-$string[20][123] = 'Produkt #%id% (%name%) entfernt';
-$string[20][124] = 'Produkt #%id% (%name%) ins Menu (#%pub%) aufgenommen';
-$string[20][125] = 'Produkt #%id% (%name%) aus dem Menu (#%pub%) entfernt';
-$string[20][126] = 'Verfügbarkeit von Produkt #%id% (%name%) angepasst';
+$string[20][120] = 'Neues globales Produkt (%name%) hinzugefügt'; // product.php
+$string[20][121] = 'Neues Produkt (%name%) hinzugefügt für Wirtschaft #%pub%'; // product.php
+$string[20][122] = 'Produkt #%id% (%name%) überarbeitet'; // product.php
+$string[20][123] = 'Produkt #%id% (%name%) entfernt'; // product.php
+$string[20][124] = 'Produkt #%id% (%name%) ins Menu (#%pub%) aufgenommen'; // product.php
+$string[20][125] = 'Produkt #%id% (%name%) aus dem Menu (#%pub%) entfernt'; // product.php
+$string[20][126] = 'Verfügbarkeit von Produkt #%id% (%name%) angepasst'; // product.php
 
+$string[20][130] = 'Neue Transaktion #%id% hinzugefügt'; // transaction.php
+$string[20][131] = 'Transaktion #%id% überarbeitet'; // transaction.php
+$string[20][132] = 'Transaktion #%id% entfernt'; // transaction.php
+
+$string[20][140] = 'Coupon (%name%) hinzugefügt zur Gruppe #%group%'; // coupon.php
+$string[20][141] = 'Coupon #%id% überarbeitet'; // coupon.php
+$string[20][142] = 'Coupon #%id% entfernt'; // coupon.php
+
+$string[20][150] = 'Neues Ticket (%ticketToken%) hinzugefügt'; // ticket.php
+$string[20][151] = 'Ticket (%ticketToken%) überarbeitet'; // ticket.php
+$string[20][152] = 'Ticket (%ticketToken%) entfernt'; // ticket.php
+$string[20][153] = 'Ticket (%ticketToken%) wiederhergestellt'; // ticket.php
+$string[20][154] = 'Ticket (%ticketToken%) entwertet'; // ticket.php
+$string[20][155] = 'Ticket (%ticketToken%) manuell reaktiviert'; // ticket.php
+$string[20][156] = ''; // ticket.php
+$string[20][157] = ''; // ticket.php
+$string[20][158] = ''; // ticket.php
+$string[20][159] = ''; // ticket.php
 
 /**
  * Profil

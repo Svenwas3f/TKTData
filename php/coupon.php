@@ -157,7 +157,14 @@ class Coupon {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Added Coupon",
+      // "message" => "Added Coupon",
+      "message" => json_encode(array(
+        "id" => 140,
+        "replacements" => array(
+          "%name%" => $values["name"],
+          "%group%" => $values["groupID"],
+        ),
+      )),
       "table" => "TICKETS_COUPONS",
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "couponID", "value" => ""),
@@ -219,7 +226,13 @@ class Coupon {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated Coupon #" . $this->couponID,
+      // "message" => "Updated Coupon #" . $this->couponID,
+      "message" => json_encode(array(
+        "id" => 141,
+        "replacements" => array(
+          "%id%" => $this->couponID,
+        ),
+      )),
       "table" => "TICKETS_COUPONS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "couponID", "value" => $this->couponID),
@@ -258,7 +271,13 @@ class Coupon {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Removed Coupon #" . $this->couponID,
+      // "message" => "Removed Coupon #" . $this->couponID,
+      "message" => json_encode(array(
+        "id" => 142,
+        "replacements" => array(
+          "%id%" => $this->couponID,
+        ),
+      )),
       "table" => "TICKETS_COUPONS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "couponID", "value" => $this->couponID),

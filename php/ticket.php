@@ -178,7 +178,7 @@ class Ticket {
    *
    * $modificationTXT = Text displayed in activity page (use %ticket% to display ticketToken)
    */
-  private function updateTicket( $newValues, $modificationTxt = "Updated ticket %ticket%" ) {
+  private function updateTicket( $newValues, $modificationArray ) {
     //require variables
     global $current_user;
 
@@ -258,7 +258,8 @@ class Ticket {
     //Modifie ticket
     $change = array(
       "user" => $current_user,
-      "message" => str_replace("%ticket%", "#" . $this->ticketToken, $modificationTxt),
+      // "message" => str_replace("%ticket%", "#" . $this->ticketToken, $modificationTxt),
+      "message" => json_encode( $modificationArray ),
       "table" => "TICKETS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "ticketKey", "value" => $this->cryptToken()["ticketKey"]),
@@ -405,7 +406,13 @@ class Ticket {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Added Ticket",
+      // "message" => "Added Ticket",
+      "message" => json_encode(array(
+        "id" => 150,
+        "replacements" => array(
+          "%ticketToken%" => $this->ticketToken,
+        ),
+      )),
       "table" => "TICKETS",
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "ticketKey", "value" => $ticketKey),
@@ -458,7 +465,12 @@ class Ticket {
     }
 
     //Update ticket
-    return $this->updateTicket( $newValues );
+    return $this->updateTicket( $newValues, array(
+      'id' => 151,
+      'replacements' => array(
+        '%ticketToken%' => $this->ticketToken,
+      ),
+    ) );
   }
 
   /**
@@ -466,7 +478,12 @@ class Ticket {
    * Requires: $ticketToken
    */
   public function remove() {
-    return $this->updateTicket(array("state" => 2), "Removed Ticket %ticket%");
+    return $this->updateTicket(array("state" => 2), array(
+      'id' => 152,
+      'replacements' => array(
+        '%ticketToken%' => $this->ticketToken,
+      ),
+    ));
   }
 
   /**
@@ -474,7 +491,12 @@ class Ticket {
    * Requires: $ticketToken
    */
   public function restore() {
-    return $this->updateTicket(array("state" => 0), "Restored Ticket %ticket%");
+    return $this->updateTicket(array("state" => 0), array(
+      'id' => 153,
+      'replacements' => array(
+        '%ticketToken%' => $this->ticketToken,
+      ),
+    ));
   }
 
   /**
@@ -487,7 +509,15 @@ class Ticket {
       Livedata::up(); //Set livedata up
     }
 
-    return $this->updateTicket(array("state" => 1, "employ_time" => date("Y-m-d H:i:s")), "Employed Ticket %ticket%");
+    return $this->updateTicket(array(
+      "state" => 1,
+      "employ_time" => date("Y-m-d H:i:s")
+    ), array(
+      'id' => 154,
+      'replacements' => array(
+        '%ticketToken%' => $this->ticketToken,
+      ),
+    ));
   }
 
   /**
@@ -500,7 +530,15 @@ class Ticket {
       Livedata::down(); //Set livedata down
     }
 
-    return $this->updateTicket(array("state" => 0, "employ_time" => NULL), "Manually reactivated Ticket %ticket%");
+    return $this->updateTicket(array(
+      "state" => 0,
+      "employ_time" => NULL
+    ), array(
+      'id' => 155,
+      'replacements' => array(
+        '%ticketToken%' => $this->ticketToken,
+      ),
+    ));
   }
 
   /**

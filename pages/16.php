@@ -282,14 +282,14 @@ echo '<div class="pub">';
 
           // Remove
           if( $transaction->remove() ) {
-            Action::success( Langauge::string( 46,
+            Action::success( Language::string( 46,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],
               ), )
             );
           }else {
-            Action::fail( Langauge::string( 47,
+            Action::fail( Language::string( 47,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],

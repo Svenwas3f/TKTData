@@ -241,7 +241,12 @@ class Transaction {
     //Modifie transaction
     $change = array(
       "user" => $current_user,
-      "message" => "Added new pub transaction #" . $this->paymentID,
+      "message" => json_encode(array(
+        "id" => 130,
+        "replacements" => array(
+          "%id%" => $this->paymentID,
+        ),
+      ),),
       "table" => "PUB_TRANSACTIONS",
       "function" => "ADD",
       "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
@@ -307,7 +312,12 @@ class Transaction {
     //Modifie transaction
     $change = array(
       "user" => $current_user,
-      "message" => "Updated pub transaction #" . $this->paymentID,
+      "message" => json_encode(array(
+        "id" => 131,
+        "replacements" => array(
+          "%id%" => $this->paymentID,
+        ),
+      ),),
       "table" => "PUB_TRANSACTIONS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
@@ -355,7 +365,12 @@ class Transaction {
     //Modifie transaction
     $change = array(
       "user" => $current_user,
-      "message" => "Removed pub transaction #" . $this->paymentID,
+      "message" => json_encode(array(
+        "id" => 132,
+        "replacements" => array(
+          "%id%" => $this->paymentID,
+        ),
+      ),),
       "table" => "PUB_TRANSACTIONS",
       "function" => "DELETE",
       "primary_key" => array("key" => "paymentID", "value" => $this->paymentID),
