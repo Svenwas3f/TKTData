@@ -1,350 +1,573 @@
 <?php
 function display_tickets( $search_value = null ){
   //Define variables
-  global $url;
-  global $url_page;
-  global $page;
-  global $current_user;
-  global $conn;
+  global $url, $url_page, $page, $mainPage, $current_user, $conn;
 
-  /**
-   * Start html
-   */
-  $state_css = ['payment-and-used', 'blocked-and-payment', 'payment-expected', 'used', 'blocked'];
-  $state_description = ['Eingelöst ohne Zahlung', 'Blockiert & bezahlt', 'Zahlung erwartet', 'Eingelöst', 'Blockiert'];
-  $html = '<div class="legend">';
-    for($i = 0; $i < COUNT($state_css); $i++){
-      $html .= '<div class="legend-element"><div class="legend-button ' . $state_css[$i] . '"></div>' . $state_description[$i] . '</div>';
-    }
-  $html .= '</div>';
+  // Start searchbar
+  $searchbar = new HTML('searchbar', array(
+    'action' => $url,
+    'method' => 'get',
+    'placeholder' => Language::string(0),
+    's' => $search_value,
+  ));
 
-  //Start table
-  $html .= '<table class="rows">';
+  $searchbar->addElement( '<input type="hidden" name="id" value="' . $mainPage . '" />' );
+  $searchbar->addElement( '<input type="hidden" name="sub" value="' . $page . '" />' );
 
-  //Headline
-  $headline_names = array('E-mail', 'Kaufdatum', 'Aktion');
+  // Start legend
+  $legend = new HTML('legend');
 
-  //Start headline
-  //Headline can be changed over array $headline_names
-  $html .= '<tr>'; //Start row
-  foreach( $headline_names as $name ){
-    $html .= '<th>' . $name . '</th>';
+  $ticket_states = array(
+    array(
+      'bcolor' => 'var(--ticket-payment-and-used)',
+      'class' => 'payment-and-used',
+      'title' => Language::string(1),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-blocked-and-payment)',
+      'class' => 'blocked-and-payment',
+      'title' => Language::string(2),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-payment-expected)',
+      'class' => 'payment-expected',
+      'title' => Language::string(3),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-used)',
+      'class' => 'used',
+      'title' => Language::string(4),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-blocked)',
+      'class' => 'blocked',
+      'title' => Language::string(5),
+    ),
+  );
+
+  foreach( $ticket_states as $item ) {
+    $legend->addElement(
+      array(
+        'bcolor' => $item["bcolor"],
+        'title' => $item["title"],
+      ),
+    );
   }
-  $html .= '</tr>'; //Close row
+
+  // Start table
+  $table = new HTML('table');
+
+  // Headline
+  $table->addElement(
+    array(
+      'headline' => array(
+        'items' => array(
+          array(
+            'context' => Language::string(6),
+          ),
+          array(
+            'context' => Language::string(7),
+          ),
+          array(
+            'context' => Language::string(8),
+          ),
+        ),
+      ),
+    ),
+  );
 
   // Set offset and steps
   $steps = 20;
   $offset = (isset($_GET["row-start"]) ? ($_GET["row-start"] * $steps) : 0);
 
-  foreach( Ticket::all( $offset, $steps, $search_value ) as $ticket ) {
-    //Define ticket state
-    $ticket_state = '';
-    if( $ticket["payment"] == 2 && $ticket["state"] == 1){ //no payment but used
-      $ticket_state = $state_css[0];
-    }elseif( $ticket["payment"] != 2 && $ticket["state"] == 2){ //Blocked/deleted and payed
-      $ticket_state = $state_css[1];
-    }elseif( $ticket["payment"] == 2 && $ticket["state"] != 2){ //Payment expected
-      $ticket_state = $state_css[2];
-    }elseif( $ticket["state"] == 1){ //Ticket used
-      $ticket_state = $state_css[3];
-    }elseif( $ticket["state"] == 2){ //Ticked blocked and no payment
-      $ticket_state = $state_css[4];
-    }
-
-    //define color of goup
+  // List tickets
+  foreach( Ticket::all( $offset, $steps, $search_value) as $ticket ) {
+    // Get group infos
     $group = new Group();
     $group->groupID = $ticket["groupID"];
     $groupInfo = $group->values();
 
-
-    $html .= '<tr class="table-list ' . $ticket_state . '">'; //Start row
-      $html .= '<td><div class="color" style="background-color: ' . $groupInfo["color"] . ';" title="Name: ' . $groupInfo["name"] . '&#013;ID: ' . $groupInfo["groupID"] . '"></div>' . $ticket["email"] . '</td>'; //Display user id
-      $html .= '<td>' . date("d.m.Y H:i:s", strtotime($ticket["purchase_time"])) . '</td>'; //Display purchase date
-
-      //Create ticket token
-      $ticketToken = Ticket::encryptTicketToken($ticket["groupID"], $ticket["ticketKey"]);
-
-      //Check if current user (logged in user) can edit or see the user
-      if( User::w_access_allowed($page, $current_user) ){
-        //Current user can edit and delete user
-        $html .= '<td style="width: auto;">
-                    <a href="' . $url_page . '&view=' . urlencode( $ticketToken ) . '" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/pencil.svg" /></a>
-                    <a href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '" target="_blank" title="PDF öffnen"><img src="' . $url . '/medias/icons/pdf.svg" /></a>';
-        //Check if ticket is blocked
-        if( $ticket["state"] == 2 ){
-          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&restore=' . urlencode( $ticketToken ) . '" title="Restore"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
-        }else{
-          $html .= '<a href="' . $url_page . ((isset( $_GET["row-start"] )) ? "&row-start=" . $_GET["row-start"] : "") . '&remove=' . urlencode( $ticketToken ) . '" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-        }
-        $html .= '</td>';
-      }elseif( User::r_access_allowed($page, $current_user) ){
-        $html .= '<td style="width: auto;">
-                    <a href="' . $url_page . '&view=' . urlencode( $ticketToken ) . '" title="Ticketdetails anzeigen"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>
-                    <a href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '" target="_blank" title="PDF öffnen"><img src="' . $url . '/medias/icons/pdf.svg" /></a>
-                  </td>';
-      }
-    $html .= '</tr>'; //End row
-  }
-
-  // Menu requred
-  $html .= '<tr class="nav">';
-
-    if( (count(Ticket::all( ($offset + $steps), 1, $search_value )) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
-    }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '" style="float: left;">Letze</a>
-                </td>';
-    }elseif (count(Ticket::all( ($offset + $steps), 1 )) > 0) { // More pages accessable
-      $html .= '<td colspan="' . count( $headline_names ) . '">
-                  <a href="' . $url_page . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '" style="float: right;">Weiter</a>
-                </td>';
+    if( $ticket["payment"] == 2 && $ticket["state"] == 1){ //no payment but used
+      $ticket_state_class = $ticket_states[0]["class"];
+    }elseif( $ticket["payment"] != 2 && $ticket["state"] == 2){ //Blocked/deleted and payed
+      $ticket_state_class = $ticket_states[1]["class"];
+    }elseif( $ticket["payment"] == 2 && $ticket["state"] != 2){ //Payment expected
+      $ticket_state_class = $ticket_states[2]["class"];
+    }elseif( $ticket["state"] == 1){ //Ticket used
+      $ticket_state_class = $ticket_states[3]["class"];
+    }elseif( $ticket["state"] == 2){ //Ticked blocked and no payment
+      $ticket_state_class = $ticket_states[4]["class"];
+    }else {
+      $ticket_state_class = '';
     }
 
-  $html .= '</tr>';
+    // Activity
+    if( User::w_access_allowed($page, $current_user) ) {
+        $ticketToken = Ticket::encryptTicketToken($ticket["groupID"], $ticket["ticketKey"]);
+        $actions = '<a
+                      href="' . $url_page . '&view=' . urlencode( $ticketToken ) . '"
+                      title="' . Language::string(9) . '"><img src="' . $url . '/medias/icons/pencil.svg" /></a>';
+        $actions .= '<a
+                      href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '"
+                      target="_blank"
+                      title="' . Language::string(10) . '"><img src="' . $url . '/medias/icons/pdf.svg" /></a>';
+        if( $ticket["state"] == 2 ) {
+          $actions .= '<a
+                        href="' . $url_page . '&restore=' . urlencode( $ticketToken ) . '"
+                        title="' . Language::string(11) . '"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
+        }else {
+          $actions .= '<a
+                        href="' . $url_page . '&remove=' . urlencode( $ticketToken ) . '"
+                        title="' . Language::string(12) . '"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
+        }
+    }else {
+      $ticketToken = Ticket::encryptTicketToken($ticket["groupID"], $ticket["ticketKey"]);
+      $actions = '<a
+                    href="' . $url_page . '&view=' . urlencode( $ticketToken ) . '"
+                    title="' . Language::string(9) . '"><img src="' . $url . '/medias/icons/view-eye.svg" /></a>';
+      $actions .= '<a
+                    href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticketToken ) . '"
+                    target="_blank"
+                    title="' . Language::string(10) . '"><img src="' . $url . '/medias/icons/pdf.svg" /></a>';
+    }
 
-  //Close table
-  $html .= '</table>';
+    $table->addElement(
+      array(
+        'row' => array(
+          'items' => array(
+            array(
+              'context' => '<div
+                              class="color"
+                              style="background-color: ' . $groupInfo["color"] . ';"
+                              title="' . Language::string(13, array(
+                                            '%name%' => $groupInfo["name"],
+                                            '%id%' => $groupInfo["groupID"],
+                                          )) . '"></div>' .
+                              $ticket["email"],
+            ),
+            array(
+              'context' => date("d.m.Y H:i:s", strtotime($ticket["purchase_time"])),
+            ),
+            array(
+              'context' => ($actions ?? ''),
+            ),
+          ),
+          'additional' => 'class="' . $ticket_state_class . '"',
+        ),
+      ),
+    );
+  }
 
-  /**
-   * Display table
-   */
-  echo $html;
+  // Footer
+  $last = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+            style="float: left;">' . Language::string(13) . '</a>';
+  $next = '<a href="' .
+            $url_page .
+            ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
+            '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+            style="float: right;">' . Language::string(14) . '</a>';
+
+  if( (count(Ticket::all( ($offset + $steps), $steps, $search_value)) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last . $next,
+        ),
+      ),
+    );
+  }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $last,
+        ),
+      ),
+    );
+  }elseif (count(Ticket::all( ($offset + $steps), $steps, $search_value)) > 0) { // More pages accessable
+    $table->addElement(
+      array(
+        'footer' => array(
+          'context' => $next,
+        ),
+      ),
+    );
+  }
+
+
+  $searchbar->prompt();
+  $legend->prompt();
+  $table->prompt();
 }
 
 function single_ticket() {
   //require variables
-  global $page;
-  global $current_user;
-  global $url;
-  global $url_page;
-  global $conn;
+  global $page, $current_user, $url, $url_page, $conn;
 
   //Creat new ticket
   $ticket = new Ticket();
   $ticket->ticketToken = $_GET["view"];
 
+  //Get group values
+  $group = new Group();
+  $group->groupID = $ticket->values()["groupID"];
+
   //Update payment if required
   checkPayment( $ticket->ticketToken );
 
-  //Set inputs disabled for read only
-  if(! User::w_access_allowed($page, $current_user)) {
-    $disabled = "disabled";
-  }else{
-    $disabled = null;
+  // Display top return button
+  $topNav = new HTML('top-nav', array(
+    'classes' => 'border-none',
+  ));
+
+  $topNav->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+      'link' => 'Javascript:history.back()',
+      'additional' => 'title="' . Language::string(11) . '"',
+    ),
+  );
+
+  // Start right menu
+  $rightMenu = new HTML('right-menu');
+
+  $rightMenu->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/pdf.svg" alt="' . Language::string(26) . '" title="' . Language::string(27) . '"/>',
+      'additional_item' => 'href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticket->ticketToken ) . '"
+                            target="_blank"',
+    ),
+  );
+
+  $rightMenu->addElement(
+    array(
+      'context' => '<img src="' . $url . 'medias/icons/mail.svg" alt="' . Language::string(28) . '" title="' . Language::string(29) . '"/>',
+      'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&send"',
+    ),
+  );
+
+  if( $ticket->values()["payment"] == 2 ) {
+    $rightMenu->addElement(
+      array(
+        'context' => '<img src="' . $url . 'medias/icons/payment.svg" alt="' . Language::string(30) . '" title="' . Language::string(31) . '"/>',
+        'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&requestPayment"',
+      ),
+    );
   }
 
-  //Get all values
-  $values = $ticket->values();
-
-  //Get group values
-  $group = new Group();
-  $group->groupID = $values["groupID"];
-
-  // &#013;
-  $html = '<div class="headline-maincolor" style="background-color: ' . $group->values()["color"] . '" title="Name: ' . $group->values()["name"] . '&#013;ID: ' . $group->values()["groupID"] . '"></div>';
-
-  //Top bar
-  $state_css = ['payment-and-used', 'blocked-and-payment', 'payment-expected', 'used', 'blocked'];
-  if( $values["payment"] == 2 && $values["state"] == 1) { //no payment but used
-    $html .= "<div class='top-bar-ticket " . $state_css[0] . "'>Ticket benützt um " . date("d.m.Y H:i:s", strtotime($values["employ_time"])) . ", Zahlung nicht getätigt.</div>";
-  }elseif( $values["payment"] != 2 && $values["state"] == 2) { //Blocked/deleted and payed
-    $html .= "<div class='top-bar-ticket " . $state_css[1] . "'>Blockiertes Ticket, bereits bezahlt.</div>";
-  }elseif( $values["payment"] == 2 && $values["state"] != 2) { //Payment expected
-    $html .= "<div class='top-bar-ticket " . $state_css[2] . "'>Zahlung nicht getätigt.</div>";
-  }elseif( $values["state"] == 1) { //Ticket used
-    $html .= "<div class='top-bar-ticket " . $state_css[3] . "'>Ticket eingelöst am " . date("d.m.Y H:i:s", strtotime($values["employ_time"])) . ".</div>";
-  }elseif( $values["state"] == 2) { //Ticked blocked and no payment
-    $html .= "<div class='top-bar-ticket " . $state_css[4] . "'>Ticket blockiert.</div>";
+  $transaction = retrieveTransaction( $ticket->ticketToken );
+  if($transaction["transaction_retrieve_status"] && $ticket->values()["amount"] > 0 && ($transaction["pspId"] != 15 || $transaction["pspId"] != 27) && $ticket->values()["payment"] == 0) {
+    $rightMenu->addElement(
+      array(
+        'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="' . Language::string(32) . '" title="' . Language::string(33) . '"/>',
+        'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&refund"',
+      ),
+    );
   }
 
-  //Display right menu
-  $html .= '<div class="right-sub-menu">';
-    $html .= '<a href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticket->ticketToken ) . '" target="_blank" class="right-menu-item"><img src="' . $url . 'medias/icons/pdf.svg" alt="PDF" title="PDF öffnen"/></a>';
-    $html .= '<a href="' . $url_page . '&send=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item"><img src="' . $url . 'medias/icons/mail.svg" alt="Mail" title="Mail erneut senden"/></a>';
-    if($values["payment"] == 2) {
-      $html .= '<a href="' . $url_page . '&requestPayment=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item"><img src="' . $url . 'medias/icons/payment.svg" alt="Mail" title="Zahlung anfordern"/></a>';
+  if( User::w_access_allowed($page, $current_user) ){
+    //Check if ticket is already used
+    if( $ticket->values()["state"] == 1 ){
+      $rightMenu->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket2.svg" alt="' . Language::string(34) . '" title="' . Language::string(35) . '"/>',
+          'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&reactivate"',
+        ),
+      );
+    }else{
+      $rightMenu->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket1.svg" alt="' . Language::string(36) . '" title="' . Language::string(37) . '"/>',
+          'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&employ"',
+        ),
+      );
     }
-    $transaction = retrieveTransaction( $ticket->ticketToken );
-    if($transaction["transaction_retrieve_status"]) {
-      if(($transaction["pspId"] != 15 || $transaction["pspId"] != 27) && $values["payment"] == 0) {
-        $html .= '<a href="' . $url_page . '&refundPayment=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item"><img src="' . $url . 'medias/icons/payment-refund.svg" alt="Refund" title="Zahlung zurückerstatten"/></a>';
-      }
+
+    //Check if ticket is blocked
+    if( $ticket->values()["state"] == 2 ){
+      $rightMenu->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/restore.svg" alt="' . Language::string(38) . '" title="' . Language::string(39) . '"/>',
+          'additional_item' => 'href="' . $url_page . '&restore=' . urlencode( $ticket->ticketToken ) . '"',
+        ),
+      );
+    }else{
+      $rightMenu->addElement(
+        array(
+          'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(40) . '" title="' . Language::string(41) . '"/>',
+          'additional_item' => 'href="' . $url_page . '&remove=' . urlencode( $ticket->ticketToken ) . '"',
+        ),
+      );
     }
-    //Display delete/used only if write access
-    if( User::w_access_allowed($page, $current_user) ){
-      //Check if ticket is already used
-      if( $ticket->values()["state"] == 1 ){
-        $html .= '<a href="' . $url_page . '&reactivate=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item" title="Ticket reaktivieren"><img src="' . $url . '/medias/icons/toggleUsedTicket2.svg" /></a>';
-      }else{
-        $html .= '<a href="' . $url_page . '&employ=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item" title="Ticket abstempeln"><img src="' . $url . '/medias/icons/toggleUsedTicket1.svg" /></a>';
-      }
+  }
 
-      //Check if ticket is blocked
-      if( $ticket->values()["state"] == 2 ){
-        $html .= '<a href="' . $url_page . '&restore=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item" title="Restore"><img src="' . $url . '/medias/icons/restore.svg" /></a>';
-      }else{
-        $html .= '<a href="' . $url_page . '&remove=' . urlencode( $ticket->ticketToken ) . '" class="right-menu-item" title="Löschen"><img src="' . $url . '/medias/icons/trash.svg" /></a>';
-      }
-    }
-  $html .= '</div>';
+  // Start form
+  $form = new HTML('form', array(
+    'action' => $url . basename($_SERVER['REQUEST_URI']),
+    'method' => 'post',
+    'additional' => 'class="right-menu"',
+  ));
 
-  //Display full form with value
-  $html .= '<form action="' . $url . basename($_SERVER['REQUEST_URI']) . ' " method="post" class="right-menu">';
+  // Email
+  $form->addElement(
+    array(
+      'type' => 'text',
+      'name' => 'email',
+      'value' => $ticket->values()["email"],
+      'placeholder' => Language::string(42),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+      'required' => true,
+    ),
+  );
 
-    //Email
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="text" name="email" value="' . $values["email"] . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">E-Mail</span>';
-    $html .= '</label>';
+  // Payment method
+  $options = array(
+    0 => Language::string(43),
+    1 => Language::string(44),
+    2 => Language::string(45),
+  );
 
-    //Payment method
-    $paymentNames = array('Karte', 'Rechnung', 'Zahlung nicht eingegangen');
-    $paymentName = (array_key_exists($values["payment"], $paymentNames)) ? $paymentNames[$values["payment"]] : 'Zahlungsmethode';
-    $paymentNumber = (isset($values["payment"])) ? $values["payment"] : '';
+  $form->addElement(
+    array(
+      'type' => 'select',
+      'name' => 'payment',
+      'value' =>  $options[$ticket->values()["payment"]] ?? '',
+      'headline' => Language::string(46),
+      'options' => $options,
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
 
-    $html .= '<div class="select" onclick="toggleOptions(this)">';
-      $html .= '<input type="text" class="selectValue" name="payment" value="' . $paymentNumber . '" ' . $disabled . ' required>';
-      $html .= '<span class="headline">' . $paymentName . '</span>';
+  $form->addElement(
+    array(
+      'type' => 'number',
+      'name' => 'amount',
+      'value' => number_format(( $ticket->values()["amount"] / 100 ), 2),
+      'placeholder' => Language::string(47),
+      'input_attributes' => 'step="0.05" min="0"',
+      'unit' => ($group->values()["currency"] ?? DEFAULT_CURRENCY),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
 
-      $html .= '<div class="options">';
-        $html .= '<span data-value="0" onclick="selectElement(this)">Karte</span>';
-        $html .= '<span data-value="1" onclick="selectElement(this)">Rechnung</span>';
-        $html .= '<span data-value="2" onclick="selectElement(this)">Zahlung nicht eingegangen</span>';
-      $html .= '</div>';
-    $html .= '</div>';
+  //Custom
+  $customUserInputs = json_decode($ticket->values()["custom"], true);
 
-    //Amount
-    $html .= '<label class="txt-input">';
-      $html .= '<input type="number" step="0.05" min="0" name="amount" value="' . number_format(( $values["amount"] / 100 ), 2) . '" ' . $disabled . ' required/>';
-      $html .= '<span class="placeholder">Betrag</span>';
-      $html .= '<span class="unit">' . $group->values()["currency"] . '</span>';
-    $html .= '</label>';
-
-    //Custom
-    $customUserInputs = json_decode($values["custom"], true);
-
-    if(! empty($customUserInputs)) {
-      foreach($customUserInputs as $customInput) {
-        switch( $customInput["type"] ) {
-          //---------------------------- Select-input ----------------------------//
-          case "select":
+  if(! empty($customUserInputs)) {
+    foreach($customUserInputs as $customInput) {
+      switch( $customInput["type"] ) {
+        //---------------------------- Select-input ----------------------------//
+        case "select":
           $options = explode(",", $customInput["options"]);
-          $html .= '<div class="select" onclick="toggleOptions(this)">';
-            $html .= '<input type="text" class="selectValue" name="' . $customInput["id"] . '" value="' .         (($customInput["value"] == "") ? "" : $customInput["value"]) . '" ' . $disabled . '>';
-            $html .= '<span class="headline">' . (($customInput["value"] == "") ? "-- Auswahl treffen --" : $customInput["value"]) . '</span>';
 
-            $html .= '<div class="options">';
-              foreach($options as $option) {
-                if($option != "") {
-                  $html .= '<span data-value="' . $option . '" onclick="selectElement(this)">' . $option . '</span>';
-                }
-              }
-
-            $html .= '</div>';
-          $html .= '</div>';
-          break;
-          //---------------------------- Radio-input ----------------------------//
-          case "radio":
+          $form->addElement(
+            array(
+              'type' => 'select',
+              'name' => $customInput["id"],
+              'value' =>  (($customInput["value"] == "") ? "" : $customInput["value"]),
+              'options' => array_combine($options, $options), // Generate correct array
+              'disabled' => ! User::w_access_allowed($page, $current_user),
+              'required' => true,
+            ),
+          );
+        break;
+        //---------------------------- Radio-input ----------------------------//
+        case "radio":
           $options = explode(",", $customInput["options"]);
-          $html .= '<div class="radio-input-container">';
-            $html .= $customInput["name"];
-            foreach($options as $option) {
-              if($option != "") {
-                //Define if current element is value
-                $currentValue = str_replace(" ", "_", $customInput["value"]);
-                $checked = ($option == $currentValue) ? "checked" : "" ;
 
-                $html .= '<label class="radio">';
-                  $html .= '<input type="radio" name="' . $customInput["id"] . '" value="' . str_replace(" ", "_", $option)  . '" ' . $checked . ' ' . $disabled . '/>';
-                  $html .= '<div title="Auswahl treffen"></div>';
-                  $html .= $option;
-                $html .= '</label>';
-              }
-            }
-          $html .= '</div>';
-          break;
-          //---------------------------- Checkbox-input ----------------------------//
-          case "checkbox":
-          $html .= '<label class="checkbox">';
-            $checked = (! empty($customInput["value"])) ? "checked" : ""; //Define if selected or not
-
-            $html .= '<input type="checkbox" name="' . $customInput["id"] . '" value="' . $customInput["value"] . '" ' . $checked . ' ' . $disabled . '/>';
-            $html .= '<div title="Häcken setzen"></div>';
-            $html .= $customInput["name"];
-          $html .= '</label>';
-          break;
-          //---------------------------- Textarea ----------------------------//
-          case "textarea":
-          $html .= '<label class="txt-input">';
-            $html .= '<textarea name="' . $customInput["id"] . '" rows="5" ' . $disabled . '>' .$customInput["value"] . '</textarea>';
-            $html .= '<span class="placeholder">' . $customInput["name"] . '</span>';
-          $html .= '</label>';
-          break;
-          //---------------------------- Text-input [Mail, Number, Date] ----------------------------//
-          default: //Text input
-          $html .= '<label class="txt-input">';
-            $html .= '<input type="' . $customInput["type"] . '" name="' . $customInput["id"] . '" value="' .$customInput["value"] . '" ' . $disabled . '/>';
-            $html .= '<span class="placeholder">' . $customInput["name"] . '</span>';
-          $html .= '</label>';
-        }
-      }
-    }
-
-    //Coupon used
-    $used_coupon = new Coupon();
-    $used_coupon->couponID = $ticket->values()["coupon"];
-
-    //Get infos
-    $coupons = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE groupID=:gid");
-    $coupons->execute(array(":gid" => $ticket->values()["groupID"]));
-
-    if($coupons->rowCount() > 0) {
-      $html .= '<div class="select" onclick="toggleOptions(this)">';
-        $html .= '<input type="text" class="selectValue" name="coupon" value="">';
-        $html .= '<span class="headline">' .
-        //Get coupon informaions
-        (
-          (empty($used_coupon->couponID)) ?
-            "Kein Coupon verwendet" : //No coupon used
-            $used_coupon->values()["name"] . ' -' . (
-                empty($used_coupon->values()["discount_percent"]) ?
-                   ($used_coupon->values()["discount_absolute"] / 100) . ' ' . $group->values()["currency"]  : //Correct absolute amount
-                   ($used_coupon->values()["discount_percent"] / 100) . '%' //Correct percent
-              )
-          ) .
-          '</span>';
-
-        $html .= '<div class="options">';
-          $html .= '<span data-value="" onclick="selectElement(this)">Kein Coupon verwendet</span>';
-          foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
-            $couponPrice = new Coupon();
-            $couponPrice->couponID = $coupon["couponID"];
-            $couponPrice = $couponPrice->new_price();
-
-            $group = new Group();
-            $group->groupID = $ticket->values()["groupID"];
-            $html .= '<span data-value="' . $coupon["couponID"] . '" onclick="selectElement(this)">' . $coupon["name"] . ' (Neuer Preis: ' . ($couponPrice/100) . ' ' . $group->values()["currency"] . ')</span>';
+          foreach($options as $option) {
+            $form->addElement(
+              array(
+                'type' => 'radio',
+                'name' => $customInput["id"],
+                'value' =>  str_replace(" ", "_", $option) ?? '',
+                'context' => $option,
+                'checked' => (str_replace(" ", "_", $customInput["value"]) == $option) ? true : false,
+                'disabled' => ! User::w_access_allowed($page, $current_user),
+                'required' => true,
+              ),
+            );
           }
-        $html .= '</div>';
-      $html .= '</div>';
+        break;
+        //---------------------------- Checkbox-input ----------------------------//
+        case "checkbox":
+          $form->addElement(
+            array(
+              'type' => 'checkbox',
+              'name' => $customInput["id"],
+              'value' =>  $customInput["value"],
+              'context' => $customInput["name"],
+              'checked' => ! empty($customInput["value"]),
+              'disabled' => ! User::w_access_allowed($page, $current_user),
+              'required' => true,
+            ),
+          );
+        break;
+        //---------------------------- Textarea ----------------------------//
+        case "textarea":
+          $form->addElement(
+            array(
+              'type' => 'textarea',
+              'name' => $customInput["id"],
+              'value' => $customInput["value"],
+              'placeholder' => $customInput["name"],
+              'disabled' => ! User::w_access_allowed($page, $current_user),
+              'required' => true,
+            ),
+          );
+        break;
+        //---------------------------- Text-input [Mail, Number, Date] ----------------------------//
+        default: //Text input
+          $form->addElement(
+            array(
+              'type' => $customInput["type"] ?? 'text',
+              'name' => $customInput["id"],
+              'value' => $customInput["value"],
+              'placeholder' => $customInput["name"],
+              'disabled' => ! User::w_access_allowed($page, $current_user),
+              'required' => true,
+            ),
+          );
+      }
     }
+  }
 
-    //Display payment time
-    if( $values["payment"] != 2 ) {
-      $html .= "<span class='ticket-payment-date'>&#9432; Zahlung getätig um " . date("H:i \a\m d.m.Y", strtotime($values["payment_time"])) . "</span>";
-    }
+  // Coupon
+  $used_coupon = new Coupon();
+  $used_coupon->couponID = $ticket->values()["coupon"];
+
+  //Get infos
+  $coupons = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE groupID=:gid");
+  $coupons->execute(array(":gid" => $ticket->values()["groupID"]));
+
+  // Get input
+  $headline = (empty($used_coupon->couponID)) ?
+              Language::string(48) : //No coupon used
+              $used_coupon->values()["name"] . ' -' . (
+                empty($used_coupon->values()["discount_percent"]) ?
+                  ($used_coupon->values()["discount_absolute"] / 100) . ' ' . $group->values()["currency"]  : //Correct absolute amount
+                  ($used_coupon->values()["discount_percent"] / 100) . '%' //Correct percent
+              );
+
+  $options = array(
+    "" => Language::string(48),
+  );
+
+  foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
+    // Get new price
+    $couponPrice = new Coupon();
+    $couponPrice->couponID = $coupon["couponID"];
+    $couponPrice = $couponPrice->new_price();
+
+    // Get currency
+    $group = new Group();
+    $group->groupID = $ticket->values()["groupID"];
+
+    $options[$coupon["couponID"]] = $coupon["name"] . ' (Neuer Preis: ' . ($couponPrice/100) . ' ' . ($group->values()["currency"]  ?? DEFAULT_CURRENCY) . ')';
+  }
 
 
-    $html .= '<input type="submit" value="Update" ' . $disabled . '/>';
+  $form->addElement(
+    array(
+      'type' => 'select',
+      'name' => 'coupon',
+      'value' =>  $ticket->values()["coupon"] ?? '',
+      'headline' => $headline,
+      'options' => $options,
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
 
-  $html .= '</form>';
 
-  //display content
-  echo $html;
+  //Display payment time
+  if( $ticket->values()["payment"] != 2 ) {
+    $form->customHTML("<span
+                          class='ticket-payment-date'>" . Language::string( 49, array(
+                            '%date%' =>date("H:i \a\m d.m.Y", strtotime($ticket->values()["payment_time"]))
+                          ) ) .
+                        "</span>");
+  }
+
+  //Update
+  $form->addElement(
+    array(
+      'type' => 'button',
+      'name' => 'update',
+      'value' =>  Language::string(50),
+      'disabled' => ! User::w_access_allowed($page, $current_user),
+    ),
+  );
+
+  // Display headline
+  echo '<div
+          class="headline-maincolor"
+          style="background-color: ' . $group->values()["color"] . '"
+          title="' . Language::string( 20, array(
+                      '%name%' => $group->values()["name"],
+                      '%id%' => $group->values()["groupID"],
+                    )) . '"></div>';
+
+  $topNav->prompt();
+
+  // Top bar message
+  $ticket_states = array(
+    array(
+      'bcolor' => 'var(--ticket-payment-and-used)',
+      'class' => 'payment-and-used',
+      'title' => Language::string(1),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-blocked-and-payment)',
+      'class' => 'blocked-and-payment',
+      'title' => Language::string(2),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-payment-expected)',
+      'class' => 'payment-expected',
+      'title' => Language::string(3),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-used)',
+      'class' => 'used',
+      'title' => Language::string(4),
+    ),
+    array(
+      'bcolor' => 'var(--ticket-blocked)',
+      'class' => 'blocked',
+      'title' => Language::string(5),
+    ),
+  );
+
+  if( $ticket->values()["payment"] == 2 && $ticket->values()["state"] == 1) { //no payment but used
+    echo '<div class="top-bar-ticket ' . $ticket_states[0]["class"] . '">' .
+            Language::string( 21, array(
+              '%date%' => date("d.m.Y H:i:s", strtotime($ticket->values()["employ_time"])),
+            )) .
+          '</div>';
+  }elseif( $ticket->values()["payment"] != 2 && $ticket->values()["state"] == 2) { //Blocked/deleted and payed
+    echo '<div class="top-bar-ticket ' . $ticket_states[1]["class"] . '">' .
+            Language::string(22) .
+          '</div>';
+  }elseif( $ticket->values()["payment"] == 2 && $ticket->values()["state"] != 2) { //Payment expected
+    echo '<div class="top-bar-ticket ' . $ticket_states[2]["class"] . '">' .
+            Language::string(23) .
+          '</div>';
+  }elseif( $ticket->values()["state"] == 1) { //Ticket used
+    echo '<div class="top-bar-ticket ' . $ticket_states[3]["class"] . '">' .
+            Language::string( 24, array(
+              '%date%' => date("d.m.Y H:i:s", strtotime($ticket->values()["employ_time"])),
+            )) .
+          '</div>';
+  }elseif( $ticket->values()["state"] == 2) { //Ticked blocked and no payment
+    echo '<div class="top-bar-ticket ' . $ticket_states[4]["class"] . '">' .
+            Language::string(25) .
+          '</div>';
+  }
+
+  $rightMenu->prompt();
+  $form->prompt();
 }
 
 //Get current action
@@ -355,25 +578,73 @@ unset($action["row-start"]); //Remove tow to get only valid keys
 
 switch(key($action)) {
   case "view":
-    if(! empty($_POST)) {
+    if(User::w_access_allowed($page, $current_user)) {
+      // Start ticket
+      $ticket = new Ticket();
+      $ticket->ticketToken = $_GET["view"];
 
-      var_dump($_POST);
-      //Update ticket
-      if(User::w_access_allowed($page, $current_user)) {
-        //do update
-        $ticket = new Ticket();
-        $ticket->ticketToken = $_GET["view"];
+      // Employ ticket
+      if( isset( $_GET["employ"] ) ) {
+        if($ticket->employ()) {
+          Action::success("Das Ticket konnte <strong>erfolgreich</strong> entwertet werden.");
+        }else {
+          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> entwertet werden.");
+        }
+      }
 
-        var_dump($ticket->values());
+      // Reactivate ticket
+      elseif( isset( $_GET["reactivate"] ) ) {
+        if($ticket->reactivate()) {
+          Action::success("Das Ticket konnte <strong>erfolgreich</strong> reaktiviert werden.");
+        }else {
+          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> reaktiviert werden.");
+        }
+      }
 
+      // Send ticket
+      elseif( isset( $_GET["send"] ) ) {
+        if($ticket->sendTicket( $ticket->values()["email"] )) {
+          Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
+        }else {
+          Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
+        }
+      }
+
+      // Request payment mail
+      elseif( isset( $_GET["requestPayment"] ) ) {
+        if($ticket->requestPayment( $ticket->values()["email"] )) {
+          Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
+        }else {
+          Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
+        }
+      }
+
+      elseif( isset( $_GET["refund"] ) ) {
+        if(! $_POST) {
+          Action::confirm("Möchten Sie die Zahlung für das Ticket " . $_GET["view"]  . " wirklich rückerstatten?", $_GET["view"], "&view=" . urlencode( $_GET["view"]) . "&refund" );
+        }
+
+        if( isset($_POST["confirm"]) ) {
+          $refund = refundTransaction( $_POST["confirm"] );
+
+          if( $refund["transaction_refund_state"] === true) {
+            Action::success("Das Geld wurde erfolgreich rückerstattet.");
+          }else {
+            Action::fail("Beim Rückerstatten ist ein Fehler aufgetreten: <br /> " . $refund["message"]);
+          }
+        }
+      }
+
+      // Update full ticket
+      elseif(! empty($_POST)) {
         if($ticket->update($_POST)) {
           Action::success("Das Ticket konnte <strong>erfolgreich</strong> überarbeitet werden.");
         }else {
           Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> überarbeitet werden.");
         }
-      }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
       }
+    }else {
+      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
     }
 
     //Display ticket
@@ -411,63 +682,111 @@ switch(key($action)) {
     }
 
 
-    echo '<form action="' . $url_page . '&add" method="post" class="form-50 box-width">';
+    // Display top return button
+    $topNav = new HTML('top-nav', array(
+      'classes' => 'border-none',
+    ));
 
-      //Gruppe
-      echo '<div class="select" onclick="toggleOptions(this)">';
-        echo '<input type="text" class="selectValue" name="groupID" required>';
-        echo '<span class="headline">Gruppe auswählen</span>';
+    $topNav->addElement(
+      array(
+        'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
+        'link' => 'Javascript:history.back()',
+        'additional' => 'title="' . Language::string(11) . '"',
+      ),
+    );
 
-        //Select all groups
-        $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS);
-        $groups->execute();
-        echo '<div class="options">';
-        while($row = $groups->fetch(PDO::FETCH_ASSOC)) {
-          $group = new Group();
-          $group->groupID = $row["groupID"];
+    // Start form
+    $form = new HTML('form', array(
+      'action' => $url . basename($_SERVER['REQUEST_URI']),
+      'method' => 'post',
+    ));
 
-          $title = 'Verfügbare Tickets: ' . $group->availableTickets() . '/' . $row["maxTickets"] . '&#013;Tickets pro Benutzer: ' . $row["tpu"]. '&#013;Preis: ' . ($row["price"]/100) . ' ' . $row["currency"] . ' + ' . $row["vat"] . '% MwST.&#013;'
-          ;
-          echo '<span data-value="' . $row["groupID"] . '" onclick="selectElement(this); group_coupons(' . $row["groupID"] . '); group_custom(' . $row["groupID"] . ')" style="border-left: 5px solid ' . $row["color"] . ';" title="' . $title . '">' . $row["name"] . '</span>'; //Display group option
-        }
-        echo '</div>';
+    //Select group
+    $options = array();
 
-      echo '</div>';
+    $groups = $conn->prepare("SELECT * FROM " . TICKETS_GROUPS);
+    $groups->execute();
+    foreach($groups->fetchAll(PDO::FETCH_ASSOC) as $row) {
+      $group = new Group();
+      $group->groupID = $row["groupID"];
 
-      //Email
-      echo '<label class="txt-input">';
-        echo '<input type="email" name="email" required/>';
-        echo '<span class="placeholder">E-Mail</span>';
-      echo '</label>';
+      $options[$row["groupID"] . "\"
+                style='border-left: 5px solid " . $row["color"] . ";'
+                title='" .
+                  Language::string( 61, array(
+                    '%availableTickets%' => $group->availableTickets(),
+                    '%maxTickets%' => $row["maxTickets"],
+                    '%tpu%' => $row["tpu"],
+                    '%price%' => ($row["price"]/100),
+                    '%currency%' => $row["currency"],
+                    '%vat%' => $row["vat"],
+                  ),) . "'"] =
+        $row["name"];
+    }
 
-      //Payment
-      echo '<div class="select" onclick="toggleOptions(this)">';
-        echo '<input type="text" class="selectValue" name="payment" required>';
-        echo '<span class="headline">Zahlungsmethode</span>';
+    $form->addElement(
+      array(
+        'type' => 'select',
+        'name' => 'groupID',
+        'headline' => Language::string(60),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'options' => $options,
+        'required' => true,
+      ),
+    );
 
-        echo '<div class="options">';
-          echo '<span data-value="0" onclick="selectElement(this)">Karte</span>';
-          echo '<span data-value="1" onclick="selectElement(this)">Rechnung</span>';
-          echo '<span data-value="2" onclick="selectElement(this)">Zahlung nicht eingegangen</span>';
-        echo '</div>';
-      echo '</div>';
+    // Email
+    $form->addElement(
+      array(
+        'type' => 'text',
+        'name' => 'email',
+        'placeholder' => Language::string(42),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+        'required' => true,
+      ),
+    );
 
-      //Custom
-      echo '<div class="custom-add-container"></div>';
+    // Payment method
+    $options = array(
+      0 => Language::string(43),
+      1 => Language::string(44),
+      2 => Language::string(45),
+    );
 
-      //Coupon
-      echo '<div class="coupon-add-container"></div>';
+    $form->addElement(
+      array(
+        'type' => 'select',
+        'name' => 'payment',
+        'headline' => Language::string(46),
+        'options' => $options,
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
 
-      //Mail
-      echo '<label class="checkbox">';
-        echo '<input type="checkbox" name="sendMail" value="true" checked/>';
-        echo '<div class="checkbox-btn" title="Ticket an Käufer senden"></div>';
-        echo 'Ticket an Käufer senden';
-      echo '</label>';
+    // Send mail
+    $form->addElement(
+      array(
+        'type' => 'checkbox',
+        'name' => 'sendMail',
+        'context' => Language::string(62),
+        'checked' => true,
+        'value' => 'true',
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
 
-      echo '<input type="submit" value="Eintragen" />';
+    // Add
+    $form->addElement(
+      array(
+        'type' => 'button',
+        'name' => 'add',
+        'value' => Language::string(63),
+        'disabled' => ! User::w_access_allowed($page, $current_user),
+      ),
+    );
 
-    echo '</form>';
+    $topNav->prompt();
+    $form->prompt();
   break;
   case "remove":
     //Update ticket
@@ -483,14 +802,6 @@ switch(key($action)) {
     }else {
       Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
     }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
 
     //Display tickets
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
@@ -519,14 +830,6 @@ switch(key($action)) {
       Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
     }
 
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
     //Display tickets
     $search_value = (!empty($_POST["search_value"])) ? $_POST["search_value"] : '';
     display_tickets( $search_value );
@@ -539,200 +842,7 @@ switch(key($action)) {
       </a>';
     }
   break;
-  case "employ":
-    //Update ticket
-    if(User::w_access_allowed($page, $current_user)) {
-      //do update
-      $ticket = new Ticket();
-      $ticket->ticketToken = $_GET["employ"];
-      if($ticket->employ()) {
-        Action::success("Das Ticket konnte <strong>erfolgreich</strong> entwertet werden.");
-      }else {
-        Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> entwertet werden.");
-      }
-    }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-    }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
-    //Display tickets
-    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
-    display_tickets( $search_value );
-
-    //Add button
-    if(User::w_access_allowed($page, $current_user)) {
-      echo '<a class="add" href="' . $url_page . '&add">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
-    }
-  break;
-  case "reactivate":
-    //Update ticket
-    if(User::w_access_allowed($page, $current_user)) {
-      //do update
-      $ticket = new Ticket();
-      $ticket->ticketToken = $_GET["reactivate"];
-      if($ticket->reactivate()) {
-        Action::success("Das Ticket konnte <strong>erfolgreich</strong> reaktiviert werden.");
-      }else {
-        Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> reaktiviert werden.");
-      }
-    }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-    }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
-    //Display tickets
-    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
-    display_tickets( $search_value );
-
-    //Add button
-    if(User::w_access_allowed($page, $current_user)) {
-      echo '<a class="add" href="' . $url_page . '&add">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
-    }
-  break;
-  case "send":
-    if(User::w_access_allowed($page, $current_user)) {
-      //Start ticket class
-      $ticket = new Ticket();
-      $ticket->ticketToken = $_GET["send"];
-
-      //Get recipient
-      $to = $ticket->values()["email"];
-
-      if($ticket->sendTicket( $to )) {
-        Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
-      }else {
-        Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
-      }
-    }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-    }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
-    //Display tickets
-    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
-    display_tickets( $search_value );
-
-    //Add button
-    if(User::w_access_allowed($page, $current_user)) {
-      echo '<a class="add" href="' . $url_page . '&add">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
-    }
-  break;
-  case "requestPayment":
-    if(User::w_access_allowed($page, $current_user)) {
-      //Start ticket class
-      $ticket = new Ticket();
-      $ticket->ticketToken = $_GET["requestPayment"];
-
-      //Get recipient
-      $to = $ticket->values()["email"];
-
-      if($ticket->requestPayment( $to )) {
-        Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
-      }else {
-        Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
-      }
-    }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
-    }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
-    //Display tickets
-    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
-    display_tickets( $search_value );
-
-    //Add button
-    if(User::w_access_allowed($page, $current_user)) {
-      echo '<a class="add" href="' . $url_page . '&add">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
-    }
-  break;
-  case "refundPayment":
-    //Start ticket class
-    $ticket = new Ticket();
-    $ticket->ticketToken = $_GET["refundPayment"];
-
-    if(! $_POST) {
-      Action::confirm("Möchten Sie die Zahlung für das Ticket " . $_GET["refundPayment"]  . " wirklich rückerstatten?", $_GET["refundPayment"], "&refundPayment=" . urlencode( $_GET["refundPayment"]) );
-    }
-
-    if( isset($_POST["confirm"]) ) {
-      $refund = refundTransaction( $_POST["confirm"]);
-
-      if( $refund["transaction_refund_state"] === true) {
-        Action::success("Das Geld wurde erfolgreich rückerstattet.");
-      }else {
-        Action::fail("Beim Rückerstatten ist ein Fehler aufgetreten: <br /> " . $refund["message"]);
-      }
-    }
-
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
-    //Display tickets
-    $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
-    display_tickets( $search_value );
-
-    //Add button
-    if(User::w_access_allowed($page, $current_user)) {
-      echo '<a class="add" href="' . $url_page . '&add">
-        <span class="horizontal"></span>
-        <span class="vertical"></span>
-      </a>';
-    }
-  break;
   default:
-    //Display form
-    echo '<form action="' . $url . '" method="get" class="search">';
-      echo '<input type="hidden" name="id" value="' . $mainPage . '" />';
-      echo '<input type="hidden" name="sub" value="' . $page . '" />';
-      echo '<input type="text" name="s" value ="' . (isset( $_GET["s"] ) ? $_GET["s"] : "") . '" placeholder="Benutzername, Vonrame, Nachname, Ticketinfo">';
-      echo '<button><img src="' . $url . 'medias/icons/magnifying-glass.svg" /></button>';
-    echo '</form>';
-
     //Display tickets
     $search_value = (!empty($_GET["s"])) ? $_GET["s"] : '';
     display_tickets( $search_value );

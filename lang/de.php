@@ -141,6 +141,106 @@ $string["mediahub"][14] = '(Fehler beim hochladen)';
 // $string[17][49] = '';
 
 /**
+ * Page 7
+ */
+// List
+$string[7][0] = 'Benutzername, Vorname, Nachname, Ticketinfo'; // Search form placeholder
+
+$string[7][1] = 'Entwertet ohne Zahlung'; // Ticket states
+$string[7][2] = 'Blockiert & bezahlt'; // Ticket states
+$string[7][3] = 'Zahlung erwartet'; // Ticket states
+$string[7][4] = 'Entwertet'; // Ticket states
+$string[7][5] = 'Blockiert'; // Ticket states
+
+$string[7][6] = 'E-Mail'; // Headline
+$string[7][7] = 'Kaufdatum'; // Headline
+$string[7][8] = 'Aktion'; // Headline
+
+$string[7][9] = 'Ticketdetails anzeigen'; // Action
+$string[7][10] = 'PDF öffnen'; // Action
+$string[7][11] = 'Wiederherstellen'; // Action
+$string[7][12] = 'Löschen'; // Action
+$string[7][13] = 'Name: %name%&#013;ID: %id%'; // Action
+
+$string[7][14] = 'Zurück'; // nav
+$string[7][15] = 'Weiter'; // nav
+
+// View
+$string[7][20] = 'Name: %name%&#013;ID: %id%';
+
+$string[7][21] = 'Ticket entwertet am %date%, Zahlung nicht getätigt.'; // Top bar text
+$string[7][22] = 'Blockiertes Ticket, bereits bezahlt.'; // Top bar text
+$string[7][23] = 'Zahlung nicht getätigt.'; // Top bar text
+$string[7][24] = 'Ticket entwertet am %date%'; // Top bar text
+$string[7][25] = 'Ticket blockiert.'; // Top bar text
+
+$string[7][26] = 'PDF'; // Img alt (right menu)
+$string[7][27] = 'PDF öffnen'; // Link title (right menu)
+$string[7][28] = 'Mail'; // Img alt (right menu)
+$string[7][39] = 'Ticket per Mail senden'; // Link title (right menu)
+$string[7][30] = 'Mail'; // Img alt (right menu)
+$string[7][31] = 'Zahlung anfordern'; // Link title (right menu)
+$string[7][32] = 'Erstatten'; // Img alt (right menu)
+$string[7][33] = 'Zahlung rückerstatten'; // Link title (right menu)
+$string[7][34] = 'Reaktivieren'; // Img alt (right menu)
+$string[7][35] = 'Ticket reaktivieren'; // Link title (right menu)
+$string[7][36] = 'Entwerten'; // Img alt (right menu)
+$string[7][37] = 'Ticket entwerten'; // Link title (right menu)
+$string[7][38] = 'Wiederherstellen'; // Img alt (right menu)
+$string[7][39] = 'Ticket wiederherstellen'; // Link title (right menu)
+$string[7][40] = 'Entfernen'; // Img alt (right menu)
+$string[7][41] = 'Ticket entfernen'; // Link title (right menu)
+
+$string[7][42] = 'E-Mail'; // Input name
+$string[7][43] = 'Karte'; // Options select
+$string[7][44] = 'Rechnung'; // Options select
+$string[7][45] = 'Zahlung nicht eingegangen'; // Options select
+$string[7][46] = 'Zahlungsmethode'; // Headline select
+$string[7][47] = 'Betrag'; // Input name
+$string[7][48] = 'Kein Coupon verwendet'; // Coupon
+$string[7][49] = '&#9432; Zahlung getätig um %date%'; // Payment time
+$string[7][50] = 'Update';
+
+// Add
+$string[7][60] = 'Gruppe auswählen';
+$string[7][61] = 'Verfügbare Tickets: %availableTickets%/%maxTickets%&#013;Tickets pro Benutzer: %tpu%&#013;Preis: %price% %currency% + %vat%% MwST.&#013;';
+$string[7][62] = 'Ticket an Käufer senden';
+$string[7][63] = 'Hinzufügen';
+
+// Actions
+$string[7][70] = '';
+$string[7][71] = '';
+$string[7][72] = '';
+$string[7][73] = '';
+$string[7][74] = '';
+$string[7][75] = '';
+$string[7][76] = '';
+$string[7][77] = '';
+$string[7][78] = '';
+$string[7][79] = '';
+$string[7][80] = '';
+$string[7][81] = '';
+$string[7][82] = '';
+$string[7][83] = '';
+$string[7][84] = '';
+$string[7][85] = '';
+$string[7][86] = '';
+$string[7][87] = '';
+$string[7][88] = '';
+$string[7][89] = '';
+$string[7][90] = '';
+$string[7][91] = '';
+$string[7][92] = '';
+$string[7][93] = '';
+$string[7][94] = '';
+$string[7][95] = '';
+$string[7][96] = '';
+$string[7][97] = '';
+$string[7][98] = '';
+$string[7][99] = '';
+
+
+/**
  * Page 9
  */
 // List
@@ -220,15 +320,15 @@ $string["scanner"][2] = 'Abbrechen'; // Button
 $string["scanner"][3] = 'Ticket benützt um %date%, Zahlung nicht getätigt.'; // Payment and ticket state
 $string["scanner"][4] = 'Blockiertes Ticket, bereits bezahlt.'; // Payment and ticket state
 $string["scanner"][5] = 'Zahlung nicht getätigt.'; // Payment and ticket state
-$string["scanner"][6] = 'Ticket eingelöst am %date%.'; // Payment and ticket state
+$string["scanner"][6] = 'Ticket entwertet am %date%.'; // Payment and ticket state
 $string["scanner"][7] = 'Ticket blockiert.'; // Payment and ticket state
 $string["scanner"][8] = 'TKTDATA'; // Title
 $string["scanner"][9] = 'E-Mail:'; // Name
 $string["scanner"][10] = 'Einlösen'; // Button
 $string["scanner"][11] = 'Abbrechen'; // Button
 
-$string["scanner"][12] = 'Das Ticket wurde <strong>erfolgreich eingelöst</strong>'; // Message
-$string["scanner"][13] = 'Das Ticket wurde <strong>nicht eingelöst</strong>'; // Message
+$string["scanner"][12] = 'Das Ticket wurde <strong>erfolgreich entwertet</strong>'; // Message
+$string["scanner"][13] = 'Das Ticket wurde <strong>nicht entwertet</strong>'; // Message
 $string["scanner"][14] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Message
 
 /**
@@ -645,10 +745,6 @@ $string[20][152] = 'Ticket (%ticketToken%) entfernt'; // ticket.php
 $string[20][153] = 'Ticket (%ticketToken%) wiederhergestellt'; // ticket.php
 $string[20][154] = 'Ticket (%ticketToken%) entwertet'; // ticket.php
 $string[20][155] = 'Ticket (%ticketToken%) manuell reaktiviert'; // ticket.php
-$string[20][156] = ''; // ticket.php
-$string[20][157] = ''; // ticket.php
-$string[20][158] = ''; // ticket.php
-$string[20][159] = ''; // ticket.php
 
 /**
  * Profil

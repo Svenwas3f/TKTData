@@ -208,15 +208,15 @@ $string["scanner"][2] = 'Cancel'; // Button
 $string["scanner"][3] = 'Ticket used at %date%, payment not made.'; // Payment and ticket state
 $string["scanner"][4] = 'Blocked ticket, already paid.'; // Payment and ticket state
 $string["scanner"][5] = 'Payment not made.'; // Payment and ticket state
-$string["scanner"][6] = 'Ticket redeemed on %date%.'; // Payment and ticket state
+$string["scanner"][6] = 'Ticket voided on %date%.'; // Payment and ticket state
 $string["scanner"][7] = 'Ticket blocked.'; // Payment and ticket state
 $string["scanner"][8] = 'TKTDATA'; // Title
 $string["scanner"][9] = 'E-Mail:'; // Name
 $string["scanner"][10] = 'Redeem'; // Button
 $string["scanner"][11] = 'Cancel'; // Button
 
-$string["scanner"][12] = 'The ticket was <strong>successfully redeemed</strong>'; // Message
-$string["scanner"][13] = 'The ticket was <strong>not redeemed</strong>'; // Message
+$string["scanner"][12] = 'The ticket was <strong>successfully voided</strong>'; // Message
+$string["scanner"][13] = 'The ticket was <strong>not voided</strong>'; // Message
 $string["scanner"][14] = 'You have <strong>no authorization</strong> to perform this action'; // Message
 
 /**
@@ -596,27 +596,42 @@ $string[20][13] = 'You have <strong>no authorization</strong> to perform this ac
 $string[20][14] = 'Return to the previous page '; // Return button
 
 // Messages
-$string[20][100] = 'Updated profile of %user%';
-$string[20][101] = 'Removed profile of %user%';
-$string[20][102] = 'Removed acces for %user%';
-$string[20][103] = 'Added profile of %user%';
-$string[20][103] = 'Version %version% restored';
+$string[20][100] = 'Updated profile of %user%'; // user.php
+$string[20][101] = 'Removed profile of %user%'; // user.php
+$string[20][102] = 'Removed acces for %user%'; // user.php
+$string[20][103] = 'Added profile of %user%'; // user.php
+$string[20][103] = 'Version %version% restored'; // user.php
 
-$string[20][110] = 'New pub added (%name%)';
-$string[20][111] = 'New global product (%name%) added';
-$string[20][112] = 'New product (%name%) added for pub %pbu% ';
-$string[20][113] = 'Added access to pub #%pub% for user (%user%) %name% ';
-$string[20][114] = 'Pub #%pub% (%name%) revised';
-$string[20][115] = 'Pub #%pub% (%name%) removed ';
-$string[20][116] = 'Removed access for the user #%user% (%username%) for the pub #%pub% (%pubname%) ';
+$string[20][110] = 'New pub added (%name%)'; // pu.php
+$string[20][111] = 'New global product (%name%) added'; // pu.php
+$string[20][112] = 'New product (%name%) added for pub %pbu% '; // pu.php
+$string[20][113] = 'Added access to pub #%pub% for user (%user%) %name% '; // pu.php
+$string[20][114] = 'Pub #%pub% (%name%) revised'; // pu.php
+$string[20][115] = 'Pub #%pub% (%name%) removed '; // pu.php
+$string[20][116] = 'Removed access for the user #%user% (%username%) for the pub #%pub% (%pubname%) '; // pu.php
 
-$string[20][120] = 'New global product (%name%) added';
-$string[20][121] = 'New product (%name%) added for pub #%pub%';
-$string[20][122] = 'Product #%id% (%name%) revised';
-$string[20][123] = 'Product #%id% (%name%) deleted';
-$string[20][124] = 'Product #%id% (%name%) added to the menu (#%pub%)';
-$string[20][125] = 'Product #%id% (%name%) removed from the menu (#%pub%)';
-$string[20][126] = 'Availability of product #%id% (%name%) adjusted';
+$string[20][120] = 'New global product (%name%) added'; // products.php
+$string[20][121] = 'New product (%name%) added for pub #%pub%'; // products.php
+$string[20][122] = 'Product #%id% (%name%) revised'; // products.php
+$string[20][123] = 'Product #%id% (%name%) deleted'; // products.php
+$string[20][124] = 'Product #%id% (%name%) added to the menu (#%pub%)'; // products.php
+$string[20][125] = 'Product #%id% (%name%) removed from the menu (#%pub%)'; // products.php
+$string[20][126] = 'Availability of product #%id% (%name%) adjusted'; // products.php
+
+$string[20][130] = 'Added new Transaction #%id%'; // transaction.php
+$string[20][131] = 'Transaction #%id% revised'; // transaction.php
+$string[20][132] = 'Transaction #%id% removed'; // transaction.php
+
+$string[20][140] = 'Coupon (%name%) added to group #%group%'; // coupon.php
+$string[20][141] = 'Coupon #%id% revised'; // coupon.php
+$string[20][142] = 'Coupon #%id% removed'; // coupon.php
+
+$string[20][150] = 'New Ticket (%ticketToken%) add'; // ticket.php
+$string[20][151] = 'Ticket (%ticketToken%) revised'; // ticket.php
+$string[20][152] = 'Ticket (%ticketToken%) removed'; // ticket.php
+$string[20][153] = 'Ticket (%ticketToken%) restored'; // ticket.php
+$string[20][154] = 'Ticket (%ticketToken%) voided'; // ticket.php
+$string[20][155] = 'Ticket (%ticketToken%) manually reactivated'; // ticket.php
 
 /**
  * Profil
