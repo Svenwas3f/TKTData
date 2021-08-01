@@ -226,7 +226,7 @@ function single_ticket() {
     array(
       'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
       'link' => 'Javascript:history.back()',
-      'additional' => 'title="' . Language::string(11) . '"',
+      'additional' => 'title="' . Language::string(51) . '"',
     ),
   );
 
@@ -235,7 +235,7 @@ function single_ticket() {
 
   $rightMenu->addElement(
     array(
-      'context' => '<img src="' . $url . 'medias/icons/pdf.svg" alt="' . Language::string(26) . '" title="' . Language::string(27) . '"/>',
+      'context' => '<img src="' . $url . 'medias/icons/pdf.svg" alt="' . Language::string(27) . '" title="' . Language::string(28) . '"/>',
       'additional_item' => 'href="' . $url . 'pdf/ticket/?ticketToken=' . urlencode( $ticket->ticketToken ) . '"
                             target="_blank"',
     ),
@@ -243,7 +243,7 @@ function single_ticket() {
 
   $rightMenu->addElement(
     array(
-      'context' => '<img src="' . $url . 'medias/icons/mail.svg" alt="' . Language::string(28) . '" title="' . Language::string(29) . '"/>',
+      'context' => '<img src="' . $url . 'medias/icons/mail.svg" alt="' . Language::string(29) . '" title="' . Language::string(30) . '"/>',
       'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&send"',
     ),
   );
@@ -251,7 +251,7 @@ function single_ticket() {
   if( $ticket->values()["payment"] == 2 ) {
     $rightMenu->addElement(
       array(
-        'context' => '<img src="' . $url . 'medias/icons/payment.svg" alt="' . Language::string(30) . '" title="' . Language::string(31) . '"/>',
+        'context' => '<img src="' . $url . 'medias/icons/payment.svg" alt="' . Language::string(31) . '" title="' . Language::string(32) . '"/>',
         'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&requestPayment"',
       ),
     );
@@ -261,7 +261,7 @@ function single_ticket() {
   if($transaction["transaction_retrieve_status"] && $ticket->values()["amount"] > 0 && ($transaction["pspId"] != 15 || $transaction["pspId"] != 27) && $ticket->values()["payment"] == 0) {
     $rightMenu->addElement(
       array(
-        'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="' . Language::string(32) . '" title="' . Language::string(33) . '"/>',
+        'context' => '<img src="' . $url . 'medias/icons/payment-refund.svg" alt="' . Language::string(33) . '" title="' . Language::string(34) . '"/>',
         'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&refund"',
       ),
     );
@@ -272,14 +272,14 @@ function single_ticket() {
     if( $ticket->values()["state"] == 1 ){
       $rightMenu->addElement(
         array(
-          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket2.svg" alt="' . Language::string(34) . '" title="' . Language::string(35) . '"/>',
+          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket2.svg" alt="' . Language::string(35) . '" title="' . Language::string(36) . '"/>',
           'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&reactivate"',
         ),
       );
     }else{
       $rightMenu->addElement(
         array(
-          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket1.svg" alt="' . Language::string(36) . '" title="' . Language::string(37) . '"/>',
+          'context' => '<img src="' . $url . 'medias/icons/toggleUsedTicket1.svg" alt="' . Language::string(37) . '" title="' . Language::string(38) . '"/>',
           'additional_item' => 'href="' . $url_page . '&view=' . urlencode( $ticket->ticketToken ) . '&employ"',
         ),
       );
@@ -289,14 +289,14 @@ function single_ticket() {
     if( $ticket->values()["state"] == 2 ){
       $rightMenu->addElement(
         array(
-          'context' => '<img src="' . $url . 'medias/icons/restore.svg" alt="' . Language::string(38) . '" title="' . Language::string(39) . '"/>',
+          'context' => '<img src="' . $url . 'medias/icons/restore.svg" alt="' . Language::string(39) . '" title="' . Language::string(40) . '"/>',
           'additional_item' => 'href="' . $url_page . '&restore=' . urlencode( $ticket->ticketToken ) . '"',
         ),
       );
     }else{
       $rightMenu->addElement(
         array(
-          'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(40) . '" title="' . Language::string(41) . '"/>',
+          'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(41) . '" title="' . Language::string(42) . '"/>',
           'additional_item' => 'href="' . $url_page . '&remove=' . urlencode( $ticket->ticketToken ) . '"',
         ),
       );
@@ -316,7 +316,7 @@ function single_ticket() {
       'type' => 'text',
       'name' => 'email',
       'value' => $ticket->values()["email"],
-      'placeholder' => Language::string(42),
+      'placeholder' => Language::string(43),
       'disabled' => ! User::w_access_allowed($page, $current_user),
       'required' => true,
     ),
@@ -324,9 +324,9 @@ function single_ticket() {
 
   // Payment method
   $options = array(
-    0 => Language::string(43),
-    1 => Language::string(44),
-    2 => Language::string(45),
+    0 => Language::string(44),
+    1 => Language::string(45),
+    2 => Language::string(46),
   );
 
   $form->addElement(
@@ -334,7 +334,7 @@ function single_ticket() {
       'type' => 'select',
       'name' => 'payment',
       'value' =>  $options[$ticket->values()["payment"]] ?? '',
-      'headline' => Language::string(46),
+      'headline' => Language::string(47),
       'options' => $options,
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),
@@ -345,7 +345,7 @@ function single_ticket() {
       'type' => 'number',
       'name' => 'amount',
       'value' => number_format(( $ticket->values()["amount"] / 100 ), 2),
-      'placeholder' => Language::string(47),
+      'placeholder' => Language::string(48),
       'input_attributes' => 'step="0.05" min="0"',
       'unit' => ($group->values()["currency"] ?? DEFAULT_CURRENCY),
       'disabled' => ! User::w_access_allowed($page, $current_user),
@@ -444,7 +444,7 @@ function single_ticket() {
 
   // Get input
   $headline = (empty($used_coupon->couponID)) ?
-              Language::string(48) : //No coupon used
+              Language::string(49) : //No coupon used
               $used_coupon->values()["name"] . ' -' . (
                 empty($used_coupon->values()["discount_percent"]) ?
                   ($used_coupon->values()["discount_absolute"] / 100) . ' ' . $group->values()["currency"]  : //Correct absolute amount
@@ -452,7 +452,7 @@ function single_ticket() {
               );
 
   $options = array(
-    "" => Language::string(48),
+    "" => Language::string(49),
   );
 
   foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
@@ -484,7 +484,7 @@ function single_ticket() {
   //Display payment time
   if( $ticket->values()["payment"] != 2 ) {
     $form->customHTML("<span
-                          class='ticket-payment-date'>" . Language::string( 49, array(
+                          class='ticket-payment-date'>" . Language::string( 50, array(
                             '%date%' =>date("H:i \a\m d.m.Y", strtotime($ticket->values()["payment_time"]))
                           ) ) .
                         "</span>");
@@ -495,7 +495,7 @@ function single_ticket() {
     array(
       'type' => 'button',
       'name' => 'update',
-      'value' =>  Language::string(50),
+      'value' =>  Language::string(51),
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),
   );
@@ -542,27 +542,27 @@ function single_ticket() {
 
   if( $ticket->values()["payment"] == 2 && $ticket->values()["state"] == 1) { //no payment but used
     echo '<div class="top-bar-ticket ' . $ticket_states[0]["class"] . '">' .
-            Language::string( 21, array(
+            Language::string( 22, array(
               '%date%' => date("d.m.Y H:i:s", strtotime($ticket->values()["employ_time"])),
             )) .
           '</div>';
   }elseif( $ticket->values()["payment"] != 2 && $ticket->values()["state"] == 2) { //Blocked/deleted and payed
     echo '<div class="top-bar-ticket ' . $ticket_states[1]["class"] . '">' .
-            Language::string(22) .
+            Language::string(23) .
           '</div>';
   }elseif( $ticket->values()["payment"] == 2 && $ticket->values()["state"] != 2) { //Payment expected
     echo '<div class="top-bar-ticket ' . $ticket_states[2]["class"] . '">' .
-            Language::string(23) .
+            Language::string(24) .
           '</div>';
   }elseif( $ticket->values()["state"] == 1) { //Ticket used
     echo '<div class="top-bar-ticket ' . $ticket_states[3]["class"] . '">' .
-            Language::string( 24, array(
+            Language::string( 25, array(
               '%date%' => date("d.m.Y H:i:s", strtotime($ticket->values()["employ_time"])),
             )) .
           '</div>';
   }elseif( $ticket->values()["state"] == 2) { //Ticked blocked and no payment
     echo '<div class="top-bar-ticket ' . $ticket_states[4]["class"] . '">' .
-            Language::string(25) .
+            Language::string(26) .
           '</div>';
   }
 
@@ -691,7 +691,7 @@ switch(key($action)) {
       array(
         'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
         'link' => 'Javascript:history.back()',
-        'additional' => 'title="' . Language::string(11) . '"',
+        'additional' => 'title="' . Language::string(51) . '"',
       ),
     );
 

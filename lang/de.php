@@ -167,39 +167,40 @@ $string[7][15] = 'Weiter'; // nav
 
 // View
 $string[7][20] = 'Name: %name%&#013;ID: %id%';
+$string[7][21] = 'Zur vorherigen Seite zurück';
 
-$string[7][21] = 'Ticket entwertet am %date%, Zahlung nicht getätigt.'; // Top bar text
-$string[7][22] = 'Blockiertes Ticket, bereits bezahlt.'; // Top bar text
-$string[7][23] = 'Zahlung nicht getätigt.'; // Top bar text
-$string[7][24] = 'Ticket entwertet am %date%'; // Top bar text
-$string[7][25] = 'Ticket blockiert.'; // Top bar text
+$string[7][22] = 'Ticket entwertet am %date%, Zahlung nicht getätigt.'; // Top bar text
+$string[7][23] = 'Blockiertes Ticket, bereits bezahlt.'; // Top bar text
+$string[7][24] = 'Zahlung nicht getätigt.'; // Top bar text
+$string[7][25] = 'Ticket entwertet am %date%'; // Top bar text
+$string[7][26] = 'Ticket blockiert.'; // Top bar text
 
-$string[7][26] = 'PDF'; // Img alt (right menu)
-$string[7][27] = 'PDF öffnen'; // Link title (right menu)
-$string[7][28] = 'Mail'; // Img alt (right menu)
-$string[7][39] = 'Ticket per Mail senden'; // Link title (right menu)
-$string[7][30] = 'Mail'; // Img alt (right menu)
-$string[7][31] = 'Zahlung anfordern'; // Link title (right menu)
-$string[7][32] = 'Erstatten'; // Img alt (right menu)
-$string[7][33] = 'Zahlung rückerstatten'; // Link title (right menu)
-$string[7][34] = 'Reaktivieren'; // Img alt (right menu)
-$string[7][35] = 'Ticket reaktivieren'; // Link title (right menu)
-$string[7][36] = 'Entwerten'; // Img alt (right menu)
-$string[7][37] = 'Ticket entwerten'; // Link title (right menu)
-$string[7][38] = 'Wiederherstellen'; // Img alt (right menu)
-$string[7][39] = 'Ticket wiederherstellen'; // Link title (right menu)
-$string[7][40] = 'Entfernen'; // Img alt (right menu)
-$string[7][41] = 'Ticket entfernen'; // Link title (right menu)
+$string[7][27] = 'PDF'; // Img alt (right menu)
+$string[7][28] = 'PDF öffnen'; // Link title (right menu)
+$string[7][29] = 'Mail'; // Img alt (right menu)
+$string[7][30] = 'Ticket per Mail senden'; // Link title (right menu)
+$string[7][31] = 'Mail'; // Img alt (right menu)
+$string[7][32] = 'Zahlung anfordern'; // Link title (right menu)
+$string[7][33] = 'Erstatten'; // Img alt (right menu)
+$string[7][34] = 'Zahlung rückerstatten'; // Link title (right menu)
+$string[7][35] = 'Reaktivieren'; // Img alt (right menu)
+$string[7][36] = 'Ticket reaktivieren'; // Link title (right menu)
+$string[7][37] = 'Entwerten'; // Img alt (right menu)
+$string[7][38] = 'Ticket entwerten'; // Link title (right menu)
+$string[7][39] = 'Wiederherstellen'; // Img alt (right menu)
+$string[7][40] = 'Ticket wiederherstellen'; // Link title (right menu)
+$string[7][41] = 'Entfernen'; // Img alt (right menu)
+$string[7][42] = 'Ticket entfernen'; // Link title (right menu)
 
-$string[7][42] = 'E-Mail'; // Input name
-$string[7][43] = 'Karte'; // Options select
-$string[7][44] = 'Rechnung'; // Options select
-$string[7][45] = 'Zahlung nicht eingegangen'; // Options select
-$string[7][46] = 'Zahlungsmethode'; // Headline select
-$string[7][47] = 'Betrag'; // Input name
-$string[7][48] = 'Kein Coupon verwendet'; // Coupon
-$string[7][49] = '&#9432; Zahlung getätig um %date%'; // Payment time
-$string[7][50] = 'Update';
+$string[7][43] = 'E-Mail'; // Input name
+$string[7][44] = 'Karte'; // Options select
+$string[7][45] = 'Rechnung'; // Options select
+$string[7][46] = 'Zahlung nicht eingegangen'; // Options select
+$string[7][47] = 'Zahlungsmethode'; // Headline select
+$string[7][48] = 'Betrag'; // Input name
+$string[7][49] = 'Kein Coupon verwendet'; // Coupon
+$string[7][50] = '&#9432; Zahlung getätig um %date%'; // Payment time
+$string[7][51] = 'Update';
 
 // Add
 $string[7][60] = 'Gruppe auswählen';
