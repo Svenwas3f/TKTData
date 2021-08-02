@@ -241,7 +241,6 @@ $string[7][95] = 'Das Ticket konnte <strong>erfolgreich</strong> aktiviert werde
 $string[7][96] = 'Leider konnte das Ticket <strong>nicht</strong> aktiviert werden.'; // Activate message
 $string[7][97] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Activate message
 
-
 /**
  * Page 9
  */

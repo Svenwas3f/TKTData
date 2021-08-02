@@ -18,122 +18,154 @@ switch($_POST["p"]) {
   case 7:
     switch($_POST["action"]) {
       case "get_custom":
-        if(User::r_access_allowed(10, $current_user)) {
+        if(User::r_access_allowed(7, $current_user)) {
+          // Start form
+          $form = new HTML('form', array(
+            'method' => 'post',
+            'action' => $url,
+          ));
+
+          // Start group
           $group = new Group();
           $group->groupID = json_decode($_POST["values"], true)["groupID"];
           $customUserInputs = json_decode($group->values()["custom"], true);
 
           if(! empty($customUserInputs)) {
-            //Set id and remove unused elements
-            for($i = 0; $i < count($customUserInputs); $i++) {
-              //Unset elements
-              unset($customUserInputs[$i]["placeholder"]);
-              unset($customUserInputs[$i]["required"]);
-
-              //Set new values
-              $customUserInputs[$i] = array_merge(array("id" => $i), $customUserInputs[$i]); //Id of input
-            }
-
-            //Order array by user input
-            foreach($customUserInputs as $key => $value) {
-              $orders[$key] = intval($value["order"]);
-            }
-            array_multisort($orders, SORT_ASC, $customUserInputs);
-
-            //Display inputs
             foreach($customUserInputs as $customInput) {
               switch( $customInput["type"] ) {
                 //---------------------------- Select-input ----------------------------//
                 case "select":
-                  $options = explode(",", $customInput["value"]);
-                  echo  '<div class="select" onclick="toggleOptions(this)">';
-                    echo  '<input type="text" class="selectValue" name="' . $customInput["id"] . '">';
-                    echo  '<span class="headline">-- Auswahl treffen --</span>';
+                  $options = explode(",", $customInput["options"]);
 
-                    echo  '<div class="options">';
-                      foreach($options as $option) {
-                        if($option != "") {
-                          echo  '<span data-value="' . $option . '" onclick="selectElement(this)">' . $option . '</span>';
-                        }
-                      }
-
-                    echo  '</div>';
-                  echo  '</div>';
+                  $form->addElement(
+                    array(
+                      'type' => 'select',
+                      'name' => $customInput["id"],
+                      'value' =>  (($customInput["value"] == "") ? "" : $customInput["value"]),
+                      'options' => array_combine($options, $options), // Generate correct array
+                      'disabled' => ! User::w_access_allowed($page, $current_user),
+                      'required' => $customInput["required"],
+                    ),
+                  );
                 break;
                 //---------------------------- Radio-input ----------------------------//
                 case "radio":
-                  $options = explode(",", $customInput["value"]);
-                  echo  '<div class="radio-input-container">';
-                    echo  $customInput["name"];
-                    foreach($options as $option) {
-                      if($option != "") {
-                        //Define if current element is value
-                        $currentValue = str_replace(" ", "_", $customInput["value"]);
+                  $options = explode(",", $customInput["options"]);
 
-                        echo  '<label class="radio">';
-                          echo  '<input type="radio" name="' . $customInput["id"] . '" />';
-                          echo  '<div title="Auswahl treffen"></div>';
-                          echo  $option;
-                        echo  '</label>';
-                      }
-                    }
-                  echo  '</div>';
+                  foreach($options as $option) {
+                    $form->addElement(
+                      array(
+                        'type' => 'radio',
+                        'name' => $customInput["id"],
+                        'value' =>  str_replace(" ", "_", $option) ?? '',
+                        'context' => $option,
+                        'checked' => (str_replace(" ", "_", $customInput["value"]) == $option) ? true : false,
+                        'disabled' => ! User::w_access_allowed($page, $current_user),
+                        'required' => $customInput["required"],
+                      ),
+                    );
+                  }
                 break;
                 //---------------------------- Checkbox-input ----------------------------//
                 case "checkbox":
-                  echo  '<label class="checkbox">';
-                    echo  '<input type="checkbox" name="' . $customInput["id"] . '" value="' . $customInput["value"] . '" />';
-                    echo  '<div title="Häcken setzen"></div>';
-                    echo  $customInput["name"];
-                  echo  '</label>';
+                  $form->addElement(
+                    array(
+                      'type' => 'checkbox',
+                      'name' => $customInput["id"],
+                      'value' =>  $customInput["value"],
+                      'context' => $customInput["name"],
+                      'checked' => ! empty($customInput["value"]),
+                      'disabled' => ! User::w_access_allowed($page, $current_user),
+                      'required' => $customInput["required"],
+                    ),
+                  );
                 break;
                 //---------------------------- Textarea ----------------------------//
                 case "textarea":
-                  echo  '<label class="txt-input">';
-                    echo  '<textarea name="' . $customInput["id"] . '" rows="5" >' .$customInput["value"] . '</textarea>';
-                    echo  '<span class="placeholder">' . $customInput["name"] . '</span>';
-                  echo  '</label>';
+                  $form->addElement(
+                    array(
+                      'type' => 'textarea',
+                      'name' => $customInput["id"],
+                      'value' => $customInput["value"],
+                      'placeholder' => $customInput["name"],
+                      'disabled' => ! User::w_access_allowed($page, $current_user),
+                      'required' => $customInput["required"],
+                    ),
+                  );
                 break;
                 //---------------------------- Text-input [Mail, Number, Date] ----------------------------//
                 default: //Text input
-                  echo  '<label class="txt-input">';
-                    echo  '<input type="' . $customInput["type"] . '" name="' . $customInput["id"] . '" value="' .$customInput["value"] . '" />';
-                    echo  '<span class="placeholder">' . $customInput["name"] . '</span>';
-                  echo  '</label>';
+                  $form->addElement(
+                    array(
+                      'type' => $customInput["type"] ?? 'text',
+                      'name' => $customInput["id"],
+                      'value' => $customInput["value"],
+                      'placeholder' => $customInput["name"],
+                      'disabled' => ! User::w_access_allowed($page, $current_user),
+                      'required' => $customInput["required"],
+                    ),
+                  );
               }
             }
           }
 
+          $form->prompt();
         }
       break;
       case "get_coupons":
-        if(User::r_access_allowed(10, $current_user)) {
+        if(User::r_access_allowed(7, $current_user)) {
           //Create connection
           $conn = Access::connect();
+
+          // Start form
+          $form = new HTML('form', array(
+            'method' => 'post',
+            'action' => $url,
+          ));
 
           //Get infos
           $coupons = $conn->prepare("SELECT * FROM " . TICKETS_COUPONS . " WHERE groupID=:gid");
           $coupons->execute(array(":gid" => json_decode($_POST["values"], true)["groupID"]));
 
-          if($coupons->rowCount() > 0) {
-            echo '<div class="select" onclick="toggleOptions(this)">';
-              echo '<input type="text" class="selectValue" name="coupon" value="">';
-              echo '<span class="headline">Wähle Coupon</span>';
+          // Get input
+          $headline = (empty($used_coupon->couponID)) ?
+                      Language::string(49, null, 7) : //No coupon used
+                      $used_coupon->values()["name"] . ' -' . (
+                        empty($used_coupon->values()["discount_percent"]) ?
+                          ($used_coupon->values()["discount_absolute"] / 100) . ' ' . $group->values()["currency"]  : //Correct absolute amount
+                          ($used_coupon->values()["discount_percent"] / 100) . '%' //Correct percent
+                      );
 
-              echo '<div class="options">';
-                echo '<span data-value="" onclick="selectElement(this)">Kein Coupon verwenden</span>';
-                foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
-                  $couponPrice = new Coupon();
-                  $couponPrice->couponID = $coupon["couponID"];
-                  $couponPrice = $couponPrice->new_price();
+          $options = array(
+            "" => Language::string(49, null, 7),
+          );
 
-                  $group = new Group();
-                  $group->groupID = json_decode($_POST["values"], true)["groupID"];
-                  echo '<span data-value="' . $coupon["couponID"] . '" onclick="selectElement(this)">' . $coupon["name"] . ' (Neuer Preis: ' . ($couponPrice/100) . ' ' . $group->values()["currency"] . ')</span>';
-                }
-              echo '</div>';
-            echo '</div>';
+          foreach($coupons->fetchAll(PDO::FETCH_ASSOC) as $coupon) {
+            // Get new price
+            $couponPrice = new Coupon();
+            $couponPrice->couponID = $coupon["couponID"];
+            $couponPrice = $couponPrice->new_price();
+
+            // Get currency
+            $group = new Group();
+            $group->groupID = json_decode($_POST["values"], true)["groupID"];
+
+            $options[$coupon["couponID"]] = $coupon["name"] . ' (Neuer Preis: ' . ($couponPrice/100) . ' ' . ($group->values()["currency"]  ?? DEFAULT_CURRENCY) . ')';
           }
+
+
+          $form->addElement(
+            array(
+              'type' => 'select',
+              'name' => 'coupon',
+              'value' => '',
+              'headline' => $headline,
+              'options' => $options,
+              'disabled' => ! User::w_access_allowed($page, $current_user),
+            ),
+          );
+
+          $form->prompt();
         }
       break;
     }

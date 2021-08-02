@@ -369,7 +369,7 @@ function single_ticket() {
               'value' =>  (($customInput["value"] == "") ? "" : $customInput["value"]),
               'options' => array_combine($options, $options), // Generate correct array
               'disabled' => ! User::w_access_allowed($page, $current_user),
-              'required' => true,
+              'required' => $customInput["required"],
             ),
           );
         break;
@@ -386,7 +386,7 @@ function single_ticket() {
                 'context' => $option,
                 'checked' => (str_replace(" ", "_", $customInput["value"]) == $option) ? true : false,
                 'disabled' => ! User::w_access_allowed($page, $current_user),
-                'required' => true,
+                'required' => $customInput["required"],
               ),
             );
           }
@@ -401,7 +401,7 @@ function single_ticket() {
               'context' => $customInput["name"],
               'checked' => ! empty($customInput["value"]),
               'disabled' => ! User::w_access_allowed($page, $current_user),
-              'required' => true,
+              'required' => $customInput["required"],
             ),
           );
         break;
@@ -414,7 +414,7 @@ function single_ticket() {
               'value' => $customInput["value"],
               'placeholder' => $customInput["name"],
               'disabled' => ! User::w_access_allowed($page, $current_user),
-              'required' => true,
+              'required' => $customInput["required"],
             ),
           );
         break;
@@ -427,7 +427,7 @@ function single_ticket() {
               'value' => $customInput["value"],
               'placeholder' => $customInput["name"],
               'disabled' => ! User::w_access_allowed($page, $current_user),
-              'required' => true,
+              'required' => $customInput["required"],
             ),
           );
       }
@@ -717,19 +717,21 @@ switch(key($action)) {
       $group = new Group();
       $group->groupID = $row["groupID"];
 
-      $options[$row["groupID"] . "\"
-                style='border-left: 5px solid " . $row["color"] . ";'
-                title='" .
-                  Language::string( 61, array(
-                    '%availableTickets%' => $group->availableTickets(),
-                    '%maxTickets%' => $row["maxTickets"],
-                    '%tpu%' => $row["tpu"],
-                    '%price%' => ($row["price"]/100),
-                    '%currency%' => $row["currency"],
-                    '%vat%' => $row["vat"],
-                  ),) . "'"] =
-        $row["name"];
+      $options[$row["groupID"]]["additional"] = 'style="border-left: 5px solid ' . $row["color"] . ';"
+                                                 title="' .
+                                                    Language::string( 61, array(
+                                                      '%availableTickets%' => $group->availableTickets(),
+                                                      '%maxTickets%' => $row["maxTickets"],
+                                                      '%tpu%' => $row["tpu"],
+                                                      '%price%' => ($row["price"]/100),
+                                                      '%currency%' => $row["currency"],
+                                                      '%vat%' => $row["vat"],
+                                                    ),) . '"';
+      $options[$row["groupID"]]["onclick"] = 'group_coupons(' . $row["groupID"] . '); group_custom(' . $row["groupID"] . ')';
+      $options[$row["groupID"]]["name"] = $row["name"];
     }
+
+    //group_coupons(' . $row["groupID"] . '); group_custom(' . $row["groupID"] . ')
 
     $form->addElement(
       array(
@@ -769,6 +771,12 @@ switch(key($action)) {
         'disabled' => ! User::w_access_allowed($page, $current_user),
       ),
     );
+
+    //Custom
+    $form->customHTML('<div class="custom-add-container"></div>');
+
+    //Coupon
+    $form->customHTML('<div class="coupon-add-container"></div>');
 
     // Send mail
     $form->addElement(

@@ -318,9 +318,9 @@ class HTML {
           $this->substance .= '<input type="checkbox"
               name="' . $values["name"] . '"
               value="' . $values["value"] . '" ' .
-              (($values["checked"] ?? false) === true ? "checked" : '') . ' ' .
-              (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
-              (($values["required"] ?? false) === true ? "required" : '')  .' />';
+              (($values["checked"] ?? false) == true ? "checked" : '') . ' ' .
+              (($values["disabled"] ?? false) == true ? "disabled" : '') . ' ' .
+              (($values["required"] ?? false) == true ? "required" : '')  .' />';
           $this->substance .= '<div class="checkbox-btn" ' . ($values["additional_div"] ?? '') . '></div>' . ($values["context"] ?? '');
         $this->substance .= '</label>';
       break;
@@ -344,9 +344,9 @@ class HTML {
           $this->substance .= '<input type="radio"
               name="' . $values["name"] . '"
               value="' . $values["value"] . '" ' .
-              (($values["checked"] ?? false) === true ? "checked" : '') . ' ' .
-              (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
-              (($values["required"] ?? false) === true ? "required" : '')  .' />';
+              (($values["checked"] ?? false) == true ? "checked" : '') . ' ' .
+              (($values["disabled"] ?? false) == true ? "disabled" : '') . ' ' .
+              (($values["required"] ?? false) == true ? "required" : '')  .' />';
           $this->substance .= '<div></div>' . ($values["context"] ?? '');
         $this->substance .= '</label>';
       break;
@@ -371,15 +371,19 @@ class HTML {
             $this->substance .= '<input type="text" class="selectValue"
             name="' . $values["name"]  . '" ' .
             (isset($values["value"]) ? 'value="' . $values["value"] . '"' : '') . ' ' .
-            (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
-            (($values["required"] ?? false) === true ? "required" : '') . '>';
+            (($values["disabled"] ?? false) == true ? "disabled" : '') . ' ' .
+            (($values["required"] ?? false) == true ? "required" : '') . '>';
             $this->substance .= '<span class="headline">' . ($values["headline"] ?? $values["value"] ?? '') .'</span>';
 
             // Set options
             $i = 0;
             $this->substance .= '<div class="options">';
               foreach( $values["options"] as $key => $option) {
-                $this->substance .= '<span data-value="' . ($key ?? $i) . '" onclick="selectElement(this)">' . ($option ?? '') . '</span>';
+                if( is_array($option) ) {
+                  $this->substance .= '<span data-value="' . ($key ?? $i) . '" onclick="selectElement(this); ' . $option["onclick"] . '" ' . $option["additional"] . '>' . ($option["name"] ?? '') . '</span>';
+                }else {
+                  $this->substance .= '<span data-value="' . ($key ?? $i) . '" onclick="selectElement(this)">' . ($option ?? '') . '</span>';
+                }
 
                 $i++;
               }
@@ -408,8 +412,8 @@ class HTML {
           name="' . $values["name"] . '" ' .
           (isset($values["rows"]) ? "rows='" . $values["rows"] . "'" : '') .
           (isset($values["cols"]) ? "rows='" . $values["cols"] . "'" : '') .
-          (($values["disabled"] ?? false) === true ? "disabled" : '') .' ' .
-          (($values["required"] ?? false) === true ? "required" : '') . '/>' .
+          (($values["disabled"] ?? false) == true ? "disabled" : '') .' ' .
+          (($values["required"] ?? false) == true ? "required" : '') . '/>' .
             ($values["value"] ?? '') .
           '</textarea>';
           $this->substance .=  '<span class="placeholder">' . $values["placeholder"] . '</span>';
@@ -466,7 +470,7 @@ class HTML {
         $this->substance .= '<input type="submit"
             name="' . $values["name"] . '"
             value="' . $values["value"] . '" ' .
-            (($values["disabled"] ?? false) === true ? "disabled" : '') . ' ' .
+            (($values["disabled"] ?? false) == true ? "disabled" : '') . ' ' .
             ($values["additional"] ?? '') . '/>';
       break;
 
@@ -492,8 +496,8 @@ class HTML {
               name="' . $values["name"] . '" ' .
               (isset($values["value"]) ? 'value="' . $values["value"] . '"' : "") . ' ' .
               (isset($values["input_attributes"]) ? $values["input_attributes"] : "") . ' ' .
-              (($values["disabled"] ?? false) === true ? "disabled" : '') .' ' .
-              (($values["required"] ?? false) === true ? "required" : '') . '/>';
+              (($values["disabled"] ?? false) == true ? "disabled" : '') .' ' .
+              (($values["required"] ?? false) == true ? "required" : '') . '/>';
           $this->substance .= '<span class="placeholder">' . $values["placeholder"] . '</span>';
           $this->substance .= (isset($values["unit"]) ? '<span class="unit">' . $values["unit"] . '</span>' : "");
         $this->substance .= '</label>';

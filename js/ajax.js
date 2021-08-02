@@ -296,8 +296,14 @@ function group_custom( group ) {
   values["groupID"] = group;
 
   ajax(7, function(c) {
+    // Generate html
+    var container = document.createElement('div');
+    container.innerHTML = c.responseText;
+
+    var custom = container.getElementsByTagName("form")[0].innerHTML;
+
     //Display message
-    document.getElementsByClassName("custom-add-container")[0].innerHTML = c.responseText;
+    document.getElementsByClassName("custom-add-container")[0].innerHTML = custom;
   }, "get_custom", values);
 }
 
@@ -311,8 +317,14 @@ function group_coupons(group) {
   values["groupID"] = group;
 
   ajax(7, function(c) {
+    // Generate html
+    var container = document.createElement('div');
+    container.innerHTML = c.responseText;
+
+    var select = container.getElementsByTagName("form")[0].innerHTML;
+
     //Display message
-    document.getElementsByClassName("custom-add-container")[0].innerHTML = c.responseText;
+    document.getElementsByClassName("coupon-add-container")[0].innerHTML = select;
   }, "get_coupons", values);
 }
 
