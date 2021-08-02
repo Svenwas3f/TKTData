@@ -80,18 +80,25 @@ function addMultiple(id) {
     'id': 'multipleContainer-' + id + inputId,
     'class': "multipleContainer"
   })
+
   //Modifie multipleInput
-  setAttributes(multipleInput, {
-    'type': 'text',
-    'name': 'multiple' + id + '[]',
-    'placeholder': 'Name'
+  input_string( 50, function(string) {
+    setAttributes(multipleInput, {
+      'type': 'text',
+      'name': 'multiple' + id + '[]',
+      'placeholder': string, // Name
+    });
   });
+
   //Modifie remove
   setAttributes(remove, {
     'onclick': 'removeMultiple(' + id + ', ' + inputId + ')',
     'style': 'margin: 0px 5px;'
   });
-  remove.appendChild(document.createTextNode("Delete"))
+
+  input_string( 49, function(string) {
+    remove.appendChild(document.createTextNode( string ));
+  });
 
   //add multiple
   var div = document.getElementById("container-" + id);
@@ -126,22 +133,28 @@ function add_text(type) {
   var required = document.createElement("INPUT");
 
   //Set attributes to all
-  setAttributes(layout, {
-    'type': 'number',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Reihenfolge'
-  })
-  setAttributes(name, {
-    'type': 'text',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Name',
-    'required': 'true'
+  input_string( 50, function(string) {
+    setAttributes(name, {
+      'type': 'text',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, // Name
+      'required': 'true'
+    });
   });
-  setAttributes(placeholder, {
-    'type': 'text',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Platzhalter',
-    'required': 'true'
+  input_string( 54, function(string) {
+    setAttributes(placeholder, {
+      'type': 'text',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, // Placeholder
+      'required': 'true'
+    });
+  });
+  input_string( 51, function(string) {
+    setAttributes(layout, {
+      'type': 'number',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, //Order
+    });
   });
   setAttributes(required, {
     'type': 'checkbox',
@@ -164,7 +177,10 @@ function add_text(type) {
   setAttributes(topText, {
     'style': 'display: inline-block'
   });
-  topText.appendChild(document.createTextNode(type.charAt(0).toUpperCase() + type.slice(1) + '-Element'));
+  input_string( 48, function(string) {
+    topText.appendChild(document.createTextNode(type.charAt(0).toUpperCase() + type.slice(1) + '-' + string)); // Wlwmwnr
+  });
+
   //Modiefie Headline
   headline.appendChild(topText);
   //Modifie delete
@@ -172,7 +188,10 @@ function add_text(type) {
     'onclick': 'removeField(' + id + ')',
     'style': 'margin: 0px 5px;'
   });
-  remove.appendChild(document.createTextNode('Delete'));
+
+  input_string( 49, function(string) {
+    remove.appendChild(document.createTextNode( string )); // Delete
+  });
 
   /*--------------------------------*/
   /* Create content
@@ -189,7 +208,10 @@ function add_text(type) {
 
   //Append text
   topText.after(remove);
-  required.after("(Pflichtfeld)");
+
+  input_string( 52, function(string) {
+    required.after("(" + string + ")"); // required
+  });
 
   //Append container to div
   //Display full new form
@@ -208,16 +230,20 @@ function add_checkbox() {
   var required = document.createElement("INPUT");
 
   //Set attributes to all
-  setAttributes(layout, {
-    'type': 'number',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Reihenfolge'
-  })
-  setAttributes(name, {
-    'type': 'text',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Name',
-    'required': 'true'
+  input_string( 50, function(string) {
+    setAttributes(name, {
+      'type': 'text',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, // Name
+      'required': 'true'
+    });
+  });
+  input_string( 51, function(string) {
+    setAttributes(layout, {
+      'type': 'number',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, //Order
+    });
   });
   setAttributes(required, {
     'type': 'checkbox',
@@ -240,7 +266,14 @@ function add_checkbox() {
   setAttributes(topText, {
     'style': 'display: inline-block'
   });
-  topText.appendChild(document.createTextNode('Checkbox-Element'));
+
+  input_string( 40, function(string) {
+    topText.appendChild(document.createTextNode( string + '-' )); // Checkbox
+  });
+  input_string( 48, function(string) {
+    topText.appendChild(document.createTextNode( string )); // Element
+  });
+
   //Modiefie Headline
   headline.appendChild(topText);
   //Modifie delete
@@ -248,7 +281,10 @@ function add_checkbox() {
     'onclick': 'removeField(' + id + ')',
     'style': 'margin: 0px 5px;'
   });
-  remove.appendChild(document.createTextNode('Delete'));
+
+  input_string( 49, function(string) {
+    remove.appendChild(document.createTextNode( string )); // Delete
+  });
 
   /*--------------------------------*/
   /* Create content
@@ -264,7 +300,9 @@ function add_checkbox() {
 
   //Append text
   topText.after(remove);
-  required.after("(Pflichtfeld)");
+  input_string( 52, function(string) {
+    required.after("(" + string + ")"); // required
+  });
 
   //Append container to div
   //Display full new form
@@ -283,17 +321,21 @@ function add_radio() {
   var required = document.createElement("INPUT");
 
   //Set attributes to all
-  setAttributes(name, {
-    'type': 'text',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Name',
-    'required': 'true'
+  input_string( 50, function(string) {
+    setAttributes(name, {
+      'type': 'text',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, // Name
+      'required': 'true'
+    });
   });
-  setAttributes(layout, {
-    'type': 'number',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Reihenfolge'
-  })
+  input_string( 51, function(string) {
+    setAttributes(layout, {
+      'type': 'number',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, //Order
+    });
+  });
   setAttributes(required, {
     'type': 'checkbox',
     'name': 'customField' + id + '[]',
@@ -316,22 +358,37 @@ function add_radio() {
   setAttributes(topText, {
     'style': 'display: inline-block'
   });
-  topText.appendChild(document.createTextNode('Radiobutton-Element'));
+
+  input_string( 44, function(string) {
+    topText.appendChild(document.createTextNode( string + '-' )); // Checkbox
+  });
+  input_string( 48, function(string) {
+    topText.appendChild(document.createTextNode( string )); // Element
+  });
+
   //Modiefie Headline
   headline.appendChild(topText);
+
   //Modifie delete
   setAttributes(remove, {
     'onclick': 'removeField(' + id + ')',
     'style': 'margin: 0px 5px;'
   });
-  remove.appendChild(document.createTextNode('Delete'));
+
+  input_string( 49, function(string) {
+    topText.appendChild(document.createTextNode( string )); // Element
+  });
+
   //Modifie add
   setAttributes(add, {
     'class': 'button',
     'onclick': 'addMultiple(' + id + ')',
     'style': 'margin-bottom: 5px;'
   });
-  add.appendChild(document.createTextNode('Auswahl hinzufügen'));
+
+  input_string( 55, function(string) {
+    add.appendChild(document.createTextNode( string )); // Element
+  });
 
   /*--------------------------------*/
   /* Create content
@@ -349,7 +406,9 @@ function add_radio() {
 
   //Append text
   topText.after(remove);
-  required.after("(Pflichtfeld)");
+  input_string( 52, function(string) {
+    required.after("(" + string + ")"); // required
+  });
 
   //Append container to div
   //Display full new form
@@ -371,17 +430,21 @@ function add_select() {
   var required = document.createElement("INPUT");
 
   //Set attributes to all
-  setAttributes(name, {
-    'type': 'text',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Name',
-    'required': 'true'
+  input_string( 50, function(string) {
+    setAttributes(name, {
+      'type': 'text',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, // Name
+      'required': 'true'
+    });
   });
-  setAttributes(layout, {
-    'type': 'number',
-    'name': 'customField' + id + '[]',
-    'placeholder': 'Reihenfolge'
-  })
+  input_string( 51, function(string) {
+    setAttributes(layout, {
+      'type': 'number',
+      'name': 'customField' + id + '[]',
+      'placeholder': string, //Order
+    });
+  });
   setAttributes(required, {
     'type': 'checkbox',
     'name': 'customField' + id + '[]',
@@ -404,22 +467,35 @@ function add_select() {
   setAttributes(topText, {
     'style': 'display: inline-block'
   });
-  topText.appendChild(document.createTextNode('Selection-Element'));
+
+  input_string( 45, function(string) {
+    topText.appendChild(document.createTextNode( string + '-' )); // Checkbox
+  });
+  input_string( 48, function(string) {
+    topText.appendChild(document.createTextNode( string )); // Element
+  });
+
   //Modiefie Headline
   headline.appendChild(topText);
+
   //Modifie delete
   setAttributes(remove, {
     'onclick': 'removeField(' + id + ')',
     'style': 'margin: 0px 5px;'
   });
-  remove.appendChild(document.createTextNode('Delete'));
+  input_string( 49, function(string) {
+    remove.appendChild(document.createTextNode( string )); // Remove
+  });
+
   //Modifie add
   setAttributes(add, {
     'class': 'button',
     'onclick': 'addMultiple(' + id + ')',
     'style': 'margin-bottom: 5px;'
   });
-  add.appendChild(document.createTextNode('Auswahl hinzufügen'));
+  input_string( 55, function(string) {
+    add.appendChild(document.createTextNode( string )); // Add
+  });
 
   /*--------------------------------*/
   /* Create content
@@ -437,7 +513,9 @@ function add_select() {
 
   //Append text
   topText.after(remove);
-  required.after("(Pflichtfeld)");
+  input_string( 52, function(string) {
+    required.after("(" + string + ")"); // required
+  });
 
   //Append container to div
   //Display full new form

@@ -442,7 +442,7 @@ class HTML {
                               class="file-input ' .
                               ((isset($values["disabled"]) && $values["disabled"]) ? 'disabled' : '' ) . ' ' .
                               ($values["classes_label"] ?? '') . '" ' .
-                              ((isset($values["disabled"]) && $values["disabled"]) ? '' : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'logo_fileID\' )"') .
+                              ((isset($values["disabled"]) && $values["disabled"]) ? '' : 'onclick="MediaHub.window.open( this.closest(\'form\'), \'' . $values["name"] . '\' )"') .
                               ($values["additional_label"] ?? '') . '>';
             $this->substance .= '<div
                                   class="preview-image"

@@ -168,6 +168,9 @@ switch($_POST["p"]) {
           $form->prompt();
         }
       break;
+      case "get_string":
+        echo Language::string( json_decode( $_POST["values"], true)["id"], null, 21 );
+      break;
     }
   break;
 

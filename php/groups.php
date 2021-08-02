@@ -144,7 +144,7 @@ class Group {
 
     $newGroupInfo = array(
       "custom" => json_encode($customInputs),
-      "adfs_custom" => json_encode($customADFS) ?? $row["adfs_custom"],
+      "adfs_custom" => (isset($customADFS)) ? json_encode($customADFS) : $row["adfs_custom"],
     );
 
     //Create modification
@@ -165,7 +165,7 @@ class Group {
 
     if($updateGroup->execute(array(
       ":custom" => json_encode($customInputs),
-      ":adfs_custom" => json_encode($customADFS),
+      ":adfs_custom" => (isset($customADFS)) ? json_encode($customADFS) : $row["adfs_custom"],
       ":gid" =>  $this->groupID
     ))) {
       return true;
@@ -423,46 +423,6 @@ class Group {
     $removeRow = $conn->prepare("DELETE FROM " . TICKETS_GROUPS . " WHERE groupID=:gid");
     if(! $removeRow->execute(array(":gid" => $this->groupID))) {
       return false;
-    }
-
-    //Remove files if required
-    if(! FULL_RESTORE ) {
-      $path = dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID;
-
-      //Function to remove directory
-      function removeDir($path) {
-        //Check if path is a directory
-        if(! is_dir($path)) {
-          return false;
-        }
-
-        //List all files/subfolders in folder
-        $objects = array_diff(scandir($path), array('.', '..'));
-        foreach($objects as $object) {
-          if( is_dir($path . "/" . $object)) {
-            //Recursion to remove files/dir from directory
-            removeDir($path . "/" . $object);
-          }else {
-            //Remove file
-            if(! unlink($path . "/" . $object)) {
-              return false;
-            }
-          }
-        }
-
-        //Remove empty folder
-        if(! rmdir($path)) {
-          return false;
-        }
-
-        //everything done successufully
-        return true;
-      }
-
-      //Delete all files
-      if(! removeDir(dirname(__FILE__, 2) . "/medias/groups/" . $this->groupID)) {
-        return false;
-      }
     }
 
     //Create modification

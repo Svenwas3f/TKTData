@@ -129,17 +129,6 @@ $string["mediahub"][12] = 'Sicher, dass Sie das Dokument löschen wollen?';
 $string["mediahub"][13] = 'Das entfernen des Dokuments ist fehlgeschlagen';
 $string["mediahub"][14] = '(Fehler beim hochladen)';
 
-// $string[17][40] = '';
-// $string[17][41] = '';
-// $string[17][42] = '';
-// $string[17][43] = '';
-// $string[17][44] = '';
-// $string[17][45] = '';
-// $string[17][46] = '';
-// $string[17][47] = '';
-// $string[17][48] = '';
-// $string[17][49] = '';
-
 /**
  * Page 7
  */
@@ -240,6 +229,174 @@ $string[7][94] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion 
 $string[7][95] = 'Das Ticket konnte <strong>erfolgreich</strong> aktiviert werden.'; // Activate message
 $string[7][96] = 'Leider konnte das Ticket <strong>nicht</strong> aktiviert werden.'; // Activate message
 $string[7][97] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Activate message
+
+/**
+ * Page 8
+ */
+$string[21][0] = 'Gruppenname';
+
+$string[21][1] = 'Name';
+$string[21][2] = 'Verwendung';
+$string[21][3] = 'Verkaufszeit';
+$string[21][4] = 'Aktion';
+
+$string[21][5] = 'Gruppendetails anzeigen';
+$string[21][6] = 'Entfernen';
+
+$string[21][7] = 'Zeitlich-<br />unbeschränkt';
+
+$string[21][8] = 'Allgemein';
+$string[21][9] = 'Formular';
+$string[21][10] = 'Ticket';
+$string[21][11] = 'Mail';
+$string[21][12] = 'Zahlung';
+$string[21][13] = 'SDK';
+
+// General
+$string[21][20] = 'Gruppenname';
+$string[21][21] = 'Maximum Tickets';
+$string[21][22] = 'Tickets pro Benutzer';
+$string[21][23] = '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code" target="_blank">Währung</a>';
+$string[21][24] = 'Betrag';
+$string[21][25] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Startzeit</abbr>';
+$string[21][26] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Endzeit</abbr>';
+$string[21][27] = '<abbr title="Value-Added Tax (MwSt.)">VAT</abbr>';
+$string[21][28] = 'Beschreibung';
+$string[21][29] = 'Update';
+
+// Custom
+$string[21][40] = 'Checkbox';
+$string[21][41] = 'Datum';
+$string[21][42] = 'E-Mail';
+$string[21][43] = 'Nummer';
+$string[21][44] = 'Radiobutton';
+$string[21][45] = 'Selection';
+$string[21][46] = 'Text';
+$string[21][47] = 'Textfeld';
+
+$string[21][48] = 'Element';
+$string[21][49] = 'Entfernen';
+$string[21][50] = 'Name';
+$string[21][51] = 'Reihenfolge';
+$string[21][52] = 'Pflichtfeld';
+$string[21][53] = 'Auswahl hinzufügen';
+$string[21][54] = 'Platzhalter';
+$string[21][55] = 'Auswahl hinzufügen';
+$string[21][56] = 'Update';
+
+// Ticket
+$string[21][60] = 'Tickettitel';
+$string[21][61] = 'Logo';
+$string[21][62] = 'Werbung 1 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(453px &#x00D7; 343px)</abbr>'; // Advert 1
+$string[21][63] = 'Werbung 2 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 2
+$string[21][64] = 'Werbung 3 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 3
+$string[21][65] = 'Klicken um auszuwählen'; // Advert 1
+$string[21][66] = 'Klicken um auszuwählen'; // Advert 2
+$string[21][67] = 'Klicken um auszuwählen'; // Advert 3
+$string[21][68] = 'Update'; // Update
+
+$string[21][69] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.'; // Update message
+$string[21][70] = 'Vorschau wird geladen';
+
+// Mail
+$string[21][80] = 'Banner';
+$string[21][81] = 'Klicken um auszuwählen';
+$string[21][82] = 'Absender';
+$string[21][83] = 'Anzeigename';
+$string[21][84] = 'Betreff';
+$string[21][85] = 'E-Mail';
+$string[21][86] = 'Ticket';
+$string[21][87] = 'Nachricht';
+$string[21][88] = 'Update';
+
+$string[21][89] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.';
+$string[21][90] = 'Von:';
+$string[21][91] = 'Betreff:';
+
+// Payment
+$string[21][100] = '';
+$string[21][101] = '';
+$string[21][102] = '';
+$string[21][103] = '';
+$string[21][104] = '';
+$string[21][105] = '';
+$string[21][106] = '';
+$string[21][107] = '';
+$string[21][108] = '';
+$string[21][109] = '';
+$string[21][110] = '';
+$string[21][111] = '';
+$string[21][112] = '';
+$string[21][113] = '';
+$string[21][114] = '';
+$string[21][115] = '';
+$string[21][116] = '';
+$string[21][117] = '';
+$string[21][118] = '';
+$string[21][119] = '';
+$string[21][120] = '';
+$string[21][121] = '';
+$string[21][122] = '';
+$string[21][123] = '';
+$string[21][124] = '';
+$string[21][125] = '';
+$string[21][126] = '';
+$string[21][127] = '';
+$string[21][128] = '';
+$string[21][129] = '';
+
+// SDK
+$string[21][130] = '';
+$string[21][131] = '';
+$string[21][132] = '';
+$string[21][133] = '';
+$string[21][134] = '';
+$string[21][135] = '';
+$string[21][136] = '';
+$string[21][137] = '';
+$string[21][138] = '';
+$string[21][139] = '';
+$string[21][140] = '';
+$string[21][141] = '';
+$string[21][142] = '';
+$string[21][143] = '';
+$string[21][144] = '';
+$string[21][145] = '';
+$string[21][146] = '';
+$string[21][147] = '';
+$string[21][148] = '';
+$string[21][149] = '';
+$string[21][150] = '';
+$string[21][151] = '';
+$string[21][152] = '';
+$string[21][153] = '';
+$string[21][154] = '';
+$string[21][155] = '';
+$string[21][156] = '';
+$string[21][157] = '';
+$string[21][158] = '';
+$string[21][159] = '';
+$string[21][160] = '';
+$string[21][161] = '';
+$string[21][162] = '';
+$string[21][163] = '';
+$string[21][164] = '';
+$string[21][165] = '';
+$string[21][166] = '';
+$string[21][167] = '';
+$string[21][168] = '';
+$string[21][169] = '';
+
+// $string[21][0] = '';
+// $string[21][1] = '';
+// $string[21][2] = '';
+// $string[21][3] = '';
+// $string[21][4] = '';
+// $string[21][5] = '';
+// $string[21][6] = '';
+// $string[21][7] = '';
+// $string[21][8] = '';
+// $string[21][9] = '';
 
 /**
  * Page 9

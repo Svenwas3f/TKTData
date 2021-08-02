@@ -43,6 +43,8 @@
  *
  * group_coupons ( group [groupID] )
  *
+ * input_string ( id [stringID], callback [callback] )
+ *
  * pub_product_visiliity_toggle ( item [HTML Element], pub [pubID], product_id [product_id] )
  *
  * pub_product_availability ( container [HTML Element], pub [pubID], product_id [product_id], availability [availability state])
@@ -326,6 +328,20 @@ function group_coupons(group) {
     //Display message
     document.getElementsByClassName("coupon-add-container")[0].innerHTML = select;
   }, "get_coupons", values);
+}
+
+/**
+ * Get language string
+ * id: Language string id
+ * callback: callback function
+ */
+function input_string( id, callback) {
+  var values = new Object();
+  values["id"] = id;
+
+  ajax( 7, function(c) {
+    callback( c.responseText );
+  }, "get_string", values);
 }
 
 /**
