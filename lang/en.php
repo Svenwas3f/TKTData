@@ -129,6 +129,107 @@ $string["mediahub"][13] = 'Removing the document failed';
 $string["mediahub"][14] = '(Error while uploading)';
 
 /**
+ * Page 7
+ */
+// List
+$string[7][0] = 'Username, First name, Name, Ticketinfo'; // Search form placeholder
+
+$string[7][1] = 'Voided without payment'; // Ticket states
+$string[7][2] = 'Blocked & payed'; // Ticket states
+$string[7][3] = 'Payment expected'; // Ticket states
+$string[7][4] = 'Voided'; // Ticket states
+$string[7][5] = 'Blocked'; // Ticket states
+
+$string[7][6] = 'E-Mail'; // Headline
+$string[7][7] = 'Purchase date'; // Headline
+$string[7][8] = 'Activity'; // Headline
+
+$string[7][9] = 'View ticketdetails'; // Action
+$string[7][10] = 'open PDF'; // Action
+$string[7][11] = 'Restore'; // Action
+$string[7][12] = 'Remove'; // Action
+$string[7][13] = 'Name: %name%&#013;ID: %id%'; // Action
+
+$string[7][14] = 'Back'; // nav
+$string[7][15] = 'Next'; // nav
+
+// View
+$string[7][20] = 'Name: %name%&#013;ID: %id%';
+$string[7][21] = 'Return to the previous page';
+
+$string[7][22] = 'Ticket voided on %date%, payment not made.'; // Top bar text
+$string[7][23] = 'Blocked ticket, already paid.'; // Top bar text
+$string[7][24] = 'Payment not made.'; // Top bar text
+$string[7][25] = 'Ticket voided on %date%'; // Top bar text
+$string[7][26] = 'Ticket blocked.'; // Top bar text
+
+$string[7][27] = 'PDF'; // Img alt (right menu)
+$string[7][28] = 'open PDF'; // Link title (right menu)
+$string[7][29] = 'Mail'; // Img alt (right menu)
+$string[7][30] = 'Send ticket via mail'; // Link title (right menu)
+$string[7][31] = 'Mail'; // Img alt (right menu)
+$string[7][32] = 'Request payment'; // Link title (right menu)
+$string[7][33] = 'Refund'; // Img alt (right menu)
+$string[7][34] = 'Refund payment'; // Link title (right menu)
+$string[7][35] = 'Reactivate'; // Img alt (right menu)
+$string[7][36] = 'Reactivate ticket'; // Link title (right menu)
+$string[7][37] = 'Void'; // Img alt (right menu)
+$string[7][38] = 'Void ticket'; // Link title (right menu)
+$string[7][39] = 'Restore'; // Img alt (right menu)
+$string[7][40] = 'Restore ticket'; // Link title (right menu)
+$string[7][41] = 'Remove'; // Img alt (right menu)
+$string[7][42] = 'Remove ticket'; // Link title (right menu)
+
+$string[7][43] = 'E-Mail'; // Input name
+$string[7][44] = 'Card'; // Options select
+$string[7][45] = 'Invoice'; // Options select
+$string[7][46] = 'Payment not received'; // Options select
+$string[7][47] = 'Payment method'; // Headline select
+$string[7][48] = 'Amount'; // Input name
+$string[7][49] = 'Coupon not used'; // Coupon
+$string[7][50] = '&#9432; Payment done on %date%'; // Payment time
+$string[7][51] = 'Update';
+
+// Add
+$string[7][60] = 'Choose group';
+$string[7][61] = 'Available tickets: %availableTickets%/%maxTickets%&#013;Tickets per user: %tpu%&#013;Preis: %price% %currency% + %vat%% VAT.&#013;';
+$string[7][62] = 'Send Ticket to shopper';
+$string[7][63] = 'Add';
+
+// Actions
+$string[7][70] = 'The ticket could be voided <strong>successfully</strong>. '; // Employ message
+$string[7][71] = 'Unfortunately the ticket could <strong>not</strong> be voided.'; // Employ message
+$string[7][72] = 'The ticket could be reactivated <strong>successfully</strong>.'; // Reactivate message
+$string[7][73] = 'Unfortunately the ticket could <strong>not</strong> be reactivated.'; // Reactivate message
+$string[7][74] = 'The mail could be sent <strong>successfully</strong>.'; // Email message
+$string[7][75] = 'Unfortunately the mail could <strong>not</strong> be sent.'; // Email message
+$string[7][76] = 'The mail could be sent <strong>successfully</strong>.'; // Payment request message
+$string[7][77] = 'Unfortunately the mail could <strong>not</strong> be sent.'; // Payment request message
+$string[7][78] = 'Are you sure you want to refund the payment for the %ticketToken% ticket?'; // Refund message
+$string[7][79] = 'The money was successfully refunded.'; // Refund message
+$string[7][80] = 'There was an error refunding: <br /> %message%'; // Refund message
+$string[7][81] = 'The ticket could be revised <strong>successfully</strong>. '; // Update ticket
+$string[7][82] = 'Unfortunately, the ticket <strong>could not</strong> be revised. '; // Update ticket
+$string[7][83] = 'You have <strong>no authorization</strong> to perform this action'; // Update ticket
+
+$string[7][84] = 'Coupon could not be used.'; // Add messages
+$string[7][85] = 'The mail could not be sent.'; // Add messages
+$string[7][86] = 'The time window to buy a ticket is <strong>not</strong> open. Consult the group for more information.'; // Add messages
+$string[7][87] = 'The maximum number of tickets has been reached.'; // Add messages
+$string[7][88] = 'The maximum number of tickets per user has been reached.'; // Add messages
+$string[7][89] = 'The ticket could be created <strong>successfully</strong>. <strong><a href="%url_page%&view=%ticketToken%" class="redirect"> View ticket</a></strong> '; // Add messages
+$string[7][90] = 'Unfortunately, the ticket could <strong>not</strong> be created'; // Add message
+$string[7][91] = 'You have <strong>no authorization</strong> to perform this action'; // Add message
+
+$string[7][92] = 'The ticket could be blocked <strong>successfully</strong>.';
+$string[7][93] = 'Unfortunately the ticket could <strong>not</strong> be blocked.';
+$string[7][94] = 'You have <strong>no authorization</strong> to perform this action';
+
+$string[7][95] = 'The ticket could be activated <strong>successfully</strong>.';
+$string[7][96] = 'Unfortunately the ticket could <strong>not</strong> be activated.';
+$string[7][97] = 'You have <strong>no authorization</strong> to perform this action';
+
+/**
  * Page 9
  */
 // List

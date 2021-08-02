@@ -209,36 +209,37 @@ $string[7][62] = 'Ticket an Käufer senden';
 $string[7][63] = 'Hinzufügen';
 
 // Actions
-$string[7][70] = '';
-$string[7][71] = '';
-$string[7][72] = '';
-$string[7][73] = '';
-$string[7][74] = '';
-$string[7][75] = '';
-$string[7][76] = '';
-$string[7][77] = '';
-$string[7][78] = '';
-$string[7][79] = '';
-$string[7][80] = '';
-$string[7][81] = '';
-$string[7][82] = '';
-$string[7][83] = '';
-$string[7][84] = '';
-$string[7][85] = '';
-$string[7][86] = '';
-$string[7][87] = '';
-$string[7][88] = '';
-$string[7][89] = '';
-$string[7][90] = '';
-$string[7][91] = '';
-$string[7][92] = '';
-$string[7][93] = '';
-$string[7][94] = '';
-$string[7][95] = '';
-$string[7][96] = '';
-$string[7][97] = '';
-$string[7][98] = '';
-$string[7][99] = '';
+$string[7][70] = 'Das Ticket konnte <strong>erfolgreich</strong> entwertet werden.'; // Employ message
+$string[7][71] = 'Leider konnte das Ticket <strong>nicht</strong> entwertet werden.'; // Employ message
+$string[7][72] = 'Das Ticket konnte <strong>erfolgreich</strong> reaktiviert werden.'; // Reactivate message
+$string[7][73] = 'Leider konnte das Ticket <strong>nicht</strong> reaktiviert werden.'; // Reactivate message
+$string[7][74] = 'Die Mail konnte <strong>erfolgreich</strong> gesendet werden.'; // Email message
+$string[7][75] = 'Leider konnte Die Mail <strong>nicht</strong> gesendet werden.'; // Email message
+$string[7][76] = 'Die Mail konnte <strong>erfolgreich</strong> gesendet werden.'; // Payment request message
+$string[7][77] = 'Leider konnte Die Mail <strong>nicht</strong> gesendet werden.'; // Payment request message
+$string[7][78] = 'Möchten Sie die Zahlung für das Ticket %ticketToken% wirklich zurückerstatten?'; // Refund message
+$string[7][79] = 'Das Geld wurde erfolgreich rückerstattet.'; // Refund message
+$string[7][80] = 'Beim Rückerstatten ist ein Fehler aufgetreten: <br /> %message%'; // Refund message
+$string[7][81] = 'Das Ticket konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update ticket
+$string[7][82] = 'Leider konnte das Ticket <strong>nicht</strong> überarbeitet werden.'; // Update ticket
+$string[7][83] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update ticket
+
+$string[7][84] = 'Coupon konnte nicht angewendet werden.'; // Add messages
+$string[7][85] = 'Die Mail konnte nicht versendet werden.'; // Add messages
+$string[7][86] = 'Das Zeitfenster um ein Ticket zu lösen ist <strong>nicht</strong> offen. Konsultiere die Gruppe für nähere Informationen.'; // Add messages
+$string[7][87] = 'Die maximale Anzahl an Tickets wurde erreicht.'; // Add messages
+$string[7][88] = 'Die maximale Anzahl an Tickets pro Benutzer wurde erreicht.'; // Add messages
+$string[7][89] = 'Das Ticket konnte <strong>erfolgreich</strong> erstellt werden. <strong><a href="%url_page%&view=%ticketToken%" class="redirect">Ticket ansehen</a></strong>'; // Add messages
+$string[7][90] = 'Leider konnte das Ticket <strong>nicht</strong> erstellt werden'; // Add message
+$string[7][91] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Add message
+
+$string[7][92] = 'Das Ticket konnte <strong>erfolgreich</strong> blockiert werden.'; // Block message
+$string[7][93] = 'Leider konnte das Ticket <strong>nicht</strong> blockiert werden.'; // Block message
+$string[7][94] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Block message
+
+$string[7][95] = 'Das Ticket konnte <strong>erfolgreich</strong> aktiviert werden.'; // Activate message
+$string[7][96] = 'Leider konnte das Ticket <strong>nicht</strong> aktiviert werden.'; // Activate message
+$string[7][97] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Activate message
 
 
 /**

@@ -313,7 +313,7 @@ function single_ticket() {
   // Email
   $form->addElement(
     array(
-      'type' => 'text',
+      'type' => 'email',
       'name' => 'email',
       'value' => $ticket->values()["email"],
       'placeholder' => Language::string(43),
@@ -509,8 +509,6 @@ function single_ticket() {
                       '%id%' => $group->values()["groupID"],
                     )) . '"></div>';
 
-  $topNav->prompt();
-
   // Top bar message
   $ticket_states = array(
     array(
@@ -566,6 +564,7 @@ function single_ticket() {
           '</div>';
   }
 
+  $topNav->prompt();
   $rightMenu->prompt();
   $form->prompt();
 }
@@ -586,51 +585,59 @@ switch(key($action)) {
       // Employ ticket
       if( isset( $_GET["employ"] ) ) {
         if($ticket->employ()) {
-          Action::success("Das Ticket konnte <strong>erfolgreich</strong> entwertet werden.");
+          Action::success( Language::string(70) );
         }else {
-          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> entwertet werden.");
+          Action::fail( Language::string(71) );
         }
       }
 
       // Reactivate ticket
       elseif( isset( $_GET["reactivate"] ) ) {
         if($ticket->reactivate()) {
-          Action::success("Das Ticket konnte <strong>erfolgreich</strong> reaktiviert werden.");
+          Action::success( Language::string(72) );
         }else {
-          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> reaktiviert werden.");
+          Action::fail( Language::string(73) );
         }
       }
 
       // Send ticket
       elseif( isset( $_GET["send"] ) ) {
         if($ticket->sendTicket( $ticket->values()["email"] )) {
-          Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
+          Action::success( Language::string(74) );
         }else {
-          Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
+          Action::fail( Language::string(75) );
         }
       }
 
       // Request payment mail
       elseif( isset( $_GET["requestPayment"] ) ) {
         if($ticket->requestPayment( $ticket->values()["email"] )) {
-          Action::success("Die Mail konnte <strong>erfolgreich</strong> gesendet werden.");
+          Action::success( Language::string(76) );
         }else {
-          Action::fail("Leider konnte Die Mail <strong>nicht</strong></b> gesendet werden.");
+          Action::fail( Language::string(77) );
         }
       }
 
       elseif( isset( $_GET["refund"] ) ) {
         if(! $_POST) {
-          Action::confirm("Möchten Sie die Zahlung für das Ticket " . $_GET["view"]  . " wirklich rückerstatten?", $_GET["view"], "&view=" . urlencode( $_GET["view"]) . "&refund" );
+          Action::confirm(
+            Language::string( 78, array(
+              '%ticketToken%' => $_GET["view"],
+            )),
+            $_GET["view"],
+            "&view=" . urlencode( $_GET["view"]) . "&refund"
+          );
         }
 
         if( isset($_POST["confirm"]) ) {
           $refund = refundTransaction( $_POST["confirm"] );
 
           if( $refund["transaction_refund_state"] === true) {
-            Action::success("Das Geld wurde erfolgreich rückerstattet.");
+            Action::success( Language::string(79) );
           }else {
-            Action::fail("Beim Rückerstatten ist ein Fehler aufgetreten: <br /> " . $refund["message"]);
+            Action::fail( Language::string( 80, array(
+              '%message%' => $refund["message"],
+            )));
           }
         }
       }
@@ -638,13 +645,13 @@ switch(key($action)) {
       // Update full ticket
       elseif(! empty($_POST)) {
         if($ticket->update($_POST)) {
-          Action::success("Das Ticket konnte <strong>erfolgreich</strong> überarbeitet werden.");
+          Action::success( Language::string(81) );
         }else {
-          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> überarbeitet werden.");
+          Action::fail( Language::string(82) );
         }
       }
     }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      Action::fail( Language::string(83) );
     }
 
     //Display ticket
@@ -655,29 +662,29 @@ switch(key($action)) {
     if(! empty($_POST)) {
       if(User::w_access_allowed($page, $current_user)) {
         $ticket = new Ticket();
-        $add = $ticket->add($_POST, false, (isset($_POST["sendMail"])) ?? false);
+        $add = $ticket->add($_POST, false, ($_POST["sendMail"] ?? false));
 
         if($add == 6) {
-          Action::fail("Coupon konnte nicht angewendet werden.");
+          Action::fail( Language::string(84) );
         }elseif($add == 5) {
-          Action::fail("Die Mail konnte nicht versendet werden.");
+          Action::fail( Language::string(85) );
         }elseif($add == 4) {
-          Action::fail("Das Zeitfenster um ein Ticket zu lösen ist <strong>nicht</strong></b> offen. Konsultiere die Gruppe für nähere Infomrationen.");
+          Action::fail( Language::string(86) );
         }elseif($add == 3) {
-          Action::fail("Die maximale Anzahl an Tickets wurde erreicht.");
+          Action::fail( Language::string(87) );
         }elseif($add == 2) {
-          Action::fail("Die maximale Anzahl an Tickets pro Benutzer wurde erreicht.");
+          Action::fail( Language::string(88) );
         }elseif($add == 1) {
-          Action::success("Das Ticket konnte <strong>erfolgreich</strong> erstellt werden.");
-
-          // Redirect to created ticket
-          echo "<script>document.location.href='" . $url_page . "&view=" . urlencode( $ticket->ticketToken ) . "'</script>";
-          exit;
+          Action::success( Language::string(89, array(
+              '%url_page%' => $url_page,
+              '%ticketToken%' => urlencode( $ticket->ticketToken ),
+            )
+          ));
         }else {
-          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> erstellt werden.");
+          Action::fail( Language::string(90) );
         }
       }else {
-        Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+        Action::fail( Language::string(91) );
       }
     }
 
@@ -691,7 +698,7 @@ switch(key($action)) {
       array(
         'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
         'link' => 'Javascript:history.back()',
-        'additional' => 'title="' . Language::string(51) . '"',
+        'additional' => 'title="' . Language::string(21) . '"',
       ),
     );
 
@@ -738,9 +745,9 @@ switch(key($action)) {
     // Email
     $form->addElement(
       array(
-        'type' => 'text',
+        'type' => 'email',
         'name' => 'email',
-        'placeholder' => Language::string(42),
+        'placeholder' => Language::string(43),
         'disabled' => ! User::w_access_allowed($page, $current_user),
         'required' => true,
       ),
@@ -748,16 +755,16 @@ switch(key($action)) {
 
     // Payment method
     $options = array(
-      0 => Language::string(43),
-      1 => Language::string(44),
-      2 => Language::string(45),
+      0 => Language::string(44),
+      1 => Language::string(45),
+      2 => Language::string(46),
     );
 
     $form->addElement(
       array(
         'type' => 'select',
         'name' => 'payment',
-        'headline' => Language::string(46),
+        'headline' => Language::string(47),
         'options' => $options,
         'disabled' => ! User::w_access_allowed($page, $current_user),
       ),
@@ -795,12 +802,12 @@ switch(key($action)) {
       $ticket = new Ticket();
       $ticket->ticketToken = $_GET["remove"];
       if($ticket->remove()) {
-        Action::success("Das Ticket konnte <strong>erfolgreich</strong> blockiert werden.");
+        Action::success( Language::string(92) );
       }else {
-        Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> blockiert werden.");
+        Action::fail( Language::string(93) );
       }
     }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      Action::fail( Language::string(94) );
     }
 
     //Display tickets
@@ -822,12 +829,12 @@ switch(key($action)) {
       $ticket = new Ticket();
       $ticket->ticketToken = $_GET["restore"];
       if($ticket->restore()) {
-        Action::success("Das Ticket konnte <strong>erfolgreich</strong> aktiviert werden.");
+        Action::success( Language::string(95) );
       }else {
-        Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> aktiviert werden.");
+        Action::fail( Language::string(96) );
       }
     }else {
-      Action::fail("Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen");
+      Action::fail( Language::string(97) );
     }
 
     //Display tickets
