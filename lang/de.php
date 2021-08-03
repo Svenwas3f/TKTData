@@ -156,7 +156,7 @@ $string[7][15] = 'Weiter'; // nav
 
 // View
 $string[7][20] = 'Name: %name%&#013;ID: %id%';
-$string[7][21] = 'Zur vorherigen Seite zurück';
+$string[7][8] = 'Zur vorherigen Seite zurück';
 
 $string[7][22] = 'Ticket entwertet am %date%, Zahlung nicht getätigt.'; // Top bar text
 $string[7][23] = 'Blockiertes Ticket, bereits bezahlt.'; // Top bar text
@@ -233,170 +233,205 @@ $string[7][97] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion 
 /**
  * Page 8
  */
-$string[21][0] = 'Gruppenname';
+$string[8][0] = 'Gruppenname, Gruppen-ID, Beschreibung, etc.';
 
-$string[21][1] = 'Name';
-$string[21][2] = 'Verwendung';
-$string[21][3] = 'Verkaufszeit';
-$string[21][4] = 'Aktion';
+$string[8][1] = 'Name';
+$string[8][2] = 'Verwendung';
+$string[8][3] = 'Verkaufszeit';
+$string[8][4] = 'Aktion';
 
-$string[21][5] = 'Gruppendetails anzeigen';
-$string[21][6] = 'Entfernen';
+$string[8][5] = 'Gruppendetails anzeigen';
+$string[8][6] = 'Entfernen';
 
-$string[21][7] = 'Zeitlich-<br />unbeschränkt';
+$string[8][7] = 'Zeitlich-<br />unbeschränkt';
 
-$string[21][8] = 'Allgemein';
-$string[21][9] = 'Formular';
-$string[21][10] = 'Ticket';
-$string[21][11] = 'Mail';
-$string[21][12] = 'Zahlung';
-$string[21][13] = 'SDK';
+$string[8][8] = 'Zurück zur Übersicht';
+$string[8][9] = 'Allgemein';
+$string[8][10] = 'Formular';
+$string[8][11] = 'Ticket';
+$string[8][12] = 'Mail';
+$string[8][13] = 'Zahlung';
+$string[8][14] = 'SDK';
 
 // General
-$string[21][20] = 'Gruppenname';
-$string[21][21] = 'Maximum Tickets';
-$string[21][22] = 'Tickets pro Benutzer';
-$string[21][23] = '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code" target="_blank">Währung</a>';
-$string[21][24] = 'Betrag';
-$string[21][25] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Startzeit</abbr>';
-$string[21][26] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Endzeit</abbr>';
-$string[21][27] = '<abbr title="Value-Added Tax (MwSt.)">VAT</abbr>';
-$string[21][28] = 'Beschreibung';
-$string[21][29] = 'Update';
+$string[8][20] = 'Gruppenname';
+$string[8][21] = 'Maximum Tickets';
+$string[8][22] = 'Tickets pro Benutzer';
+$string[8][23] = '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code" target="_blank">Währung</a>';
+$string[8][24] = 'Betrag';
+$string[8][25] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Startzeit</abbr>';
+$string[8][26] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Endzeit</abbr>';
+$string[8][27] = '<abbr title="Value-Added Tax (MwSt.)">VAT</abbr>';
+$string[8][28] = 'Beschreibung';
+$string[8][29] = 'Update';
 
 // Custom
-$string[21][40] = 'Checkbox';
-$string[21][41] = 'Datum';
-$string[21][42] = 'E-Mail';
-$string[21][43] = 'Nummer';
-$string[21][44] = 'Radiobutton';
-$string[21][45] = 'Selection';
-$string[21][46] = 'Text';
-$string[21][47] = 'Textfeld';
+$string[8][40] = 'Checkbox';
+$string[8][41] = 'Datum';
+$string[8][42] = 'E-Mail';
+$string[8][43] = 'Nummer';
+$string[8][44] = 'Radiobutton';
+$string[8][45] = 'Selection';
+$string[8][46] = 'Text';
+$string[8][47] = 'Textfeld';
 
-$string[21][48] = 'Element';
-$string[21][49] = 'Entfernen';
-$string[21][50] = 'Name';
-$string[21][51] = 'Reihenfolge';
-$string[21][52] = 'Pflichtfeld';
-$string[21][53] = 'Auswahl hinzufügen';
-$string[21][54] = 'Platzhalter';
-$string[21][55] = 'Auswahl hinzufügen';
-$string[21][56] = 'Update';
+$string[8][48] = 'Element';
+$string[8][49] = 'Entfernen';
+$string[8][50] = 'Name';
+$string[8][51] = 'Reihenfolge';
+$string[8][52] = 'Pflichtfeld';
+$string[8][53] = 'Auswahl hinzufügen';
+$string[8][54] = 'Platzhalter';
+$string[8][55] = 'Auswahl hinzufügen';
+$string[8][56] = 'Update';
 
 // Ticket
-$string[21][60] = 'Tickettitel';
-$string[21][61] = 'Logo';
-$string[21][62] = 'Werbung 1 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(453px &#x00D7; 343px)</abbr>'; // Advert 1
-$string[21][63] = 'Werbung 2 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 2
-$string[21][64] = 'Werbung 3 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 3
-$string[21][65] = 'Klicken um auszuwählen'; // Advert 1
-$string[21][66] = 'Klicken um auszuwählen'; // Advert 2
-$string[21][67] = 'Klicken um auszuwählen'; // Advert 3
-$string[21][68] = 'Update'; // Update
+$string[8][60] = 'Tickettitel';
+$string[8][61] = 'Logo';
+$string[8][62] = 'Werbung 1 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(453px &#x00D7; 343px)</abbr>'; // Advert 1
+$string[8][63] = 'Werbung 2 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 2
+$string[8][64] = 'Werbung 3 <abbr title="Es wird nur dieser Inhalt angezeigt. Man kann kein Verhältnis verwenden und muss sich an diesen absoluten Werten orientieren.">(754px &#x00D7; 343px)</abbr>'; // Advert 3
+$string[8][65] = 'Klicken um auszuwählen'; // Advert 1
+$string[8][66] = 'Klicken um auszuwählen'; // Advert 2
+$string[8][67] = 'Klicken um auszuwählen'; // Advert 3
+$string[8][68] = 'Update'; // Update
 
-$string[21][69] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.'; // Update message
-$string[21][70] = 'Vorschau wird geladen';
+$string[8][69] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.'; // Update message
+$string[8][70] = 'Vorschau wird geladen'; // Preview load message
 
 // Mail
-$string[21][80] = 'Banner';
-$string[21][81] = 'Klicken um auszuwählen';
-$string[21][82] = 'Absender';
-$string[21][83] = 'Anzeigename';
-$string[21][84] = 'Betreff';
-$string[21][85] = 'E-Mail';
-$string[21][86] = 'Ticket';
-$string[21][87] = 'Nachricht';
-$string[21][88] = 'Update';
+$string[8][80] = 'Banner'; // Input name
+$string[8][81] = 'Klicken um auszuwählen'; // Image selection info
+$string[8][82] = 'Absender'; // Input name
+$string[8][83] = 'Anzeigename'; // Input name
+$string[8][84] = 'Betreff'; // Input name
+$string[8][85] = 'E-Mail'; // Select info
+$string[8][86] = 'Ticket'; // Select info
+$string[8][87] = 'Nachricht'; // Input name
+$string[8][88] = 'Update'; // Button name
 
-$string[21][89] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.';
-$string[21][90] = 'Von:';
-$string[21][91] = 'Betreff:';
+$string[8][89] = '&#9888; Klicken Sie auf Update, um ihre Änderungen zu sehen.'; // Info message
+$string[8][90] = 'Von:'; // Preview
+$string[8][91] = 'Betreff:'; // Preview
 
 // Payment
-$string[21][100] = '';
-$string[21][101] = '';
-$string[21][102] = '';
-$string[21][103] = '';
-$string[21][104] = '';
-$string[21][105] = '';
-$string[21][106] = '';
-$string[21][107] = '';
-$string[21][108] = '';
-$string[21][109] = '';
-$string[21][110] = '';
-$string[21][111] = '';
-$string[21][112] = '';
-$string[21][113] = '';
-$string[21][114] = '';
-$string[21][115] = '';
-$string[21][116] = '';
-$string[21][117] = '';
-$string[21][118] = '';
-$string[21][119] = '';
-$string[21][120] = '';
-$string[21][121] = '';
-$string[21][122] = '';
-$string[21][123] = '';
-$string[21][124] = '';
-$string[21][125] = '';
-$string[21][126] = '';
-$string[21][127] = '';
-$string[21][128] = '';
-$string[21][129] = '';
+$string[8][100] = 'Zahlungsanforderungs-Mail'; // Headline
+$string[8][101] = 'Diese Nachricht wird im Mail bei einer Zahlungsanforderung erscheinen. Beachte, dass bei Vorkasse oder Rechnung der Zahlungslink nicht erscheinen wird.'; // Info
+$string[8][102] = 'E-Mail'; // Message button
+$string[8][103] = 'Zahlungslink'; // Message button
+$string[8][104] = 'Nachricht'; // Input name
+
+$string[8][105] = 'Payrexx'; // Headline
+$string[8][106] = 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.'; // Info
+$string[8][107] = 'Payrexx Instance'; // Input name
+$string[8][108] = 'Payrexx Secret'; // Input name
+
+$string[8][109] = 'Store'; // Headline
+$string[8][110] = 'Damit Sie auch ohne Programmiererfahrung ein Ticket verkaufen können, beinhaltet dieses System auch einen eigenen <a href="%url%store" target="_blank">Store</a> womit Sie ihre Tickets verkaufen können. Im Folgenden können Sie das Design des Store beeinflussen. Möchten Sie jemanden direkt dieses Ticket verkaufen, verwenden Sie diesen Link: <a href="%url%store/tickets/buy/%group%" target="_blank">%url%store/ticket/buy/%group%</a>'; // Info
+$string[8][111] = 'Im Store anzeigen'; // Input name
+$string[8][112] = 'Dieses Ticket im Store verkaufen'; // Input title
+$string[8][113] = 'Logo'; // Input name
+$string[8][114] = 'Klicken um auszuwählen'; // Select info
+$string[8][115] = 'Hintergrundbild'; // Input name
+$string[8][116] = 'Klicken um auszuwählen'; // Select info
+
+$string[8][117] = 'ADFS'; // Headline
+$string[8][118] = 'Diese Funktion ist nur verfügbar, wenn der Administrator die simpleSAMLphp einstellungen vorgenommen und einen Pfad im general.php angegeben hat. <a href="https://simplesamlphp.org/" target="_blank">Weitere Informationen</a>'; // Info deactivatead
+$string[8][119] = 'Durch aktivieren dieser Funktion, muss der Kunde sich über Ihr ADFS authentifizieren um ein Ticket zu erwerben. Beachten Sie, dass die simpleSAML-Konfiguration manuell vorgenommen werden muss. Ist die Konfiguration fehlerhaft, funktioniert der ganze Bestellungsprozess über den Store für diese Ticketgruppe nicht mehr. Die Authentifizierung kann nicht über ein Drittanbieter via SDK erfolgen.'; // Info activated
+$string[8][120] = 'Authentifizierung verlangen'; // Input name
+$string[8][121] = 'Anmeldung fordern um Ticket zu kaufen'; // Input title
+$string[8][122] = 'Fügen Sie den jeweiligen Array-Key des ADFS-Array in das zugehörig definierte Feld vom Formular ein, um die Daten ihres Active Directory zu übernehmen. Leer gelassene Felder müssen vom Benutzer selbst eingetragen werden. Werden alle Felder definiert, kann der Benutzer nur noch ein Coupon hinzufügen.'; // ADFS custom text
+$string[8][123] = 'E-Mail<abbr title="Für den Bestellprozess immer benötigt">*</abbr>'; // Input name
+$string[8][124] = 'Update';
 
 // SDK
-$string[21][130] = '';
-$string[21][131] = '';
-$string[21][132] = '';
-$string[21][133] = '';
-$string[21][134] = '';
-$string[21][135] = '';
-$string[21][136] = '';
-$string[21][137] = '';
-$string[21][138] = '';
-$string[21][139] = '';
-$string[21][140] = '';
-$string[21][141] = '';
-$string[21][142] = '';
-$string[21][143] = '';
-$string[21][144] = '';
-$string[21][145] = '';
-$string[21][146] = '';
-$string[21][147] = '';
-$string[21][148] = '';
-$string[21][149] = '';
-$string[21][150] = '';
-$string[21][151] = '';
-$string[21][152] = '';
-$string[21][153] = '';
-$string[21][154] = '';
-$string[21][155] = '';
-$string[21][156] = '';
-$string[21][157] = '';
-$string[21][158] = '';
-$string[21][159] = '';
-$string[21][160] = '';
-$string[21][161] = '';
-$string[21][162] = '';
-$string[21][163] = '';
-$string[21][164] = '';
-$string[21][165] = '';
-$string[21][166] = '';
-$string[21][167] = '';
-$string[21][168] = '';
-$string[21][169] = '';
+$string[8][130] = 'Möchten Sie den geheimen Schlüssel tatsächlich erneuern?<br /><span style="color: #f0c564;">Diese Aktion wird nur empfohlen, wenn Sie einen Verdacht auf Missbrauch dieses Schlüssels haben oder ihn noch nicht produktiv einsetzen.</span>'; // Refres message
 
-// $string[21][0] = '';
-// $string[21][1] = '';
-// $string[21][2] = '';
-// $string[21][3] = '';
-// $string[21][4] = '';
-// $string[21][5] = '';
-// $string[21][6] = '';
-// $string[21][7] = '';
-// $string[21][8] = '';
-// $string[21][9] = '';
+$string[8][131] = 'Geheimschlüssel'; // Headline
+$string[8][132] = 'Damit Sie eine Anfrage per SDK machen können, müssen Sie diesen geheimen Schlüssel verwenden. Berücksichtigen Sie, dass dieser Schlüssel nur für diese Gruppe verfügbar ist. Sie können somit nur Tickets, welche dieser Gruppe zugeordnet wurden, überarbeiten, löschen oder auslesen.'; // Info
+$string[8][133] = 'WICHTIG: Wer in Besitz dieses Schlüssels ist, kann Tickets hinzufügen, löschen, überarbeiten und auslesen. Veröffentlichen Sie diesen Schlüssel <b>nie</b> und geben Sie den Schlüssel nur an vertraute Personen weiter. Vermuten Sie einen Missbrauch dieses Schlüssels, erneuern Sie ihn unverzüglich.'; // Notice
+
+$string[8][134] = 'SDK-Dokument'; // Headline
+$string[8][135] = 'Laden Sie sich hier das benötigte SDK-Dokument herunter.'; // Info
+$string[8][136] = 'SDK-Dokument herunterladen'; // Link button title
+$string[8][137] = 'Download'; // Link button text
+
+$string[8][138] = 'Einfache Verwendung'; // Headline
+$string[8][139] = 'Haben Sie wenig Programmiererfahrung, können Sie eine einfache Implementierung machen. Diese finden Sie unter dem Reiter <a href="%url_page%&view=%group%&section=5">Zahlung&#8594;Store</a>.'; // Info text
+
+$string[8][140] = 'Dokumentation'; // Headline
+$string[8][141] = 'Folgende Informationen können Sie über die SDK erhalten, hinzufügen und überarbeiten.<br />Bitte beachten Sie, dass dies nur eine kleine und undetailierte Dokumentation ist. Eine detailierte Beschreibung der verwendeten Funktionen finden Sie direkt im SDK-Dokument, welches Sie oben herunterladen können.'; // Info
+$string[8][142] = 'Ticketinformationen abrufen'; // SDK Code headline
+$string[8][143] = 'Ticket-Token abrufen'; // SDK Code headline
+$string[8][144] = 'Ticket hinzufügen'; // SDK Code headline
+$string[8][145] = 'Ticket überarbeiten'; // SDK Code headline
+$string[8][146] = 'Ticket entfernen'; // SDK Code headline
+$string[8][147] = 'Ticket wiederherstellen'; // SDK Code headline
+$string[8][148] = 'Ticket per Mail senden'; // SDK Code headline
+$string[8][149] = 'Coupon-ID per Name erhalten'; // SDK Code headline
+$string[8][150] = 'Coupon prüfen'; // SDK Code headline
+$string[8][151] = 'Ticketpreis mit Coupon'; // SDK Code headline
+$string[8][152] = 'Gruppeninformationen'; // SDK Code headline
+$string[8][153] = 'Benuzte Tickets'; // SDK Code headline
+$string[8][154] = 'Verfügbare Tickets'; // SDK Code headline
+$string[8][155] = 'Pro Benutzer verfügbare Tickets'; // SDK Code headline
+$string[8][156] = 'Gateway anfordern'; // SDK Code headline
+$string[8][157] = 'Gateway löschen'; // SDK Code headline
+$string[8][158] = 'Transaktionsinfos'; // SDK Code headline
+$string[8][159] = 'Zahlungserinnerung senden'; // SDK Code headline
+
+// No access to group
+$string[8][160] = 'Keine Zugriff auf die Gruppe <strong>#%group%</strong>';
+
+// Add
+$string[8][170] = 'Zur vorherigen Seite zurück';
+$string[8][171] = 'Gruppe hinzufügen';
+$string[8][172] = 'Hinzufügen';
+
+// Actions
+$string[8][200] = 'Der Gruppenabschnitt <strong>Allgemein</strong> konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update section
+$string[8][201] = 'Der Gruppenabschnitt <strong>Allgemein</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update section
+$string[8][202] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][203] = 'Der Gruppenabschnitt <strong>Formular</strong> konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update section
+$string[8][204] = 'Der Gruppenabschnitt <strong>Formular</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update section
+$string[8][205] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][206] = 'Der Gruppenabschnitt <strong>Ticket</strong> konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update section
+$string[8][207] = 'Der Gruppenabschnitt <strong>Ticket</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update section
+$string[8][208] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][209] = 'Der Gruppenabschnitt <strong>Mail</strong> konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update section
+$string[8][210] = 'Der Gruppenabschnitt <strong>Mail</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update section
+$string[8][211] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][212] = 'Der Gruppenabschnitt <strong>Zahlung</strong> konnte <strong>erfolgreich</strong> überarbeitet werden.'; // Update section
+$string[8][213] = 'Der Gruppenabschnitt <strong>Zahlung</strong> konnte <strong>nicht</strong> überarbeitet werden.'; // Update section
+$string[8][214] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][215] = 'Der geheime Schlüssel konnte <strong>erfolgreich</strong> erneuert werden.'; // Update section
+$string[8][216] = 'Der geheime Schlüssel konnte <strong>nicht</strong> erneuert werden.'; // Update section
+$string[8][217] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Update section
+
+$string[8][218] = 'Möchten Sie die Grupe #%id% (%name%) wirklich entfernen?'; // Remove request
+$string[8][219] = 'Die Gruppe #%id% wurde erfolgreich entfernt.'; // Remove group
+$string[8][220] = 'Die Gruppe #%id% konnte nicht entfernt werden.'; // Remove group
+$string[8][221] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Remove group
+
+$string[8][222] = 'Die Gruppe konnte <strong>erfolgreich</strong> erstellt werden. <a href="%url_page%&view=%id%" class="redirect">Gruppe verwalten</a></strong>'; // Add group
+$string[8][223] = 'Leider konnte die Gruppe <strong>nicht</strong></b> erstellt werden.'; // Add group
+$string[8][224] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Add group
+
+// $string[8][0] = '';
+// $string[8][1] = '';
+// $string[8][2] = '';
+// $string[8][3] = '';
+// $string[8][4] = '';
+// $string[8][5] = '';
+// $string[8][6] = '';
+// $string[8][7] = '';
+// $string[8][8] = '';
+// $string[8][9] = '';
 
 /**
  * Page 9
@@ -426,7 +461,7 @@ $string[9][18] = 'Update';
 
 // Remove
 $string[9][20] = 'Möchtest du den Coupon <strong>#%id%</strong> mit dem Namen <strong>%name%</strong> wirklich löschen?';
-$string[9][21] = 'Der Coupon konnte <strong>erfolgreich</strong> entfernt werden';
+$string[9][8] = 'Der Coupon konnte <strong>erfolgreich</strong> entfernt werden';
 $string[9][22] = 'Der Coupon konnte <strong>nicht</strong> entfernt werden';
 $string[9][23] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
 
@@ -563,7 +598,7 @@ $string[16][17] = 'Status:'; // Details
 $string[16][18] = 'Zahlung erwartet, Abgeholt'; // Pickup state
 $string[16][19] = 'Zahlung erwartet'; // Pickup state
 $string[16][20] = 'Nicht abgeholt'; // Pickup state
-$string[16][21] = 'Abgeholt'; // Pickup state
+$string[16][8] = 'Abgeholt'; // Pickup state
 $string[16][22] = 'Zahlungstyp:'; // Detail
 $string[16][23] = 'Onlinezahlung'; // Payment type
 $string[16][24] = 'Barzahlung'; // Payment type
@@ -639,7 +674,7 @@ $string[17][18] = 'Verfügbar'; // Availability types
 $string[17][19] = 'Wenige verfügbar'; // Availability types
 $string[17][20] = 'Ausverkauft'; // Availability types
 
-$string[17][21] = 'Name'; // headlines
+$string[17][8] = 'Name'; // headlines
 $string[17][22] = 'Preis'; // headlines
 $string[17][23] = 'Aktion'; // headlines
 $string[17][24] = 'Produktdetails anzeigen'; // Top nav title
@@ -717,7 +752,7 @@ $string[18][17] = 'Weiter'; // Table navigation
 
 // Single pub
 $string[18][20] = 'Allgemein'; // Top nav item
-$string[18][21] = 'Rechte'; // Top nav item
+$string[18][8] = 'Rechte'; // Top nav item
 $string[18][22] = 'Wirtschaft verwalten'; // Top nav item title
 $string[18][23] = 'Rechte verwalten'; // Top nav item title
 
@@ -821,7 +856,7 @@ $string[19][18] = 'Schreibberechtigung setzen'; // Page access title
 $string[19][19] = 'Leseberechtigung setzen'; // Page access title
 
 $string[19][20] = 'Zugangsdaten an Benutzer senden'; // Send access checkbox
-$string[19][21] = 'Mail an neuen Benutzer senden'; // Send access checkbox
+$string[19][8] = 'Mail an neuen Benutzer senden'; // Send access checkbox
 
 $string[19][22] = 'UPDATE'; // Update
 $string[19][23] = 'Benutzer aktualisieren'; // Update title

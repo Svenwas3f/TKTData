@@ -377,6 +377,8 @@ class Group {
       return false;
     }
 
+    $this->groupID = $conn->lastInsertId();
+
     //Set secret key
     $this->refreshSecretKey(array("confirm" => "update"));
 
