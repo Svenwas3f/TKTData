@@ -150,7 +150,13 @@ class Group {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Updated Group #" . $this->groupID . " [Form]",
+      // "message" => "Updated Group #" . $this->groupID . " [Form]",
+      "message" => json_encode(array(
+        "id" => 161,
+        "replacements" => array(
+          "%id%" => $this->groupID,
+        ),
+      )),
       "table" => "TICKETS_GROUPS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "groupID", "value" => $this->groupID),
@@ -205,7 +211,13 @@ class Group {
     //Modifie
     $change = array(
       "user" => $current_user,
-      "message" => "Updated secret key of group #" . $this->groupID ,
+      // "message" => "Updated secret key of group #" . $this->groupID ,
+      "message" => json_encode(array(
+        "id" => 165,
+        "replacements" => array(
+          "%id%" => $this->groupID,
+        ),
+      )),
       "table" => "TICKETS_GROUPS",
       "function" => "UPDATE",
       "primary_key" => array("key" => "groupID", "value" => $this->groupID),
@@ -281,23 +293,48 @@ class Group {
     // Generate values
     switch( $selection )  {
       case 1: //General
-        $group_page = "Allgemein";
+      $message = array(
+        "id" => 160,
+        "replacements" => array(
+          "%id%" => $this->groupID,
+        ),
+      );
       break;
-      case 2: //userInputs
-        $group_page = "Formular";
+      case 2: //Form
+        $message = array(
+          "id" => 161,
+          "replacements" => array(
+            "%id%" => $this->groupID,
+          ),
+        );
         return $this->updateUserInputs($values);
       break;
       case 3: //ticket
-        $group_page = "Ticket";
+        $message = array(
+          "id" => 162,
+          "replacements" => array(
+            "%id%" => $this->groupID,
+          ),
+        );
       break;
       case 4: //mail
-        $group_page = "Mail";
+        $message = array(
+          "id" => 163,
+          "replacements" => array(
+            "%id%" => $this->groupID,
+          ),
+        );
 
         //Modifie values
         $values["mail_msg"] = nl2br(htmlspecialchars($values["mail_msg"]));
       break;
       case 5: //payment
-        $group_page = "Payment";
+        $message = array(
+          "id" => 164,
+          "replacements" => array(
+            "%id%" => $this->groupID,
+          ),
+        );
 
         //Modifie values
         $values["payment_store"] = (isset($values["payment_store"]) ? 1 : 0);
@@ -306,7 +343,12 @@ class Group {
         $values["adfs_custom"] = isset($values["adfs_custom"]) ? json_encode($values["adfs_custom"]) : '';
       break;
       case 6: //SDK
-        $group_page = "SDK";
+        $message = array(
+          "id" => 165,
+          "replacements" => array(
+            "%id%" => $this->groupID,
+          ),
+        );
         return $this->refreshSecretKey($values);
       break;
       default: //Default is false
@@ -314,7 +356,35 @@ class Group {
     }
 
     // Valid keys
-    $valid_keys = array( "maxTickets", "price", "vat", "currency", "startTime", "endTime", "tpu", "ticket_title", "ticket_logo_fileID", "ticket_advert1_fileID", "ticket_advert2_fileID", "ticket_advert3_fileID", "mail_banner_fileID", "mail_from", "mail_displayName", "mail_subject", "mail_msg", "payment_mail_msg", "payment_store", "payment_logo_fileID", "payment_background_fileID", "adfs", "adfs_custom", "payment_payrexx_instance", "payment_payrexx_secret", "description", "name", "custom" );
+    $valid_keys = array(  "maxTickets",
+                          "price",
+                          "vat",
+                          "currency",
+                          "startTime",
+                          "endTime",
+                          "tpu",
+                          "ticket_title",
+                          "ticket_logo_fileID",
+                          "ticket_advert1_fileID",
+                          "ticket_advert2_fileID",
+                          "ticket_advert3_fileID",
+                          "mail_banner_fileID",
+                          "mail_from",
+                          "mail_displayName",
+                          "mail_subject",
+                          "mail_msg",
+                          "payment_mail_msg",
+                          "payment_store",
+                          "payment_logo_fileID",
+                          "payment_background_fileID",
+                          "adfs",
+                          "adfs_custom",
+                          "payment_payrexx_instance",
+                          "payment_payrexx_secret",
+                          "description",
+                          "name",
+                          "custom",
+                        );
 
     // Ccheck values
     $checked_values = array_intersect_key( $values, array_flip( $valid_keys ) );
@@ -335,7 +405,7 @@ class Group {
       //Create modification
       $change = array(
         "user" => $current_user,
-        "message" => "Updated Group #" . $this->groupID ." [" . $group_page . "]",
+        "message"=> json_encode( $message ),
         "table" => "TICKETS_GROUPS",
         "function" => "UPDATE",
         "primary_key" => array("key" => "groupID", "value" => $this->groupID),
@@ -384,7 +454,12 @@ class Group {
 
     $change = array(
       "user" => $current_user,
-      "message" => "Added Group " . $values["name"],
+      "message" => json_encode(array(
+        "id" => 166,
+        "replacements" => array(
+          "%name%" => $values["name"]
+        ),
+      )),
       "table" => "TICKETS_GROUPS",
       "function" => "INSERT INTO",
       "primary_key" => array("key" => "groupID", "value" => $conn->lastInsertId()),
@@ -430,7 +505,12 @@ class Group {
     //Create modification
     $change = array(
       "user" => $current_user,
-      "message" => "Removed Group #" . $this->groupID,
+      "message" => json_encode(array(
+        "id" => 167,
+        "replacements" => array(
+          "%id%" => $this->groupID,
+        ),
+      )),
       "table" => "TICKETS_GROUPS",
       "function" => "DELETE",
       "primary_key" => array("key" => "groupID", "value" => $this->groupID),

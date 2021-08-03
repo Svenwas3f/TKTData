@@ -404,7 +404,6 @@ class User {
     //Create modification
     $change = array(
       "user" => $current_user,
-      // "message" => "Updated profile from  " . $this->user,
       "message" => json_encode(array(
         "id" => 100,
         "replacements" => array(
@@ -576,7 +575,6 @@ class User {
 
     $change_user = array(
       "user" => $current_user,
-      // "message" => "Removed " . $this->user . "'s profile",
       "message" => json_encode(array(
         "id" => 101,
         "replacements" => array(
@@ -592,7 +590,6 @@ class User {
 
     $change_rights = array(
       "user" => $current_user,
-      // "message" => "Removed  " . $this->user . "'s rights",
       "message" => json_encode(array(
         "id" => 102,
         "replacements" => array(
@@ -712,7 +709,6 @@ class User {
     //Create modification
     $change = array(
       "user" => $current_user,
-      // "message" => "Added User " . $name . " (" . $this->user . ")",
       "message" => json_encode(array(
         "id" => 103,
         "replacements" => array(
@@ -849,7 +845,6 @@ class User {
     //Modifie user
     User::modifie(array(
       "user" => $current_user,
-      // "message" => "Restored version #" . $data["id"],
       "message" => json_encode(array(
         "id" => 104,
         "replacements" => array(

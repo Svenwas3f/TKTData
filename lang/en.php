@@ -893,7 +893,7 @@ $string[20][100] = 'Updated profile of %user%'; // user.php
 $string[20][101] = 'Removed profile of %user%'; // user.php
 $string[20][102] = 'Removed acces for %user%'; // user.php
 $string[20][103] = 'Added profile of %user%'; // user.php
-$string[20][103] = 'Version %version% restored'; // user.php
+$string[20][104] = 'Version %version% restored'; // user.php
 
 $string[20][110] = 'New pub added (%name%)'; // pu.php
 $string[20][111] = 'New global product (%name%) added'; // pu.php
@@ -925,6 +925,15 @@ $string[20][152] = 'Ticket (%ticketToken%) removed'; // ticket.php
 $string[20][153] = 'Ticket (%ticketToken%) restored'; // ticket.php
 $string[20][154] = 'Ticket (%ticketToken%) voided'; // ticket.php
 $string[20][155] = 'Ticket (%ticketToken%) manually reactivated'; // ticket.php
+
+$string[20][160] = 'Revised group #%id% [General]'; // groups.php
+$string[20][161] = 'Revised group #%id% [Form]'; // groups.php
+$string[20][162] = 'Revised group #%id% [Ticket]'; // groups.php
+$string[20][163] = 'Revised group #%id% [Mail]'; // groups.php
+$string[20][164] = 'Revised group #%id% [Payment]'; // groups.php
+$string[20][165] = 'Renewed secret key of group #%id%'; // groups.php
+$string[20][166] = 'Added group %name%'; // groups.php
+$string[20][167] = 'Removed group #%id% '; // groups.php
 
 /**
  * Profil

@@ -156,7 +156,7 @@ $string[7][15] = 'Weiter'; // nav
 
 // View
 $string[7][20] = 'Name: %name%&#013;ID: %id%';
-$string[7][8] = 'Zur vorherigen Seite zurück';
+$string[7][21] = 'Zur vorherigen Seite zurück';
 
 $string[7][22] = 'Ticket entwertet am %date%, Zahlung nicht getätigt.'; // Top bar text
 $string[7][23] = 'Blockiertes Ticket, bereits bezahlt.'; // Top bar text
@@ -461,7 +461,7 @@ $string[9][18] = 'Update';
 
 // Remove
 $string[9][20] = 'Möchtest du den Coupon <strong>#%id%</strong> mit dem Namen <strong>%name%</strong> wirklich löschen?';
-$string[9][8] = 'Der Coupon konnte <strong>erfolgreich</strong> entfernt werden';
+$string[9][21] = 'Der Coupon konnte <strong>erfolgreich</strong> entfernt werden';
 $string[9][22] = 'Der Coupon konnte <strong>nicht</strong> entfernt werden';
 $string[9][23] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen';
 
@@ -598,7 +598,7 @@ $string[16][17] = 'Status:'; // Details
 $string[16][18] = 'Zahlung erwartet, Abgeholt'; // Pickup state
 $string[16][19] = 'Zahlung erwartet'; // Pickup state
 $string[16][20] = 'Nicht abgeholt'; // Pickup state
-$string[16][8] = 'Abgeholt'; // Pickup state
+$string[16][21] = 'Abgeholt'; // Pickup state
 $string[16][22] = 'Zahlungstyp:'; // Detail
 $string[16][23] = 'Onlinezahlung'; // Payment type
 $string[16][24] = 'Barzahlung'; // Payment type
@@ -674,7 +674,7 @@ $string[17][18] = 'Verfügbar'; // Availability types
 $string[17][19] = 'Wenige verfügbar'; // Availability types
 $string[17][20] = 'Ausverkauft'; // Availability types
 
-$string[17][8] = 'Name'; // headlines
+$string[17][21] = 'Name'; // headlines
 $string[17][22] = 'Preis'; // headlines
 $string[17][23] = 'Aktion'; // headlines
 $string[17][24] = 'Produktdetails anzeigen'; // Top nav title
@@ -752,7 +752,7 @@ $string[18][17] = 'Weiter'; // Table navigation
 
 // Single pub
 $string[18][20] = 'Allgemein'; // Top nav item
-$string[18][8] = 'Rechte'; // Top nav item
+$string[18][21] = 'Rechte'; // Top nav item
 $string[18][22] = 'Wirtschaft verwalten'; // Top nav item title
 $string[18][23] = 'Rechte verwalten'; // Top nav item title
 
@@ -856,7 +856,7 @@ $string[19][18] = 'Schreibberechtigung setzen'; // Page access title
 $string[19][19] = 'Leseberechtigung setzen'; // Page access title
 
 $string[19][20] = 'Zugangsdaten an Benutzer senden'; // Send access checkbox
-$string[19][8] = 'Mail an neuen Benutzer senden'; // Send access checkbox
+$string[19][21] = 'Mail an neuen Benutzer senden'; // Send access checkbox
 
 $string[19][22] = 'UPDATE'; // Update
 $string[19][23] = 'Benutzer aktualisieren'; // Update title
@@ -906,7 +906,7 @@ $string[20][100] = 'Profil von %user% überarbeitet'; // User.php
 $string[20][101] = 'Profil von %user% entfernt'; // User.php
 $string[20][102] = 'Zugriffsrechte von %user% entfernt'; // User.php
 $string[20][103] = 'Profil von %user% hinzugefügt'; // User.php
-$string[20][103] = 'Version %version% wiederhergestellt'; // User.php
+$string[20][104] = 'Version %version% wiederhergestellt'; // User.php
 
 $string[20][110] = 'Neue Wirtschaft hinzugefügt (%name%)'; // pub.php
 $string[20][111] = 'Neues globales Produkt (%name%) hinzugefügt'; // pub.php
@@ -938,6 +938,15 @@ $string[20][152] = 'Ticket (%ticketToken%) entfernt'; // ticket.php
 $string[20][153] = 'Ticket (%ticketToken%) wiederhergestellt'; // ticket.php
 $string[20][154] = 'Ticket (%ticketToken%) entwertet'; // ticket.php
 $string[20][155] = 'Ticket (%ticketToken%) manuell reaktiviert'; // ticket.php
+
+$string[20][160] = 'Grupe #%id% überarbeitet [Allgemein]'; // groups.php
+$string[20][161] = 'Grupe #%id% überarbeitet [Formular]'; // groups.php
+$string[20][162] = 'Grupe #%id% überarbeitet [Ticket]'; // groups.php
+$string[20][163] = 'Grupe #%id% überarbeitet [Mail]'; // groups.php
+$string[20][164] = 'Grupe #%id% überarbeitet [Zahlung]'; // groups.php
+$string[20][165] = 'Geheimer Schlüssel der Gruppe #%id% erneuert'; // groups.php
+$string[20][166] = 'Gruppe %name% hinzugefügt'; // groups.php
+$string[20][167] = 'Gruppe #%id% entfernt'; // groups.php
 
 /**
  * Profil
