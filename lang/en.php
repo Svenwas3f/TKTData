@@ -30,6 +30,8 @@ $string["general"][5] = 'The page <strong>#%page%</strong> does not exits.'; // 
 $string["general"][6] = 'Back'; // Fullscreen info (page does not exist)
 $string["general"][7] = 'Access to the page <strong>#%page%</strong> denied. '; // Fullscreen info (page access denied)
 $string["general"][8] = 'Back'; // Fullscreen info (page access denied)
+$string["general"][9] = 'TKTDATA - STORE'; // Store page title
+
 
 /**
 * Footer
@@ -960,4 +962,132 @@ $string[20][167] = 'Removed group #%id% '; // groups.php
  // Confirm form
  $string["profile"][18] = 'UPDATE';
 
+ /**
+  * Store
+  */
+ // 1.php
+ $string["store"][0] = 'Search for an event';
+ $string["store"][1] = 'Expired';
+ $string["store"][2] = 'Sold out';
+ $string["store"][3] = 'Does not exist';
+ $string["store"][4] = 'View previous events';
+ $string["store"][5] = 'View more events';
+
+ // 2.php
+ $string["store"][10] = 'Coupon could not be used.';
+ $string["store"][11] = 'The mail could not be sent.';
+ $string["store"][12] = 'The time window to buy a ticket is <strong>not</strong> open. Consult the group for more information.';
+ $string["store"][13] = 'The maximum number of tickets has been reached.';
+ $string["store"][14] = 'The maximum number of tickets per user has been reached.';
+ $string["store"][15] = 'The ticket could be created <strong>successfully</strong>.';
+ $string["store"][16] = 'Unfortunately the ticket could <strong>not</strong> be created.';
+ $string["store"][17] = 'E-Mail';
+ $string["store"][18] = '-- make a selection  --';
+ $string["store"][19] = 'Make a selection ';
+ $string["store"][20] = 'Check it';
+ $string["store"][21] = 'Use coupon';
+ $string["store"][22] = 'To pay:';
+ $string["store"][23] = 'PAY';
+
+ // 3.php
+ $string["store"][30] = 'Make payment now';
+ $string["store"][31] = 'The payment page could not be loaded. Report to the administrator.<br />The following error message is displayed: %message%.';
+
+ // 4.php
+ $string["store"][40] = 'The mail could not be sent. Reload the page to try again.';
+ $string["store"][41] = 'Payment successful'; // Payment state successful
+ $string["store"][42] = 'Payment failed'; // Transaction failed
+ $string["store"][43] = 'Payment successful'; // Confirmed
+ $string["store"][44] = 'Payment expected'; // 15 invoice
+ $string["store"][45] = 'Payment expected'; // 27 prepayment
+ $string["store"][46] = 'Payment failed'; // unknown error
+ $string["store"][47] = 'Hello %mail%<br /><br />We are glad that you are here. Your ticket has been successfully created and will be emailed to you shortly. We have already received your payment. <br />Save your ticket to your cell phone and look forward to the best event of the year.';// Payment state successful
+ $string["store"][48] = 'Hello %mail%<br /><br />We are glad that you are here. Your ticket has been successfully created and will be emailed to you shortly. We have already received your payment. <br />Save your ticket to your cell phone and look forward to the best event of the year.'; // Confirmed
+ $string["store"][49] = 'Hello %mail%<br /><br />We are glad that you are here. Your ticket has been successfully created and an invoice has been sent to your mail. Upon receipt of payment, the ticket will be sent to you by mail.<br />Save then your ticket to your cell phone and look forward to the best event of the year.'; // 15 invoice
+ $string["store"][50] = 'Hello %mail%<br /><br />We are glad that you are here. Your ticket has been successfully created and an invoice has been sent to your mail. Upon receipt of payment, the ticket will be sent to you by mail.<br />Save then your ticket to your cell phone and look forward to the best event of the year.'; // 27 Invoice
+ $string["store"][51] = '"Hello %mail%<br /><br />We are glad that you are here. Your ticket has been successfully created and an invoice has been sent to your mail. Upon receipt of payment, the ticket will be sent to you by mail.<br />Save then your ticket to your cell phone and look forward to the best event of the year.'; // Unknown error
+ $string["store"][52] = 'Price:'; // Price
+ $string["store"][53] = 'Not used'; // Coupon
+ $string["store"][54] = 'Coupon:'; // Coupon
+ $string["store"][55] = 'Payment made'; // payment state
+ $string["store"][56] = 'Payment expected'; // payment state
+ $string["store"][57] = 'Payment made'; // payment state
+ $string["store"][58] = 'Payment authorised'; // payment state
+ $string["store"][59] = 'Payment reserved'; // payment state
+ $string["store"][60] = 'Payment unknown'; // payment state
+ $string["store"][61] = 'Payment state:';
+ $string["store"][62] = 'Payment date:';
+ $string["store"][63] = 'Total:';
+ $string["store"][64] = 'Ticket proudly provided by <span>TKTDATA</span>'; // Footer text
+
+ // 5.php
+ $string["store"][70] = 'How to buy a ticket';
+ $string["store"][71] = 'The ticket purchase is very simple and can be done by you without any problems. To do so, visit <a href="%url%store/" target="_blank">%url%store/</a> and select your ticket. You will be redirected to a new page where you have to fill in your contact details. Your email address is required so that we can send you your ticket. The rest of the information can be either mandatory or optional, depending on the ticket. If you have a coupon you can redeem it by clicking on &quot;Use Coupon&quot;. After filling out the field, the ticket price will be adjusted accordingly. Please click out of the input field to see the change. After that you can click on &quot;Pay&quot;.<br />
+ Now the half is already done. Wait a moment until the payment window has loaded. Now select your preferred payment method and follow the instructions of the payment window. After the successful payment, wait a moment until you are redirected to a new page.
+ You have now successfully ordered your ticket. You should now see a summary of your order. The ticket will be sent to you immediately by mail. However, this may take a few minutes.';
+ $string["store"][72] = 'I have lost my ticket!';
+ $string["store"][73] = 'Don\'t panic. It\'s not a big deal, your ticket is stored with us and we can easily resend it to you. To do so, visit <a href="%url%store/ticket/find-ticket" target="_blank">%url%store/ticket/find-ticket</a>. Enter your email address and click on the &quot;search&quot; icon. A list with all your tickets will appear. To get the ticket again, you can simply click on &quot;resend&quot;. If you want to contact the organizer, you can click on &quot;Organizer&quot;. You will be redirected to a contact page.';
+ $string["store"][74] = 'Payment options';
+ $string["store"][75] = 'Each ticket has its own payment methods. Basically, however, all common payment methods are available. From Mastercard to Visa to invoice or prepayment, virtually everything is included.';
+ $string["store"][76] = 'Personalized tickets';
+ $string["store"][77] = 'Please note that all tickets are personalized and therefore cannot be transferred to others. If you would like to change your ticket, please contact the event management in advance.';
+ $string["store"][78] = 'Contact';
+ $string["store"][79] = 'The system runs under <span>TKTDATA</span>. If you have any problems, please contact: <br />
+ <br />
+ Max Muster<br />
+ <a href="mailto:max.muster@example.ch">max.muster@example.ch</a><br />
+ Musterstrasse 1<br />
+ 1234 Musterort <br />
+ 079 123 45 67<br />';
+
+ // 6.php
+ $string["store"][90] = 'Your  E-Mail'; // Placeholder
+ $string["store"][91] = 'Does not exist';
+ $string["store"][92] = 'Expired';
+ $string["store"][93] = 'Payment done';
+ $string["store"][94] = 'Payment expected';
+ $string["store"][95] = 'Payment done';
+ $string["store"][96] = 'Payment authorised';
+ $string["store"][97] = 'Payment reserved';
+ $string["store"][98] = 'Payment unknown';
+ $string["store"][99] = 'Resend';
+ $string["store"][100] = 'Organizer';
+ $string["store"][101] = 'View previous tickets';
+ $string["store"][102] = 'View more tickets';
+
+ // 7.php
+ $string["store"][110] = 'Look for pub';
+ $string["store"][111] = 'View previous pubs';
+ $string["store"][112] = 'View more pubs';
+
+ // 8.php
+ $string["store"][120] = 'The payment process could not be started.';
+ $string["store"][121] = 'TOTAL:';
+ $string["store"][122] = 'PAY';
+ $string["store"][123] = 'TKTData Logo';
+ $string["store"][124] = 'Tip';
+
+ // 9.php
+ $string["store"][130] = 'Make payment now';
+ $string["store"][131] = 'The payment page could not be loaded. Report to the administrator.<br />The following error message is displayed: %message%.';
+
+ // 10.php
+ $string["store"][140] = 'The mail could not be sent. Reload the page to try again.';
+ $string["store"][141] = 'Payment expected';
+ $string["store"][142] = 'Payment successful';
+ $string["store"][143] = 'Payment failed';
+ $string["store"][144] = 'Hello,<br />Please pay cash at the checkout. Enter as payment ID <strong>#%id%</strong>.';
+ $string["store"][145] = 'Hello,<br />You can use this receipt to go pick up your purchase at checkout. Enter as payment ID <strong>#%id%</strong>. The receipt was also sent to you by mail (to %mail%).';
+ $string["store"][146] = 'Hello,<br />Your payment has failed. Please try again or contact the staff.';
+ $string["store"][147] = 'Tip';
+ $string["store"][148] = 'Total:';
+ $string["store"][149] = 'Store proudly provided by <span>TKTDATA</span>.';
+
+ // Store footer
+ $string["store"]["footer1"] = 'Contact'; // Ticket
+ $string["store"]["footer2"] = 'Find my ticket'; // Ticket
+ $string["store"]["footer3"] = 'How do I buy a ticket?'; // Ticket
+ $string["store"]["footer4"] = 'What payment options are there?'; // Ticket
+ $string["store"]["footer5"] = 'Powerd by <span>TKTDATA</span>'; // Ticket
+ $string["store"]["footer6"] = 'Powerd by <span>TKTDATA</span>'; // Pubs
  ?>

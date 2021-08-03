@@ -31,7 +31,7 @@ define("PATH_TO_INI", "C:/xampp/htdocs/www.tktdata.ch/logindata.ini");
 // Define default language
 // Use one of the language code that is listed in the lang/ folder. The language code
 // follows official ISO language code http://www.loc.gov/standards/iso639-2/php/code_list.php
-define("DEFAULT_LANGUAGE", "de");
+define("DEFAULT_LANGUAGE", "en");
 
 // Define string as salt key
 // Do not change this value after your system is working!! This string will disable your selled tickets, yoru login informations and secret keys.

@@ -24,7 +24,7 @@ if( empty($transaction->globalValues()["payrexx_transaction"]) ) {
     <div class="response-container">
       <?php
       // if( $error === false ) {
-      //   echo '<div class="error">Die Mail konnte nicht gesendet werden. Laden Sie die Seite neu um es noch einmal zu versuchen.</div>';
+      //   echo '<div class="error">' . Language::string(140, null, "store") . '</div>';
       // }
        ?>
       <div class="headline">
@@ -36,13 +36,13 @@ if( empty($transaction->globalValues()["payrexx_transaction"]) ) {
 
         if( $payment_method == 27 || $payment_method == 15 ) {
           echo '<img src="' . $url . 'medias/store/icons/waiting.svg" />';
-          echo '<span>Zahlung erwartet</span>';
+          echo '<span>' . Language::string( 141, null, "store" ) . '</span>';
         }elseif( $payment_state == "confirmed") {
           echo '<img src="' . $url . 'medias/store/icons/success.svg" />';
-          echo '<span>Zahlung erfolgreich</span>';
+          echo '<span>' . Language::string( 142, null, "store" ) . '</span>';
         }else {
           echo '<img src="' . $url . 'medias/store/icons/error.svg" />';
-          echo '<span>Zahlung fehlgeschlagen</span>';
+          echo '<span>' . Language::string( 143, null, "store" ) . '</span>';
         }
          ?>
       </div>
@@ -51,11 +51,16 @@ if( empty($transaction->globalValues()["payrexx_transaction"]) ) {
         <?php
         // Show message
         if( $payment_method == 27 || $payment_method == 15 ) {
-          echo 'Hallo,<br />Bitte bezahle bar an der Kasse. Gib als Zahlungs-ID <strong>#' . $transaction->paymentID . '</strong> an.';
+          echo Language::string( 144, array(
+                  '%id%' => $transaction->paymentID,
+                ), "store" );
         }elseif( $payment_state == "confirmed") {
-          echo 'Hallo,<br />Du kannst mit diesem Beleg deinen Einkauf an der Kasse abholen gehen. Gib als Zahlungs-ID <strong>#' . $transaction->paymentID . '</strong> an. Der Beleg wurde dir auch per Mail (an ' . $transaction->globalValues()["email"] . ') zugestellt.';
+          echo Language::string( 145, array(
+                  '%id%' => $transaction->paymentID,
+                  '%mail%' => $transaction->globalValues()["email"],
+                ), "store" );
         }else {
-          echo 'Hallo,<br />Ihre Zahlung ist fehlgeschlagen. Versuchen Sie es erneut oder melden Sie sich beim Personal.';
+          echo Language::string( 146, null, "store" );
         }
          ?>
       </div>
@@ -71,7 +76,7 @@ if( empty($transaction->globalValues()["payrexx_transaction"]) ) {
           if($values["product_id"] == 0) {
             echo '<div class="item">';
               echo '<span class="quantity">1x</span>';
-              echo '<span class="name">Trinkgeld</span>';
+              echo '<span class="name">' . Language::string( 147, null, "store" ) . '</span>';
               echo '<span class="price">' . number_format(($values["price"] / 100), 2) . ' ' . $values["currency"] . '</span>';
             echo '</div>';
 
@@ -94,13 +99,13 @@ if( empty($transaction->globalValues()["payrexx_transaction"]) ) {
 
         // List total
         echo '<div class="item total">';
-          echo '<span class="name">Total:</span>';
+          echo '<span class="name">' . Language::string( 148, null, "store" ) . '</span>';
           echo '<span class="price">' . number_format(($total / 100), 2) . ' ' . $transaction->globalValues()["currency"] . '</span>';
         echo '</div>';
          ?>
 
         <div class="footer">
-          Transaction proudly provided by <span>TKTDATA</span>
+          <?php echo Language::string( 149, null, "store" ); ?>
         </div>
       </div>
     </div>

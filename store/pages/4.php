@@ -37,29 +37,29 @@ if( $transaction["transaction_retrieve_status"] == false || $transaction["pspId"
         <div class="response-container">
           <?php
           if( $error === false ) {
-            echo '<div class="error">Die Mail konnte nicht gesendet werden. Laden Sie die Seite neu um es noch einmal zu versuchen.</div>';
+            echo '<div class="error">' . Language::string( 40, null, "store") . '</div>';
           }
            ?>
           <div class="headline">
             <?php
             if( $ticket->values()["payment"] != 2) { //No payment required
               echo '<img src="' . $url . 'medias/store/icons/success.svg" />';
-              echo '<span>Zahlung erfolgreich</span>';
+              echo '<span' . Language::string( 41, null, "store") . '></span>';
             } elseif ( $transaction["transaction_retrieve_status"] == false ) {
               echo '<img src="' . $url . 'medias/store/icons/error.svg" />';
-              echo '<span>Zahlung fehlgeschlagen</span>';
+              echo '<span>' . Language::string( 42, null, "store") . '</span>';
             } elseif ( $transaction["status"] == "confirmed") {
               echo '<img src="' . $url . 'medias/store/icons/success.svg" />';
-              echo '<span>Zahlung erfolgreich</span>';
+              echo '<span>' . Language::string( 43, null, "store") . '</span>';
             } elseif ($transaction["pspId"] == 15 ) { //http://developers.payrexx.com/docs/miscellaneous
               echo '<img src="' . $url . 'medias/store/icons/waiting.svg" />';
-              echo '<span>Zahlung erwartet</span>';
+              echo '<span>' . Language::string( 44, null, "store") . '</span>';
             } elseif ($transaction["pspId"] == 27) { //http://developers.payrexx.com/docs/miscellaneous
               echo '<img src="' . $url . 'medias/store/icons/waiting.svg" />';
-              echo '<span>Zahlung erwartet</span>';
+              echo '<span>' . Language::string( 45, null, "store") . '</span>';
             } else {
               echo '<img src="' . $url . 'medias/store/icons/error.svg" />';
-              echo '<span>Zahlung fehlgeschlagen</span>';
+              echo '<span>' . Language::string( 46, null, "store") . '</span>';
             }
              ?>
           </div>
@@ -69,30 +69,25 @@ if( $transaction["transaction_retrieve_status"] == false || $transaction["pspId"
           <div class="message">
             <?php
             if( $ticket->values()["payment"] != 2) { //Payemt done
-              echo "Hallo " . $ticket->values()["email"] . "<br />
-              <br />
-              Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und wird dir zeitnahe per Mail zugestellt. Die Zahlung ist bei uns bereits eingegangen. <br />
-              Speichere dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.";
+              echo Language::string( 47, array(
+                      '%mail%' => $ticket->values()["email"],
+                    ), "store" );
             } elseif ( $transaction["status"] == "confirmed") {
-              echo "Hallo " . $ticket->values()["email"] . "<br />
-              <br />
-              Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und wird dir zeitnahe per Mail zugestellt. Die Zahlung ist bei uns bereits eingegangen. <br />
-              Speichere dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.";
+              echo Language::string( 48, array(
+                      '%mail%' => $ticket->values()["email"],
+                    ), "store" );
             } elseif ($transaction["status"] == 15 ) { //http://developers.payrexx.com/docs/miscellaneous
-              echo "Hallo " . $ticket->values()["email"] . "<br />
-              <br />
-              Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt. <br />
-              Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.";
+              echo Language::string( 49, array(
+                      '%mail%' => $ticket->values()["email"],
+                    ), "store" );
             } elseif ($transaction["status"] == 27) { //http://developers.payrexx.com/docs/miscellaneous
-              echo "Hallo " . $ticket->values()["email"] . "<br />
-              <br />
-              Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt. <br />
-              Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.";
+              echo Language::string( 50, array(
+                      '%mail%' => $ticket->values()["email"],
+                    ), "store" );
             } else {
-              echo "Hallo " . $ticket->values()["email"] . "<br />
-              <br />
-              Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt. <br />
-              Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.";
+              echo Language::string( 51, array(
+                      '%mail%' => $ticket->values()["email"],
+                    ), "store" );
             }
              ?>
           </div>
@@ -100,8 +95,8 @@ if( $transaction["transaction_retrieve_status"] == false || $transaction["pspId"
           <div class="details">
             <!-- Preis -->
             <div class="item">
-              <span class="info">Preis:</span>
-              <span class="value"><?php echo ((($group->values()["price"]) + ($group->values()["price"] * $group->values()["vat"] / 10000)) / 100) . ' ' . $group->values()["currency"]; ?></span>
+              <span class="info"><?php echo Language::string( 52, null, "store"); ?></span>
+              <span class="value"><?php echo number_format(((($group->values()["price"]) + ($group->values()["price"] * $group->values()["vat"] / 10000)) / 100), 2) . ' ' . $group->values()["currency"]; ?></span>
             </div>
 
             <!-- Coupon -->
@@ -112,37 +107,37 @@ if( $transaction["transaction_retrieve_status"] == false || $transaction["pspId"
               $coupon->couponID = $ticket->values()["coupon"];
               $coupon = '-' . (empty($coupon->values()["discount_percent"]) ? ($coupon->values()["discount_absolute"] / 100) . " " . $group->values()["currency"] : ($coupon->values()["discount_percent"] / 100 . "%"));
             }else {
-              $coupon = 'Nicht verwendet';
+              $coupon = Language::string( 53, null, "store");
             }
              ?>
             <div class="item">
-              <span class="info">Coupon:</span>
+              <span class="info"><?php echo Language::string( 54, null, "store"); ?></span>
               <span class="value"><?php echo $coupon; ?></span>
             </div>
 
             <?php
             if( $ticket->values()["payment"] != 2 ) { //Payment done
-                $payment_state = "Bereits getätigt";
+                $payment_state = Language::string( 55, null, "store");;
                 $payment_time = isset($ticket->values()["payment_time"]) ? date("d.m.Y H:i", strtotime( $ticket->values()["payment_time"] )) : '--.--.---- --:--';
             } elseif ( $transaction["transaction_retrieve_status"] == false ) {
-              $payment_state = "erwartet";
+              $payment_state = Language::string( 56, null, "store");;
               $payment_time = '--.--.---- --:--';
             }else {
               switch($transaction["status"]) {
                 case "waiting":
-                  $payment_state = "erwartet";
+                  $payment_state = Language::string( 56, null, "store");
                 break;
                 case "confirmed":
-                  $payment_state = "erfolgreich getätigt";
+                  $payment_state = Language::string( 57, null, "store");;
                 break;
                 case "authorized":
-                  $payment_state = "authorisiert";
+                  $payment_state = Language::string( 58, null, "store");;
                 break;
                 case "reserved":
-                  $payment_state = "reserviert";
+                  $payment_state = Language::string( 59, null, "store");;
                 break;
                 default:
-                  $payment_state = "unbekannt";
+                  $payment_state = Language::string( 60, null, "store");;
                 break;
               }
 
@@ -152,25 +147,25 @@ if( $transaction["transaction_retrieve_status"] == false || $transaction["pspId"
 
             <!-- Status -->
             <div class="item">
-              <span class="info">Status:</span>
+              <span class="info"><?php echo Language::string( 61, null, "store"); ?></span>
               <span class="value"><?php echo $payment_state; ?></span>
             </div>
 
             <!-- Zahldatum -->
             <div class="item">
-              <span class="info">Zahldatum:</span>
+              <span class="info"><?php echo Language::string( 62, null, "store"); ?></span>
               <span class="value"><?php echo $payment_time; ?></span>
             </div>
 
             <!-- Total -->
             <div class="item total">
-              <span class="info">Total:</span>
-              <span class="value"><?php echo ($ticket->values()["amount"] / 100) . ' ' . $group->values()["currency"]; ?></span>
+              <span class="info"><?php echo Language::string( 63, null, "store"); ?></span>
+              <span class="value"><?php echo number_format(($ticket->values()["amount"] / 100), 2) . ' ' . $group->values()["currency"]; ?></span>
             </div>
           </div>
 
           <div class="footer">
-            Ticket proudly provided by <span>TKTDATA</span>
+            <?php echo Language::string( 64, null, "store"); ?>
           </div>
         </div>
 

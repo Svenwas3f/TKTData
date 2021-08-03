@@ -38,7 +38,7 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>TKTDATA - STORE</title>
+    <title><?php echo Language::string( 9, null, "general" ); ?></title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,8 +49,8 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
     <meta name="copyright" content="Sven Waser">
     <meta name="reply-to" content="sven.waser@sven-waser.ch">
 
-    <meta name="description" content="Wilkommen auf dem TKTData Store. Kaufen Sie sich hier ein Ticket für den nächsten Event oder eine Erfrischung während dem Event">
-    <meta name="keywords" content="TKTData, TKTData Store, Store">
+    <meta name="description" content="<?php echo Language::string( 1, null, "general" ); ?>">
+    <meta name="keywords" content="<?php echo Language::string( 2, null, "general" ); ?>">
 
     <meta name="content-language" content="de">
     <meta name="robots" content="noindex">
@@ -96,15 +96,15 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
         case "ticket":
           echo '<div class="container">';
                   echo '<div class="footer-element">';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#contact">Kontakt</a>';
-                    echo '<a href="' . $url . 'store/' . $type . '/find-ticket">Mein Ticket finden</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#contact">' . Language::string( "footer1", null, "store" ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/find-ticket">' . Language::string( "footer2", null, "store" ) . '</a>';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-procedure">Wie kaufe ich ein Ticket?</a>';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-options">Welche Zahlungsmöglichkeiten gibt es?</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-procedure">' . Language::string( "footer3", null, "store" ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-options">' . Language::string( "footer4", null, "store" ) . '</a>';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<span class="powered">Powered by <span>TKTDATA</span></span>';
+                    echo '<span class="powered">' . Language::string( "footer5", null, "store" ) . '</span>';
                   echo '</div>';
                 echo '</div>';
         break;
@@ -117,7 +117,7 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
                   echo '<div class="footer-element">';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<span class="powered">Powered by <span>TKTDATA</span></span>';
+                    echo '<span class="powered">' . Language::string( "footer6", null, "store" ) . '</span>';
                   echo '</div>';
                 echo '</div>';
         break;

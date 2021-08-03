@@ -86,19 +86,19 @@ if(!empty($_POST)) {
       <?php
       if(isset($add)) {
         if($add == 6) {
-          Action::fail("Coupon konnte nicht angewendet werden.");
+          Action::fail( Language::string(10, null, "store") );
         }elseif($add == 5) {
-          Action::fail("Die Mail konnte nicht versendet werden.");
+          Action::fail( Language::string(11, null, "store") );
         }elseif($add == 4) {
-          Action::fail("Das Zeitfenster um ein Ticket zu lösen ist <strong>nicht</strong></b> offen. Konsultiere die Gruppe für nähere Infomrationen.");
+          Action::fail( Language::string(12, null, "store") );
         }elseif($add == 3) {
-          Action::fail("Die maximale Anzahl an Tickets wurde erreicht.");
+          Action::fail( Language::string(13, null, "store") );
         }elseif($add == 2) {
-          Action::fail("Die maximale Anzahl an Tickets pro Benutzer wurde erreicht.");
+          Action::fail( Language::string(14, null, "store") );
         }elseif($add == 1) {
-          Action::success("Das Ticket konnte <strong>erfolgreich</strong> erstellt werden.");
+          Action::success( Language::string(15, null, "store") );
         }else {
-          Action::fail("Leider konnte das Ticket <strong>nicht</strong></b> erstellt werden.");
+          Action::fail( Language::string(16, null, "store") );
         }
       }
        ?>
@@ -122,9 +122,7 @@ if(!empty($_POST)) {
       }
       ?>
       <div class="buy-container">
-        <div class="fullscreen-img" style="background-image: url('<?php echo $backgroundImgUrl; ?>');">
-          <img class="logo" src="" />
-        </div>
+        <div class="fullscreen-img" style="background-image: url('<?php echo $backgroundImgUrl; ?>');"></div>
 
         <div class="buy-form-container">
           <form action="<?php echo $url . "store/" . $type . "/buy/" . $_GET["id"]; ?>" method="post">
@@ -139,7 +137,6 @@ if(!empty($_POST)) {
 
             <!-- User inputs -->
             <div class="custom">
-              <!-- <h4>Kontaktangaben</h4> -->
               <?php
               $customUserInputs = json_decode($group->values()["custom"], true);
               $customADFS = json_decode($group->values()["adfs_custom"], true);
@@ -147,7 +144,7 @@ if(!empty($_POST)) {
               //First
               echo '<label class="txt-input">';
                 echo '<input type="text" name="email" ' . (isset($user_informations) &&  isset($user_informations[$customADFS["email"]]) ? ('value="' . $user_informations[$customADFS["email"]] . '" disabled') : ('required')) . '/>';
-                echo '<span class="placeholder">E-Mail</span>';
+                echo '<span class="placeholder">' . Language::string(17, null, "store") . '</span>';
               echo '</label>';
 
               if(! empty($customUserInputs)) {
@@ -181,7 +178,7 @@ if(!empty($_POST)) {
                       $options = explode(",", $customInput["value"]);
                       echo  '<div class="select" onclick="toggleOptions(this)">';
                         echo  '<input type="text" class="selectValue" name="' . $customInput["id"] . '"' . $required . ' ' . $disabled . '>';
-                        echo  '<span class="headline">-- Auswahl treffen --</span>';
+                        echo  '<span class="headline">' . Language::string(18, null, "store") . '</span>';
 
                         echo  '<div class="options">';
                           foreach($options as $option) {
@@ -202,7 +199,7 @@ if(!empty($_POST)) {
                           if($option != "") {
                             echo  '<label class="radio">';
                               echo  '<input type="radio" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                              echo  '<div title="Auswahl treffen"></div>';
+                              echo  '<div title="' . Language::string(19, null, "store") . '"></div>';
                               echo  $option;
                             echo  '</label>';
                           }
@@ -213,7 +210,7 @@ if(!empty($_POST)) {
                     case "checkbox":
                       echo  '<label class="checkbox">';
                         echo  '<input type="checkbox" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                        echo  '<div title="Häcken setzen"></div>';
+                        echo  '<div title="' . Language::string(20, null, "store") . '"></div>';
                         echo  $customInput["name"];
                       echo  '</label>';
                     break;
@@ -238,12 +235,12 @@ if(!empty($_POST)) {
 
             <!-- Coupon -->
             <div class="coupon">
-              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);">Coupon einlösen</span>
+              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);"><?php echo Language::string(21, null, "store"); ?></span>
             </div>
 
             <!-- Price -->
             <div class="price_tag">
-              <span class="name">Zu bezahlen:</span>
+              <span class="name"><?php echo Language::string(22, null, "store"); ?></span>
               <span class="price"><?php echo number_format(($group->values()["price"] + ($group->values()["vat"] / 10000) * $group->values()["price"]) / 100, 2); ?></span>
               <span class="discount_price"></span>
               <span class="unit"><?php echo $group->values()["currency"]; ?></span>
@@ -253,7 +250,7 @@ if(!empty($_POST)) {
             <button>
               <div class="container">
                 <img src="<?php echo $url; ?>medias/store/icons/pay.svg" />
-                <span>BEZAHLEN</span>
+                <span><?php echo Language::string(23, null, "store"); ?></span>
               </div>
             </button>
 

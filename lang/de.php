@@ -30,6 +30,7 @@ $string["general"][5] = 'Die Seite <strong>#%page%</strong> existiert nicht.'; /
 $string["general"][6] = 'Zurück'; // Fullscreen info (page does not exist)
 $string["general"][7] = 'Zugriff auf die Seite <strong>#%page%</strong> verweigert.'; // Fullscreen info (page access denied)
 $string["general"][8] = 'Zurück'; // Fullscreen info (page access denied)
+$string["general"][9] = 'TKTDATA - STORE'; // Store page title
 
 /**
  * Footer
@@ -421,17 +422,6 @@ $string[8][221] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion
 $string[8][222] = 'Die Gruppe konnte <strong>erfolgreich</strong> erstellt werden. <a href="%url_page%&view=%id%" class="redirect">Gruppe verwalten</a></strong>'; // Add group
 $string[8][223] = 'Leider konnte die Gruppe <strong>nicht</strong> erstellt werden.'; // Add group
 $string[8][224] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Add group
-
-// $string[8][0] = '';
-// $string[8][1] = '';
-// $string[8][2] = '';
-// $string[8][3] = '';
-// $string[8][4] = '';
-// $string[8][5] = '';
-// $string[8][6] = '';
-// $string[8][7] = '';
-// $string[8][8] = '';
-// $string[8][9] = '';
 
 /**
  * Page 9
@@ -972,4 +962,133 @@ $string["profile"][17] = 'Passwort bestätigen';
 
 // Confirm form
 $string["profile"][18] = 'UPDATE';
+
+/**
+ * Store
+ */
+// 1.php
+$string["store"][0] = 'Nach Veranstaltung suchen';
+$string["store"][1] = 'Abgelaufen';
+$string["store"][2] = 'Ausverkauft';
+$string["store"][3] = 'Existiert nicht';
+$string["store"][4] = 'Vorherige Veranstaltungen ansehen';
+$string["store"][5] = 'Weitere Veranstaltungen ansehen';
+
+// 2.php
+$string["store"][10] = 'Coupon konnte nicht angewendet werden.';
+$string["store"][11] = 'Die Mail konnte nicht versendet werden.';
+$string["store"][12] = 'Das Zeitfenster um ein Ticket zu lösen ist <strong>nicht</strong> offen. Konsultiere die Gruppe für nähere Infomrationen.';
+$string["store"][13] = 'Die maximale Anzahl an Tickets wurde erreicht.';
+$string["store"][14] = 'Die maximale Anzahl an Tickets pro Benutzer wurde erreicht.';
+$string["store"][15] = 'Das Ticket konnte <strong>erfolgreich</strong> erstellt werden.';
+$string["store"][16] = 'Leider konnte das Ticket <strong>nicht</strong> erstellt werden.';
+$string["store"][17] = 'E-Mail';
+$string["store"][18] = '-- Auswahl treffen --';
+$string["store"][19] = 'Auswahl treffen';
+$string["store"][20] = 'Häcken setzen';
+$string["store"][21] = 'Coupon einlösen';
+$string["store"][22] = 'Zu bezahlen:';
+$string["store"][23] = 'BEZAHLEN';
+
+// 3.php
+$string["store"][30] = 'Zahlung jetzt tätigen';
+$string["store"][31] = 'Die Zahlungsseite konnte nicht geladen werden. Melden Sie sich beim Administrator.<br />Folgende Fehlermeldung wird ausgegeben: %message%';
+
+// 4.php
+$string["store"][40] = 'Die Mail konnte nicht gesendet werden. Laden Sie die Seite neu um es noch einmal zu versuchen.';
+$string["store"][41] = 'Zahlung erfolgreich'; // Payment state successful
+$string["store"][42] = 'Zahlung fehlgeschlagen'; // Transaction failed
+$string["store"][43] = 'Zahlung erfolgreich'; // Confirmed
+$string["store"][44] = 'Zahlung erwartet'; // 15 invoice
+$string["store"][45] = 'Zahlung erwartet'; // 27 prepayment
+$string["store"][46] = 'Zahlung fehlgeschlagen'; // unknown error
+$string["store"][47] = 'Hallo %mail%<br /><br />Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und wird dir zeitnahe per Mail zugestellt. Die Zahlung ist bei uns bereits eingegangen. <br />Speichere dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.';// Payment state successful
+$string["store"][48] = 'Hallo %mail%<br /><br />Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und wird dir zeitnahe per Mail zugestellt. Die Zahlung ist bei uns bereits eingegangen.<br />Speichere dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.'; // Confirmed
+$string["store"][49] = 'Hallo %mail%<br /><br />Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt.<br />Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.'; // 15 invoice
+$string["store"][50] = 'Hallo %mail%<br /><br />Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt.<br />Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.'; // 27 Invoice
+$string["store"][51] = '"Hallo %mail%<br /><br />Es freut uns, dass du dabei bist. Dein Ticket wurde erfolgreich erstellt und eine Rechnug an deine Mail gesendet. Nach Zahlungseingang wird dir das Ticket per Mail zugestellt.<br />Speichere dann dein Ticket auf dein Mobiltelefon und freue dich auf den besten Event des Jahres.'; // Unknown error
+$string["store"][52] = 'Preis:'; // Price
+$string["store"][53] = 'Nicht verwendet'; // Coupon
+$string["store"][54] = 'Coupon:'; // Coupon
+$string["store"][55] = 'Zahlung getätigt'; // payment state
+$string["store"][56] = 'Zahlung erwartet'; // payment state
+$string["store"][57] = 'Zahlung getätigt'; // payment state
+$string["store"][58] = 'Zahlung authorisiert'; // payment state
+$string["store"][59] = 'Zahlung reserviert'; // payment state
+$string["store"][60] = 'Zahlung unbekannt'; // payment state
+$string["store"][61] = 'Zahlstatus:';
+$string["store"][62] = 'Zahldatum:';
+$string["store"][63] = 'Total:';
+$string["store"][64] = 'Ticket stolz zur Verfügung gestellt von <span>TKTDATA</span>'; // Footer text
+
+// 5.php
+$string["store"][70] = 'Wie kaufe ich ein Ticket';
+$string["store"][71] = 'Der Ticketkauf ist ganz einfach und kann von dir problemlos durchgeführ werden. Besuche dazu <a href="%url%store/" target="_blank">%url%store/</a> und wähle Dein Ticket aus. Du wirst auf eine neue Seite weitergeleitet wo du Deine Kontaktangaben machen must. Deine E-Mail wird zwingend benötigt, damit wir Dir dein Ticket zustellen können. Die restlichen Angaben können entweder zwingend oder freiwillig sein, dies kommt auf das Ticket an. Wenn du einen Coupon besitzt kannst du diesen einlösen, indem du auf &quot;Coupon einlösen&quot; klickst. Nach dem ausfüllen des Feldes wird Dir entsprechen der Ticketpreis angepasst. Bitte klicke dich aus dem Eingabefeld um die Änderung zu sehen. Danach kannst du auf &quot;Bezahlen&quot; klicken.<br />
+Nun die hälfte ist bereits erledigt. Warte einen Augenblick, bis das Zahlfenster geladen hat. Wähle nun Deine bevorzugte Zahlungsmethode aus und folge den Anweisungen des Zahlungsfenster. Nach der erfolgreichen Zahlung, warte kurz bis du auf eine neue Seite weitergeleitet wirts.<br />
+Du hast nun erfolgreich dein Ticket bestellt. Du solltest nun eine Zusammenfassung deiner Bestellung sehen. Das Ticket wird Dir unverzüglich per Mail zugestellt. Dies kann jedoch einige Minuten in anspruch nehmen.';
+$string["store"][72] = 'Ich habe mein Ticket verloren!';
+$string["store"][73] = 'Nur keine Panik. Das ist halb so wild, Dein Ticket ist bei uns gespeichert und wir können es Dir ganz einfach erneut zusenden. Besuche dafür <a href="%url%store/ticket/find-ticket" target="_blank">%url%store/ticket/find-ticket</a>. Gib deine E-Mailadresse ein und klicke auf das &quot;Such-Symbol&quot;. Es kommt nun eine Liste mit allen deinen Tickets. Um das Ticket erneut zu erhalten, kannst du einfach auf &quot;erneut senden&quot; klicken. Möchtest du den Veranstalter kontaktieren, kannst du auf &quot;Veranstalter&quot; klicken. Du wirst auf eine Kontaktseite weitergeleitet';
+$string["store"][74] = 'Zahlungsmöglichkeiten';
+$string["store"][75] = 'Jedes Ticket hat seine eigenen Zahlungsmethoden. Grundsätzlich sind jedoch alle gängigen Zahlungsmethoden verfügbar. Von Mastercard über Visa bis hin zur Rechnung oder Vorkasse ist praktisch alles enthalten.';
+$string["store"][76] = 'Personalisierte Tickets';
+$string["store"][77] = 'Bitte beachte, dass alle Tickets personalisiert sind und somit nicht an andere übertragen werden können. Möchtest du eine Ticketänderung vornehmen so melde Dich bitte im voraus bei der Eventleitung.';
+$string["store"][78] = 'Kontakt';
+$string["store"][79] = 'Das System läuft unter <span>TKTDATA</span>. Melde dich bei Problemen bei:<br />
+<br />
+Max Muster<br />
+<a href="mailto:max.muster@example.ch">max.muster@example.ch</a><br />
+Musterstrasse 1<br />
+1234 Musterort <br />
+079 123 45 67<br />';
+
+// 6.php
+$string["store"][90] = 'Deine E-Mail'; // Placeholder
+$string["store"][91] = 'Existiert nicht';
+$string["store"][92] = 'Abgelaufen';
+$string["store"][93] = 'Zahlung getätigt';
+$string["store"][94] = 'Zahlung erwartet';
+$string["store"][95] = 'Zahlung getätigt';
+$string["store"][96] = 'Zahlung authorisiert';
+$string["store"][97] = 'Zahlung reserviert';
+$string["store"][98] = 'Zahlung unbekannt';
+$string["store"][99] = 'Erneut senden';
+$string["store"][100] = 'Veranstalter';
+$string["store"][101] = 'Vorherige Tickets ansehen';
+$string["store"][102] = 'Weitere Tickets ansehen';
+
+// 7.php
+$string["store"][110] = 'Nach Wirtschaft suchen';
+$string["store"][111] = 'Vorherige Wirtschaften ansehen';
+$string["store"][112] = 'Weitere Wirtschaften ansehen';
+
+// 8.php
+$string["store"][120] = 'Der Zahlungsvorgang konnte nicht gestartet werden.';
+$string["store"][121] = 'TOTAL:';
+$string["store"][122] = 'BEZAHLEN';
+$string["store"][123] = 'TKTData Logo';
+$string["store"][124] = 'Trinkgeld';
+
+// 9.php
+$string["store"][130] = 'Zahlung jetzt tätigen';
+$string["store"][131] = 'Die Zahlungsseite konnte nicht geladen werden. Melden Sie sich beim Administrator.<br />Folgende Fehlermeldung wird ausgegeben: %message%';
+
+// 10.php
+$string["store"][140] = 'Die Mail konnte nicht gesendet werden. Laden Sie die Seite neu um es noch einmal zu versuchen.';
+$string["store"][141] = 'Zahlung erwartet';
+$string["store"][142] = 'Zahlung erfolgreich';
+$string["store"][143] = 'Zahlung fehlgeschlagen';
+$string["store"][144] = 'Hallo,<br />Bitte bezahle bar an der Kasse. Gib als Zahlungs-ID <strong>#%id%</strong> an.';
+$string["store"][145] = 'Hallo,<br />Du kannst mit diesem Beleg deinen Einkauf an der Kasse abholen gehen. Gib als Zahlungs-ID <strong>#%id%</strong> an. Der Beleg wurde dir auch per Mail (an %mail%) zugestellt.';
+$string["store"][146] = 'Hallo,<br />Ihre Zahlung ist fehlgeschlagen. Versuchen Sie es erneut oder melden Sie sich beim Personal.';
+$string["store"][147] = 'Trinkgeld';
+$string["store"][148] = 'Total:';
+$string["store"][149] = 'Store stolz zur Verfügung gestellt von <span>TKTDATA</span>';
+
+// Store footer
+$string["store"]["footer1"] = 'Kontakt'; // Ticket
+$string["store"]["footer2"] = 'Mein Ticket finden'; // Ticket
+$string["store"]["footer3"] = 'Wie kaufe ich ein Ticket?'; // Ticket
+$string["store"]["footer4"] = 'Welche Zahlungsmöglichkeiten gibt es?'; // Ticket
+$string["store"]["footer5"] = 'Unterstützt von <span>TKTDATA</span>'; // Ticket
+$string["store"]["footer6"] = 'Unterstützt von <span>TKTDATA</span>'; // Pubs
  ?>

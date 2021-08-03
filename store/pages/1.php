@@ -8,7 +8,7 @@
 
 <form action="" method="get"  class="search_bar">
   <label>
-    <input type="text" name="s" placeholder="Nach Veranstaltung suchen"/>
+    <input type="text" name="s" placeholder="<?php echo Language::string( 0, null, "store" ); ?>"/>
     <button class="icon"><img src="<?php echo $url; ?>medias/icons/magnifying-glass.svg"></button>
   </label>
 </form>
@@ -42,13 +42,13 @@
           //Banner required
           switch($groupState) {
             case 1:
-              echo '<div class="banner" style="background-color: #b91657;">Abgelaufen</div>';
+              echo '<div class="banner" style="background-color: #b91657;">' . Language::string( 1, null, "store" ) . '</div>';
             break;
             case 2:
-              echo '<div class="banner" style="background-color: #4c4ca1;">Ausverkauft</div>';
+              echo '<div class="banner" style="background-color: #4c4ca1;">' . Language::string( 2, null, "store" ) . '</div>';
             break;
             case 3:
-              echo '<div class="banner" style="background-color: #80007c;">Existiert nicht</div>';
+              echo '<div class="banner" style="background-color: #80007c;">' . Language::string( 3, null, "store" ) . '</div>';
             break;
           }
 
@@ -59,7 +59,7 @@
             echo '<img  src="' . $url . 'medias/store/favicon-color-512.png"/>';
           }
           echo '<span class="title">' . $group["name"] . '</span>';
-          echo '<span class="info">' . (($group["price"] + ($group["vat"] / 10000) * $group["price"]) / 100) . ' ' . $group["currency"] . '</span>';
+          echo '<span class="info">' . number_format((($group["price"] + ($group["vat"] / 10000) * $group["price"]) / 100), 2) . ' ' . $group["currency"] . '</span>';
         echo '</div>';
       echo '</a>';
     }
@@ -70,24 +70,21 @@
 <?php
 if( (count(Group::all(($offset + $steps), 1, ($_GET["s"] ?? null) )) > 0) && (($offset/$steps) > 0) ) {
   echo '<div class="page-nav">';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . '" class="left" title="Vorherige Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . '" class="left" title="' . Language::string( 4, null, "store" ) . '"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
     echo '<a class="center"></a>';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . '" class="right" title="Weitere Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . '" class="right" title="' . Language::string( 5, null, "store" ) . '"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
   echo '</div>';
-  // echo "last/next";
 }elseif( ($offset/$steps) > 0 ) {
   echo '<div class="page-nav">';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . '" class="left" title="Vorherige Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . '" class="left" title="' . Language::string( 4, null, "store" ) . '"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
     echo '<a class="center"></a>';
     echo '<a class="right"></a>';
   echo '</div>';
-  // echo "last";
 }elseif( (count(Group::all(($offset + $steps), 1, ($_GET["s"] ?? null) )) > 0) ) {
   echo '<div class="page-nav">';
     echo '<a class="left"></a>';
     echo '<a class="center"></a>';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . '" class="right" title="Weitere Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . '" class="right" title="' . Language::string( 5, null, "store" ) . '"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
   echo '</div>';
-  // echo "next";
 }
  ?>

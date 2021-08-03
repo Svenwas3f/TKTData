@@ -6,7 +6,7 @@
 
 <form action="" method="get"  class="search_bar">
   <label>
-    <input type="text" name="s" placeholder="Nach Wirtschaft suchen" value="<?php echo $_GET["s"] ?? null; ?>"/>
+    <input type="text" name="s" placeholder="<?php echo Language::string(110, null, "store"); ?>" value="<?php echo $_GET["s"] ?? null; ?>"/>
     <button class="icon"><img src="<?php echo $url; ?>medias/icons/magnifying-glass.svg"></button>
   </label>
 </form>
@@ -38,13 +38,13 @@
 // Next/last page
 if( (count(Pub::all(($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($offset/$steps) > 0) ) {
   echo '<div class="page-nav">';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="left" title="Vorherige Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="left" title="' . Language::string(111, null, "store") . '"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
     echo '<a class="center"></a>';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="right" title="Weitere Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="right" title="' . Language::string(112, null, "store") .'"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
   echo '</div>';
 }elseif( ($offset/$steps) > 0 ) { // Last page
   echo '<div class="page-nav">';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="left" title="Vorherige Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps - 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="left" title="' . Language::string(111, null, "store") . '"><img src="' . $url . 'medias/store/icons/page-back.svg"</a>';
     echo '<a class="center"></a>';
     echo '<a class="right"></a>';
   echo '</div>';
@@ -52,7 +52,7 @@ if( (count(Pub::all(($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($off
   echo '<div class="page-nav">';
     echo '<a class="left"></a>';
     echo '<a class="center"></a>';
-    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="right" title="Weitere Wirtschaften ansehen"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
+    echo '<a a href="' . $url . 'store/' . $type . '/?row-start=' . ($offset/$steps + 1) . ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) . '" class="right" title="' . Language::string(112, null, "store") .'"><img src="' . $url . 'medias/store/icons/page-next.svg"</a>';
   echo '</div>';
 }
  ?>

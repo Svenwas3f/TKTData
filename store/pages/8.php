@@ -20,13 +20,11 @@ if(empty($pub->values())) {
 // Get background image
 if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["background_fileID"] ) ) {
   $mediaHub = new MediaHub();
-  $mediaHub->fileID = $pub->values()["background_fileID"];
 
   $backgroundImgUrl = $mediaHub->getUrl( $pub->values()["background_fileID"] );
   $altImage = $mediaHub->fileDetails()["alt"];
 }else {
   $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
-  $altImage = "Background";
 }
 
 // Check if form is validated
@@ -56,7 +54,7 @@ if(! empty($_POST)) {
   if($transaction->add( $transaction_values, $_GET["id"] )) {
     header("Location: " . $url . "store/" . $type . "/pay/" . $transaction->paymentID);
   }else {
-    Action::fail("Der Zahlungsvorgang konnte nicht gestartet werden.");
+    Action::fail( Language::string( 120, null, "store" ) );
   }
 }
 
@@ -71,12 +69,12 @@ if(! empty($_POST)) {
     <!-- Payment infos -->
     <div class="submenu-total">
       <div class="calculated">
-        <span class="total">TOTAL:</span>
+        <span class="total"><?php echo Language::string( 121, null, "store" ); ?></span>
         <span class="price">0.00</span>
         <span class="currency"><?php echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY) ?></span>
       </div>
 
-      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )">BEZAHLEN</button>
+      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )"><?php echo Language::string( 122, null, "store" ); ?></button>
     </div>
 
     <!-- Details -->
@@ -96,7 +94,7 @@ if(! empty($_POST)) {
           echo $logo->fileDetails()["alt"];
         }else {
           // Default alt
-          echo "TKTData Logo";
+          echo Language::string( 123, null, "store" );
         }
         ?>" />
       </div>
@@ -163,7 +161,7 @@ if(! empty($_POST)) {
         // Show section for tip amount
         echo'<div class="section-container">';
           echo '<div class="header row tip">';
-            echo '<span class="product">Trinkgeld</span>';
+            echo '<span class="product">' . Language::string( 124, null, "store" ) . '</span>';
             echo '<div class="placeholder-js">';
               echo '<span class="input">';
                 echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onkeyup="change_total_price( this )" />';

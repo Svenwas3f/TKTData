@@ -34,10 +34,8 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
   $mediaHub->fileID = $pub->values()["background_fileID"];
 
   $backgroundImgUrl = $mediaHub->getUrl( $pub->values()["background_fileID"] );
-  $altImage = $mediaHub->fileDetails()["alt"];
 }else {
   $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
-  $altImage = "Background";
 }
  ?>
 
@@ -53,13 +51,17 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
 
   //Payment modal
   if( is_object( $response ) ) {
-    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">Zahlung jetzt tätigen</a>';
+    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">' . Language::string( 130, null, "store" ) . '</a>';
     echo '<script type="text/javascript">';
     echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
     echo 'jQuery(\'.payrexx-modal-window\').click();';
     echo '</script>';
   }else {
-    Action::fail("Die Zahlungsseite konnte nicht geladen werden. Melden Sie sich beim Administrator.<br />Folgende Fehlermeldung wird ausgegeben: " . $response);
+    Action::fail(
+      Language::string( 131, array(
+        '%message%' => $response
+      ), "store"
+    ));
   }
   ?>
 

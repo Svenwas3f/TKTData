@@ -21,7 +21,7 @@ $group->groupID = $ticket->values()["groupID"];
 
 //Check if price exists
 if( $ticket->values()["amount"] <= 0) {
-  header("Location: " . $url . "store/ticket/?ticketToken=" . urlencode($ticket->ticketToken) );
+  header("Location: " . $url . "store/ticket/response/?ticketToken=" . urlencode($ticket->ticketToken) );
   exit;
 }
 
@@ -29,7 +29,7 @@ if( $ticket->values()["amount"] <= 0) {
 $transaction = retrieveTransaction( $ticket->ticketToken );
 if( $transaction["transaction_retrieve_status"] == true ) {
   if($transaction["status"] == "confirmed" || $transaction["pspId"] == 15 || $transaction["pspId"] == 27) { //https://developers.payrexx.com/docs/miscellaneous
-    header("Location: " . $url . "store/ticket/?ticketToken=" . urlencode($ticket->ticketToken));
+    header("Location: " . $url . "store/ticket/response/?ticketToken=" . urlencode($ticket->ticketToken));
     exit;
   }
 }
@@ -66,13 +66,17 @@ if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->va
     <?php
     //Payment modal
     if($response["gateway_creation_state"]) {
-      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">Zahlung jetzt tätigen</a>';
+      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">' . Language::string(30, null, "store") . '</a>';
       echo '<script type="text/javascript">';
         echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
         echo 'jQuery(\'.payrexx-modal-window\').click();';
       echo '</script>';
     }else {
-      Action::fail("Die Zahlungsseite konnte nicht geladen werden. Melden Sie sich beim Administrator.<br />Folgende Fehlermeldung wird ausgegeben: " . $response["message"]);
+      Action::fail(
+        Language::string( 31, array(
+          '%message%' => $response["message"],
+        ), "store")
+      );
     }
      ?>
 
