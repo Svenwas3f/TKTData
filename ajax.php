@@ -169,7 +169,7 @@ switch($_POST["p"]) {
         }
       break;
       case "get_string":
-        echo Language::string( json_decode( $_POST["values"], true)["id"], null, 21 );
+        echo Language::string( json_decode( $_POST["values"], true)["id"], null, 8 );
       break;
     }
   break;

@@ -259,8 +259,8 @@ $string[8][21] = 'Maximum Tickets';
 $string[8][22] = 'Tickets pro Benutzer';
 $string[8][23] = '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code" target="_blank">Währung</a>';
 $string[8][24] = 'Betrag';
-$string[8][25] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Startzeit</abbr>';
-$string[8][26] = '<abbr title="Format: YYYY-MM-DD HH::ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Endzeit</abbr>';
+$string[8][25] = '<abbr title="Format: YYYY-MM-DD HH:ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Startzeit</abbr>';
+$string[8][26] = '<abbr title="Format: YYYY-MM-DD HH:ii:ss, Es kann jedoch jedes beliebige Format verwendet werden&#13;Verwenden Sie dasselbe Datum sowie Zeit um das Ticket zeitlich unbeschr&auml;nkt an zu bieten (In Start und Endzeit)">Endzeit</abbr>';
 $string[8][27] = '<abbr title="Value-Added Tax (MwSt.)">VAT</abbr>';
 $string[8][28] = 'Beschreibung';
 $string[8][29] = 'Update';
@@ -349,7 +349,7 @@ $string[8][130] = 'Möchten Sie den geheimen Schlüssel tatsächlich erneuern?<b
 
 $string[8][131] = 'Geheimschlüssel'; // Headline
 $string[8][132] = 'Damit Sie eine Anfrage per SDK machen können, müssen Sie diesen geheimen Schlüssel verwenden. Berücksichtigen Sie, dass dieser Schlüssel nur für diese Gruppe verfügbar ist. Sie können somit nur Tickets, welche dieser Gruppe zugeordnet wurden, überarbeiten, löschen oder auslesen.'; // Info
-$string[8][133] = 'WICHTIG: Wer in Besitz dieses Schlüssels ist, kann Tickets hinzufügen, löschen, überarbeiten und auslesen. Veröffentlichen Sie diesen Schlüssel <b>nie</b> und geben Sie den Schlüssel nur an vertraute Personen weiter. Vermuten Sie einen Missbrauch dieses Schlüssels, erneuern Sie ihn unverzüglich.'; // Notice
+$string[8][133] = 'WICHTIG: Wer in Besitz dieses Schlüssels ist, kann Tickets hinzufügen, löschen, überarbeiten und auslesen. Veröffentlichen Sie diesen Schlüssel <strong>nie</strong> und geben Sie den Schlüssel nur an vertraute Personen weiter. Vermuten Sie einen Missbrauch dieses Schlüssels, erneuern Sie ihn unverzüglich.'; // Notice
 
 $string[8][134] = 'SDK-Dokument'; // Headline
 $string[8][135] = 'Laden Sie sich hier das benötigte SDK-Dokument herunter.'; // Info
@@ -357,7 +357,7 @@ $string[8][136] = 'SDK-Dokument herunterladen'; // Link button title
 $string[8][137] = 'Download'; // Link button text
 
 $string[8][138] = 'Einfache Verwendung'; // Headline
-$string[8][139] = 'Haben Sie wenig Programmiererfahrung, können Sie eine einfache Implementierung machen. Diese finden Sie unter dem Reiter <a href="%url_page%&view=%group%&section=5">Zahlung&#8594;Store</a>.'; // Info text
+$string[8][139] = 'Haben Sie keine Programmiererfahrung, können Sie eine einfache Implementierung machen. Diese finden Sie unter dem Reiter <a href="%url_page%&view=%group%&section=5">Zahlung&#8594;Store</a>.'; // Info text
 
 $string[8][140] = 'Dokumentation'; // Headline
 $string[8][141] = 'Folgende Informationen können Sie über die SDK erhalten, hinzufügen und überarbeiten.<br />Bitte beachten Sie, dass dies nur eine kleine und undetailierte Dokumentation ist. Eine detailierte Beschreibung der verwendeten Funktionen finden Sie direkt im SDK-Dokument, welches Sie oben herunterladen können.'; // Info
@@ -419,7 +419,7 @@ $string[8][220] = 'Die Gruppe #%id% konnte nicht entfernt werden.'; // Remove gr
 $string[8][221] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Remove group
 
 $string[8][222] = 'Die Gruppe konnte <strong>erfolgreich</strong> erstellt werden. <a href="%url_page%&view=%id%" class="redirect">Gruppe verwalten</a></strong>'; // Add group
-$string[8][223] = 'Leider konnte die Gruppe <strong>nicht</strong></b> erstellt werden.'; // Add group
+$string[8][223] = 'Leider konnte die Gruppe <strong>nicht</strong> erstellt werden.'; // Add group
 $string[8][224] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Add group
 
 // $string[8][0] = '';

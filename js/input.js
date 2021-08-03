@@ -376,7 +376,7 @@ function add_radio() {
   });
 
   input_string( 49, function(string) {
-    topText.appendChild(document.createTextNode( string )); // Element
+    remove.appendChild(document.createTextNode( string )); // Element
   });
 
   //Modifie add

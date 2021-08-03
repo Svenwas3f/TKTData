@@ -230,6 +230,198 @@ $string[7][96] = 'Unfortunately the ticket could <strong>not</strong> be activat
 $string[7][97] = 'You have <strong>no authorization</strong> to perform this action';
 
 /**
+ * Page 8
+ */
+$string[8][0] = 'Groupname, Group-ID, Description, etc.';
+
+$string[8][1] = 'Name';
+$string[8][2] = 'Usage';
+$string[8][3] = 'Sales time';
+$string[8][4] = 'Activity';
+
+$string[8][5] = 'View groupdetails';
+$string[8][6] = 'remove';
+
+$string[8][7] = 'Unlimited<br />time';
+
+$string[8][8] = 'Back to overview';
+$string[8][9] = 'General';
+$string[8][10] = 'Form';
+$string[8][11] = 'Ticket';
+$string[8][12] = 'Mail';
+$string[8][13] = 'Payment';
+$string[8][14] = 'SDK';
+
+// General
+$string[8][20] = 'Groupname';
+$string[8][21] = 'Maximum tickets';
+$string[8][22] = 'Tickets per user';
+$string[8][23] = '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Use ISO-Code" target="_blank">Currency</a>';
+$string[8][24] = 'Amount';
+$string[8][25] = '<abbr title="Format: YYYY-MM-DD HH:ii:ss, however, any format can be used &#13;Use the same date and time to offer the ticket indefinitely (in start and end time)">Starttime</abbr>';
+$string[8][26] = '<abbr title="Format: YYYY-MM-DD HH:ii:ss, however, any format can be used &#13;Use the same date and time to offer the ticket indefinitely (in start and end time)">Endtime</abbr>';
+$string[8][27] = '<abbr title="Value-Added Tax">VAT</abbr>';
+$string[8][28] = 'Description';
+$string[8][29] = 'Update';
+
+// Custom
+$string[8][40] = 'Checkbox';
+$string[8][41] = 'Datum';
+$string[8][42] = 'E-Mail';
+$string[8][43] = 'Nummer';
+$string[8][44] = 'Radiobutton';
+$string[8][45] = 'Selection';
+$string[8][46] = 'Text';
+$string[8][47] = 'Textarea';
+
+$string[8][48] = 'Element';
+$string[8][49] = 'Remove';
+$string[8][50] = 'Name';
+$string[8][51] = 'Order';
+$string[8][52] = 'Required';
+$string[8][53] = 'Add selection';
+$string[8][54] = 'Placeholder';
+$string[8][55] = 'Add selection';
+$string[8][56] = 'Update';
+
+// Ticket
+$string[8][60] = 'Tickettitle';
+$string[8][61] = 'Logo';
+$string[8][62] = 'Advert 1 <abbr title="Only this content is displayed. You cannot use a ratio and you have to orientate yourself on these absolute values.">(453px &#x00D7; 343px)</abbr>'; // Advert 1
+$string[8][63] = 'Advert 2 <abbr title="Only this content is displayed. You cannot use a ratio and you have to orientate yourself on these absolute values.">(754px &#x00D7; 343px)</abbr>'; // Advert 2
+$string[8][64] = 'Advert 3 <abbr title="Only this content is displayed. You cannot use a ratio and you have to orientate yourself on these absolute values.">(754px &#x00D7; 343px)</abbr>'; // Advert 3
+$string[8][65] = 'Click to select '; // Advert 1
+$string[8][66] = 'Click to select '; // Advert 2
+$string[8][67] = 'Click to select '; // Advert 3
+$string[8][68] = 'Update'; // Update
+
+$string[8][69] = '&#9888; Click Update to see your changes.'; // Update message
+$string[8][70] = 'Loading preview'; // Preview load message
+
+// Mail
+$string[8][80] = 'Banner'; // Input name
+$string[8][81] = 'Click to select'; // Image selection info
+$string[8][82] = 'From'; // Input name
+$string[8][83] = 'Click to select'; // Input name
+$string[8][84] = 'Subject'; // Input name
+$string[8][85] = 'E-Mail'; // Select info
+$string[8][86] = 'Ticket'; // Select info
+$string[8][87] = 'Message'; // Input name
+$string[8][88] = 'Update'; // Button name
+
+$string[8][89] = '&#9888; Click Update to see your changes.'; // Info message
+$string[8][90] = 'From:'; // Preview
+$string[8][91] = 'Subject:'; // Preview
+
+// Payment
+$string[8][100] = 'Paymentrequest-Mail'; // Headline
+$string[8][101] = 'This message will appear in the mail when a payment request is made. Note that the payment link will not appear in the case of prepayment or invoice.'; // Info
+$string[8][102] = 'E-Mail'; // Message button
+$string[8][103] = 'paymentlink'; // Message button
+$string[8][104] = 'Message'; // Input name
+
+$string[8][105] = 'Payrexx'; // Headline
+$string[8][106] = 'To be able to receive a online payment, you need an account at <a href="https://www.payrexx.com" title="Visit the website of Payrexx" target="_blank">Payrexx</a>. Payrexx is a Swiss company. If you would like to have Stripe as your <abbr title="Payment service provider">PSP</abbr>, visit <a href = "https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/ "target="_ blank ">this page</a>.'; // Info
+$string[8][107] = 'Payrexx Instance'; // Input name
+$string[8][108] = 'Payrexx Secret'; // Input name
+
+$string[8][109] = 'Store'; // Headline
+$string[8][110] = 'That you can sell a ticket without any programming experience, this system also includes a <a href="%url%store" target="_blank">store</a> with which you can sell your tickets. In the following you can configure the design of the store. If you would like to sell someone this ticket directly, use this link: <a href="%url%store/tickets/buy/%group%" target="_blank">%url%store/ticket/buy/%group%</a> '; // Info
+$string[8][111] = 'show in store'; // Input name
+$string[8][112] = 'Sell this ticket in store'; // Input title
+$string[8][113] = 'Logo'; // Input name
+$string[8][114] = 'Click to select'; // Select info
+$string[8][115] = 'Background'; // Input name
+$string[8][116] = 'Click to select'; // Select info
+
+$string[8][117] = 'ADFS'; // Headline
+$string[8][118] = 'This function is only available if the administrator has made the simpleSAMLphp configuration and specified the path in general.php. <a href="https://simplesamlphp.org/" target="_blank">More information</a>'; // Info deactivatead
+$string[8][119] = 'By activating this function, the customer must authenticate himself via your ADFS in order to purchase a ticket. Note that the simpleSAML configuration has to be done manually. If the configuration is incorrect, the entire ordering process via the store for this ticket group will no longer work. The authentication cannot be done by a third party via SDK. '; // Info activated
+$string[8][120] = 'Request authentification'; // Input name
+$string[8][121] = 'Request authentification for ticket purchase'; // Input title
+$string[8][122] = 'Insert the array key of the ADFS array into the corresponding defined field of the form in order to transfer the data from your Active Directory. Fields left empty must be entered by the user himself. If all fields are defined, the user can only add a coupon. '; // ADFS custom text
+$string[8][123] = 'E-Mail<abbr title="Required for purchase">*</abbr>'; // Input name
+$string[8][124] = 'Update';
+
+// SDK
+$string[8][130] = 'Do you really want to renew the secret key?<br /><span style="color: #f0c564;">This action is only recommended if you suspect that this key has been misused or if you are not yet using it productively.</span> '; // Refres message
+
+$string[8][131] = 'Secret key'; // Headline
+$string[8][132] = 'In order to be able to make a request via SDK, you have to use this secret key. Note that this key is only available to this group. You can only edit, delete or read tickets that have been assigned to this group.'; // Info
+$string[8][133] = 'IMPORTANT: Anyone who has this key can add, delete, edit and read tickets. <strong>Never</strong> publish this key and give the key only to people you trust. If you suspect that this key has been misused, renew it immediately.'; // Notice
+
+$string[8][134] = 'SDK-Document'; // Headline
+$string[8][135] = 'Download the required SDK document here.'; // Info
+$string[8][136] = 'Download SDK-Document'; // Link button title
+$string[8][137] = 'Download'; // Link button text
+
+$string[8][138] = 'Easy to use'; // Headline
+$string[8][139] = 'If you have no programming experience, you can do a simple implementation. You find the instructaions at <a href="%url_page%&view=%group%&section=5">Payment&#8594;Store</a> .'; // Info text
+
+$string[8][140] = 'Documentation'; // Headline
+$string[8][141] = 'The following information can be obtained, added and revised via the SDK.<br />Please note that this is only a small and undetailed documentation. A detailed description of the functions used can be found directly in the SDK document, which you can download above.'; // Info
+$string[8][142] = 'Request Ticketinformations'; // SDK Code headline
+$string[8][143] = 'Request Ticket-Token'; // SDK Code headline
+$string[8][144] = 'Add Ticket'; // SDK Code headline
+$string[8][145] = 'Revise Ticket'; // SDK Code headline
+$string[8][146] = 'Remove Ticket'; // SDK Code headline
+$string[8][147] = 'Restore Ticket'; // SDK Code headline
+$string[8][148] = 'Send Ticket via mail'; // SDK Code headline
+$string[8][149] = 'Get coupon-ID via name'; // SDK Code headline
+$string[8][150] = 'Check coupon'; // SDK Code headline
+$string[8][151] = 'Ticketprice with coupon'; // SDK Code headline
+$string[8][152] = 'Group informations'; // SDK Code headline
+$string[8][153] = 'Used Tickets'; // SDK Code headline
+$string[8][154] = 'Available Tickets'; // SDK Code headline
+$string[8][155] = 'Tickets per user'; // SDK Code headline
+$string[8][156] = 'Request gateway'; // SDK Code headline
+$string[8][157] = 'remove gateway'; // SDK Code headline
+$string[8][158] = 'Transaction infos'; // SDK Code headline
+$string[8][159] = 'Send payment reminder'; // SDK Code headline
+
+// No access to group
+$string[8][160] = 'No access to the group <strong>#%group%</strong>';
+
+// Add
+$string[8][170] = 'Return to the previous page';
+$string[8][171] = 'Add group';
+$string[8][172] = 'Add';
+
+// Actions
+$string[8][200] = 'The group section <strong>General</strong> could be revised <strong>successfully</strong>.'; // Update section
+$string[8][201] = 'The group section <strong>General</strong> could <strong>not</strong> be revised.'; // Update section
+$string[8][202] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][203] = 'The group section <strong>Form</strong> could be revised <strong>successfully</strong>.'; // Update section
+$string[8][204] = 'The group section <strong>Form</strong> could <strong>not</strong> be revised.'; // Update section
+$string[8][205] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][206] = 'The group section <strong>Ticket</strong> could be revised <strong>successfully</strong>.'; // Update section
+$string[8][207] = 'The group section <strong>Ticket</strong> could <strong>not</strong> be revised.'; // Update section
+$string[8][208] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][209] = 'The group section <strong>Mail</strong> could be revised <strong>successfully</strong>.'; // Update section
+$string[8][210] = 'The group section <strong>Mail</strong> could <strong>not</strong> be revised.'; // Update section
+$string[8][211] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][212] = 'The group section <strong>Payment</strong> could be revised <strong>successfully</strong>.'; // Update section
+$string[8][213] = 'The group section <strong>Payment</strong> could <strong>not</strong> be revised.'; // Update section
+$string[8][214] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][215] = 'The secret key could be renewed <strong> successfully </strong>.'; // Update section
+$string[8][216] = 'The secret key could <strong>not</strong> be renewed.'; // Update section
+$string[8][217] = 'You have <strong>no authorization</strong> to perform this action'; // Update section
+
+$string[8][218] = 'Are you sure you want to remove the group #%id% (%name%)?'; // Remove request
+$string[8][219] = 'The group #%id% was successfully removed.'; // Remove group
+$string[8][220] = 'The group #%id% could not be removed.'; // Remove group
+$string[8][221] = 'You have <strong>no authorization</strong> to perform this action'; // Remove group
+
+$string[8][222] = 'The group could be created <strong>successfully</strong>. <a href="%url_page%&view=%id%" class="redirect">Manage group</a></strong>'; // Add group
+$string[8][223] = 'Unfortunately the group <strong>could not</strong> be created.'; // Add group
+$string[8][224] = 'You have <strong>no authorization</strong> to perform this action'; // Add group
+
+/**
  * Page 9
  */
 // List

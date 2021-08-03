@@ -1373,7 +1373,7 @@ if( isset( $_GET["view"] ) ) {
     array(
       'context' => '<img src="' . $url . 'medias/icons/history-back.svg">',
       'link' => 'Javascript:history.back()',
-      'additional' => 'title="' . Language::string(171) . '"',
+      'additional' => 'title="' . Language::string(170) . '"',
     ),
   );
 
