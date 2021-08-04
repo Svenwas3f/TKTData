@@ -96,15 +96,15 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
         case "ticket":
           echo '<div class="container">';
                   echo '<div class="footer-element">';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#contact">' . Language::string( "footer1", null, "store" ) . '</a>';
-                    echo '<a href="' . $url . 'store/' . $type . '/find-ticket">' . Language::string( "footer2", null, "store" ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#contact">' . Language::string( "footer1", null, "store", null, ($group->groupID ?? null) ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/find-ticket">' . Language::string( "footer2", null, "store", null, ($group->groupID ?? null) ) . '</a>';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-procedure">' . Language::string( "footer3", null, "store" ) . '</a>';
-                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-options">' . Language::string( "footer4", null, "store" ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-procedure">' . Language::string( "footer3", null, "store", null, ($group->groupID ?? null) ) . '</a>';
+                    echo '<a href="' . $url . 'store/' . $type . '/faq#payment-options">' . Language::string( "footer4", null, "store", null, ($group->groupID ?? null) ) . '</a>';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<span class="powered">' . Language::string( "footer5", null, "store" ) . '</span>';
+                    echo '<span class="powered">' . Language::string( "footer5", null, "store", null, ($group->groupID ?? null) ) . '</span>';
                   echo '</div>';
                 echo '</div>';
         break;
@@ -117,7 +117,7 @@ $_GET = array_merge( $_GET, $APPENDED_GET); // Merge parameters and add to GET
                   echo '<div class="footer-element">';
                   echo '</div>';
                   echo '<div class="footer-element">';
-                    echo '<span class="powered">' . Language::string( "footer6", null, "store" ) . '</span>';
+                    echo '<span class="powered">' . Language::string( "footer6", null, "store", null, null, ($pub->pub ?? $transaction->globalValues()['pub_id'] ?? null) ) . '</span>';
                   echo '</div>';
                 echo '</div>';
         break;
