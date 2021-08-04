@@ -1084,6 +1084,20 @@ $string["store"][147] = 'Trinkgeld';
 $string["store"][148] = 'Total:';
 $string["store"][149] = 'Store stolz zur Verfügung gestellt von <span>TKTDATA</span>';
 
+// Ajax.php / ajax.js
+$string["store"][160] = 'Coupon nicht gefunden';
+$string["store"][161] = 'Coupon nicht mehr verfügbar';
+$string["store"][162] = 'Ticketpreis mit Coupon';
+$string["store"][163] = 'Coupon nicht mehr verfügbar';
+$string["store"][164] = 'Das Ticket wurde erfolgreich gesendet';
+$string["store"][165] = 'Beim senden ist ein Fehler aufgetreten. Versuche es erneut.';
+$string["store"][166] = 'Das Ticket wurde erfolgreich gesendet';
+$string["store"][167] = 'Beim senden ist ein Fehler aufgetreten. Versuche es erneut.';
+$string["store"][168] = 'Kein TicketToken angegeben.';
+
+$string["store"][169] = 'Coupon';
+$string["store"][170] = 'Die Mail wird gesendet. Wir bitten um etwas Geduld.';
+
 // Store footer
 $string["store"]["footer1"] = 'Kontakt'; // Ticket
 $string["store"]["footer2"] = 'Mein Ticket finden'; // Ticket

@@ -84,7 +84,13 @@ function selectElement(ele) {
  * Insert display form (Enables coupon frm)
 */
 function showCouponForm(ele, group) {
-  ele.innerHTML = '<label class="txt-input"><input type="text" name="coupon" onchange="html_coupon_info(this.value, ' + group + ')"/><span class="placeholder">Coupon</label><span class="coupon_response"></span>';
+  ajax(2, function(c) {
+    ele.innerHTML = '<label class="txt-input">' +
+                      '<input type="text" name="coupon" onchange="html_coupon_info(this.value, ' + group + ')"/>' +
+                      '<span class="placeholder">' + c.responseText + '</span>' + 
+                    '</label>' +
+                    '<span class="coupon_response"></span>';
+  }, "get_string");
 }
 
 /**
@@ -260,7 +266,14 @@ function accordion(id){
  */
 function ajax_send_mail( email, id, offset, steps ) {
   /* Inform user */
-  document.getElementsByClassName("ajax-response")[0].innerHTML = '  <div class="message-container"><div class="message waiting" onclick="this.remove()"><img src="' + location.protocol + '//' + location.host + location.pathname.replace(/store(.)*/, "") +  '/medias/icons/waiting.svg"><span>die Mail wird gesendet. Wir bitten um etwas Geduld.</span></div></div>';
+  ajax(6, function(c) {
+    document.getElementsByClassName("ajax-response")[0].innerHTML =
+      '<div class="message-container">' +
+        '<div class="message waiting" onclick="this.remove()"><img src="' + location.protocol + '//' + location.host + location.pathname.replace(/store(.)*/, "") +  '/medias/icons/waiting.svg">' +
+          '<span>' + c.responseText + '</span>' +
+        '</div>' +
+      '</div>';
+  }, "get_string");
 
   // Ajax request
   var values = new Object();

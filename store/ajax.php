@@ -38,7 +38,7 @@ switch($_POST["p"] ?? null) {
             "code" => 03,
             "couponName" => $coupon->values()["name"],
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
-            "message" => "Coupon found"
+            "message" => Language::string( 160, null, "store" ),
           ));
           exit;
         }else {
@@ -46,7 +46,7 @@ switch($_POST["p"] ?? null) {
             "response" => false,
             "code" => 04,
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
-            "message" => "Coupon no longer available"
+            "message" => Language::string( 161, null, "store" ),
           ));
           exit;
         }
@@ -69,7 +69,7 @@ switch($_POST["p"] ?? null) {
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
             "discountPrice" => $coupon->new_price(),
             "currency" => $group->values()["currency"],
-            "message" => "Coupon price"
+            "message" => Language::string( 162, null, "store" ),
           ));
           exit;
         }else {
@@ -77,10 +77,13 @@ switch($_POST["p"] ?? null) {
             "response" => false,
             "code" => 04,
             "basePrice" => $group->values()["price"],
-            "message" => "Coupon no longer available"
+            "message" => Language::string( 163, null, "store" ),
           ));
           exit;
         }
+      break;
+      case "get_string":
+        echo Language::string( 169, null, "store" );
       break;
     }
   break;
@@ -112,22 +115,25 @@ switch($_POST["p"] ?? null) {
           if( checkPayment( $ticket->ticketToken ) || $ticket->values()["payment"] != 2 ) {
             //Send mail
             if( $ticket->sendTicket( $to ) ) {
-              Action::success("Das Ticket wurde erfolgreich gesendet");
+              Action::success( Language::string( 164, null, "store" ) );
             }else {
-              Action::fail("Beim senden ist ein Fehler aufgetreten. Versuche es erneut.");
+              Action::fail( Language::string( 165, null, "store" ) );
             }
           }else {
             //Send mail
             if( $ticket->requestPayment( $to ) ) {
-              Action::success("Das Ticket wurde erfolgreich gesendet");
+              Action::success( Language::string( 166, null, "store" ) );
             }else {
-              Action::fail("Beim senden ist ein Fehler aufgetreten. Versuche es erneut.");
+              Action::fail( Language::string( 167, null, "store" ) );
             }
           }
 
         }else {
-          Action::fail("Kein TicketToken angegeben.");
+          Action::fail( Language::string( 168, null, "store" ) );
         }
+      break;
+      case "get_string":
+        echo Language::string( 170, null, "store" );
       break;
     }
   break;

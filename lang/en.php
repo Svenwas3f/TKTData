@@ -1083,6 +1083,20 @@ $string[20][167] = 'Removed group #%id% '; // groups.php
  $string["store"][148] = 'Total:';
  $string["store"][149] = 'Store proudly provided by <span>TKTDATA</span>.';
 
+ // Ajax.php / ajax.js
+ $string["store"][160] = 'Coupon found';
+ $string["store"][161] = 'Coupon no longer available';
+ $string["store"][162] = 'Coupon price';
+ $string["store"][163] = 'Coupon no longer available';
+ $string["store"][164] = 'The ticket was sent successfully';
+ $string["store"][165] = 'An error occurred while sending. Try again.';
+ $string["store"][166] = 'The ticket was sent successfully';
+ $string["store"][167] = 'An error occurred while sending. Try again.';
+ $string["store"][168] = 'No TicketToken specified.';
+
+ $string["store"][169] = 'Coupon';
+ $string["store"][170] = 'The mail will be sent. We ask for a little patience.';
+
  // Store footer
  $string["store"]["footer1"] = 'Contact'; // Ticket
  $string["store"]["footer2"] = 'Find my ticket'; // Ticket
