@@ -66,7 +66,7 @@ if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->va
     <?php
     //Payment modal
     if($response["gateway_creation_state"]) {
-      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">' . Language::string(30, null, "store") . '</a>';
+      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">' . Language::string(30, null, "store", null, $group->groupID) . '</a>';
       echo '<script type="text/javascript">';
         echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
         echo 'jQuery(\'.payrexx-modal-window\').click();';
@@ -75,7 +75,7 @@ if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->va
       Action::fail(
         Language::string( 31, array(
           '%message%' => $response["message"],
-        ), "store")
+        ), "store", null, $group->groupID)
       );
     }
      ?>

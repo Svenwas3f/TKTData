@@ -331,19 +331,20 @@ $string[8][109] = 'Store'; // Headline
 $string[8][110] = 'Damit Sie auch ohne Programmiererfahrung ein Ticket verkaufen können, beinhaltet dieses System auch einen eigenen <a href="%url%store" target="_blank">Store</a> womit Sie ihre Tickets verkaufen können. Im Folgenden können Sie das Design des Store beeinflussen. Möchten Sie jemanden direkt dieses Ticket verkaufen, verwenden Sie diesen Link: <a href="%url%store/tickets/buy/%group%" target="_blank">%url%store/ticket/buy/%group%</a>'; // Info
 $string[8][111] = 'Im Store anzeigen'; // Input name
 $string[8][112] = 'Dieses Ticket im Store verkaufen'; // Input title
-$string[8][113] = 'Logo'; // Input name
-$string[8][114] = 'Klicken um auszuwählen'; // Select info
-$string[8][115] = 'Hintergrundbild'; // Input name
-$string[8][116] = 'Klicken um auszuwählen'; // Select info
+$string[8][113] = 'Sprache des Store wählen'; // Language
+$string[8][114] = 'Logo'; // Input name
+$string[8][115] = 'Klicken um auszuwählen'; // Select info
+$string[8][116] = 'Hintergrundbild'; // Input name
+$string[8][117] = 'Klicken um auszuwählen'; // Select info
 
-$string[8][117] = 'ADFS'; // Headline
-$string[8][118] = 'Diese Funktion ist nur verfügbar, wenn der Administrator die simpleSAMLphp einstellungen vorgenommen und einen Pfad im general.php angegeben hat. <a href="https://simplesamlphp.org/" target="_blank">Weitere Informationen</a>'; // Info deactivatead
-$string[8][119] = 'Durch aktivieren dieser Funktion, muss der Kunde sich über Ihr ADFS authentifizieren um ein Ticket zu erwerben. Beachten Sie, dass die simpleSAML-Konfiguration manuell vorgenommen werden muss. Ist die Konfiguration fehlerhaft, funktioniert der ganze Bestellungsprozess über den Store für diese Ticketgruppe nicht mehr. Die Authentifizierung kann nicht über ein Drittanbieter via SDK erfolgen.'; // Info activated
-$string[8][120] = 'Authentifizierung verlangen'; // Input name
+$string[8][118] = 'ADFS'; // Headline
+$string[8][119] = 'Diese Funktion ist nur verfügbar, wenn der Administrator die simpleSAMLphp einstellungen vorgenommen und einen Pfad im general.php angegeben hat. <a href="https://simplesamlphp.org/" target="_blank">Weitere Informationen</a>'; // Info deactivatead
+$string[8][120] = 'Durch aktivieren dieser Funktion, muss der Kunde sich über Ihr ADFS authentifizieren um ein Ticket zu erwerben. Beachten Sie, dass die simpleSAML-Konfiguration manuell vorgenommen werden muss. Ist die Konfiguration fehlerhaft, funktioniert der ganze Bestellungsprozess über den Store für diese Ticketgruppe nicht mehr. Die Authentifizierung kann nicht über ein Drittanbieter via SDK erfolgen.'; // Info activated
+$string[8][121] = 'Authentifizierung verlangen'; // Input name
 $string[8][121] = 'Anmeldung fordern um Ticket zu kaufen'; // Input title
-$string[8][122] = 'Fügen Sie den jeweiligen Array-Key des ADFS-Array in das zugehörig definierte Feld vom Formular ein, um die Daten ihres Active Directory zu übernehmen. Leer gelassene Felder müssen vom Benutzer selbst eingetragen werden. Werden alle Felder definiert, kann der Benutzer nur noch ein Coupon hinzufügen.'; // ADFS custom text
-$string[8][123] = 'E-Mail<abbr title="Für den Bestellprozess immer benötigt">*</abbr>'; // Input name
-$string[8][124] = 'Update';
+$string[8][123] = 'Fügen Sie den jeweiligen Array-Key des ADFS-Array in das zugehörig definierte Feld vom Formular ein, um die Daten ihres Active Directory zu übernehmen. Leer gelassene Felder müssen vom Benutzer selbst eingetragen werden. Werden alle Felder definiert, kann der Benutzer nur noch ein Coupon hinzufügen.'; // ADFS custom text
+$string[8][124] = 'E-Mail<abbr title="Für den Bestellprozess immer benötigt">*</abbr>'; // Input name
+$string[8][125] = 'Update';
 
 // SDK
 $string[8][130] = 'Möchten Sie den geheimen Schlüssel tatsächlich erneuern?<br /><span style="color: #f0c564;">Diese Aktion wird nur empfohlen, wenn Sie einen Verdacht auf Missbrauch dieses Schlüssels haben oder ihn noch nicht produktiv einsetzen.</span>'; // Refres message
@@ -758,26 +759,28 @@ $string[18][31] = 'Bilder'; // images title
 $string[18][32] = 'Klicken um auszuwählen'; // Image input select info
 $string[18][33] = 'Logo'; // Image name
 $string[18][34] = 'Hintergrundbild'; // Image name
-$string[18][35] = 'Payrexx'; // Payrexx title
-$string[18][36] = 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.'; // Payrexx info
-$string[18][37] = 'Payrexx Instance'; // Input name
-$string[18][38] = 'Payrexx Secret'; // Input name
-$string[18][39] = 'Währung'; // Input name
-$string[18][40] = 'Gebühren'; // Fees title
-$string[18][41] = 'Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechend verrechnet. An den Produktpreisen ändert sich dadurch nichts.'; // Fees info
-$string[18][42] = 'Absolute Gebühren'; // Input name
-$string[18][43] = 'Prozentuale Gebühren'; // Input name
-$string[18][44] = 'Update'; // Button value
+$string[18][35] = 'Store';
+$string[18][36] = 'Sprache des Store wählen';
+$string[18][37] = 'Payrexx'; // Payrexx title
+$string[18][38] = 'Damit Sie online direkt eine Zahlung empfangen können, benötien Sie ein Konto bei <a href="https://www.payrexx.com" title="Besuchen Sie die Webseite von Payrexx" target="_blank">Payrexx</a>. Payrexx ist ein schweizer Unternehmen. Möchten Sie Stripe als Ihren <abbr title="Payment service provider">PSP</abbr> haben, können Sie sich auf <a href="https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/" target="_blank">dieser Seite</a> informieren.'; // Payrexx info
+$string[18][39] = 'Payrexx Instance'; // Input name
+$string[18][40] = 'Payrexx Secret'; // Input name
+$string[18][41] = 'Währung'; // Input name
+$string[18][42] = 'Gebühren'; // Fees title
+$string[18][43] = 'Pro Transaktion verlangt der Anbieter entsprechende Gebühren. Bitte definiere hier, welche Gebüren dein Zahlungsanbieter verlang um die Auswertung korrekt zu erhalten. Die beiden Gebühren werden zusammengezählt und entsprechend verrechnet. An den Produktpreisen ändert sich dadurch nichts.'; // Fees info
+$string[18][44] = 'Absolute Gebühren'; // Input name
+$string[18][45] = 'Prozentuale Gebühren'; // Input name
+$string[18][46] = 'Update'; // Button value
 
-$string[18][45] = 'Benutzername'; // Input name
-$string[18][46] = 'Email'; // Input name
-$string[18][47] = 'Schreiben | Lesen'; // Input name
-$string[18][48] = '%user% hat Schreibrechte auf diese Wirtschaft'; // Toggle title
-$string[18][49] = '%user% hat keine Schreibrechte auf diese Wirtschaft'; // Toggle title
-$string[18][50] = '%user% hat Leserechte auf diese Wirtschaft'; // Toggle title
-$string[18][51] = '%user% hat keine Leserechte auf diese Wirtschaft'; // Toggle title
-$string[18][52] = 'Die Rechte konnten nicht hinzugefügt werden.'; // Fail info
-$string[18][53] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Fail info
+$string[18][47] = 'Benutzername'; // Input name
+$string[18][48] = 'Email'; // Input name
+$string[18][49] = 'Schreiben | Lesen'; // Input name
+$string[18][50] = '%user% hat Schreibrechte auf diese Wirtschaft'; // Toggle title
+$string[18][51] = '%user% hat keine Schreibrechte auf diese Wirtschaft'; // Toggle title
+$string[18][52] = '%user% hat Leserechte auf diese Wirtschaft'; // Toggle title
+$string[18][53] = '%user% hat keine Leserechte auf diese Wirtschaft'; // Toggle title
+$string[18][54] = 'Die Rechte konnten nicht hinzugefügt werden.'; // Fail info
+$string[18][55] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Fail info
 
 //Single product
 $string[18][60] = 'Zur vorherigen Seite zurück'; // Top nav title
@@ -810,6 +813,8 @@ $string[18][81] = 'Produkt hinzufügen'; // Add product
 $string[18][82] = 'Gruppe wählen'; // Select info
 $string[18][83] = 'Erstellen'; // Create product
 $string[18][84] = 'Erstellen'; // Create pub
+$string[18][85] = 'Die Unterseite existiert nicht.'; // No section found
+$string[18][86] = 'Zurück'; // No section found
 
 // List pubs and products actions
 $string[18][90] = 'WIRTSCHAFTEN';
@@ -889,7 +894,6 @@ $string[20][11] = 'Ihre Änderung wurde <strong>erfolgreich</strong> durchgefüh
 $string[20][12] = 'Ihre Änderung konnte <strong>nicht</strong> durchgeführt werden'; // Action response
 $string[20][13] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // Action response
 $string[20][14] = 'Zur vorherigen Seite zurück'; // Return button
-
 
 // Messages
 $string[20][100] = 'Profil von %user% überarbeitet'; // User.php
@@ -1077,8 +1081,8 @@ $string["store"][140] = 'Die Mail konnte nicht gesendet werden. Laden Sie die Se
 $string["store"][141] = 'Zahlung erwartet';
 $string["store"][142] = 'Zahlung erfolgreich';
 $string["store"][143] = 'Zahlung fehlgeschlagen';
-$string["store"][144] = 'Hallo,<br />Bitte bezahle bar an der Kasse. Gib als Zahlungs-ID <strong>#%id%</strong> an.';
-$string["store"][145] = 'Hallo,<br />Du kannst mit diesem Beleg deinen Einkauf an der Kasse abholen gehen. Gib als Zahlungs-ID <strong>#%id%</strong> an. Der Beleg wurde dir auch per Mail (an %mail%) zugestellt.';
+$string["store"][144] = 'Hallo %mail%,<br />Bitte bezahle bar an der Kasse. Gib als Zahlungs-ID <strong>#%id%</strong> an.';
+$string["store"][145] = 'Hallo %mail%,<br />Du kannst mit diesem Beleg deinen Einkauf an der Kasse abholen gehen. Gib als Zahlungs-ID <strong>#%id%</strong> an. Der Beleg wurde dir auch per Mail (an %mail%) zugestellt.';
 $string["store"][146] = 'Hallo,<br />Ihre Zahlung ist fehlgeschlagen. Versuchen Sie es erneut oder melden Sie sich beim Personal.';
 $string["store"][147] = 'Trinkgeld';
 $string["store"][148] = 'Total:';

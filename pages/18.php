@@ -166,13 +166,13 @@ function single_pub ( $pub_id ) {
           'headline' => array(
             'items' => array(
               array(
-                'context' => Language::string(45),
-              ),
-              array(
-                'context' => Language::string(46),
-              ),
-              array(
                 'context' => Language::string(47),
+              ),
+              array(
+                'context' => Language::string(48),
+              ),
+              array(
+                'context' => Language::string(49),
               ),
             ),
           ),
@@ -195,9 +195,9 @@ function single_pub ( $pub_id ) {
                       onclick="' . ($write_access ? "pub_remove_right" : "pub_add_right") .
                         '(this, \'' . $user["id"] . '\', ' . $pub->pub . ', \'w\')"
                         title="' . ($write_access ?
-                        Language::string(48, array(
+                        Language::string(50, array(
                           '%user%' => User::name( $user["id"] ),
-                        )) : Language::string(49, array(
+                        )) : Language::string(51, array(
                           '%user%' => User::name( $user["id"] ),
                         ))) . '">' .
                       '<img src="' . $url . '/medias/icons/' .
@@ -207,9 +207,9 @@ function single_pub ( $pub_id ) {
                       onclick="' . ($read_access ? "pub_remove_right" : "pub_add_right") .
                         '(this, \'' . $user["id"] . '\', ' . $pub->pub . ', \'r\')"
                         title="' . ($read_access ?
-                        Language::string(50, array(
+                        Language::string(52, array(
                           '%user%' => User::name( $user["id"] ),
-                        )) : Language::string(51, array(
+                        )) : Language::string(53, array(
                           '%user%' => User::name( $user["id"] ),
                         ))) . '">' .
                       '<img src="' . $url . '/medias/icons/' .
@@ -219,9 +219,9 @@ function single_pub ( $pub_id ) {
           // Current user can not edit
           $actions = '<a
                         title="' . ($write_access ?
-                        Language::string(48, array(
+                        Language::string(50, array(
                           '%user%' => User::name( $user["id"] ),
-                        )) : Language::string(49, array(
+                        )) : Language::string(51, array(
                           '%user%' => User::name( $user["id"] ),
                         ))) . '">' .
                       '<img src="' . $url . '/medias/icons/' .
@@ -229,9 +229,9 @@ function single_pub ( $pub_id ) {
                     '</a>';
           $actions .= '<a
                         title="' . ($read_access ?
-                        Language::string(50, array(
+                        Language::string(52, array(
                           '%user%' => User::name( $user["id"] ),
-                        )) : Language::string(51, array(
+                        )) : Language::string(53, array(
                           '%user%' => User::name( $user["id"] ),
                         ))) . '">' .
                       '<img src="' . $url . '/medias/icons/' .
@@ -394,10 +394,31 @@ function single_pub ( $pub_id ) {
         ),
       );
 
-      // Payrexx
+      // Store
       $form->customHTML('<div class="box">');
         $form->customHTML('<p>' . Language::string(35) . '</p>');
-        $form->customHTML( Language::string(36) );
+      $form->customHTML('</div>');
+
+      // Languages
+      $options = array();
+      foreach( Language::all() as $language ) {
+        $options[$language["code"]] = $language["loc"] . ' (' . $language["int"] . ')';
+      }
+
+      $form->addElement(
+        array(
+          'type' => 'select',
+          'name' => 'payment_store_language',
+          'value' => $pub->values()["payment_store_language"] ?? null,
+          'headline' => (isset($pub->values()["payment_store_language"]) ? $options[$pub->values()["payment_store_language"]] : Language::string(36)),
+          'options' => $options
+        ),
+      );
+
+      // Payrexx
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(37) . '</p>');
+        $form->customHTML( Language::string(38) );
 
         // Payrexx instance
         $form->addElement(
@@ -405,7 +426,7 @@ function single_pub ( $pub_id ) {
             'type' => 'text',
             'name' => 'payment_payrexx_instance',
             'value' => ($pub->values()["payment_payrexx_instance"] ?? ''),
-            'placeholder' => Language::string(37),
+            'placeholder' => Language::string(39),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -416,7 +437,7 @@ function single_pub ( $pub_id ) {
             'type' => 'text',
             'name' => 'payment_payrexx_secret',
             'value' => ($pub->values()["payment_payrexx_secret"] ?? ''),
-            'placeholder' => Language::string(38),
+            'placeholder' => Language::string(40),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -427,7 +448,7 @@ function single_pub ( $pub_id ) {
             'type' => 'text',
             'name' => 'currency',
             'value' => ($pub->values()["currency"] ?? ''),
-            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(39) . '</a>',
+            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(41) . '</a>',
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -436,8 +457,8 @@ function single_pub ( $pub_id ) {
 
       // Fees
       $form->customHTML('<div class="box">');
-        $form->customHTML('<p>' . Language::string(40) . '</p>');
-        $form->customHTML( Language::string(41) );
+        $form->customHTML('<p>' . Language::string(42) . '</p>');
+        $form->customHTML( Language::string(43) );
 
         // Fees absolute
         $form->addElement(
@@ -446,7 +467,7 @@ function single_pub ( $pub_id ) {
             'name' => 'payment_fee_absolute',
             'value' => (isset($pub->values()["payment_fee_absolute"]) ? number_format($pub->values()["payment_fee_absolute"] / 100, 2) : 0),
             'unit' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
-            'placeholder' => Language::string(42),
+            'placeholder' => Language::string(44),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -458,7 +479,7 @@ function single_pub ( $pub_id ) {
             'name' => 'payment_fee_percent',
             'value' => (isset($pub->values()["payment_fee_percent"]) ? number_format($pub->values()["payment_fee_percent"] / 100, 2) : 0),
             'unit' => '%',
-            'placeholder' => Language::string(43),
+            'placeholder' => Language::string(45),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -469,7 +490,7 @@ function single_pub ( $pub_id ) {
         array(
           'type' => 'button',
           'name' => 'update',
-          'value' => Language::string(44),
+          'value' => Language::string(46),
           'disabled' => ! User::w_access_allowed( $page, $current_user ),
         ),
       );
@@ -633,7 +654,7 @@ function single_product ( $product_id ) {
   if( User::w_access_allowed( $page, $current_user )) {
     $form->customHTML('<h1>' . Language::string(61) . '</h1>');
   }else {
-    $form->customHTML('<h1>' . Language::string(52) . '</h1>');
+    $form->customHTML('<h1>' . Language::string(62) . '</h1>');
   }
 
   $form->addElement(
@@ -1020,10 +1041,31 @@ switch(key($action)) {
         ),
       );
 
-      // Payrexx
+      // Store
       $form->customHTML('<div class="box">');
         $form->customHTML('<p>' . Language::string(35) . '</p>');
-        $form->customHTML( Language::string(36) );
+      $form->customHTML('</div>');
+
+      // Languages
+      $options = array();
+      foreach( Language::all() as $language ) {
+        $options[$language["code"]] = $language["loc"] . ' (' . $language["int"] . ')';
+      }
+
+      $form->addElement(
+        array(
+          'type' => 'select',
+          'name' => 'payment_store_language',
+          'value' => null,
+          'headline' => Language::string(36),
+          'options' => $options,
+        ),
+      );
+
+      // Payrexx
+      $form->customHTML('<div class="box">');
+        $form->customHTML('<p>' . Language::string(37) . '</p>');
+        $form->customHTML( Language::string(38) );
 
         // Payrexx instance
         $form->addElement(
@@ -1031,7 +1073,7 @@ switch(key($action)) {
             'type' => 'text',
             'name' => 'payment_payrexx_instance',
             'value' => ($pub->values()["payment_payrexx_instance"] ?? ''),
-            'placeholder' => Language::string(37),
+            'placeholder' => Language::string(39),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -1042,7 +1084,7 @@ switch(key($action)) {
             'type' => 'text',
             'name' => 'payment_payrexx_secret',
             'value' => ($pub->values()["payment_payrexx_secret"] ?? ''),
-            'placeholder' => Language::string(38),
+            'placeholder' => Language::string(40),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -1052,7 +1094,7 @@ switch(key($action)) {
           array(
             'type' => 'text',
             'name' => 'currency',
-            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(39) . '</a>',
+            'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(41) . '</a>',
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -1061,8 +1103,8 @@ switch(key($action)) {
 
       // Fees
       $form->customHTML('<div class="box">');
-        $form->customHTML('<p>' . Language::string(40) . '</p>');
-        $form->customHTML( Language::string(41) );
+        $form->customHTML('<p>' . Language::string(42) . '</p>');
+        $form->customHTML( Language::string(43) );
 
         // Fees absolute
         $form->addElement(
@@ -1070,7 +1112,7 @@ switch(key($action)) {
             'type' => 'text',
             'name' => 'payment_fee_absolute',
             'unit' => DEFAULT_CURRENCY,
-            'placeholder' => Language::string(42),
+            'placeholder' => Language::string(44),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -1081,7 +1123,7 @@ switch(key($action)) {
             'type' => 'text',
             'name' => 'payment_fee_percent',
             'unit' => '%',
-            'placeholder' => Language::string(43),
+            'placeholder' => Language::string(45),
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),
         );
@@ -1103,7 +1145,7 @@ switch(key($action)) {
 
       echo '</div>';
     }else {
-      Action::fs_info('Die Unterseite existiert nicht . ', "Zurück", $url_page );
+      Action::fs_info( Language::string(85), Language::string(86), $url_page );
     }
   break;
   case "list":

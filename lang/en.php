@@ -331,19 +331,20 @@ $string[8][109] = 'Store'; // Headline
 $string[8][110] = 'That you can sell a ticket without any programming experience, this system also includes a <a href="%url%store" target="_blank">store</a> with which you can sell your tickets. In the following you can configure the design of the store. If you would like to sell someone this ticket directly, use this link: <a href="%url%store/tickets/buy/%group%" target="_blank">%url%store/ticket/buy/%group%</a> '; // Info
 $string[8][111] = 'show in store'; // Input name
 $string[8][112] = 'Sell this ticket in store'; // Input title
-$string[8][113] = 'Logo'; // Input name
-$string[8][114] = 'Click to select'; // Select info
-$string[8][115] = 'Background'; // Input name
-$string[8][116] = 'Click to select'; // Select info
+$string[8][113] = 'Select store language'; // Input name
+$string[8][114] = 'Logo'; // Input name
+$string[8][115] = 'Click to select'; // Select info
+$string[8][116] = 'Background'; // Input name
+$string[8][117] = 'Click to select'; // Select info
 
-$string[8][117] = 'ADFS'; // Headline
-$string[8][118] = 'This function is only available if the administrator has made the simpleSAMLphp configuration and specified the path in general.php. <a href="https://simplesamlphp.org/" target="_blank">More information</a>'; // Info deactivatead
-$string[8][119] = 'By activating this function, the customer must authenticate himself via your ADFS in order to purchase a ticket. Note that the simpleSAML configuration has to be done manually. If the configuration is incorrect, the entire ordering process via the store for this ticket group will no longer work. The authentication cannot be done by a third party via SDK. '; // Info activated
-$string[8][120] = 'Request authentification'; // Input name
-$string[8][121] = 'Request authentification for ticket purchase'; // Input title
-$string[8][122] = 'Insert the array key of the ADFS array into the corresponding defined field of the form in order to transfer the data from your Active Directory. Fields left empty must be entered by the user himself. If all fields are defined, the user can only add a coupon. '; // ADFS custom text
-$string[8][123] = 'E-Mail<abbr title="Required for purchase">*</abbr>'; // Input name
-$string[8][124] = 'Update';
+$string[8][118] = 'ADFS'; // Headline
+$string[8][119] = 'This function is only available if the administrator has made the simpleSAMLphp configuration and specified the path in general.php. <a href="https://simplesamlphp.org/" target="_blank">More information</a>'; // Info deactivatead
+$string[8][120] = 'By activating this function, the customer must authenticate himself via your ADFS in order to purchase a ticket. Note that the simpleSAML configuration has to be done manually. If the configuration is incorrect, the entire ordering process via the store for this ticket group will no longer work. The authentication cannot be done by a third party via SDK. '; // Info activated
+$string[8][121] = 'Request authentification'; // Input name
+$string[8][122] = 'Request authentification for ticket purchase'; // Input title
+$string[8][123] = 'Insert the array key of the ADFS array into the corresponding defined field of the form in order to transfer the data from your Active Directory. Fields left empty must be entered by the user himself. If all fields are defined, the user can only add a coupon. '; // ADFS custom text
+$string[8][124] = 'E-Mail<abbr title="Required for purchase">*</abbr>'; // Input name
+$string[8][125] = 'Update';
 
 // SDK
 $string[8][130] = 'Do you really want to renew the secret key?<br /><span style="color: #f0c564;">This action is only recommended if you suspect that this key has been misused or if you are not yet using it productively.</span> '; // Refres message
@@ -758,26 +759,28 @@ $string[18][31] = 'Images'; // images title
 $string[18][32] = 'Click to select'; // Image input select info
 $string[18][33] = 'Logo'; // Image name
 $string[18][34] = 'Backgroundimage'; // Image name
-$string[18][35] = 'Payrexx'; // Payrexx title
-$string[18][36] = 'To be able to receive a payment directly online, you need an account at <a href="https://www.payrexx.com" title="Visit the website of Payrexx" target="_blank">Payrexx</a> . Payrexx is a Swiss company. If you would like to have Stripe as your <abbr title = "Payment service provider">PSP</abbr>, you can visit <a href = "https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/ "target =" _ blank ">this page</a>.'; // Payrexx info
-$string[18][37] = 'Payrexx Instance'; // Input name
-$string[18][38] = 'Payrexx Secret'; // Input name
-$string[18][39] = 'Currency'; // Input name
-$string[18][40] = 'Fees'; // Fees title
-$string[18][41] = 'The provider charges corresponding fees for each transaction. Please define here which fees your payment provider requires in order to receive the evaluation correctly. The two fees are added together and offset accordingly. This does not change the product prices. '; // Fees info
-$string[18][42] = 'Absolute fees'; // Input name
-$string[18][43] = 'Percentage Gebühren'; // Input name
-$string[18][44] = 'Update'; // Button value
+$string[18][35] = 'Store';
+$string[18][36] = 'Choose store language';
+$string[18][37] = 'Payrexx'; // Payrexx title
+$string[18][38] = 'To be able to receive a payment directly online, you need an account at <a href="https://www.payrexx.com" title="Visit the website of Payrexx" target="_blank">Payrexx</a> . Payrexx is a Swiss company. If you would like to have Stripe as your <abbr title = "Payment service provider">PSP</abbr>, you can visit <a href = "https://www.payrexx.com/de/resources/knowledge-hub/payrexx-for-stripe/ "target =" _ blank ">this page</a>.'; // Payrexx info
+$string[18][39] = 'Payrexx Instance'; // Input name
+$string[18][40] = 'Payrexx Secret'; // Input name
+$string[18][41] = 'Currency'; // Input name
+$string[18][42] = 'Fees'; // Fees title
+$string[18][43] = 'The provider charges corresponding fees for each transaction. Please define here which fees your payment provider requires in order to receive the evaluation correctly. The two fees are added together and offset accordingly. This does not change the product prices. '; // Fees info
+$string[18][44] = 'Absolute fees'; // Input name
+$string[18][45] = 'Percentage Gebühren'; // Input name
+$string[18][46] = 'Update'; // Button value
 
-$string[18][45] = 'Username'; // Input name
-$string[18][46] = 'Email'; // Input name
-$string[18][47] = 'Write | Read'; // Input name
-$string[18][48] = '%user% has write access to this pub'; // Toggle title
-$string[18][49] = '%user% has no write access to this pub'; // Toggle title
-$string[18][50] = '%user% has reading access to this pub'; // Toggle title
-$string[18][51] = '%user% has no reading access to this pub'; // Toggle title
-$string[18][52] = 'The rights could not be added.'; // Fail info
-$string[18][53] = 'You have <strong>no authorization</strong> to perform this action.'; // Fail info
+$string[18][47] = 'Username'; // Input name
+$string[18][48] = 'Email'; // Input name
+$string[18][49] = 'Write | Read'; // Input name
+$string[18][50] = '%user% has write access to this pub'; // Toggle title
+$string[18][51] = '%user% has no write access to this pub'; // Toggle title
+$string[18][52] = '%user% has reading access to this pub'; // Toggle title
+$string[18][53] = '%user% has no reading access to this pub'; // Toggle title
+$string[18][54] = 'The rights could not be added.'; // Fail info
+$string[18][55] = 'You have <strong>no authorization</strong> to perform this action.'; // Fail info
 
 //Single product
 $string[18][60] = 'Return to the previous page'; // Top nav title
@@ -810,6 +813,8 @@ $string[18][81] = 'Add product'; // Add product
 $string[18][82] = 'Choose group'; // Select info
 $string[18][83] = 'Create'; // Create product
 $string[18][84] = 'Create'; // Create pub
+$string[18][85] = 'The subpage does not exist'; // No section found
+$string[18][86] = 'Back'; // No section found
 
 // List pubs and products actions
 $string[18][90] = 'PUBS';
@@ -1076,8 +1081,8 @@ $string[20][167] = 'Removed group #%id% '; // groups.php
  $string["store"][141] = 'Payment expected';
  $string["store"][142] = 'Payment successful';
  $string["store"][143] = 'Payment failed';
- $string["store"][144] = 'Hello,<br />Please pay cash at the checkout. Enter as payment ID <strong>#%id%</strong>.';
- $string["store"][145] = 'Hello,<br />You can use this receipt to go pick up your purchase at checkout. Enter as payment ID <strong>#%id%</strong>. The receipt was also sent to you by mail (to %mail%).';
+ $string["store"][144] = 'Hello %mail%,<br />Please pay cash at the checkout. Enter as payment ID <strong>#%id%</strong>.';
+ $string["store"][145] = 'Hello %mail%,<br />You can use this receipt to go pick up your purchase at checkout. Enter as payment ID <strong>#%id%</strong>. The receipt was also sent to you by mail (to %mail%).';
  $string["store"][146] = 'Hello,<br />Your payment has failed. Please try again or contact the staff.';
  $string["store"][147] = 'Tip';
  $string["store"][148] = 'Total:';

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 19. Jul 2021 um 18:36
+-- Erstellungszeit: 04. Aug 2021 um 13:50
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -98,6 +98,7 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (17, 'Produkte', 5, 'pub_products.svg', 2, NULL),
 (18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
+(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL),
 
 -- --------------------------------------------------------
 
@@ -112,6 +113,7 @@ CREATE TABLE `tktdata_pub` (
   `logo_fileID` varchar(32) DEFAULT NULL,
   `background_fileID` varchar(32) DEFAULT NULL,
   `currency` varchar(3) DEFAULT NULL,
+  `payment_store_language` varchar(10) DEFAULT NULL,
   `payment_payrexx_instance` varchar(255) DEFAULT NULL,
   `payment_payrexx_secret` varchar(255) DEFAULT NULL,
   `payment_fee_percent` int(11) DEFAULT NULL,
@@ -160,22 +162,6 @@ CREATE TABLE `tktdata_pub_products_meta` (
   `visible` int(11) DEFAULT NULL,
   `availability` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `tktdata_pub_products_meta`
---
-
-INSERT INTO `tktdata_pub_products_meta` (`pub_id`, `product_id`, `visible`, `availability`) VALUES
-(4, 4, 0, 2),
-(4, 5, 1, NULL),
-(4, 14, 0, NULL),
-(4, 17, 0, 1),
-(4, 19, 1, 0),
-(4, 20, 1, 2),
-(4, 28, 0, NULL),
-(4, 35, 0, NULL),
-(5, 4, 0, NULL),
-(5, 25, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -268,6 +254,7 @@ CREATE TABLE `tktdata_tickets_groups` (
   `mail_msg` text DEFAULT NULL,
   `payment_mail_msg` text DEFAULT NULL,
   `payment_store` int(11) DEFAULT NULL,
+  `payment_store_language` varchar(10) DEFAULT NULL,
   `payment_logo_fileID` varchar(32) DEFAULT NULL,
   `payment_background_fileID` varchar(32) DEFAULT NULL,
   `adfs` int(11) DEFAULT NULL,
@@ -292,7 +279,7 @@ CREATE TABLE `tktdata_user` (
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `language` varchar(10) NOT NULL DEFAULT 'de'
+  `language` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -426,61 +413,61 @@ ALTER TABLE `tktdata_user_rights`
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_archive`
 --
 ALTER TABLE `tktdata_livedata_archive`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_livedata_live`
 --
 ALTER TABLE `tktdata_livedata_live`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1306;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub`
 --
 ALTER TABLE `tktdata_pub`
-  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `pub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub_access`
 --
 ALTER TABLE `tktdata_pub_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=367;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub_products`
 --
 ALTER TABLE `tktdata_pub_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_coupons`
 --
 ALTER TABLE `tktdata_tickets_coupons`
-  MODIFY `couponID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `couponID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_tickets_groups`
 --
 ALTER TABLE `tktdata_tickets_groups`
-  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_actions`
 --
 ALTER TABLE `tktdata_user_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_user_rights`
 --
 ALTER TABLE `tktdata_user_rights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3511;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

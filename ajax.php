@@ -603,7 +603,7 @@ switch($_POST["p"]) {
 
           // Remove access if exitst
           if(! $pub->remove_access( $values["user"] ) ) {
-            Action::fail( Language::string(52, null, 18) );
+            Action::fail( Language::string(544, null, 18) );
           }
 
           if( ($values["type"] ?? "r") == "w") {
@@ -623,7 +623,7 @@ switch($_POST["p"]) {
           }
 
           if(! $pub->add( Pub::ACCESS_TALBE, $access_values ) ) {
-            Action::fail( Language::string(52, null, 18) );
+            Action::fail( Language::string(54, null, 18) );
             return false;
           }
 
@@ -642,7 +642,7 @@ switch($_POST["p"]) {
           }
 
           if(! $user->updateRights( $new_rights ) ) {
-            Action::fail( Language::string(52, null, 18) );
+            Action::fail( Language::string(54, null, 18) );
             return false;
           }
 
@@ -650,13 +650,13 @@ switch($_POST["p"]) {
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights2.svg",
-              "title_w" => Language::string( 48, array(
+              "title_w" => Language::string( 50, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              "title_r" => Language::string( 50, array(
+              "title_r" => Language::string( 52, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
@@ -664,20 +664,20 @@ switch($_POST["p"]) {
           }else {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              "title_w" => Language::string( 49, array(
+              "title_w" => Language::string( 51, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              "title_r" => Language::string( 50, array(
+              "title_r" => Language::string( 52, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }
         }else {
-          Action::fail( Language::string( 53, null, 18 ) );
+          Action::fail( Language::string( 55, null, 18 ) );
         }
       break;
       case "remove_right":
@@ -691,7 +691,7 @@ switch($_POST["p"]) {
 
           // Remove access if exitst
           if(! $pub->remove_access( $values["user"] ) ) {
-            Action::fail( Language::string( 52, null, 18 ) );
+            Action::fail( Language::string( 54, null, 18 ) );
           }
 
           if( ($values["type"] ?? "r") == "w") {
@@ -711,7 +711,7 @@ switch($_POST["p"]) {
           }
 
           if(! $pub->add( Pub::ACCESS_TALBE, $access_values ) ) {
-            Action::fail( Language::string( 52, null, 18 ) );
+            Action::fail( Language::string( 54, null, 18 ) );
             return false;
           }
 
@@ -719,13 +719,13 @@ switch($_POST["p"]) {
           if( ($values["type"] ?? "r") == "w") {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              "title_w" => Language::string( 49, array(
+              "title_w" => Language::string( 51, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights2.svg",
-              "title_r" => Language::string( 50, array(
+              "title_r" => Language::string( 52, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_r" => "pub_remove_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
@@ -733,20 +733,20 @@ switch($_POST["p"]) {
           }else {
             echo json_encode(array(
               "img_w" => $url . "/medias/icons/togglePubRights1.svg",
-              "title_w" => Language::string( 49, array(
+              "title_w" => Language::string( 51, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_w" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'w')",
 
               "img_r" => $url . "/medias/icons/togglePubRights1.svg",
-              "title_r" => Language::string( 51, array(
+              "title_r" => Language::string( 53, array(
                 '%user%' => $values["user"],
               ), 18 ),
               "onclick_name_r" => "pub_add_right(this, '" . $values["user"] . "', '" . $pub->pub . "', 'r')",
             ));
           }
         }else {
-          Action::fail( Language::string( 53, null, 18 ) );
+          Action::fail( Language::string( 55, null, 18 ) );
         }
       break;
       case "toggle_tip":

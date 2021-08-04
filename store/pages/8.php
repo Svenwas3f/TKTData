@@ -54,7 +54,7 @@ if(! empty($_POST)) {
   if($transaction->add( $transaction_values, $_GET["id"] )) {
     header("Location: " . $url . "store/" . $type . "/pay/" . $transaction->paymentID);
   }else {
-    Action::fail( Language::string( 120, null, "store" ) );
+    Action::fail( Language::string( 120, null, "store", null, null, $pub->pub ) );
   }
 }
 
@@ -69,12 +69,12 @@ if(! empty($_POST)) {
     <!-- Payment infos -->
     <div class="submenu-total">
       <div class="calculated">
-        <span class="total"><?php echo Language::string( 121, null, "store" ); ?></span>
+        <span class="total"><?php echo Language::string( 121, null, "store", null, null, $pub->pub ); ?></span>
         <span class="price">0.00</span>
         <span class="currency"><?php echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY) ?></span>
       </div>
 
-      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )"><?php echo Language::string( 122, null, "store" ); ?></button>
+      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )"><?php echo Language::string( 122, null, "store", null, null, $pub->pub ); ?></button>
     </div>
 
     <!-- Details -->
@@ -94,7 +94,7 @@ if(! empty($_POST)) {
           echo $logo->fileDetails()["alt"];
         }else {
           // Default alt
-          echo Language::string( 123, null, "store" );
+          echo Language::string( 123, null, "store", null, null, $pub->pub );
         }
         ?>" />
       </div>
@@ -161,7 +161,7 @@ if(! empty($_POST)) {
         // Show section for tip amount
         echo'<div class="section-container">';
           echo '<div class="header row tip">';
-            echo '<span class="product">' . Language::string( 124, null, "store" ) . '</span>';
+            echo '<span class="product">' . Language::string( 124, null, "store", null, null, $pub->pub ) . '</span>';
             echo '<div class="placeholder-js">';
               echo '<span class="input">';
                 echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onkeyup="change_total_price( this )" />';

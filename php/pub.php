@@ -112,7 +112,26 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("pub_id", "name", "description", "logo_fileID", "background_fileID", "payment_payrexx_instance", "currency", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip", "id", "user_id", "w", "r", "section", "price", "product_fileID");
+    $valid_keys = array("pub_id",
+                        "name",
+                        "description",
+                        "logo_fileID",
+                        "background_fileID",
+                        "payment_payrexx_instance",
+                        "currency",
+                        "payment_store_language",
+                        "payment_payrexx_secret",
+                        "payment_fee_absolute",
+                        "payment_fee_percent",
+                        "tip",
+                        "id",
+                        "user_id",
+                        "w",
+                        "r",
+                        "section",
+                        "price",
+                        "product_fileID",
+                      );
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     //Generate query
@@ -199,7 +218,17 @@ class Pub {
     $conn = Access::connect();
 
     // Check values
-    $valid_keys = array("name", "logo_fileID", "description", "background_fileID", "currency", "payment_payrexx_instance", "payment_payrexx_secret", "payment_fee_absolute", "payment_fee_percent", "tip");
+    $valid_keys = array("name",
+                        "logo_fileID",
+                        "description",
+                        "background_fileID",
+                        "currency",
+                        "payment_store_language",
+                        "payment_payrexx_instance",
+                        "payment_payrexx_secret",
+                        "payment_fee_absolute",
+                        "payment_fee_percent",
+                        "tip");
     $checked_values = array_intersect_key($values, array_flip($valid_keys));
 
     // Generate values and keys

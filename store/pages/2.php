@@ -86,19 +86,19 @@ if(!empty($_POST)) {
       <?php
       if(isset($add)) {
         if($add == 6) {
-          Action::fail( Language::string(10, null, "store") );
+          Action::fail( Language::string( 10, null, "store", null, $group->groupID ) );
         }elseif($add == 5) {
-          Action::fail( Language::string(11, null, "store") );
+          Action::fail( Language::string( 11, null, "store", null, $group->groupID ) );
         }elseif($add == 4) {
-          Action::fail( Language::string(12, null, "store") );
+          Action::fail( Language::string( 12, null, "store", null, $group->groupID ) );
         }elseif($add == 3) {
-          Action::fail( Language::string(13, null, "store") );
+          Action::fail( Language::string( 13, null, "store", null, $group->groupID ) );
         }elseif($add == 2) {
-          Action::fail( Language::string(14, null, "store") );
+          Action::fail( Language::string( 14, null, "store", null, $group->groupID ) );
         }elseif($add == 1) {
-          Action::success( Language::string(15, null, "store") );
+          Action::success( Language::string( 15, null, "store", null, $group->groupID ) );
         }else {
-          Action::fail( Language::string(16, null, "store") );
+          Action::fail( Language::string( 16, null, "store", null, $group->groupID ) );
         }
       }
        ?>
@@ -144,7 +144,7 @@ if(!empty($_POST)) {
               //First
               echo '<label class="txt-input">';
                 echo '<input type="text" name="email" ' . (isset($user_informations) &&  isset($user_informations[$customADFS["email"]]) ? ('value="' . $user_informations[$customADFS["email"]] . '" disabled') : ('required')) . '/>';
-                echo '<span class="placeholder">' . Language::string(17, null, "store") . '</span>';
+                echo '<span class="placeholder">' . Language::string( 17, null, "store", null, $group->groupID ) . '</span>';
               echo '</label>';
 
               if(! empty($customUserInputs)) {
@@ -178,7 +178,7 @@ if(!empty($_POST)) {
                       $options = explode(",", $customInput["value"]);
                       echo  '<div class="select" onclick="toggleOptions(this)">';
                         echo  '<input type="text" class="selectValue" name="' . $customInput["id"] . '"' . $required . ' ' . $disabled . '>';
-                        echo  '<span class="headline">' . Language::string(18, null, "store") . '</span>';
+                        echo  '<span class="headline">' . Language::string( 18, null, "store", null, $group->groupID ) . '</span>';
 
                         echo  '<div class="options">';
                           foreach($options as $option) {
@@ -199,7 +199,7 @@ if(!empty($_POST)) {
                           if($option != "") {
                             echo  '<label class="radio">';
                               echo  '<input type="radio" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                              echo  '<div title="' . Language::string(19, null, "store") . '"></div>';
+                              echo  '<div title="' . Language::string( 19, null, "store", null, $group->groupID ) . '"></div>';
                               echo  $option;
                             echo  '</label>';
                           }
@@ -210,7 +210,7 @@ if(!empty($_POST)) {
                     case "checkbox":
                       echo  '<label class="checkbox">';
                         echo  '<input type="checkbox" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                        echo  '<div title="' . Language::string(20, null, "store") . '"></div>';
+                        echo  '<div title="' . Language::string( 20, null, "store", null, $group->groupID ) . '"></div>';
                         echo  $customInput["name"];
                       echo  '</label>';
                     break;
@@ -235,12 +235,12 @@ if(!empty($_POST)) {
 
             <!-- Coupon -->
             <div class="coupon">
-              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);"><?php echo Language::string(21, null, "store"); ?></span>
+              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);"><?php echo Language::string( 21, null, "store", null, $group->groupID ); ?></span>
             </div>
 
             <!-- Price -->
             <div class="price_tag">
-              <span class="name"><?php echo Language::string(22, null, "store"); ?></span>
+              <span class="name"><?php echo Language::string( 22, null, "store", null, $group->groupID ); ?></span>
               <span class="price"><?php echo number_format(($group->values()["price"] + ($group->values()["vat"] / 10000) * $group->values()["price"]) / 100, 2); ?></span>
               <span class="discount_price"></span>
               <span class="unit"><?php echo $group->values()["currency"]; ?></span>
@@ -250,7 +250,7 @@ if(!empty($_POST)) {
             <button>
               <div class="container">
                 <img src="<?php echo $url; ?>medias/store/icons/pay.svg" />
-                <span><?php echo Language::string(23, null, "store"); ?></span>
+                <span><?php echo Language::string( 23, null, "store", null, $group->groupID ); ?></span>
               </div>
             </button>
 

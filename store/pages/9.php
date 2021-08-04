@@ -51,7 +51,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
 
   //Payment modal
   if( is_object( $response ) ) {
-    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">' . Language::string( 130, null, "store" ) . '</a>';
+    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">' . Language::string( 130, null, "store", null, null, $pub->pub ) . '</a>';
     echo '<script type="text/javascript">';
     echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
     echo 'jQuery(\'.payrexx-modal-window\').click();';
@@ -60,7 +60,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
     Action::fail(
       Language::string( 131, array(
         '%message%' => $response
-      ), "store"
+      ), "store", null, null, $pub->pub
     ));
   }
   ?>

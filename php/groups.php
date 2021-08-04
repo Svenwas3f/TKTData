@@ -375,6 +375,7 @@ class Group {
                           "mail_msg",
                           "payment_mail_msg",
                           "payment_store",
+                          "payment_store_language",
                           "payment_logo_fileID",
                           "payment_background_fileID",
                           "adfs",
@@ -480,9 +481,6 @@ class Group {
    * Removes a group and returns true or false
    * Requires: $groupID
    *
-   * FULL_RESTORE informations: (Consutlate general.php file for future informations abrout FULL_RESTORE)
-   *   true = remove database entry
-   *   false = remove database entry and files
    */
   public function remove() {
     //request variables
@@ -492,9 +490,10 @@ class Group {
     $conn = Access::connect();
 
     //Get restore data
-    $restore = $conn->prepare("SELECT name, maxTickets, tpu, currency, price, startTime, endTime, vat, description, custom, color FROM " . TICKETS_GROUPS . " WHERE groupID=:gid");
-    $restore->execute(array(":gid" => $this->groupID));
-    $restoreData = $restore->fetch(PDO::FETCH_ASSOC);
+    // $restore = $conn->prepare("SELECT name, maxTickets, tpu, currency, price, startTime, endTime, vat, description, custom, color FROM " . TICKETS_GROUPS . " WHERE groupID=:gid");
+    // $restore->execute(array(":gid" => $this->groupID));
+    // $restoreData = $restore->fetch(PDO::FETCH_ASSOC);
+    $restoreData = $this->values();
 
     //Remove from database
     $removeRow = $conn->prepare("DELETE FROM " . TICKETS_GROUPS . " WHERE groupID=:gid");

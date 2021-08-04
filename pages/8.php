@@ -843,13 +843,29 @@ function section_payment( $groupID, $section ) {
     ),
   );
 
+  // Languages
+  $options = array();
+  foreach( Language::all() as $language ) {
+    $options[$language["code"]] = $language["loc"] . ' (' . $language["int"] . ')';
+  }
+
+  $form->addElement(
+    array(
+      'type' => 'select',
+      'name' => 'payment_store_language',
+      'value' => $group->values()["payment_store_language"] ?? null,
+      'headline' => (isset($group->values()["payment_store_language"]) ? $options[$group->values()["payment_store_language"]] : Language::string(113)),
+      'options' => $options
+    ),
+  );
+
   $form->addElement(
     array(
       'type' => 'image',
       'name' => 'payment_logo_fileID',
       'value' => $group->values()['payment_logo_fileID'],
-      'headline' => Language::string(113),
-      'select_info' => Language::string(114),
+      'headline' => Language::string(114),
+      'select_info' => Language::string(115),
       'preview_image' => empty($group->values()["payment_logo_fileID"]) ? '' : MediaHub::getUrl( $group->values()["payment_logo_fileID"] ),
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),
@@ -860,8 +876,8 @@ function section_payment( $groupID, $section ) {
       'type' => 'image',
       'name' => 'payment_background_fileID',
       'value' => $group->values()['payment_background_fileID'],
-      'headline' => Language::string(115),
-      'select_info' => Language::string(116),
+      'headline' => Language::string(116),
+      'select_info' => Language::string(117),
       'preview_image' => empty($group->values()["payment_background_fileID"]) ? '' : MediaHub::getUrl( $group->values()["payment_background_fileID"] ),
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),
@@ -871,8 +887,8 @@ function section_payment( $groupID, $section ) {
   if(SIMPLE_SAML_CONFIG === null) {
     $form->customHTML('<div style="opacity: 0.5; margin-bottom: 12.5px;">');
 
-      $form->customHTML('<p>' . Language::string(117) . '</p>');
-      $form->customHTML( Language::string(118) );
+      $form->customHTML('<p>' . Language::string(118) . '</p>');
+      $form->customHTML( Language::string(119) );
 
       $form->addElement(
         array(
@@ -880,8 +896,8 @@ function section_payment( $groupID, $section ) {
           'name' => 'adfs',
           'value' => 'true',
           'checked' => ($group->values()["adfs"] == 1),
-          'context' => Language::string(120),
-          'additional_div' => 'title="' . Language::string(121) . '"',
+          'context' => Language::string(121),
+          'additional_div' => 'title="' . Language::string(122) . '"',
           'disabled' => ! User::w_access_allowed($page, $current_user),
         ),
       );
@@ -889,8 +905,8 @@ function section_payment( $groupID, $section ) {
 
     $form->customHTML('</div>');
   }else {
-    $form->customHTML('<p>' . Language::string(117) . '</p>');
-    $form->customHTML( Language::string(119) );
+    $form->customHTML('<p>' . Language::string(118) . '</p>');
+    $form->customHTML( Language::string(120) );
 
     $form->addElement(
       array(
@@ -898,8 +914,8 @@ function section_payment( $groupID, $section ) {
         'name' => 'adfs',
         'value' => 'true',
         'checked' => ($group->values()["adfs"] == 1),
-        'context' => Language::string(120),
-        'additional_div' => 'title="' . Language::string(121) . '"',
+        'context' => Language::string(121),
+        'additional_div' => 'title="' . Language::string(122) . '"',
         'disabled' => ! User::w_access_allowed($page, $current_user),
       ),
     );
@@ -908,14 +924,14 @@ function section_payment( $groupID, $section ) {
     $customUserInputs = json_decode($group->values()["custom"], true);
     $customADFS = json_decode($group->values()["adfs_custom"], true);
 
-    $form->customHTML('<span style="display: block; margin-top: 12.5px;">' . Language::string(122) . '</span>');
+    $form->customHTML('<span style="display: block; margin-top: 12.5px;">' . Language::string(123) . '</span>');
 
     $form->addElement(
       array(
         'type' => 'text',
         'name' => 'adfs_custom[email]',
         'value' => $customADFS["email"] ?? '',
-        'placeholder' => Language::string(123),
+        'placeholder' => Language::string(124),
         'disabled' => ! User::w_access_allowed($page, $current_user),
       ),
     );
@@ -956,7 +972,7 @@ function section_payment( $groupID, $section ) {
     array(
       'type' => 'button',
       'name' => 'update',
-      'value' => Language::string(124),
+      'value' => Language::string(125),
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),
   );
