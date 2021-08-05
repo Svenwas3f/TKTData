@@ -126,7 +126,7 @@ echo '<div class="pub">';
         }
 
         // Remove
-        if(  $transaction->globalValues()["payment_state"] == 1 || array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
+        if(  $transaction->globalValues()["payment_state"] == 1 || array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
           $rightmenu->addElement(
             array(
               'context' => '<img src="' . $url . 'medias/icons/trash.svg" alt="' . Language::string(7) . '" title="' . Language::string(8) . '"/>',
@@ -214,7 +214,7 @@ echo '<div class="pub">';
             echo '<div class="detail-item state">';
               echo '<span class="type">' . Language::string(22) . '</span>';
               echo '<span class="value">';
-                if(  $transaction->globalValues()["payment_state"] != 1 && array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) === false ) {
+                if(  $transaction->globalValues()["payment_state"] != 1 && array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) === false ) {
                   echo Language::string(23);
                 }else {
                   echo Language::string(24);
@@ -396,7 +396,7 @@ echo '<div class="pub">';
         $action = '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view=' . urlencode( $transaction->paymentID ) . '"
                     title="' . Language::string(42) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
         if(  $transaction->globalValues()["payment_state"] == 1 ||
-              array_search( $transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) != false ) {
+              array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
           $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove=' . urlencode( $transaction->paymentID ) . '"
                         title="' . Language::string(43) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
         }
@@ -404,7 +404,7 @@ echo '<div class="pub">';
         $table->addElement(
           array(
             'row' => array(
-              'additional' => 'class="' . $class . '" title="' . $title . '"',
+              'additional' => 'class="' . $class . '" title="' . $title . '" id="' . $transaction->paymentID . '"',
               'items' => array(
                 array(
                   'context' => $transaction->globalValues()["email"],
@@ -469,5 +469,12 @@ echo '<div class="pub">';
       $searchbar->prompt();
       $legend->prompt();
       $table->prompt();
+
+      // Generate JS
+      echo  '<script>' .
+              'setInterval(function() {' .
+                'loadTransactions(' . $steps . ', ' . $offset .', ' . ($_GET["s"] ?? 'null') . ', ' . $transaction->pub . ');' .
+              '}, 2500);' .
+            '</script>';
     break;
   }

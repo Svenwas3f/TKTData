@@ -553,7 +553,7 @@ function togglePickUp( paymentID, icon ) {
 }
 
 /**
- *
+ * Payment confirmed
  */
 function confirmPayment( paymentID, icon ) {
   var values = new Object();
@@ -573,4 +573,82 @@ function confirmPayment( paymentID, icon ) {
       }, "message", message)
     }
   }, "confirmPayment", values);
+}
+
+function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0) {
+  // Values
+  var values = new Object();
+  values["steps"] = steps;
+  values["offset"] = offset;
+  values["search_value"] = search_value;
+  values["pub"] = pub;
+
+  // Get all transactions
+  var table = document.getElementsByTagName("table")[0];
+
+  // Get new rows
+  ajax(16, function(c) {
+    // Get results
+    var result = JSON.parse(c.responseText);
+
+    Object.keys(result).forEach(key => {
+      // // Get element
+      var row = document.getElementById( key );
+
+      // Check if row exists
+      if( table.contains( row ) ) {
+        // Check if class update required
+        if( row.getAttribute('class') != result[key].class ) {
+          row.setAttribute('class', result[key].class); // Update classes
+        }
+
+        // Check if email update required
+        var email = row.getElementsByTagName("td")[0];
+        if( email != result[key].email) {
+          email.innerHTML = result[key].email;
+        }
+      }else {
+        // Add new row and remove last one
+        var firstTr = table.getElementsByTagName("tr")[0];
+
+        // Generate object
+        var newRow = document.createElement("div");
+        newRow.innerHTML = result[key].html;
+        newRow = newRow.getElementsByTagName("tr")[0];
+
+        // Insert row
+        firstTr.parentNode.insertBefore( newRow, firstTr.nextSibling);
+      }
+    });
+
+    // Prepare remove for redundant rows
+    var rows = table.getElementsByClassName("transaction");
+
+    if( rows.length > steps ) { // Check removed
+      // Set counter
+      var counter = rows.length;
+
+      // Loop for remove
+      for( let i = steps; i < counter; i++) {
+        rows[steps].remove();
+      }
+
+      // Check if footer is required
+      var nav = table.getElementsByClassName("nav")[0];
+      if(! table.contains( nav ) ) {
+        ajax(16, function(c) {
+          // Get result
+          var result = c.responseText;
+
+          // Generate object
+          var nav = document.createElement("div");
+          nav.innerHTML = result;
+          nav = nav.getElementsByTagName("tr")[1];
+
+          table.append( nav );
+
+        }, "tableNav", values);
+      }
+    }
+  }, "updateRows", values);
 }

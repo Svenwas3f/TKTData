@@ -15,6 +15,8 @@
  *
  * HTML->prompt ()
  *
+ * HTML->output ()
+ *
  * HTML->addElement ( $values [array] )
  *
  * HTML->addInput ( $values [array] )
@@ -160,6 +162,23 @@ class HTML {
     echo $this->startTag;
       echo $this->substance;
     echo $this->endTag;
+  }
+
+  /**
+   * This function generates output
+   *
+   * Execute this function after executing all other functions to get a proper result.
+   * Do not execute this function multiple time for the same class or it will occure
+   * problems while submiting a form or others.
+   */
+  public function output() {
+    // Generate output
+    $output = $this->startTag;
+      $output .= $this->substance;
+    $output .= $this->endTag;
+
+    // Return output
+    return $output;
   }
 
   /**

@@ -538,6 +538,169 @@ switch($_POST["p"]) {
             echo (($transaction->update(array("payment_state" => 1)) == true) ? "true" : "false");
         }
       break;
+      case "updateRows":
+        // Set variables
+        $steps = json_decode( $_POST["values"], true)["steps"];
+        $offset = json_decode( $_POST["values"], true)["offset"];
+        $search_value = json_decode( $_POST["values"], true)["search_value"];
+        $pub = json_decode( $_POST["values"], true)["pub"];
+
+        // Get transactions
+        $transactions = new Transaction();
+        $transactions->pub = $pub ?? 0;
+
+        // Generate array
+        foreach( $transactions->all( $offset ?? 0, $steps ?? 20, ($search_value ?? null) ) as $values ) {
+          // Set payment id
+          $transactions->paymentID = $values["paymentID"];
+
+          // Fill array
+          if( $transactions->globalValues()["payment_state"]  == 2 && $transactions->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
+            $transactionStates[$transactions->paymentID]["class"] = "transaction payment-and-pickUp";
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(38, null, 16);
+            $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
+          }elseif ( $transactions->globalValues()["payment_state"]  == 2 ) { // Payment expected
+            $transactionStates[$transactions->paymentID]["class"] = "transaction payment-expected";
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(39, null, 16);
+            $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
+          }elseif( $transactions->globalValues()["pick_up"] == 0 ) { // not picked up
+            $transactionStates[$transactions->paymentID]["class"] = "transaction no-pickUp";
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(40, null, 16);
+            $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
+          }else {
+            $transactionStates[$transactions->paymentID]["class"] = "transaction";
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(41, null, 16);
+            $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
+          }
+
+          // Generate html
+          // Notice: This part is copied out of 16.php
+          $table = new HTML('table');
+
+          // Define action
+          $action = '<a href="' . $url_page . '&pub=' . urlencode( $transactions->pub ) . '&view=' . urlencode( $transactions->paymentID ) . '"
+                      title="' . Language::string(42) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
+          if(  $transactions->globalValues()["payment_state"] == 1 ||
+                array_search( ($transactions->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
+            $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $transactions->pub ) . '&remove=' . urlencode( $transactions->paymentID ) . '"
+                          title="' . Language::string(43) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
+          }
+
+          // Generate row
+          $table->addElement(
+            array(
+              'row' => array(
+                'additional' => 'class="' . $transactionStates[$transactions->paymentID]["class"] . '"' .
+                'title="' . $transactionStates[$transactions->paymentID]["title"] . '" id="' . $transactions->paymentID . '"',
+                'items' => array(
+                  array(
+                    'context' => $transactions->globalValues()["email"],
+                  ),
+                  array(
+                    'context' => number_format(($transactions->totalPrice() / 100), 2) . ' ' .
+                                  ($transactions->globalValues()["currency"] ?? DEFAULT_CURRENCY),
+                  ),
+                  array(
+                    'context' => date("d.m.Y H:i:s", strtotime($transactions->globalValues()["payment_time"])),
+                  ),
+                  array(
+                    'context' => $action,
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          $transactionStates[$transactions->paymentID]["html"] = $table->output();
+        }
+
+        // Reverse arrray to add in correct order if multiple transactions are added
+        $transactionStates = array_reverse($transactionStates, true);
+
+        // return array
+        echo json_encode( $transactionStates );
+      break;
+      case "tableNav":
+        // Get values
+        $steps = json_decode( $_POST["values"], true)["steps"];
+        $offset = json_decode( $_POST["values"], true)["offset"];
+        $search_value = json_decode( $_POST["values"], true)["search_value"];
+        $pub = json_decode( $_POST["values"], true)["pub"];
+
+        // Get transactions
+        $transaction = new Transaction();
+        $transaction->pub = $pub ?? 0;
+
+        // Start table
+        $table = new HTML('table');
+
+        // Headline
+        $table->addElement(
+          array(
+            'headline' => array(
+              'items' => array(
+                array(
+                  'context' => Language::string(34, null),
+                ),
+                array(
+                  'context' => Language::string(35, null),
+                ),
+                array(
+                  'context' => Language::string(36, null),
+                ),
+                array(
+                  'context' => Language::string(37, null),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Footer
+        $last = '<a href="' .
+                  $url .
+                  '?id=5&sub=16' .
+                  (! is_null($pub) ? "&pub=" . urlencode($pub) : "") .
+                  (! is_null($search_value) ? "&s=" . urlencode($search_value) : "" ) .
+                  '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
+                  style="float: left;">' . Language::string(44, null, 16) . '</a>';
+        $next = '<a href="' .
+                  $url .
+                  '?id=5&sub=16' .
+                  (! is_null($pub) ? "&pub=" . urlencode($pub) : "") .
+                  (! is_null($search_value) ? "&s=" . urlencode($search_value) : "" ) .
+                  '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
+                  style="float: right;">' . Language::string(45, null, 16) . '</a>';
+
+        if( (count($transaction->all( ($offset + $steps), 1, ($search_value ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
+          $table->addElement(
+            array(
+              'footer' => array(
+                'context' => $last . $next,
+              ),
+            ),
+          );
+        }elseif ( ($offset/$steps) > 0 ) { // Less pages accessables
+          $table->addElement(
+            array(
+              'footer' => array(
+                'context' => $last,
+              ),
+            ),
+          );
+        }elseif (count($transaction->all( ($offset + $steps), 1, ($search_value ?? null))) > 0) { // More pages accessable
+          $table->addElement(
+            array(
+              'footer' => array(
+                'context' => $next,
+              ),
+            ),
+          );
+        }
+
+        // Display nav
+        $table->prompt();
+      break;
     }
   break;
 

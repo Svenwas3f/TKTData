@@ -2483,6 +2483,10 @@ form.search button img {
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
  * Pub pages
  =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+.mainpage-5.subpage-16 .rows .transaction {
+  transition: .5s;
+}
+
 .mainpage-5.subpage-16 .rows .transaction.payment-and-pickUp {
   background-color: var(--transaction-payment-and-pickUp);
 }

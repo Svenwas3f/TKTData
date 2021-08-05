@@ -580,7 +580,7 @@ class Transaction {
     // Get fees
     $fees = 0;
 
-    if( $this->globalValues()["payment_state"] != 1 && array_search( $this->getGateway()->getInvoices()[0]["transactions"][0]["pspId"], array(27, 15) ) === false ) {
+    if( $this->globalValues()["payment_state"] != 1 && array_search( ($this->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) === false ) {
       // Calculate
       $fees = $fees + ($this->globalValues()["fee_percent"] / 10000) * ($this->totalPrice() - ($this->globalValues()["refund"] ?? 0)); // Percent
       $fees = $fees + $this->globalValues()["fee_absolute"]; //Absolute
