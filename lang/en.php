@@ -600,40 +600,47 @@ $string[16][28] = 'Unknown name'; // Name of product not found
 $string[16][29] = 'Total:'; // Total info
 
 // List
-$string[16][30] = 'Email, Payment-ID, Payment time'; // Search form placeholder
-$string[16][31] = 'Picked up without payment'; // Pickup states
-$string[16][32] = 'Payment expected'; // Pickup states
-$string[16][33] = 'Pick up expected'; // Pickup states
-$string[16][34] = 'Email'; // Headline
-$string[16][35] = 'Price'; // Headline
-$string[16][36] = 'Date'; // Headline
-$string[16][37] = 'Activity'; // Headline
-$string[16][38] = 'Payment expected. Product already picked up.'; // Pickup states title
-$string[16][39] = 'Payment expected.'; // Pickup states title
-$string[16][40] = 'Pick up expected'; // Pickup states title
-$string[16][41] = 'Picked up'; // Pickup states title
-$string[16][42] = 'View transaction'; // Link title
-$string[16][43] = 'Remove transaction'; // Link title
-$string[16][44] = 'Last'; // Footer nav
-$string[16][45] = 'Next'; // Footer nav
+$string[16][30] = 'Use all product for evaluation'; // Toggle title
+$string[16][31] = 'All'; // Toggle text
+$string[16][32] = 'Only use own product for evaluation'; // Toggle title
+$string[16][33] = 'Own'; // Toggle text
+$string[16][34] = 'Revenue less fees and reimbursements'; // Mainbox title
+$string[16][35] = 'Fees:';
+$string[16][36] = 'Refund:';
+$string[16][37] = 'Email, Payment-ID, Payment time'; // Search form placeholder
+$string[16][38] = 'Picked up without payment'; // Pickup states
+$string[16][39] = 'Payment expected'; // Pickup states
+$string[16][40] = 'Pick up expected'; // Pickup states
+$string[16][41] = 'Email'; // Headline
+$string[16][42] = 'Price'; // Headline
+$string[16][43] = 'Date'; // Headline
+$string[16][44] = 'Activity'; // Headline
+$string[16][45] = 'Payment expected. Product already picked up.'; // Pickup states title
+$string[16][46] = 'Payment expected.'; // Pickup states title
+$string[16][47] = 'Pick up expected'; // Pickup states title
+$string[16][48] = 'Picked up'; // Pickup states title
+$string[16][49] = 'View transaction'; // Link title
+$string[16][50] = 'Remove transaction'; // Link title
+$string[16][51] = 'Last'; // Footer nav
+$string[16][52] = 'Next'; // Footer nav
 
-$string[16][46] = 'The transaction <strong>%email% (#%id%)</strong> was deleted <strong>successfully</strong>.'; // Remove message success
-$string[16][47] = 'The transaction <strong>%email% (#%id%)</strong> could <strong>not</strong> be deleted.'; // Remove message fail
-$string[16][48] = 'You have <strong>no authorization</strong> to perform this action'; // No access
+$string[16][53] = 'The transaction <strong>%email% (#%id%)</strong> was deleted <strong>successfully</strong>.'; // Remove message success
+$string[16][54] = 'The transaction <strong>%email% (#%id%)</strong> could <strong>not</strong> be deleted.'; // Remove message fail
+$string[16][55] = 'You have <strong>no authorization</strong> to perform this action'; // No access
 
 // Remove
-$string[16][50] = 'Do you really want to delete the transaction <strong>%email% (#%id%)</strong>? ';
+$string[16][60] = 'Do you really want to delete the transaction <strong>%email% (#%id%)</strong>? ';
 
 // No access to pub
-$string[16][60] = 'You have no access to the pub (#%id%) <strong>%name%</strong> '; // Fullscreen message
-$string[16][61] = 'Back'; // Fullscreen return button
+$string[16][70] = 'You have no access to the pub (#%id%) <strong>%name%</strong> '; // Fullscreen message
+$string[16][71] = 'Back'; // Fullscreen return button
 
 // Ajax messages
-$string[16][70] = 'Refund failed.';
-$string[16][71] = 'Refund failed. %refund%';
-$string[16][72] = 'This user does not have authorization for this action ';
-$string[16][73] = 'Successful -%refund% %currency% reimbursed.';
-$string[16][74] = 'Receipt of payment could not be confirmed ';
+$string[16][80] = 'Refund failed.';
+$string[16][81] = 'Refund failed. %refund%';
+$string[16][82] = 'This user does not have authorization for this action ';
+$string[16][83] = 'Successful -%refund% %currency% reimbursed.';
+$string[16][84] = 'Receipt of payment could not be confirmed ';
 
 
 /**

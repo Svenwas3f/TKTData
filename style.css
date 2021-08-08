@@ -2483,6 +2483,76 @@ form.search button img {
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
  * Pub pages
  =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+.mainpage-5.subpage-16 .earning-box {
+  margin: 20px;
+  background-color: var(--lighterwhitegray);
+  box-shadow: 0px 0px 5px var(--custom-gray11);
+  padding: 20px;
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.mainpage-5.subpage-16 .earning-box .toggle {
+  display: flex;
+  justify-content: center;
+}
+
+.mainpage-5.subpage-16 .earning-box .toggle .container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns:  1fr 1fr;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+}
+
+.mainpage-5.subpage-16 .earning-box .toggle .container .text {
+  display: block;
+  text-align: center;
+  background-color: var(--custom-gray7);
+  padding: 5px 20px;
+  color: white;
+  font-size: 10pt;
+  user-select: none;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+}
+
+.mainpage-5.subpage-16 .earning-box .toggle .container .text.current {
+  background-color: var(--custom-gray6);
+}
+
+.mainpage-5.subpage-16 .earning-box .toggle .container .text:hover {
+  opacity: 0.9;
+}
+
+.mainpage-5.subpage-16 .earning-box .earned .text {
+  display: block;
+  text-align: center;
+  font-family: 'Open Sans Bold', sans-serif;
+  font-size: 36pt;
+  line-height: 1;
+  padding: 20px 20px;
+}
+
+.mainpage-5.subpage-16 .earning-box .info {
+  display: flex;
+  justify-content: center;
+}
+
+.mainpage-5.subpage-16 .earning-box .info .fees, .mainpage-5.subpage-16 .earning-box .info .refund, .mainpage-5.subpage-16 .earning-box .info .divider {
+  display: block;
+  font-size: 9pt;
+  margin: 0px 3px;
+}
+
+.mainpage-5.subpage-16 .earning-box .info .name {
+  margin-right: 5px;
+}
+
+
 .mainpage-5.subpage-16 .rows .transaction {
   transition: .5s;
 }

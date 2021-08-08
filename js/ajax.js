@@ -59,6 +59,16 @@
  *
  * togglePickUp ( paymentID [paymentID], icon [HTML Element] )
  *
+ * confirmPayment ()
+ *
+ * loadTransactions( steps [INT], offset [INT], search_value [search value], pub [INT] )
+ *
+ * toggleEarningBox( type [INT], pub [INT] )
+ *
+ * toggleEarningBox( type [INT], pub [INT] )
+ *
+ * earningBoxValues( pub [INT], global_products [boolean] )
+ *
  */
 
 /**
@@ -542,8 +552,6 @@ function togglePickUp( paymentID, icon ) {
     // Get json
     var ajax_response = JSON.parse(c.responseText);
 
-    console.log(ajax_response.message);
-
     // Change icon
     icon.children[0].src = ajax_response.img_src;
 
@@ -575,6 +583,14 @@ function confirmPayment( paymentID, icon ) {
   }, "confirmPayment", values);
 }
 
+/**
+ * Function to update transaction list
+ *
+ * steps: Rows to list
+ * offset: Where to start
+ * search_value: search value
+ * pub: pub ID
+ */
 function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0) {
   // Values
   var values = new Object();
@@ -591,6 +607,15 @@ function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0)
     // Get results
     var result = JSON.parse(c.responseText);
 
+    // Remove removed transactions
+    var rows = table.getElementsByClassName("transaction");
+
+    for( let i = 0; i < rows.length; i++ ) {
+      if(! Object.keys(result).includes( rows[i].getAttribute("id") ) ) {
+        rows[i].remove();
+      }
+    }
+
     Object.keys(result).forEach(key => {
       // // Get element
       var row = document.getElementById( key );
@@ -606,6 +631,12 @@ function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0)
         var email = row.getElementsByTagName("td")[0];
         if( email != result[key].email) {
           email.innerHTML = result[key].email;
+        }
+
+        // Check if action update required
+        var action = row.getElementsByTagName("td")[3];
+        if( action != result[key].action ) {
+          action.innerHTML = result[key].action;
         }
       }else {
         // Add new row and remove last one
@@ -651,4 +682,63 @@ function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0)
       }
     }
   }, "updateRows", values);
+}
+
+/**
+ *
+ */
+function toggleEarningBox( type, pub ) {
+  // Ger box values
+  var box = document.getElementsByClassName("earning-box")[0];
+  var all = box.getElementsByClassName("toggle")[0].getElementsByClassName("text")[0];
+  var own = box.getElementsByClassName("toggle")[0].getElementsByClassName("text")[1];
+
+  if( type == 0 ) {
+    // Change class
+    all.classList.add("current");
+    own.classList.remove("current");
+
+    // Load current
+    earningBoxValues( pub, true );
+  }else {
+    // Change class
+    all.classList.remove("current");
+    own.classList.add("current");
+
+    // Load current
+    earningBoxValues( pub, false );
+  }
+}
+
+/**
+ *
+ */
+function earningBoxValues( pub, global_products = true) {
+  var values = new Object();
+  values["pub"] = pub;
+  values["global"] = global_products;
+
+  ajax(16, function(c) {
+    // Emcode
+    var ajax_response = JSON.parse(c.responseText);
+
+    // Get box values
+    var box = document.getElementsByClassName("earning-box")[0];
+    var earned = box.getElementsByClassName("earned")[0].getElementsByClassName("text")[0];
+    var fees = box.getElementsByClassName("info")[0].getElementsByClassName("fees")[0].getElementsByClassName("value")[0];
+    var refund = box.getElementsByClassName("info")[0].getElementsByClassName("refund")[0].getElementsByClassName("value")[0];
+
+    // Check input
+    if( earned.innerHTML != ajax_response.earned ) {
+      earned.innerHTML = ajax_response.earned;
+    }
+
+    if( fees.innerHTML != ajax_response.fees ) {
+      fees.innerHTML = ajax_response.fees
+    }
+
+    if( refund.innerHTML != ajax_response.refund  ) {
+      refund.innerHTML = ajax_response.refund
+    }
+  }, "earningBox", values);
 }

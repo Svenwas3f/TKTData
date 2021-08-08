@@ -30,6 +30,12 @@
  *
  * pub->access ( $user [int or null], $offset [int], $steps [int] ) [$pub]
  *
+ * pub->earned ( $global [boolean] )
+ *
+ * pub->refunded ( $global [boolean] )
+ *
+ * pub->fees ( $global [boolean] )
+ *
  * pub->accessable ( $user [string] )
  *
  * pub->values () [$pub]
@@ -434,6 +440,119 @@ class Pub {
     $result = array_map(function($v) { return $v[0]; }, $accessable->fetchAll( PDO::FETCH_NUM ));
 
     return $result;
+  }
+
+  /**
+   * Function to get earnings of pub
+   *
+   * $global: Boolean value if global products should be included or not
+   */
+  public function earned( $global = true ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Request amount
+    if( $global ) {
+      // Including global products
+      $earned = $conn->prepare("SELECT sum(price * quantity) FROM " . PUB_TRANSACTIONS ." WHERE pub_id=:pub_id AND
+                                payment_state <> 2");
+    }else {
+      // Excluding global products
+      $earned = $conn->prepare("SELECT sum(price * quantity) FROM " . PUB_TRANSACTIONS ." WHERE pub_id=:pub_id AND
+                                payment_state <> 2 AND
+                                product_id NOT IN (SELECT id FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL)");
+    }
+
+    // Request
+    $earned->execute(
+      array(
+        ':pub_id' => $this->pub,
+      ),
+    );
+
+    // Return amount
+    return round( $earned->fetch( PDO::FETCH_NUM )[0] );
+  }
+
+  /**
+  * Function to get refund of pub
+  *
+  * $global: Boolean value if global products should be included or not
+  */
+  public function refunded( $global = true ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Request amount
+    if( $global ) {
+      // Including global products
+      $refunded = $conn->prepare("SELECT sum(refund) FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub_id AND
+                                  payment_state <> 2");
+    }else {
+      // Excluding global products
+      $refunded = $conn->prepare("SELECT sum(refund) FROM " . PUB_TRANSACTIONS . " WHERE pub_id=:pub_id AND
+                                payment_state <> 2 AND
+                                product_id NOT IN (SELECT id FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL)");
+    }
+
+    // Request
+    $refunded->execute(
+      array(
+        ':pub_id' => $this->pub,
+      ),
+    );
+
+    // Return amount
+    return round( $refunded->fetch( PDO::FETCH_NUM )[0] );
+  }
+
+  /**
+   * Function to get fees of pub
+   *
+   * $global: Boolean value if global products should be included or not
+   */
+  public function fees( $global = true ) {
+    //Get database connection
+    $conn = Access::connect();
+
+    // Request amount
+    if( $global ) {
+      // Including global products
+      $fee_values = $conn->prepare("SELECT fee_absolute, fee_percent, sum(price) as total_price FROM  " . PUB_TRANSACTIONS . "  WHERE pub_id=:pub_id AND
+      payment_state <> 2
+      group by paymentID");
+    }else {
+      // Excluding global products
+      $fee_values = $conn->prepare("SELECT fee_absolute, fee_percent, sum(price) as total_price FROM  " . PUB_TRANSACTIONS . "  WHERE pub_id=:pub_id AND
+      payment_state <> 2 AND
+      product_id NOT IN (SELECT id FROM " . PUB_PRODUCTS . " WHERE pub_id IS NULL)
+      group by paymentID");
+    }
+
+    // Request
+    $fee_values->execute(
+      array(
+        ':pub_id' => $this->pub,
+      ),
+    );
+
+    // Generate full amount
+    $fees = array();
+
+    // List through elements
+    foreach( $fee_values->fetchAll( PDO::FETCH_ASSOC ) as $value) {
+      array_push(
+        $fees, // Array to push
+        ((($value["fee_percent"] / 10000) * $value["total_price"]) + $value["fee_absolute"]) // new value
+      );
+    }
+
+    return round( array_sum( $fees ) );
+
+    // Return amount
+    // return round( $fee_values->fetch( PDO::FETCH_NUM )[0] );
+
+    // SELECT fee_absolute, fee_percent, sum(price) as total_price FROM `tktdata_pub_transactions` group by paymentID
   }
 
   /**

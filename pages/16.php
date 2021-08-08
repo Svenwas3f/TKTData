@@ -29,13 +29,13 @@ $read_access = ($read_page === true && $read_pub === true) ?  true : false;
 // Message if user has no access to this pub
 if( $write_access === false && $read_access === false ) {
   Action::fs_info(
-    Language::string( 60,
+    Language::string( 70,
       array(
         '%id%' => $pub->pub,
         '%name%' => $pub->values()['name'],
       ),
     ),
-    Language::string(61),
+    Language::string(71),
     $url_page);
   return;
 }
@@ -282,14 +282,14 @@ echo '<div class="pub">';
 
           // Remove
           if( $transaction->remove() ) {
-            Action::success( Language::string( 46,
+            Action::success( Language::string( 53,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],
               ), )
             );
           }else {
-            Action::fail( Language::string( 47,
+            Action::fail( Language::string( 54,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],
@@ -297,7 +297,7 @@ echo '<div class="pub">';
             );
           }
         }else {
-          Action::fail( Language::string(48) );
+          Action::fail( Language::string(55) );
         }
       }
 
@@ -305,7 +305,7 @@ echo '<div class="pub">';
       $searchbar = new HTML('searchbar', array(
         'action' => $url,
         'method' => 'get',
-        'placeholder' => Language::string(30),
+        'placeholder' => Language::string(37),
         's' => ($_GET['s'] ?? ''),
       ));
 
@@ -317,15 +317,15 @@ echo '<div class="pub">';
       $availability = array(
         0 => array(
           "bcolor" => "var(--transaction-payment-and-pickUp)",
-          "title" => Language::string(31),
+          "title" => Language::string(38),
         ),
         1 => array(
           "bcolor" => "var(--transaction-payment-expected)",
-          "title" => Language::string(32),
+          "title" => Language::string(39),
         ),
         2 => array(
           "bcolor" => "var(--transaction-no-pickUp)",
-          "title" => Language::string(33),
+          "title" => Language::string(40),
         ),
       );
 
@@ -349,16 +349,16 @@ echo '<div class="pub">';
           'headline' => array(
             'items' => array(
               array(
-                'context' => Language::string(34),
+                'context' => Language::string(41),
               ),
               array(
-                'context' => Language::string(35),
+                'context' => Language::string(42),
               ),
               array(
-                'context' => Language::string(36),
+                'context' => Language::string(43),
               ),
               array(
-                'context' => Language::string(37),
+                'context' => Language::string(44),
               ),
             ),
           ),
@@ -380,25 +380,26 @@ echo '<div class="pub">';
         // Generate class
         if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
           $class = "transaction payment-and-pickUp";
-          $title = Language::string(38);
+          $title = Language::string(45);
         }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
           $class = "transaction payment-expected";
-          $title = Language::string(39);
+          $title = Language::string(46);
         }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
           $class = "transaction no-pickUp";
-          $title = Language::string(40);
+          $title = Language::string(47);
         }else {
           $class = "transaction";
-          $title = Language::string(41);
+          $title = Language::string(48);
         }
 
         // Create actions
         $action = '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view=' . urlencode( $transaction->paymentID ) . '"
-                    title="' . Language::string(42) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
-        if(  $transaction->globalValues()["payment_state"] == 1 ||
-              array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
+                    title="' . Language::string(49) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
+        if( $transaction->globalValues()["payment_state"] == 1 || // manually payment
+            $transaction->globalValues()["payment_state"] == 2 || // payment expected
+            array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
           $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove=' . urlencode( $transaction->paymentID ) . '"
-                        title="' . Language::string(43) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
+                        title="' . Language::string(50) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
         }
 
         $table->addElement(
@@ -431,13 +432,13 @@ echo '<div class="pub">';
                 (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
                 ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                 '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
-                style="float: left;">' . Language::string(44) . '</a>';
+                style="float: left;">' . Language::string(51) . '</a>';
       $next = '<a href="' .
                 $url_page .
                 (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
                 ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                 '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
-                style="float: right;">' . Language::string(45) . '</a>';
+                style="float: right;">' . Language::string(52) . '</a>';
 
       if( (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $table->addElement(
@@ -465,16 +466,53 @@ echo '<div class="pub">';
         );
       }
 
+      // enerate box
+      $global = true;
+
+      echo '<div class="earning-box">';
+        // Toggle
+        echo '<div class="toggle">';
+          echo '<div class="container">';
+            echo '<span class="text current" data-current="0" onclick="toggleEarningBox(0, ' . $pub->pub . ')" title="' . Language::string(30) . '">' . Language::string(31) . '</span>';
+            echo '<span class="text" data-current="1" onclick="toggleEarningBox(1, ' . $pub->pub . ')" title="' . Language::string(32) . '">' . Language::string(33) . '</span>';
+          echo '</div>';
+        echo '</div>';
+
+        // Main text
+        echo '<div class="earned">';
+          echo '<span class="text" title="' . Language::string(34) . '">' . number_format( ($pub->earned( $global ) - $pub->fees( $global ) - $pub->refunded( $global )) / 100 , 2) . " " . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) .'</span>';
+        echo '</div>';
+
+        // Subinfo
+        echo '<div class="info">';
+          echo '<div class="fees">';
+            echo '<span class="name">' . Language::string(35) . '</span>';
+            echo '<span class="value">' . number_format( ($pub->fees( $global ) / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+          echo '</div>';
+          echo '<span class="divider">|</span>';
+          echo '<div class="refund">';
+            echo '<span class="name">' . Language::string(36) . '</span>';
+            echo '<span class="value">' . number_format( ($pub->refunded( $global ) / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+          echo '</div>';
+        echo '</div>';
+      echo '</div>';
+
       // Show HTML
       $searchbar->prompt();
       $legend->prompt();
       $table->prompt();
 
-      // Generate JS
-      echo  '<script>' .
-              'setInterval(function() {' .
-                'loadTransactions(' . $steps . ', ' . $offset .', ' . ($_GET["s"] ?? 'null') . ', ' . $transaction->pub . ');' .
-              '}, 2500);' .
-            '</script>';
+
+      echo '<script>';
+        echo 'setInterval( function() {';
+          echo 'var current = document.getElementsByClassName("earning-box")[0].getElementsByClassName("toggle")[0].getElementsByClassName("current")[0];';
+          echo 'if( current.getAttribute("data-current") == 0 ) {';
+            echo 'earningBoxValues( ' . $pub->pub . ', true);';
+          echo '}else if ( current.getAttribute("data-current") == 1 ) {';
+            echo 'earningBoxValues( ' . $pub->pub . ', false);';
+          echo  '}';
+          echo 'loadTransactions(' . $steps . ', ' . $offset .', ' . ($_GET["s"] ?? 'null') . ', ' . $transaction->pub . ');';
+        echo '}, 2000);';
+      echo '</script>';
     break;
   }

@@ -601,40 +601,47 @@ $string[16][28] = 'Name unbekannt'; // Name of product not found
 $string[16][29] = 'Total:'; // Total info
 
 // List
-$string[16][30] = 'Email, Zahlungs-ID, Zahlungszeit'; // Search form placeholder
-$string[16][31] = 'Ohne Zahlung abgeholt'; // Pickup states
-$string[16][32] = 'Zahlung erwartet'; // Pickup states
-$string[16][33] = 'Abholung erwartet'; // Pickup states
-$string[16][34] = 'Email'; // Headline
-$string[16][35] = 'Preis'; // Headline
-$string[16][36] = 'Datum'; // Headline
-$string[16][37] = 'Aktion'; // Headline
-$string[16][38] = 'Zahlung erwartet. Produkte bereits abgeholt.'; // Pickup states title
-$string[16][39] = 'Zahlung erwartet.'; // Pickup states title
-$string[16][40] = 'Abholung erwartet'; // Pickup states title
-$string[16][41] = 'Abgeholt'; // Pickup states title
-$string[16][42] = 'Transaktion anzeigen'; // Link title
-$string[16][43] = 'Transaktion entfernen'; // Link title
-$string[16][44] = 'Zurück'; // Footer nav
-$string[16][45] = 'Weiter'; // Footer nav
+$string[16][30] = 'Alle Produkt für die Auswertung verwenden'; // Toggle title
+$string[16][31] = 'Alle'; // Toggle text
+$string[16][32] = 'Nur eigene Produkt für die Auswertung verwenden'; // Toggle title
+$string[16][33] = 'Eigene'; // Toggle text
+$string[16][34] = 'Einnahmen abzüglich Gebühren und Rückerstattungen'; // Mainbox title
+$string[16][35] = 'Gebühren:';
+$string[16][36] = 'Zurückerstattet:';
+$string[16][37] = 'Email, Zahlungs-ID, Zahlungszeit'; // Search form placeholder
+$string[16][38] = 'Ohne Zahlung abgeholt'; // Pickup states
+$string[16][39] = 'Zahlung erwartet'; // Pickup states
+$string[16][40] = 'Abholung erwartet'; // Pickup states
+$string[16][41] = 'Email'; // Headline
+$string[16][42] = 'Preis'; // Headline
+$string[16][43] = 'Datum'; // Headline
+$string[16][44] = 'Aktion'; // Headline
+$string[16][45] = 'Zahlung erwartet. Produkte bereits abgeholt.'; // Pickup states title
+$string[16][46] = 'Zahlung erwartet.'; // Pickup states title
+$string[16][47] = 'Abholung erwartet'; // Pickup states title
+$string[16][48] = 'Abgeholt'; // Pickup states title
+$string[16][49] = 'Transaktion anzeigen'; // Link title
+$string[16][50] = 'Transaktion entfernen'; // Link title
+$string[16][51] = 'Zurück'; // Footer nav
+$string[16][52] = 'Weiter'; // Footer nav
 
-$string[16][46] = 'Die Transaktion <strong>%email% (#%id%)</strong> wurde <strong>erfolgreich</strong> gelöscht.'; // Remove message success
-$string[16][47] = 'Die Transaktion <strong>%email% (#%id%)</strong> konnte <strong>nicht</strong> gelöscht werden.'; // Remove message fail
-$string[16][48] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
+$string[16][53] = 'Die Transaktion <strong>%email% (#%id%)</strong> wurde <strong>erfolgreich</strong> gelöscht.'; // Remove message success
+$string[16][54] = 'Die Transaktion <strong>%email% (#%id%)</strong> konnte <strong>nicht</strong> gelöscht werden.'; // Remove message fail
+$string[16][55] = 'Sie haben <strong>keine Berechtigung</strong> um diese Aktion durchzuführen'; // No access
 
 // Remove
-$string[16][50] = 'Möchtest du die Transaktion <strong>%email% (#%id%)</strong>  wirklich löschen?';
+$string[16][60] = 'Möchtest du die Transaktion <strong>%email% (#%id%)</strong>  wirklich löschen?';
 
 // No access to pub
-$string[16][60] = 'Du hast keinen Zugriff auf die Wirtschaft (#%id%) <strong>%name%</strong>'; // Fullscreen message
-$string[16][61] = 'Zurück'; // Fullscreen return button
+$string[16][70] = 'Du hast keinen Zugriff auf die Wirtschaft (#%id%) <strong>%name%</strong>'; // Fullscreen message
+$string[16][71] = 'Zurück'; // Fullscreen return button
 
 // Ajax messages
-$string[16][70] = 'Rückerstattung fehlgeschlagen.';
-$string[16][71] = 'Rückerstattung fehlgeschlagen. %refund%';
-$string[16][72] = 'Dieser Benutzer hat keine Berechtigung zu dieser Aktion';
-$string[16][73] = 'Erfolgreich -%refund% %currency% erstattet.';
-$string[16][74] = 'Zahlungseingang konnte nicht bestätigt werden';
+$string[16][80] = 'Rückerstattung fehlgeschlagen.';
+$string[16][81] = 'Rückerstattung fehlgeschlagen. %refund%';
+$string[16][82] = 'Dieser Benutzer hat keine Berechtigung zu dieser Aktion';
+$string[16][83] = 'Erfolgreich -%refund% %currency% erstattet.';
+$string[16][84] = 'Zahlungseingang konnte nicht bestätigt werden';
 
 /**
  * Page 17

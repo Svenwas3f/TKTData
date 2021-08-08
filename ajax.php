@@ -428,14 +428,14 @@ switch($_POST["p"]) {
           if( $refund === false) {
             echo json_encode(array(
               "error" => array(
-                "id" => 70,
+                "id" => 80,
                 "type" => "error",
               ),
             ));
           }elseif( is_string($refund) ) {
             echo json_encode(array(
               "error" => array(
-                "id" => 71,
+                "id" => 81,
                 "type" => "error",
                 "replacements" => array(
                   "%refund%" => $refund,
@@ -452,7 +452,7 @@ switch($_POST["p"]) {
               "formated_new_amount" => number_format(($transaction->totalPrice() - $transaction->globalValues()["refund"] ?? 0) / 100,2),
               "currency" => $transaction->globalValues()["currency"] ?? DEFAULT_CURRENCY,
               "success" => array(
-                "id" => 73,
+                "id" => 83,
                 "type" => "success",
                 "replacements" => array(
                   "%refund%" => number_format(($transaction->globalValues()["refund"] / 100), 2),
@@ -464,7 +464,7 @@ switch($_POST["p"]) {
         }else {
           echo json_encode(array(
             "error" => array(
-              "id" => 72,
+              "id" => 82,
               "type" => "error",
             ),
           ));
@@ -539,6 +539,10 @@ switch($_POST["p"]) {
         }
       break;
       case "updateRows":
+        // IMPORTANT NOTICE:
+        // No payment check is made and no trashcan will be check for prepaid and invoice transactions
+        // because the request time would be to height and the system will crash shortly
+
         // Set variables
         $steps = json_decode( $_POST["values"], true)["steps"];
         $offset = json_decode( $_POST["values"], true)["offset"];
@@ -557,19 +561,19 @@ switch($_POST["p"]) {
           // Fill array
           if( $transactions->globalValues()["payment_state"]  == 2 && $transactions->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
             $transactionStates[$transactions->paymentID]["class"] = "transaction payment-and-pickUp";
-            $transactionStates[$transactions->paymentID]["title"] = Language::string(38, null, 16);
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(45, null, 16);
             $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
           }elseif ( $transactions->globalValues()["payment_state"]  == 2 ) { // Payment expected
             $transactionStates[$transactions->paymentID]["class"] = "transaction payment-expected";
-            $transactionStates[$transactions->paymentID]["title"] = Language::string(39, null, 16);
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(46, null, 16);
             $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
           }elseif( $transactions->globalValues()["pick_up"] == 0 ) { // not picked up
             $transactionStates[$transactions->paymentID]["class"] = "transaction no-pickUp";
-            $transactionStates[$transactions->paymentID]["title"] = Language::string(40, null, 16);
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(47, null, 16);
             $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
           }else {
             $transactionStates[$transactions->paymentID]["class"] = "transaction";
-            $transactionStates[$transactions->paymentID]["title"] = Language::string(41, null, 16);
+            $transactionStates[$transactions->paymentID]["title"] = Language::string(48, null, 16);
             $transactionStates[$transactions->paymentID]["email"] = $transactions->globalValues()["email"];
           }
 
@@ -578,13 +582,16 @@ switch($_POST["p"]) {
           $table = new HTML('table');
 
           // Define action
-          $action = '<a href="' . $url_page . '&pub=' . urlencode( $transactions->pub ) . '&view=' . urlencode( $transactions->paymentID ) . '"
-                      title="' . Language::string(42) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
-          if(  $transactions->globalValues()["payment_state"] == 1 ||
-                array_search( ($transactions->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
-            $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $transactions->pub ) . '&remove=' . urlencode( $transactions->paymentID ) . '"
-                          title="' . Language::string(43) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
+          $action = '<a href="' . $url . '?id=5&sub=16&pub=' . urlencode( $transactions->pub ) . '&view=' . urlencode( $transactions->paymentID ) . '"
+                      title="' . Language::string(49) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
+          if( $transactions->globalValues()["payment_state"] == 1 || // manually payment
+              $transactions->globalValues()["payment_state"] == 2 ) { // payment expected
+            $action .=  '<a href="' . $url . '?id=5&sub=16&pub=' . urlencode( $transactions->pub ) . '&remove=' . urlencode( $transactions->paymentID ) . '"
+                          title="' . Language::string(50) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
           }
+
+          // Add action
+          $transactionStates[$transactions->paymentID]["action"] = $action;
 
           // Generate row
           $table->addElement(
@@ -640,16 +647,16 @@ switch($_POST["p"]) {
             'headline' => array(
               'items' => array(
                 array(
-                  'context' => Language::string(34, null),
+                  'context' => Language::string(41, null),
                 ),
                 array(
-                  'context' => Language::string(35, null),
+                  'context' => Language::string(42, null),
                 ),
                 array(
-                  'context' => Language::string(36, null),
+                  'context' => Language::string(43, null),
                 ),
                 array(
-                  'context' => Language::string(37, null),
+                  'context' => Language::string(44, null),
                 ),
               ),
             ),
@@ -663,14 +670,14 @@ switch($_POST["p"]) {
                   (! is_null($pub) ? "&pub=" . urlencode($pub) : "") .
                   (! is_null($search_value) ? "&s=" . urlencode($search_value) : "" ) .
                   '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
-                  style="float: left;">' . Language::string(44, null, 16) . '</a>';
+                  style="float: left;">' . Language::string(51, null, 16) . '</a>';
         $next = '<a href="' .
                   $url .
                   '?id=5&sub=16' .
                   (! is_null($pub) ? "&pub=" . urlencode($pub) : "") .
                   (! is_null($search_value) ? "&s=" . urlencode($search_value) : "" ) .
                   '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
-                  style="float: right;">' . Language::string(45, null, 16) . '</a>';
+                  style="float: right;">' . Language::string(52, null, 16) . '</a>';
 
         if( (count($transaction->all( ($offset + $steps), 1, ($search_value ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
           $table->addElement(
@@ -700,6 +707,23 @@ switch($_POST["p"]) {
 
         // Display nav
         $table->prompt();
+      break;
+      case "earningBox":
+        // Start pub
+        $pub = new Pub();
+        $pub->pub = json_decode( $_POST["values"], true)["pub"];
+
+        // Set global
+        $global = json_decode( $_POST["values"], true)["global"];
+
+        // Return values
+        echo json_encode(
+          array(
+            'earned' => number_format( ($pub->earned( $global ) - $pub->fees( $global ) - $pub->refunded( $global )) / 100 , 2) . " " . ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+            'fees' => number_format( ($pub->fees( $global ) / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+            'refund' => number_format( ($pub->refunded( $global ) / 100), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+          ),
+        );
       break;
     }
   break;
