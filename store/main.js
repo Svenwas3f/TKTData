@@ -84,13 +84,16 @@ function selectElement(ele) {
  * Insert display form (Enables coupon frm)
 */
 function showCouponForm(ele, group) {
+  var values = new Object();
+  values["gid"] = group;
+
   ajax(2, function(c) {
     ele.innerHTML = '<label class="txt-input">' +
                       '<input type="text" name="coupon" onchange="html_coupon_info(this.value, ' + group + ')"/>' +
-                      '<span class="placeholder">' + c.responseText + '</span>' + 
+                      '<span class="placeholder">' + c.responseText + '</span>' +
                     '</label>' +
                     '<span class="coupon_response"></span>';
-  }, "get_string");
+  }, "get_string", values);
 }
 
 /**

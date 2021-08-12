@@ -29,6 +29,9 @@ switch($_POST["p"] ?? null) {
         $group = new Group();
         $group->groupID = json_decode($_POST["values"], true)["gid"];
 
+        // Get language
+        $lang_code = $group->values()["payment_store_language"];
+
         //Set coupon id
         $coupon->couponID = $cid;
 
@@ -38,7 +41,7 @@ switch($_POST["p"] ?? null) {
             "code" => 03,
             "couponName" => $coupon->values()["name"],
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
-            "message" => Language::string( 160, null, "store" ),
+            "message" => Language::string( 160, null, "store", null, $lang_code ),
           ));
           exit;
         }else {
@@ -46,7 +49,7 @@ switch($_POST["p"] ?? null) {
             "response" => false,
             "code" => 04,
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
-            "message" => Language::string( 161, null, "store" ),
+            "message" => Language::string( 161, null, "store", null, $lang_code ),
           ));
           exit;
         }
@@ -57,6 +60,9 @@ switch($_POST["p"] ?? null) {
         $cid = $coupon->get_couponID(json_decode($_POST["values"], true)["name"], json_decode($_POST["values"], true)["gid"]);
         $group = new Group();
         $group->groupID = json_decode($_POST["values"], true)["gid"];
+
+        // Get language
+        $lang_code = $group->values()["payment_store_language"];
 
         //Set coupon id
         $coupon->couponID = $cid;
@@ -69,7 +75,7 @@ switch($_POST["p"] ?? null) {
             "basePrice" => $group->values()["price"] + ($group->values()["price"] * $group->values()["vat"]/10000),
             "discountPrice" => $coupon->new_price(),
             "currency" => $group->values()["currency"],
-            "message" => Language::string( 162, null, "store" ),
+            "message" => Language::string( 162, null, "store", null, $lang_code ),
           ));
           exit;
         }else {
@@ -77,13 +83,19 @@ switch($_POST["p"] ?? null) {
             "response" => false,
             "code" => 04,
             "basePrice" => $group->values()["price"],
-            "message" => Language::string( 163, null, "store" ),
+            "message" => Language::string( 163, null, "store", null, $lang_code ),
           ));
           exit;
         }
       break;
       case "get_string":
-        echo Language::string( 169, null, "store" );
+        // Get language
+        $group = new Group;
+        $group->groupID = json_decode( $_POST["values"], true)["gid"];
+        $lang_code = $group->values()["payment_store_language"];
+
+        // Retrun string
+        echo Language::string( 169, null, "store", null, $lang_code );
       break;
     }
   break;

@@ -19,6 +19,9 @@ if( count($ticket->values()) <= 0 ) {
 $group = new Group();
 $group->groupID = $ticket->values()["groupID"];
 
+// Get language
+$lang_code = $group->values()["payment_store_language"];
+
 //Check if price exists
 if( $ticket->values()["amount"] <= 0) {
   header("Location: " . $url . "store/ticket/response/?ticketToken=" . urlencode($ticket->ticketToken) );
@@ -66,7 +69,7 @@ if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->va
     <?php
     //Payment modal
     if($response["gateway_creation_state"]) {
-      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">' . Language::string(30, null, "store", null, $group->groupID) . '</a>';
+      echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $group->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response["hash"] . '">' . Language::string(30, null, "store", null, $lang_code) . '</a>';
       echo '<script type="text/javascript">';
         echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
         echo 'jQuery(\'.payrexx-modal-window\').click();';
@@ -75,7 +78,7 @@ if( isset( $group->values()["payment_background_fileID"] ) &&! empty( $group->va
       Action::fail(
         Language::string( 31, array(
           '%message%' => $response["message"],
-        ), "store", null, $group->groupID)
+        ), "store", null, $lang_code)
       );
     }
      ?>

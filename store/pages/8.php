@@ -12,6 +12,9 @@ $pub->pub = $_GET["id"];
 $product = new Product();
 $product->pub = $pub->pub;
 
+// Get current language
+$lang_code = $pub->values()["payment_store_language"];
+
 // Check if pub exits
 if(empty($pub->values())) {
   header("Location: " . $url . "store/" . $type);
@@ -54,10 +57,9 @@ if(! empty($_POST)) {
   if($transaction->add( $transaction_values, $_GET["id"] )) {
     header("Location: " . $url . "store/" . $type . "/pay/" . $transaction->paymentID);
   }else {
-    Action::fail( Language::string( 120, null, "store", null, null, $pub->pub ) );
+    Action::fail( Language::string( 120, null, "store", null, $lang_code ) );
   }
 }
-
 ?>
 <!-- Go back to last step -->
 <div class="return-header">
@@ -69,12 +71,12 @@ if(! empty($_POST)) {
     <!-- Payment infos -->
     <div class="submenu-total">
       <div class="calculated">
-        <span class="total"><?php echo Language::string( 121, null, "store", null, null, $pub->pub ); ?></span>
+        <span class="total"><?php echo Language::string( 121, null, "store", null, $lang_code ); ?></span>
         <span class="price">0.00</span>
         <span class="currency"><?php echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY) ?></span>
       </div>
 
-      <button class="pay" onclick="console.log( validateForm(document.getElementsByTagName('form')[0]) )"><?php echo Language::string( 122, null, "store", null, null, $pub->pub ); ?></button>
+      <button class="pay" onclick="validateForm(document.getElementsByTagName('form')[0])"><?php echo Language::string( 122, null, "store", null, $lang_code ); ?></button>
     </div>
 
     <!-- Details -->
@@ -94,7 +96,8 @@ if(! empty($_POST)) {
           echo $logo->fileDetails()["alt"];
         }else {
           // Default alt
-          echo Language::string( 123, null, "store", null, null, $pub->pub );
+          // echo Language::string( 123, null, "store", null, null, $pub->pub );
+          echo Language::string( 123, null, "store", null, $lang_code );
         }
         ?>" />
       </div>
@@ -144,7 +147,7 @@ if(! empty($_POST)) {
           // Show section
           echo'<div class="section-container">';
             echo '<div class="header row">';
-              echo '<span class="product">' . ($section["section"] ?? "Produkte") . '</span>';
+              echo '<span class="product">' . ($section["section"] ?? Language::string( 124, null, "store", null, $lang_code) ) . '</span>';
               echo '<span class="accordion"><span onclick="toggle_section(this)">-</span></span>';
             echo '</div>';
 
@@ -161,7 +164,7 @@ if(! empty($_POST)) {
         // Show section for tip amount
         echo'<div class="section-container">';
           echo '<div class="header row tip">';
-            echo '<span class="product">' . Language::string( 124, null, "store", null, null, $pub->pub ) . '</span>';
+            echo '<span class="product">' . Language::string( 125, null, "store", null, $lang_code) . '</span>';
             echo '<div class="placeholder-js">';
               echo '<span class="input">';
                 echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onkeyup="change_total_price( this )" />';

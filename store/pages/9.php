@@ -24,6 +24,9 @@ if(! empty($transaction->globalValues()["payrexx_transaction"]) ) {
 $pub = new Pub();
 $pub->pub = $transaction->globalValues()["pub_id"];
 
+// Get current language
+$lang_code = $pub->values()["payment_store_language"];
+
 // Start product
 $product = new Product();
 $product->pub = $pub->pub;
@@ -51,7 +54,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
 
   //Payment modal
   if( is_object( $response ) ) {
-    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">' . Language::string( 130, null, "store", null, null, $pub->pub ) . '</a>';
+    echo '<a class="payrexx-modal-window" href="#" data-href="https://' . $pub->values()["payment_payrexx_instance"] . '.payrexx.com/?payment=' . $response->getHash() . '">' . Language::string( 130, null, "store", null, $lang_code ) . '</a>';
     echo '<script type="text/javascript">';
     echo 'jQuery(\'.payrexx-modal-window\').payrexxModal();';
     echo 'jQuery(\'.payrexx-modal-window\').click();';
@@ -60,7 +63,7 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
     Action::fail(
       Language::string( 131, array(
         '%message%' => $response
-      ), "store", null, null, $pub->pub
+      ), "store", null, $lang_code
     ));
   }
   ?>

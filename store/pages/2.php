@@ -4,6 +4,9 @@
 $group = new Group();
 $group->groupID = $_GET["id"];
 
+// Get language
+$lang_code = $group->values()["payment_store_language"];
+
 if($group->values() === false) {
   header("Location: " . $url . "/store/" . $type);
 }elseif($group->availableTickets() <= 0) {
@@ -86,19 +89,19 @@ if(!empty($_POST)) {
       <?php
       if(isset($add)) {
         if($add == 6) {
-          Action::fail( Language::string( 10, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 10, null, "store", null, $lang_code ) );
         }elseif($add == 5) {
-          Action::fail( Language::string( 11, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 11, null, "store", null, $lang_code ) );
         }elseif($add == 4) {
-          Action::fail( Language::string( 12, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 12, null, "store", null, $lang_code ) );
         }elseif($add == 3) {
-          Action::fail( Language::string( 13, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 13, null, "store", null, $lang_code ) );
         }elseif($add == 2) {
-          Action::fail( Language::string( 14, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 14, null, "store", null, $lang_code ) );
         }elseif($add == 1) {
-          Action::success( Language::string( 15, null, "store", null, $group->groupID ) );
+          Action::success( Language::string( 15, null, "store", null, $lang_code ) );
         }else {
-          Action::fail( Language::string( 16, null, "store", null, $group->groupID ) );
+          Action::fail( Language::string( 16, null, "store", null, $lang_code ) );
         }
       }
        ?>
@@ -144,7 +147,7 @@ if(!empty($_POST)) {
               //First
               echo '<label class="txt-input">';
                 echo '<input type="text" name="email" ' . (isset($user_informations) &&  isset($user_informations[$customADFS["email"]]) ? ('value="' . $user_informations[$customADFS["email"]] . '" disabled') : ('required')) . '/>';
-                echo '<span class="placeholder">' . Language::string( 17, null, "store", null, $group->groupID ) . '</span>';
+                echo '<span class="placeholder">' . Language::string( 17, null, "store", null, $lang_code ) . '</span>';
               echo '</label>';
 
               if(! empty($customUserInputs)) {
@@ -178,7 +181,7 @@ if(!empty($_POST)) {
                       $options = explode(",", $customInput["value"]);
                       echo  '<div class="select" onclick="toggleOptions(this)">';
                         echo  '<input type="text" class="selectValue" name="' . $customInput["id"] . '"' . $required . ' ' . $disabled . '>';
-                        echo  '<span class="headline">' . Language::string( 18, null, "store", null, $group->groupID ) . '</span>';
+                        echo  '<span class="headline">' . Language::string( 18, null, "store", null, $lang_code ) . '</span>';
 
                         echo  '<div class="options">';
                           foreach($options as $option) {
@@ -199,7 +202,7 @@ if(!empty($_POST)) {
                           if($option != "") {
                             echo  '<label class="radio">';
                               echo  '<input type="radio" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                              echo  '<div title="' . Language::string( 19, null, "store", null, $group->groupID ) . '"></div>';
+                              echo  '<div title="' . Language::string( 19, null, "store", null, $lang_code ) . '"></div>';
                               echo  $option;
                             echo  '</label>';
                           }
@@ -210,7 +213,7 @@ if(!empty($_POST)) {
                     case "checkbox":
                       echo  '<label class="checkbox">';
                         echo  '<input type="checkbox" name="' . $customInput["id"] . '" ' . ((!empty($adfs_value) && $adfs_value == $option) ? "checked" : "") . ' ' . $required . ' ' . $disabled . '/>';
-                        echo  '<div title="' . Language::string( 20, null, "store", null, $group->groupID ) . '"></div>';
+                        echo  '<div title="' . Language::string( 20, null, "store", null, $lang_code ) . '"></div>';
                         echo  $customInput["name"];
                       echo  '</label>';
                     break;
@@ -235,12 +238,12 @@ if(!empty($_POST)) {
 
             <!-- Coupon -->
             <div class="coupon">
-              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);"><?php echo Language::string( 21, null, "store", null, $group->groupID ); ?></span>
+              <span class="toggle" onclick="showCouponForm(document.getElementsByClassName('coupon')[0], <?php echo $group->groupID; ?>);"><?php echo Language::string( 21, null, "store", null, $lang_code ); ?></span>
             </div>
 
             <!-- Price -->
             <div class="price_tag">
-              <span class="name"><?php echo Language::string( 22, null, "store", null, $group->groupID ); ?></span>
+              <span class="name"><?php echo Language::string( 22, null, "store", null, $lang_code ); ?></span>
               <span class="price"><?php echo number_format(($group->values()["price"] + ($group->values()["vat"] / 10000) * $group->values()["price"]) / 100, 2); ?></span>
               <span class="discount_price"></span>
               <span class="unit"><?php echo $group->values()["currency"]; ?></span>
@@ -250,7 +253,7 @@ if(!empty($_POST)) {
             <button>
               <div class="container">
                 <img src="<?php echo $url; ?>medias/store/icons/pay.svg" />
-                <span><?php echo Language::string( 23, null, "store", null, $group->groupID ); ?></span>
+                <span><?php echo Language::string( 23, null, "store", null, $lang_code ); ?></span>
               </div>
             </button>
 
