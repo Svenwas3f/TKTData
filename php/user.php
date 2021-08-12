@@ -54,7 +54,7 @@
  *
  * User->remove () [$user]
  *
- * User->add ($email [email of user], $userID [identification number], $name [display name of user], $rights [array for userrights], $sendMail [boolean, send mail to user or not] ) [$user]
+ * User->add ($email [email of user], $userID [identification number], $name [display name of user], $rights [array for userrights], $sendMail [boolean, send mail to user or not] )
  *
  ******** Backup system ********
  *

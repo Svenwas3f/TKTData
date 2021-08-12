@@ -17,6 +17,19 @@ if(!empty($_POST)) {
   //Check if first login
   if($table->rowCount() === 0) {
     if(strtolower($_POST["id"]) === "admin" && strtolower($_POST["password"]) === "admin") {
+      // Get all menupoints
+      $menu = $conn->prepare("SELECT id FROM " . MENU . " WHERE submenu <> 0");
+      $menu->execute();
+
+      foreach( $menu->fetchAll( PDO::FETCH_NUM ) as $menuID) {
+        $rights[$menuID[0]] = array( "w", "r" );
+      }
+
+      // Create new admin superuser
+      $user = new User();
+      $user->add( EMAIL, 'Admin', 'Admin', $rights, false);
+      $user->updatePassword('admin', 'admin'); // Set old password
+
       //Login successful
       $_SESSION["login"] = true;
       $_SESSION["user"] = "Admin";

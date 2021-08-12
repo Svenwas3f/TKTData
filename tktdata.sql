@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Aug 2021 um 18:10
+-- Erstellungszeit: 12. Aug 2021 um 21:51
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -73,6 +73,32 @@ CREATE TABLE `tktdata_menu` (
   `layout` int(11) DEFAULT NULL,
   `plugin` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `tktdata_menu`
+--
+
+INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`) VALUES
+(1, 'Ticket', 0, NULL, 1, NULL),
+(2, 'Coupons', 0, NULL, 2, NULL),
+(3, 'Scanner', 0, NULL, 3, NULL),
+(4, 'Live', 0, NULL, 4, NULL),
+(5, 'Wirtschaften', 0, NULL, 5, NULL),
+(6, 'Benutzer', 0, NULL, 6, NULL),
+(7, 'Alle Tickets', 1, 'ticket.svg', 1, NULL),
+(8, 'Gruppen', 1, 'group.svg', 2, NULL),
+(9, 'Alle Coupons', 2, 'coupon.svg', 1, NULL),
+(10, 'Informationen', 3, 'info.svg', 1, NULL),
+(11, 'QR-Scanner', 3, 'qr.svg', 2, NULL),
+(12, 'Code-Scanner', 3, 'code.svg', 3, NULL),
+(13, 'Live', 4, 'livedata_live.svg', 1, NULL),
+(14, 'Archiv', 4, 'livedata_archiv.svg', 2, NULL),
+(15, 'Manuell', 4, 'livedata_manually.svg', 3, NULL),
+(16, 'Übersicht', 5, 'pub.svg', 1, NULL),
+(17, 'Produkte', 5, 'pub_products.svg', 2, NULL),
+(18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
+(19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
+(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL),
 
 -- --------------------------------------------------------
 
@@ -399,7 +425,7 @@ ALTER TABLE `tktdata_livedata_live`
 -- AUTO_INCREMENT für Tabelle `tktdata_menu`
 --
 ALTER TABLE `tktdata_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT für Tabelle `tktdata_pub`
