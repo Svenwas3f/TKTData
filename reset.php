@@ -22,39 +22,36 @@ if(! empty($_POST)) {
   //Check user
   if($resetUser === false) {
     //User does not exist
-    Action::fail("Dieser Benutzer existert nicht.");
+    Action::fail( Language::string( 11, null, "auth" ) );
   }else{
     //Reset password
     $newPassword = User::resetPassword( $resetUser["id"]);
 
     //Check if new password is set correctly
     if(! $newPassword) {
-      Action::fail("Das Passwort konnte nicht zurückgesetzt werden.");
+      Action::fail( Language::string( 12, null, "auth" ) );
     }
 
-    //Send mail
-    $msg = 'Guten Tag ' . $resetUser["name"] . '<br />
-    <br />
-    Ihr Passwort wurde zurückgesetzt. Sofern Sie diese Aktion nicht selbst durchgeführt haben, melden Sie sich bei ihrem Administrator. <br />
-    Melden Sie sich unter <a href="' . $url . '/auth.php" title="Zum login">' . $url . '/auth.php</a> mit folgenden Daten an:<br />
-    Benutzername: <strong><b>' . $resetUser["id"] . '</b></strong><br />
-    Passwort: <strong><b>' . $newPassword . '</b></strong><br />
-    <br />
-    Vielen Dank.';
+    // Mail message
+    $msg = Language::string( 0, array(
+      "%user%" => $resetUser["name"],
+      "%url%" => $url,
+      "%userid%" => $resetUser["id"],
+      "%new_password%" => $newPassword,
+    ), "email" );
 
     $mail = new TKTDataMailer();
     $mail->CharSet = "UTF-8";
-    $mail->setFrom(EMAIL, "TKTDATA - RESET PASSWORD");
+    $mail->setFrom(EMAIL,  Language::string( 1, null, "email" ));
     $mail->addAddress($resetUser["email"]);
-    $mail->Subject = "Ihr Passwort wurde zurückgesetzt";
-    $mail->msgHTML( $mail->tktdataMail( $msg ) );
+    $mail->Subject = Language::string( 2, null, "email" );
+    $mail->msgHTML( $mail->htmlMail_TktdataMail( $msg ) );
 
     if($mail->send()) {
-      Action::success("Das Passwort konnte erfolgreich zurückgesetzt werden. Sie erhalten ein Mail mit den neuen Zugangsdaten.");
+      Action::success( Language::string( 13, null, "auth" ) );
     }else {
-      Action::fail("Die Mail konnte nicht gesendet werden. Bitte versuchen Sie es erneut");
+      Action::fail( Language::string( 14, null, "auth" ) );
     }
-
   }
 }
 
