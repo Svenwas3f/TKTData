@@ -684,21 +684,19 @@ class User {
 
     //Send welcome mail
     if($sendMail) {
-      $msg = 'Guten Tag ' . $name . '<br />
-      <br />
-      Sie wurden beim System registriert. <br />
-      Melden Sie sich unter <a href="' . $url . '/auth.php" title="Zum login">' . $url . '/auth.php</a> mit folgenden Daten an:<br />
-      Benutzername: <strong><b>' . $this->user . '</b></strong><br />
-      Passwort: <strong><b>' . $password . '</b></strong><br />
-      <br />
-      Vielen Dank.';
+      $msg = Language::string( 3, array(
+        "%user%" => $name,
+        "%url%" => $url,
+        "%userid%" => $this->user,
+        "%password%" => $passowrd,
+      ), "email" );
 
       $mail = new TKTDataMailer();
       $mail->CharSet = "UTF-8";
-      $mail->setFrom(EMAIL, "TKTDATA - WELCOME");
+      $mail->setFrom(EMAIL, Language::string( 4, null, "email" ));
       $mail->addAddress($email);
-      $mail->Subject = "Willkommen bei TKTDATA. Sie wurden zu unserem System hinzugefügt.";
-      $mail->msgHTML( $mail->tktdataMail( $msg ) );
+      $mail->Subject = Language::string( 5, null, "email" );
+      $mail->msgHTML( $mail->htmlMail_TktdataMail( $msg ) );
 
       if(! $mail->send()) {
         return false;

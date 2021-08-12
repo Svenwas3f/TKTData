@@ -685,7 +685,10 @@ function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0)
 }
 
 /**
+ * Change earning box direction
  *
+ * type: What type is the new selection (0 [all], 1 [own])
+ * pub: Pub ID
  */
 function toggleEarningBox( type, pub ) {
   // Ger box values
@@ -711,7 +714,10 @@ function toggleEarningBox( type, pub ) {
 }
 
 /**
+ * Changes values of earning box
  *
+ * pub: Pub ID
+ * global_products: Boolean to check if global products are included
  */
 function earningBoxValues( pub, global_products = true) {
   var values = new Object();
@@ -741,4 +747,106 @@ function earningBoxValues( pub, global_products = true) {
       refund.innerHTML = ajax_response.refund
     }
   }, "earningBox", values);
+}
+
+/**
+ * Changes input value
+ *
+ * Input: HTML Input element
+ * Action: whether to move up or down
+ */
+function changeQuantity( input, action ) {
+  if( action == "add") {
+    var newValue = (parseInt(input.value) + 1);
+  }else {
+    var newValue = (parseInt(input.value) - 1);
+  }
+
+  if(newValue >= 0 && newValue < 1000) {
+    input.value = newValue;
+    input.dispatchEvent( new Event('change') );
+  }
+}
+
+/**
+* Toogles sections
+*
+* click: Element where click is done
+ */
+function toggle_section( click ) {
+  var products = click.parentNode.parentNode.parentNode.getElementsByClassName("productlist")[0];
+
+  console.log(products.scrollHeight + "px");
+
+  if( products.style.maxHeight ) {
+    products.style.maxHeight = null;
+    click.innerHTML = "+";
+  }else {
+    products.style.maxHeight = products.scrollHeight + "px";
+    click.innerHTML = "-";
+  }
+}
+
+/**
+ * Check if form is valid
+ *
+ * form: HTML form
+ */
+function validateForm( form ) {
+  // Get all inputs
+  var inputs = form.getElementsByTagName("input");
+
+  // Check if amount exists
+  for(var i = 0; i < inputs.length; i++) {
+    if( inputs[i].value != 0 && inputs[i].value != undefined && inputs[i].value != null ) {
+      form.submit();
+      return true;
+    }
+  }
+
+  // add border if no value exists red
+  for(var i = 0; i < inputs.length; i++) {
+    inputs[i].parentNode.style.outline = "4px solid #9a2e37";
+  }
+
+  // No value found
+  return false;
+}
+
+/**
+ * Gets price of form
+ *
+ * input: Intput that requests change
+ */
+function change_total_price( input ) {
+  // Links
+  var base_url = location.protocol + '//' + location.host + location.pathname;
+  var ajax_file = base_url + "/ajax.php";
+
+
+  // Get form value
+  var form = input.parentNode.parentNode.parentNode.parentNode.parentNode;
+  var formData = new FormData( form );
+  formData.append("p", 16);
+  formData.append("action", "calculate");
+
+  // Ajax request
+  var req = new XMLHttpRequest();
+  req.open("POST", ajax_file);
+  req.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      // Get pricebar
+      var submenu_total = document.getElementsByClassName("submenu-total")[0];
+      var price = submenu_total.getElementsByClassName("price")[0];
+
+      console.log(this.responseText);
+
+      // get values
+      var ajax_response = JSON.parse(this.responseText);
+
+      // Add new price
+      price.innerHTML = ajax_response.formated;
+    }
+  }
+  req.send(formData);
 }

@@ -135,12 +135,20 @@ class Ticket {
    * $to = reciept Mail
    */
   public function sendTicket( $to ) {
+    // Start group
+    $group = new Group();
+    $group->groupID = $this->cryptToken()["gid"];
+
+    // Prepare mail
     $mail = new TKTdataMailer();
     $mail->CharSet = "UTF-8";
-    $mail->setFrom(EMAIL, "TKTDATA - DEIN TICKET");
+    $mail->setFrom(
+                    ( $group->values()["mail_from"] ?? EMAIL),
+                    ( $group->values()["mail_displayName"] ?? Language::string( 6, null, "email" ))
+                  );
     $mail->addAddress( $to );
-    $mail->Subject = ( "Ihr Ticket, wir können es kaum erwarten, Sie begrüssen zu dürfen." );
-    $mail->msgHTML( $mail->ticketMail( $this->ticketToken) );
+    $mail->Subject = ( ($group->values()["mail_subject"] ??  Language::string( 7, null, "email")) );
+    $mail->msgHTML( $mail->htmlMail_TicketMail( $this->ticketToken) );
     return $mail->send();
   }
 
@@ -153,10 +161,10 @@ class Ticket {
   public function requestPayment( $to ) {
     $mail = new TKTdataMailer();
     $mail->CharSet = "UTF-8";
-    $mail->setFrom(EMAIL, "TKTDATA - ZAHLUNGSANFORDERUNG");
+    $mail->setFrom(EMAIL, Language::string( 9, null, "email" ));
     $mail->addAddress( $to );
-    $mail->Subject = ( "Zahlungsanforderung für Ihr Ticket" );
-    $mail->msgHTML( $mail->paymentRequestMail( $this->ticketToken) );
+    $mail->Subject = Language::string( 10, null, "email" );
+    $mail->msgHTML( $mail->htmlMail_paymentRequestMail( $this->ticketToken) );
     return $mail->send();
   }
 

@@ -11,6 +11,12 @@
  * For further description please go to requested function
  * Variables witch have to be passd through the function are written after the function name inround brackets ().
  *
+ * Language::string ( $id [INT], $replacement [Array], $p [STRING], $user [STRING], $language [ISO639-2] )
+ *
+ * Language::user_preference ( $user [STRING] )
+ *
+ * Language::all () 
+ *
  */
 class Language {
   /**
@@ -20,10 +26,9 @@ class Language {
    * $replacement: multiple array for dynamical content, default null
    * $p: Page where string is requested, default $page
    * $user: User that wants to see translation, default $current_user
-   * $group: Ticket group-ID
-   * $pub: Pub ID
+   * $language: Language to use
    */
-  public static function string( $id, $replacement = null, $p = null, $user = null, $group = null, $pub = null ) {
+  public static function string( $id, $replacement = null, $p = null, $user = null, $language = null ) {
     // Get globals
     global $current_user, $page;
 
@@ -39,8 +44,12 @@ class Language {
 
     // Check if page is plugin or not
     if( isset($plugin) && $plugin->is_pluginpage( $p ) ) {
+      // Generate language code
+      $lang_code = is_null( $language ) ? Language::user_preference( $user ) : $language;
+
       // Generate path to language file
-      $language_file_path = dirname(__FILE__, 2) . "/plugins/" . $plugin->get_page( intval( $p ) )["plugin"] . "/lang/" . Language::user_preference( $user, $group, $pub ) . ".php";
+      // $language_file_path = dirname(__FILE__, 2) . "/plugins/" . $plugin->get_page( intval( $p ) )["plugin"] . "/lang/" . Language::user_preference( $user, $group, $pub ) . ".php";
+      $language_file_path = dirname(__FILE__, 2) . "/plugins/" . $plugin->get_page( intval( $p ) )["plugin"] . "/lang/" . $lang_code . ".php";
 
       // Check if file exist
       if(! file_exists( $language_file_path )) {
@@ -48,8 +57,12 @@ class Language {
         $language_file_path = glob(dirname(__FILE__, 2) . "/plugins/" . $plugin->get_page( intval( $p ) )["plugin"] . "/lang/*.php")[0];
       }
     }else {
+      // Generate language code
+      $lang_code = is_null( $language ) ? Language::user_preference( $user ) : $language;
+
       // Generate path to language file
-      $language_file_path = dirname(__FILE__, 2) . "/lang/" . Language::user_preference( $user, $group, $pub ) . ".php";
+      // $language_file_path = dirname(__FILE__, 2) . "/lang/" . Language::user_preference( $user, $group, $pub ) . ".php";
+      $language_file_path = dirname(__FILE__, 2) . "/lang/" . $lang_code . ".php";
       // Check if file exist
       if(! file_exists( $language_file_path )) {
         // Get first accessable language
@@ -91,10 +104,8 @@ class Language {
    * This functions gets the users language preference
    *
    * $user: User ID or by default (null) $current_user
-   * $group: Ticket group-ID
-   * $pub: Pub ID
    */
-  public static function user_preference( $user = null, $group = null, $pub = null ) {
+  public static function user_preference( $user = null ) {
     // Get globals
     global $current_user;
 
@@ -102,28 +113,8 @@ class Language {
     $language = new User();
     $language->user = $user ?? $current_user;
 
-    // Check if user is store
-    if( $language->user == 'Store' ) {
-      // Get store language selection
-      if( isset($group) ) {
-        // Get group
-        $lang_code = new Group();
-        $lang_code->groupID = $group;
-
-        return $lang_code->values()["payment_store_language"] ?? DEFAULT_LANGUAGE;
-      }elseif( isset($pub) ) {
-        // Get pub
-        $lang_code = new Pub();
-        $lang_code->pub = $pub;
-
-        return $lang_code->values()["payment_store_language"] ?? DEFAULT_LANGUAGE;
-      }else {
-        return DEFAULT_LANGUAGE;
-      }
-    }else {
-      // Get user language selection
-      return $language->values()["language"] ?? DEFAULT_LANGUAGE;
-    }
+    // Get user language selection
+    return $language->values()["language"] ?? DEFAULT_LANGUAGE;
   }
 
   /**

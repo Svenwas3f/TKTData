@@ -725,6 +725,33 @@ switch($_POST["p"]) {
           ),
         );
       break;
+      case "calculate":
+        // Generate price
+        $price = 0;
+
+        // Loop through every product
+        foreach( $_POST as $productID=>$quantity ) {
+          if( is_int($productID) ) {
+            // Get product
+            $product = new Product();
+            $product->product_id = $productID;
+
+            // get price
+            $price = $price + ($product->values()["price"] * $quantity);
+          }
+        }
+
+        // Add tip if available
+        if( isset($_POST["tip"]) &&! empty($_POST["tip"]) && $_POST["tip"] > 0) {
+          $price = $price + ($_POST["tip"] * 100);
+        }
+
+        echo json_encode(array(
+          "plain" => $price,
+          "calculated" => ($price /100),
+          "formated" => number_format(($price / 100), 2),
+        ));
+      break;
     }
   break;
 

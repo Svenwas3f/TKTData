@@ -67,7 +67,133 @@ echo '<div class="pub">';
 
   switch(key($action)) {
     case "add":
+      // Start product
+      $product = new Product();
+      $product->pub = $pub->pub;
 
+      if(! empty( $_POST ) ) {
+        // Generate array
+        $transaction_values = array();
+        foreach($_POST as $productID => $quantity) {
+          if( is_int( $productID ) && $quantity != 0 ) {
+            array_push( $transaction_values, array(
+              "productID" => $productID,
+              "quantity" => $quantity ?? 0,
+            ));
+          }
+        }
+
+        // Add tip if required
+        if( isset($_POST["tip"]) && $_POST["tip"] != 0 ) {
+          array_push( $transaction_values, array(
+            "productID" => 0,
+            "price" => floatval(str_replace(",", ".", $_POST["tip"])) * 100,
+            "quantity" => 1,
+          ));
+        }
+
+        // If success
+        $transaction = new Transaction();
+        if($transaction->add( $transaction_values, $pub->pub )) {
+          // Update E-Mail
+          $transaction->update(
+            array(
+              "email" => $_POST["email"],
+            )
+          );
+
+          // Success message and redirect
+          Action::success( Language::string(90) );
+          echo '<script>window.location.href = "' . $url_page . '&view=' . $transaction->paymentID . '"</script>';
+        }else {
+          Action::fail( Language::string(91) );
+        }
+      }
+
+      // Get sections
+      $sections = $product->sections();
+      array_push($sections, array("section" => null));
+
+      // Submenu totol
+      echo '<div class="submenu-total">';
+        echo '<div class="calculated">';
+          echo '<span class="total">' . Language::string(92) . '</span>';
+          echo '<span class="price">0.00</span>';
+          echo '<span class="currency">' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+        echo '</div>';
+        echo '<button class="pay" onclick="validateForm(document.getElementsByTagName(\'form\')[0])">' . Language::string(93) . '</button>';
+      echo '</div>';
+
+      echo '<form class="products" action="' . $url_page . '&add" method="post">';
+
+        // Email
+        echo '<label class="txt-input" style="margin: 10px 0px;">';
+          echo '<input type="email" name="email" required="">';
+          echo '<span class="placeholder">' . Language::string(94) . '</span>';
+        echo '</label>';
+
+        // List through seections
+        foreach($sections as $section) {
+          // Get all products
+          $products = "";
+          foreach( $product->products_by_section( $section["section"] ) as $values ) {
+            // Check if visible
+            $product->product_id = $values["id"];
+
+            if($product->visibility()) {
+              $products .= '<div class="row">';
+                $products .= '<span class="product">';
+                  $products .= $values["name"];
+                  // Check image
+                  if(! empty($values["product_fileID"])) {
+                    $products .= '<span class="icon">&#9432;</span>';
+                    $products .= '<div class="product-img" style="background-image: url(\'' . MediaHub::getUrl( $values["product_fileID"] ) . '\')"></div>';
+                  }
+                $products .= '</span>';
+                $products .= '<span class="price">' . number_format(( isset($values["price"]) ? ($values["price"] / 100) : 0), 2) . ' ' . ($pub->values()["currency"] ?? DEFAULT_CURRENCY) . '</span>';
+                $products .= '<div class="shoppingbag_options">';
+                  $products .= '<span class="remove" onclick="changeQuantity(this.parentNode.children[1], \'remove\')">-</span>';
+                  $products .= '<input type="text" name="' . $values["id"] . '" pattern="[0-9]{1,3}" value="0" onchange="change_total_price( this )"/>';
+                  $products .= '<span class="add" onclick="changeQuantity(this.parentNode.children[1], \'add\')">+</span>';
+                $products .= '</div>';
+              $products .= '</div>';
+            }
+          }
+
+          // Check if any products are listet in this section
+          if( strlen($products) > 0) {
+            // Show section
+            echo'<div class="section-container">';
+              echo '<div class="header row">';
+                echo '<span class="product">' . ($section["section"] ?? Language::string(95)) . '</span>';
+                echo '<span class="accordion"><span onclick="toggle_section(this)">-</span></span>';
+              echo '</div>';
+
+              echo '<div class="productlist" style="max-height: 100%;">';
+                echo $products; // Show products
+              echo '</div>';
+
+            echo '</div>';
+          }
+        }
+
+        // Check if open amount is allowed
+        if( $pub->values()["tip"] === 1) {
+          // Show section for tip amount
+          echo'<div class="section-container">';
+            echo '<div class="header row tip">';
+              echo '<span class="product">' . Language::string(96) . '</span>';
+              echo '<div class="placeholder-js">';
+                echo '<span class="input">';
+                  echo'<input type="text" pattern="[0-9\.]{1,3}" name="tip" placeholder="0.00" onkeyup="change_total_price( this )" />';
+                  echo ($pub->values()["currency"] ?? DEFAULT_CURRENCY);
+                echo  '</span>';
+              echo '</div>';
+            echo '</div>';
+          echo '</div>';
+        }
+
+      echo '</form>';
     break;
     case "view":
       // Set ID
@@ -211,7 +337,7 @@ echo '<div class="pub">';
             echo '</div>';
 
             // Payment option
-            echo '<div class="detail-item state">';
+            echo '<div class="detail-item paymentOption">';
               echo '<span class="type">' . Language::string(22) . '</span>';
               echo '<span class="value">';
                 if(  $transaction->globalValues()["payment_state"] != 1 && array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) === false ) {
@@ -263,7 +389,7 @@ echo '<div class="pub">';
       $transaction->paymentID = $_GET["remove"] ?? null;
 
       // Generate message
-      $info = Language::string( 50,
+      $info = Language::string( 60,
         array(
           '%email%' => $transaction->globalvalues()["email"],
           '%id%' => $_GET["remove"],
@@ -501,6 +627,14 @@ echo '<div class="pub">';
       $searchbar->prompt();
       $legend->prompt();
       $table->prompt();
+
+      //Add button
+      if( $write_access ) {
+        echo '<a class="add" href="' . $url_page . '&add">
+          <span class="horizontal"></span>
+          <span class="vertical"></span>
+        </a>';
+      }
 
 
       echo '<script>';

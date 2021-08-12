@@ -424,6 +424,26 @@ class Transaction {
   }
 
   /**
+   * Sends invoice mail to user
+   * requires: $paymentID
+   */
+  public function sendInvoice() {
+    // Get language
+    $pub = new Pub();
+    $pub->pub = $this->globalValues()["pub_id"];
+    $lang_code = $pub->values()["payment_store_language"];
+
+    // Send mail
+    $mail = new TKTdataMailer();
+    $mail->CharSet = "UTF-8";
+    $mail->setFrom(EMAIL, Language::string( 12, null, "email", null, $lang_code ));
+    $mail->addAddress( $this->globalValues()["email"] );
+    $mail->Subject = Language::string( 13, null, "email", null, $lang_code );
+    $mail->msgHTML( $mail->htmlMail_InvoicePub( $this->paymentID) );
+    return $mail->send();
+  }
+
+  /**
    * Gets values of an gateway
    * requires: $paymentID
    */
