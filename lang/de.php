@@ -67,6 +67,10 @@ $string["auth"][7] = 'Zurücksetzen'; // Input name
 $string["auth"][8] = 'Aktuelles Passwort zurücksetzen'; // Input title
 $string["auth"][9] = 'Zum Login'; // Link title
 $string["auth"][10] = 'Anmelden'; // Link name
+$string["auth"][11] = 'Dieser Benutzer existert nicht.'; // Inexistent user
+$string["auth"][12] = 'Das Passwort konnte nicht zurückgesetzt werden.'; // Error
+$string["auth"][13] = 'Das Passwort konnte erfolgreich zurückgesetzt werden. Sie erhalten ein Mail mit den neuen Zugangsdaten.';
+$string["auth"][14] = 'Die Mail konnte nicht gesendet werden. Bitte versuchen Sie es erneut';
 
 /**
  * Actions
@@ -643,6 +647,16 @@ $string[16][82] = 'Dieser Benutzer hat keine Berechtigung zu dieser Aktion';
 $string[16][83] = 'Erfolgreich -%refund% %currency% erstattet.';
 $string[16][84] = 'Zahlungseingang konnte nicht bestätigt werden';
 
+// Add
+$string[16][90] = 'Die Bestellung wurde erfolgreich hinzugefügt.'; // Action response
+$string[16][91] = 'Die Bestellung konnte nicht erstellt werden.'; // Action response
+
+$string[16][92] = 'TOTAL:'; // Menu
+$string[16][93] = 'Bezahlen'; // Button
+$string[16][94] = 'E-Mail'; // Input name
+$string[16][95] = 'Produkte'; // Section default
+$string[16][96] = 'Trinkgeld'; // Tip
+
 /**
  * Page 17
  */
@@ -975,6 +989,62 @@ $string["profile"][17] = 'Passwort bestätigen';
 $string["profile"][18] = 'UPDATE';
 
 /**
+ * E-Mail
+ */
+// Reset password
+$string["email"][0] = 'Guten Tag %user%<br />' .
+                      '<br />' .
+                      'Ihr Passwort wurde zurückgesetzt. Sofern Sie diese Aktion nicht selbst durchgeführt haben, melden Sie sich bei ihrem Administrator. <br />' .
+                      '<br />' .
+                      'Sie können sich neu unter <a href="%url%auth.php" title="Zum login">%url%auth.php</a> mit folgenden Zugangsdaten anmelden:<br />' .
+                      '<br />' .
+                      'Benutzername: <strong>%userid%</strong><br />' .
+                      'Passwort: <strong>%new_password%</strong><br />' .
+                      '<br />' .
+                      'Vielen Dank.'; // Message
+$string["email"][1] = 'TKTDATA - Passwort zurücksetzen'; // From text
+$string["email"][2] = 'Ihr Passwort wurde zurückgesetzt'; // Subject
+
+// Add user
+$string["email"][3] = 'Guten Tag %user%<br />' .
+                      '<br />' .
+                      'Sie wurden beim System registriert. <br />' .
+                      'Melden Sie sich unter <a href="%url%/auth.php" title="Zum login">%url%auth.php</a> mit folgenden Daten' .
+                      'an:<br />' .
+                      'Benutzername: <strong>%userid%</strong><br />' .
+                      'Passwort: <strong>%password%</strong><br />' .
+                      '<br />' .
+                      'Vielen Dank.'; // Message
+$string["email"][4] = 'TKTDATA - Willkommen"'; // From header
+$string["email"][5] = 'Willkommen bei TKTDATA. Sie wurden zu unserem System hinzugefügt.'; // Subject
+
+// Send ticket
+$string["email"][6] = 'TKTDATA - DEIN TICKET';
+$string["email"][7] = 'Ihr Ticket, wir können es kaum erwarten, Sie begrüssen zu dürfen.';
+$string["email"][8] = 'Dein Ticket';
+
+// Request payment
+$string["email"][9] = 'TKTDATA - ZAHLUNGSANFORDERUNG';
+$string["email"][10] = 'Zahlungsanforderung für Ihr Ticket';
+$string["email"][11] = 'Online zahlen';
+
+// Send transaction invoice of pub
+$string["email"][12] = 'TKTDATA - RECHNUNG';
+$string["email"][13] = 'Rechnung für Ihre Bestellung im Store';
+
+$string["email"][14] =  'Hallo %email%<br />' .
+                        '<br />' .
+                        'Vielen Dank für deine Bestellung. Du kannst diese nun bei <strong>%pubname%</strong> abholen. Erwähne dabei bitte die Zahungs-ID <strong>#%paymentid%</strong>.<br />' .
+                        'Im folgenden findest du Details zu deiner Bestellung.';
+$string["email"][15] = 'Onlinezahlung';
+$string["email"][16] = 'Barzahlung';
+$string["email"][17] = 'Zahlungs-ID';
+$string["email"][18] = 'Zahlungszeit';
+$string["email"][19] = 'Zahlungsmethode';
+$string["email"][20] = 'Trinkgeld';
+$string["email"][21] = 'TOTAL';
+
+/**
  * Store
  */
 // 1.php
@@ -1077,7 +1147,8 @@ $string["store"][120] = 'Der Zahlungsvorgang konnte nicht gestartet werden.';
 $string["store"][121] = 'TOTAL:';
 $string["store"][122] = 'BEZAHLEN';
 $string["store"][123] = 'TKTData Logo';
-$string["store"][124] = 'Trinkgeld';
+$string["store"][124] = 'Produkte';
+$string["store"][125] = 'Trinkgeld';
 
 // 9.php
 $string["store"][130] = 'Zahlung jetzt tätigen';

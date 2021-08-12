@@ -68,6 +68,10 @@ $string["auth"][7] = 'Reset'; // Input name
 $string["auth"][8] = 'Reset current password'; // Input title
 $string["auth"][9] = 'Return to login'; // Link title
 $string["auth"][10] = 'Sign in'; // Link name
+$string["auth"][11] = 'This user does not exist.'; // Inexistent user
+$string["auth"][12] = 'The password could not be reset.'; // Error
+$string["auth"][14] = 'The password could be reset successfully. You will receive a mail with the new access data.';
+$string["auth"][15] = 'The mail could not be sent. Please try again.';
 
 /**
 * Actions
@@ -642,6 +646,15 @@ $string[16][82] = 'This user does not have authorization for this action ';
 $string[16][83] = 'Successful -%refund% %currency% reimbursed.';
 $string[16][84] = 'Receipt of payment could not be confirmed ';
 
+// Add
+$string[16][90] = 'The order was successfully added.'; // Action response
+$string[16][91] = 'The order could not be created.'; // Action response
+
+$string[16][92] = 'TOTAL:'; // Menu
+$string[16][93] = 'Pay'; // Button
+$string[16][94] = 'E-Mail'; // Input name
+$string[16][95] = 'Products'; // Section default
+$string[16][96] = 'Tip'; // Tip
 
 /**
  * Page 17
@@ -975,6 +988,62 @@ $string[20][167] = 'Removed group #%id% '; // groups.php
  $string["profile"][18] = 'UPDATE';
 
  /**
+ * E-Mail
+ */
+// Reset password
+$string["email"][0] = 'Good day %user%<br />' .
+                      '<br />' .
+                      'Your password has been reset. Unless you performed this action yourself, please contact your administrator.<br />' .
+                      '<br />' .
+                      'You can login again at <a href="%url%auth.php" title="To login">%url%auth.php</a> with the following credentials:<br />' .
+                      '<br />' .
+                      'Username: <strong>%userid%</strong><br />' .
+                      'Password: <strong>%new_password%</strong><br />' .
+                      '<br />' .
+                      'Thank you.'; // Message
+$string["email"][1] = 'TKTDATA - Reset password'; // From text
+$string["email"][2] = 'Your password has been reset'; // Subject
+
+// Add user
+$string["email"][3] = 'Good day %user%<br />' .
+                      '<br />' .
+                      'You have been registered with the system. <br />' .
+                      'Log in to <a href="%url%/auth.php" title="To login">%url%auth.php</a> with the following data' .
+                      'to:<br />' .
+                      'Username: <strong>%userid%</strong><br />' .
+                      'Password: <strong>%password%</strong><br />' .
+                      '<br />' .
+                      'Thank you.'; // Message
+$string["email"][4] = 'TKTDATA - WELCOME"'; // From header
+$string["email"][5] = 'Welcome to TKTDATA. You have been added to our system.'; // Subject
+
+// Send ticket
+$string["email"][6] = 'TKTDATA - YOUR TICKET';
+$string["email"][7] = 'Your ticket, we can\'t wait to welcome you.';
+$string["email"][8] = 'Your Ticket';
+
+// Request payment
+$string["email"][9] = 'TKTDATA - PAYMENT REQUEST';
+$string["email"][10] = 'Payment request for your ticket';
+$string["email"][11] = 'Pay online';
+
+// Send transaction invoice of pub
+$string["email"][12] = 'TKTDATA - INVOICE';
+$string["email"][13] = 'Invoice for your order in the store';
+
+$string["email"][14] =  'Hello %email%<br />' .
+                        '<br />' .
+                        'Thank you very much for your order. You can now pick it up at <strong>%pubname%</strong>. When doing so, please mention the payment ID <strong>#%paymentid%</strong>.<br />' .
+                        'Below you will find details about your order.';
+$string["email"][15] = 'Online payment';
+$string["email"][16] = 'Cash payment';
+$string["email"][17] = 'Payment-ID';
+$string["email"][18] = 'Payment time';
+$string["email"][19] = 'Payment method';
+$string["email"][20] = 'Tip';
+$string["email"][21] = 'TOTAL';
+
+ /**
   * Store
   */
  // 1.php
@@ -1077,7 +1146,8 @@ $string[20][167] = 'Removed group #%id% '; // groups.php
  $string["store"][121] = 'TOTAL:';
  $string["store"][122] = 'PAY';
  $string["store"][123] = 'TKTData Logo';
- $string["store"][124] = 'Tip';
+ $string["store"][124] = 'Products';
+ $string["store"][125] = 'Tip';
 
  // 9.php
  $string["store"][130] = 'Make payment now';

@@ -1,0 +1,6 @@
+#Files can only be included and not read over address
+
+<FILESMATCH "\.php$">
+  order deny,allow
+  deny from all
+</FILESMATCH>
