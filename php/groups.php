@@ -443,7 +443,7 @@ class Group {
     $color = '#' . bin2hex(random_bytes(3));
 
     //Insert into table
-    $addGroup = $conn->prepare("INSERT INTO " . TICKETS_GROUPS . " (color, name, maxTickets, price, vat, tpu, startTime, endTime) VALUES (:color, :name, 0, 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00')");
+    $addGroup = $conn->prepare("INSERT INTO " . TICKETS_GROUPS . " (color, name, maxTickets, price, vat, tpu, startTime, endTime) VALUES (:color, :name, 0, 0, 0, 0, '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d H:i:s") . "')");
     if(! $addGroup->execute(array(":color" => $color, ":name" => $values["name"]))) {
       return false;
     }

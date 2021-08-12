@@ -25,6 +25,9 @@ if(!empty($_POST)) {
         $rights[$menuID[0]] = array( "w", "r" );
       }
 
+      // Set current user
+      $current_user = "Setup";
+
       // Create new admin superuser
       $user = new User();
       $user->add( EMAIL, 'Admin', 'Admin', $rights, false);
