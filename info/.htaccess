@@ -1,0 +1,6 @@
+#Files can only be included and not read over address
+
+<FILESMATCH "\.md$">
+  order deny,allow
+  deny from all
+</FILESMATCH>
