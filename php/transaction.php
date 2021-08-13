@@ -434,7 +434,7 @@ class Transaction {
     $lang_code = $pub->values()["payment_store_language"];
 
     // Send mail
-    $mail = new TKTdataMailer();
+    $mail = new TKTDataMailer();
     $mail->CharSet = "UTF-8";
     $mail->setFrom(EMAIL, Language::string( 12, null, "email", null, $lang_code ));
     $mail->addAddress( $this->globalValues()["email"] );

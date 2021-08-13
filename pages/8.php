@@ -211,7 +211,7 @@ function section_general( $groupID, $section ) {
       'name' => 'price',
       'value' => number_format(($group->values()["price"] / 100), 2),
       'placeholder' => Language::string(24),
-      'input_attributes' => 'min="0" steps="0.05"',
+      'input_attributes' => 'step="0.01" value="0.00"',
       'unit' => ($group->values()["currency"] ?? DEFAULT_CURRENCY),
       'disabled' => ! User::w_access_allowed($page, $current_user),
       'required' => true
@@ -251,7 +251,7 @@ function section_general( $groupID, $section ) {
       'name' => 'vat',
       'value' => ($group->values()["vat"] / 100),
       'placeholder' => Language::string(27),
-      'input_attributes' => 'min="0" steps="0.05"',
+      'input_attributes' => 'step="0.01" value="0.00"',
       'unit' => '%',
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),

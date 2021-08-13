@@ -25,7 +25,6 @@ if( isset( $pub->values()["background_fileID"] ) &&! empty( $pub->values()["back
   $mediaHub = new MediaHub();
 
   $backgroundImgUrl = $mediaHub->getUrl( $pub->values()["background_fileID"] );
-  $altImage = $mediaHub->fileDetails()["alt"];
 }else {
   $backgroundImgUrl = $url . 'medias/store/background/' . pathinfo( glob(dirname(__FILE__,3) . "/medias/store/background/*")[0], PATHINFO_BASENAME );
 }
@@ -93,10 +92,12 @@ if(! empty($_POST)) {
         ?>" alt="<?php
         if(! empty( $pub->values()["logo_fileID"]) ) {
           // Custom alt
+          $logo = new MediaHub();
+          $logo->fileID = $pub->values()["logo_fileID"];
+
           echo $logo->fileDetails()["alt"];
         }else {
           // Default alt
-          // echo Language::string( 123, null, "store", null, null, $pub->pub );
           echo Language::string( 123, null, "store", null, $lang_code );
         }
         ?>" />

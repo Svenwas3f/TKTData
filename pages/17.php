@@ -127,6 +127,7 @@ echo '<div class="pub">';
           'name' => 'price',
           'placeholder' => Language::string(41),
           'unit' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+          'input_attributes' => 'step="0.01" value="0.00"',
           'disabled' => ! $write_access,
           'required' => true,
         ),
@@ -322,6 +323,7 @@ echo '<div class="pub">';
             'placeholder' => Language::string(41),
             'value' => ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  ""),
             'unit' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+            'input_attributes' => 'step="0.01" value="0.00"',
             'disabled' => ! $write_access,
             'required' => true,
           ),
@@ -463,6 +465,7 @@ echo '<div class="pub">';
             'placeholder' => Language::string(41),
             'value' => ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  ""),
             'unit' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
+            'input_attributes' => 'step="0.01" value="0.00"',
             'disabled' => true,
           ),
         );

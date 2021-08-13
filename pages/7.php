@@ -346,7 +346,7 @@ function single_ticket() {
       'name' => 'amount',
       'value' => number_format(( $ticket->values()["amount"] / 100 ), 2),
       'placeholder' => Language::string(48),
-      'input_attributes' => 'step="0.05" min="0"',
+      'input_attributes' => 'step="0.01" value="0.00"',
       'unit' => ($group->values()["currency"] ?? DEFAULT_CURRENCY),
       'disabled' => ! User::w_access_allowed($page, $current_user),
     ),

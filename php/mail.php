@@ -54,8 +54,9 @@ class TKTDataMailer extends PHPMailer {
 
         $return .= '}';
         $return .= '</style>';
+      $return .= '</head>';
 
-        $return .= '<body>';
+      $return .= '<body>';
         $return .= '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; height: 100%; padding: 40px;"> <!-- Container -->';
           $return .= '<tr>';
             $return .= '<td>';
@@ -91,63 +92,6 @@ class TKTDataMailer extends PHPMailer {
 
     // Return values
     return $return;
-
-    //HTML mail
-    // return '<!DOCTYPE html>
-    // <html lang="de" dir="ltr">
-    //   <head>
-    //     <meta charset="utf-8">
-    //     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
-    //     <title></title>
-    //
-    //     <style>
-    //       @media screen and (max-width: 700px) {
-    //
-    //         table[class="mail-container"] {
-    //           width: 100% !important;
-    //         }
-    //
-    //         img[class="logo"] {
-    //           margin: 20px 10% !important;
-    //         }
-    //
-    //       }
-    //     </style>
-    //
-    //     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    //   </head>
-    //   <body>
-    //     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; height: 100%; padding: 40px;"> <!-- Container -->
-    //       <tr>
-    //         <td>
-    //           <table  width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f6; margin: 0px auto; color: black; padding: 10px 10% 40px 10%; font-family: \'Open Sans\', sans-serif; font-size: 14pt; overflow: hidden;" class="mail-container"> <!-- Content -->
-    //             <tr>
-    //               <td>
-    //
-    //                 <table width="100%" cellspacing="0" cellpadding="0" style="text-align: center; color: #232b43; font-size: 15pt;font-weight: bolder; margin: 50px 0px;">
-    //                   <tr>
-    //                     <td>
-    //                       <img src="' . $url . 'medias/logo/logo-fitted.png" style="display: block; width: 100%;" class="logo" alt="TKTDATA TICKETSYSTEM">
-    //                     </td>
-    //                   </tr>
-    //                 </table>
-    //
-    //                 <table width="100%" cellspacing="0" cellpadding="0" style="margin: 20px 0px;">
-    //                   <tr>
-    //                     <td style="margin: 20px 0px;">
-    //                       ' . utf8Html( $msg ) . '
-    //                     </td>
-    //                   </tr>
-    //                 </table>
-    //
-    //               </td>
-    //             </tr>
-    //           </table>
-    //         </td>
-    //       </tr>
-    //     </table>
-    //   </body>
-    // </html>';
   }
 
   /**
@@ -240,8 +184,9 @@ class TKTDataMailer extends PHPMailer {
 
         $return .= '}';
         $return .= '</style>';
+      $return .= '</head>';
 
-        $return .= '<body>';
+      $return .= '<body>';
         $return .= '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; height: 100%; padding: 40px;"> <!-- Container -->';
           $return .= '<tr>';
             $return .= '<td>';
@@ -352,8 +297,9 @@ class TKTDataMailer extends PHPMailer {
 
         $return .= '}';
         $return .= '</style>';
+      $return .= '</head>';
 
-        $return .= '<body>';
+      $return .= '<body>';
         $return .= '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; height: 100%; padding: 40px;"> <!-- Container -->';
           $return .= '<tr>';
             $return .= '<td>';
@@ -417,7 +363,7 @@ class TKTDataMailer extends PHPMailer {
     if( empty($pub->values()["logo_fileID"]) ) {
       $imgUrl = $url . 'medias/logo/logo-fitted.png';
     }else {
-      $imgUrl = MediaHub::getUrl( $pub["logo_fileID"] );
+      $imgUrl = MediaHub::getUrl( $pub->values()["logo_fileID"] );
     }
 
     // Generate info text
@@ -511,8 +457,9 @@ class TKTDataMailer extends PHPMailer {
 
         $return .= '}';
         $return .= '</style>';
+      $return .= '</head>';
 
-        $return .= '<body>';
+      $return .= '<body>';
         $return .= '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fafafa; height: 100%; padding: 40px;"> <!-- Container -->';
           $return .= '<tr>';
             $return .= '<td>';

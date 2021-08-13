@@ -692,6 +692,7 @@ function single_product ( $product_id ) {
       'placeholder' => Language::string(65),
       'value' => ($product->values()["price"] ? number_format(($product->values()["price"]/100), 2) :  ""),
       'unit' => '<abbr title="' . Language::string(66) . '">' . DEFAULT_CURRENCY . '</abbr>',
+      'input_attributes' => 'step="0.01" value="0.00"',
       'disabled' => ! User::w_access_allowed( $page, $current_user ),
     ),
   );
@@ -929,6 +930,7 @@ switch(key($action)) {
           'name' => 'price',
           'placeholder' => Language::string(65),
           'unit' => '<abbr title="' . Language::string(66) . '">' . DEFAULT_CURRENCY . '</abbr>',
+          'input_attributes' => 'step="0.01" value="0.00"',
           'disabled' => ! User::w_access_allowed( $page, $current_user ),
         ),
       );
