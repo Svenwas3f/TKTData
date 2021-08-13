@@ -144,6 +144,10 @@ class MediaHub {
       ":upload_user" => $current_user
     ));
 
+    if (!file_exists( dirname(__FILE__, 2) . "/medias/hub/" )) {
+      mkdir( dirname(__FILE__, 2) . "/medias/hub/", 0777, true );
+    }
+
     // Upload image
     if( move_uploaded_file( $image["tmp_name"], dirname(__FILE__, 2) . "/medias/hub/" . $this->fileID . "." . pathinfo( $image["name"], PATHINFO_EXTENSION ) )) {
       //Create modification
