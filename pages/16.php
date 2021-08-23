@@ -408,14 +408,14 @@ echo '<div class="pub">';
 
           // Remove
           if( $transaction->remove() ) {
-            Action::success( Language::string( 53,
+            Action::success( Language::string( 54,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],
               ), )
             );
           }else {
-            Action::fail( Language::string( 54,
+            Action::fail( Language::string( 55,
               array(
                 '%email%' => $email,
                 '%id%' => $_POST["confirm"],
@@ -423,7 +423,7 @@ echo '<div class="pub">';
             );
           }
         }else {
-          Action::fail( Language::string(55) );
+          Action::fail( Language::string(56) );
         }
       }
 
@@ -476,6 +476,7 @@ echo '<div class="pub">';
             'items' => array(
               array(
                 'context' => Language::string(41),
+                'additional' => 'style="width: 1%; white-space:nowrap;"',
               ),
               array(
                 'context' => Language::string(42),
@@ -485,6 +486,9 @@ echo '<div class="pub">';
               ),
               array(
                 'context' => Language::string(44),
+              ),
+              array(
+                'context' => Language::string(45),
               ),
             ),
           ),
@@ -506,26 +510,26 @@ echo '<div class="pub">';
         // Generate class
         if( $transaction->globalValues()["payment_state"]  == 2 && $transaction->globalValues()["pick_up"] == 1 ) { // Payment expected and picked up
           $class = "transaction payment-and-pickUp";
-          $title = Language::string(45);
+          $title = Language::string(46);
         }elseif ( $transaction->globalValues()["payment_state"]  == 2 ) { // Payment expected
           $class = "transaction payment-expected";
-          $title = Language::string(46);
+          $title = Language::string(47);
         }elseif( $transaction->globalValues()["pick_up"] == 0 ) { // not picked up
           $class = "transaction no-pickUp";
-          $title = Language::string(47);
+          $title = Language::string(48);
         }else {
           $class = "transaction";
-          $title = Language::string(48);
+          $title = Language::string(49);
         }
 
         // Create actions
         $action = '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&view=' . urlencode( $transaction->paymentID ) . '"
-                    title="' . Language::string(49) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
+                    title="' . Language::string(50) . '"><img src="' . $url . '/medias/icons/view-eye.svg"/></a>';
         if( $transaction->globalValues()["payment_state"] == 1 || // manually payment
             $transaction->globalValues()["payment_state"] == 2 || // payment expected
             array_search( ($transaction->getGateway()->getInvoices()[0]["transactions"][0]["pspId"] ?? null), array(27, 15) ) != false ) {
           $action .=  '<a href="' . $url_page . '&pub=' . urlencode( $pub->pub ) . '&remove=' . urlencode( $transaction->paymentID ) . '"
-                        title="' . Language::string(50) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
+                        title="' . Language::string(51) . '"><img src="' . $url . '/medias/icons/trash.svg"/></a>';
         }
 
         $table->addElement(
@@ -533,6 +537,10 @@ echo '<div class="pub">';
             'row' => array(
               'additional' => 'class="' . $class . '" title="' . $title . '" id="' . $transaction->paymentID . '"',
               'items' => array(
+                array(
+                  'context' => '#' . $transaction->paymentID,
+                  'additional' => 'style="width: 1%; white-space:nowrap;"',
+                ),
                 array(
                   'context' => $transaction->globalValues()["email"],
                 ),
@@ -558,13 +566,13 @@ echo '<div class="pub">';
                 (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
                 ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                 '&row-start=' . round($offset/$steps - 1, PHP_ROUND_HALF_UP) . '"
-                style="float: left;">' . Language::string(51) . '</a>';
+                style="float: left;">' . Language::string(52) . '</a>';
       $next = '<a href="' .
                 $url_page .
                 (isset($_GET["pub"]) ? "&pub=" . urlencode($_GET["pub"]) : "") .
                 ( isset($_GET["s"]) ? "&s=" . urlencode($_GET["s"]) : "" ) .
                 '&row-start=' . round($offset/$steps + 1, PHP_ROUND_HALF_UP) . '"
-                style="float: right;">' . Language::string(52) . '</a>';
+                style="float: right;">' . Language::string(53) . '</a>';
 
       if( (count($transaction->all( ($offset + $steps), 1, ($_GET["s"] ?? null))) > 0) && (($offset/$steps) > 0) ) { // More and less pages accessable
         $table->addElement(

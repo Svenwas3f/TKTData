@@ -447,7 +447,7 @@ function single_pub ( $pub_id ) {
           array(
             'type' => 'text',
             'name' => 'currency',
-            'value' => ($pub->values()["currency"] ?? ''),
+            'value' => ($pub->values()["currency"] ?? DEFAULT_CURRENCY),
             'placeholder' => '<a href="https://en.wikipedia.org/wiki/List_of_circulating_currencies" title="Verwende den ISO-Code " target="_blank">' . Language::string(41) . '</a>',
             'disabled' => ! User::w_access_allowed( $page, $current_user ),
           ),

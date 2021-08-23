@@ -628,13 +628,13 @@ function loadTransactions( steps = 20, offset = 0, search_value = null, pub = 0)
         }
 
         // Check if email update required
-        var email = row.getElementsByTagName("td")[0];
+        var email = row.getElementsByTagName("td")[1];
         if( email != result[key].email) {
           email.innerHTML = result[key].email;
         }
 
         // Check if action update required
-        var action = row.getElementsByTagName("td")[3];
+        var action = row.getElementsByTagName("td")[4];
         if( action != result[key].action ) {
           action.innerHTML = result[key].action;
         }
@@ -838,8 +838,6 @@ function change_total_price( input ) {
       // Get pricebar
       var submenu_total = document.getElementsByClassName("submenu-total")[0];
       var price = submenu_total.getElementsByClassName("price")[0];
-
-      console.log(this.responseText);
 
       // get values
       var ajax_response = JSON.parse(this.responseText);

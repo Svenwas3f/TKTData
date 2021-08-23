@@ -110,7 +110,7 @@ $logo->fileID = $pub->values()["logo_fileID"];
     ?>
     <a class="onlineshop" href="<?php echo $onlineshop_link; ?>" target="_blank">
       <div class="img-container">
-        <img src="<?php qr_img_src( $onlineshop_link ); ?>" />
+        <img src="<?php echo $url . 'pdf/menu/qrcodes/' . qr_img_src( $onlineshop_link ); ?>" />
       </div>
       <span><?php echo $onlineshop_link; ?></span>
     </a>

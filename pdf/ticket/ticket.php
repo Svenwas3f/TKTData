@@ -44,7 +44,7 @@ $groupValues = $group->values();
             ?>
           </div>
           <div class="qr-container">
-            <img src="<?php qr_img_src( $ticketToken ); ?>" />
+            <img src="<?php echo $url . 'pdf/ticket/qrcodes/' .  qr_img_src( $ticketToken ); ?>" />
           </div>
           <span class="token"><?php echo $ticketToken; ?></span>
         </div>

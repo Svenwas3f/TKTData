@@ -4,7 +4,7 @@ function qr_img_src($ticketToken){
   require_once( dirname(__FILE__, 3) . "/qrcode/qrlib.php");
 
   //Create parameters
-  $path = "qrcodes/"; //Path to files
+  $path = dirname(__FILE__) . "/qrcodes/"; //Path to files
   $name = md5( $ticketToken ); //Hash name to prevent innocent
   $extension = '.png'; //File extension of file
 
@@ -22,6 +22,6 @@ function qr_img_src($ticketToken){
   QRcode::png( $ticketToken, $filePath, QR_ECLEVEL_H, 8, 0 );
 
   //Return source
-  echo $filePath;
+  return pathinfo($filePath, PATHINFO_BASENAME);
 }
 ?>

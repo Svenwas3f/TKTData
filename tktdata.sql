@@ -98,7 +98,7 @@ INSERT INTO `tktdata_menu` (`id`, `name`, `submenu`, `image`, `layout`, `plugin`
 (17, 'Produkte', 5, 'pub_products.svg', 2, NULL),
 (18, 'Einstellungen', 5, 'pub_settings.svg', 3, NULL),
 (19, 'Alle Benutzer', 6, 'user.svg', 1, NULL),
-(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL),
+(20, 'Aktivitäten', 6, 'activites.svg', 2, NULL);
 
 -- --------------------------------------------------------
 
