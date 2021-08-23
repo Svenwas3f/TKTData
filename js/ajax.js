@@ -776,8 +776,6 @@ function changeQuantity( input, action ) {
 function toggle_section( click ) {
   var products = click.parentNode.parentNode.parentNode.getElementsByClassName("productlist")[0];
 
-  console.log(products.scrollHeight + "px");
-
   if( products.style.maxHeight ) {
     products.style.maxHeight = null;
     click.innerHTML = "+";
